@@ -82,11 +82,12 @@ export function Navbar() {
             {/* Search Trigger Button */}
             <button
               onClick={() => setIsSearchOpen(true)}
-              className="flex items-center gap-2 rounded-xl border border-slate-200 bg-slate-50/80 px-3 py-2 text-xs font-medium text-slate-500 shadow-sm transition-all hover:border-slate-300 hover:bg-white hover:text-slate-800"
+              aria-label="Buscar calculadora"
+              className="flex items-center gap-2 rounded-xl border border-slate-200 bg-slate-50/80 px-3 py-2 text-xs font-medium text-slate-600 shadow-sm transition-all hover:border-slate-300 hover:bg-white hover:text-slate-900"
             >
-              <Search className="h-4 w-4 text-slate-400" />
-              <span className="hidden md:inline">Buscar calculadora...</span>
-              <kbd className="hidden rounded bg-slate-200/60 px-1.5 py-0.5 text-[10px] font-semibold text-slate-500 md:inline">
+              <Search className="h-4 w-4 text-slate-500" />
+              <span className="hidden md:inline font-semibold">Buscar calculadora...</span>
+              <kbd className="hidden rounded bg-slate-200/80 px-1.5 py-0.5 text-[10px] font-bold text-slate-600 md:inline">
                 Ctrl K
               </kbd>
             </button>

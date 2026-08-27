@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next';
 import { CALCULATORS_REGISTRY } from '@/features/calculators/registry';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://calculaperu.com.pe';
+  const baseUrl = 'https://calculadora-peru.vercel.app';
 
   const calculatorRoutes = CALCULATORS_REGISTRY.map((calc) => ({
     url: `${baseUrl}${calc.slug}`,

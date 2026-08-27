@@ -162,8 +162,8 @@ export default function HomePage() {
                   onClick={() => setSelectedCategory(cat.id)}
                   className={`flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs sm:text-sm font-bold transition-all shrink-0 cursor-pointer ${
                     isSelected
-                      ? 'bg-emerald-600 text-white shadow-md shadow-emerald-600/20'
-                      : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 hover:border-slate-300'
+                      ? 'bg-emerald-700 text-white shadow-md shadow-emerald-950/20'
+                      : 'bg-white border border-slate-200 text-slate-800 hover:bg-slate-100 hover:border-slate-300'
                   }`}
                 >
                   <DynamicIcon name={cat.icon} className="h-4 w-4" />
@@ -236,7 +236,7 @@ export default function HomePage() {
                   <span className="text-[11px] font-semibold text-slate-500 font-mono line-clamp-1 max-w-[190px]">
                     🇵🇪 S/ Soles
                   </span>
-                  <span className="inline-flex items-center gap-1 text-xs font-bold text-emerald-600 group-hover:translate-x-1 transition-transform">
+                  <span className="inline-flex items-center gap-1 text-xs font-extrabold text-emerald-800 group-hover:text-emerald-950 group-hover:translate-x-1 transition-all">
                     <span>Calcular</span>
                     <ArrowRight className="h-3.5 w-3.5" />
                   </span>
