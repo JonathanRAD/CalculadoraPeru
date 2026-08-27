@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: 'CalculaPerú | El Portal de Calculadoras #1 del Perú',
   description:
-    'Todas las calculadoras financieras, comerciales y tributarias que necesitas en un solo lugar. Calcula precio de venta, IGV 18%, margen de ganancia, punto de equilibrio y consumo de luz en Soles (S/).',
+    'Calculadoras financieras, comerciales y tributarias del Perú: precio de venta, IGV 18%, margen de ganancia, punto de equilibrio y luz en Soles (S/).',
   keywords: [
     'calculadora peru',
     'calculadora igv 18',
@@ -25,17 +25,45 @@ export const metadata: Metadata = {
     'margen de ganancia',
     'punto de equilibrio peru',
     'consumo electrico luz del sur enel',
-    'calculadora financiera peru',
     'mypes peru',
   ],
   authors: [{ name: 'CalculaPerú' }],
-  metadataBase: new URL('https://calculaperu.com.pe'),
+  metadataBase: new URL('https://calculaperu.vercel.app'),
+  alternates: {
+    canonical: '/',
+  },
   openGraph: {
+    siteName: 'CalculaPerú',
     title: 'CalculaPerú | El Portal de Calculadoras #1 del Perú',
     description:
-      'Convierte cada cálculo en mejores decisiones. Calculadoras gratuitas de precio de venta, margen, punto de equilibrio e IGV adaptadas al Perú.',
+      'Calculadoras financieras, comerciales y tributarias del Perú: IGV 18%, precio de venta y luz en Soles.',
+    url: 'https://calculaperu.vercel.app',
     locale: 'es_PE',
     type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'CalculaPerú | El Portal de Calculadoras #1 del Perú',
+    description:
+      'Calculadoras financieras, comerciales y tributarias adaptadas al Perú: IGV 18%, precio de venta y luz.',
+  },
+};
+
+const rootWebsiteJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'CalculaPerú',
+  alternateName: 'Calcula Peru',
+  url: 'https://calculaperu.vercel.app',
+  description:
+    'El portal de calculadoras financieras, comerciales y tributarias #1 del Perú para MYPES y emprendedores.',
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: {
+      '@type': 'EntryPoint',
+      urlTemplate: 'https://calculaperu.vercel.app/?q={search_term_string}',
+    },
+    'query-input': 'required name=search_term_string',
   },
 };
 
@@ -46,9 +74,17 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es" className={`${geistSans.variable} ${geistMono.variable}`} suppressHydrationWarning>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(rootWebsiteJsonLd) }}
+        />
+      </head>
       <body className="min-h-screen flex flex-col bg-slate-50 text-slate-900 font-sans" suppressHydrationWarning>
         <Navbar />
-        <div className="flex-1">{children}</div>
+        <main id="main-content" className="flex-1">
+          {children}
+        </main>
         <Footer />
       </body>
     </html>
