@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { ChevronRight, Sparkles, BookOpen, ShieldCheck } from 'lucide-react';
+import { ChevronRight, ArrowRight, ShieldCheck } from 'lucide-react';
 import { CALCULATORS_REGISTRY, CalculatorMeta } from '../registry';
 import { FaqAccordion, FaqItem } from '@/shared/components/ui/FaqAccordion';
 
@@ -19,12 +19,10 @@ export function CalculatorShell({
   educationalContent,
   faqs,
 }: CalculatorShellProps) {
-  // Related calculators (same category or popular)
   const related = CALCULATORS_REGISTRY
     .filter((c) => c.id !== meta.id)
     .slice(0, 3);
 
-  // Schema.org SoftwareApplication JSON-LD
   const appJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'SoftwareApplication',
@@ -40,58 +38,50 @@ export function CalculatorShell({
   };
 
   return (
-    <div className="min-h-screen bg-slate-50/60 pb-16">
+    <div className="min-h-screen bg-[#eef2f6] dark:bg-slate-950 text-slate-900 dark:text-slate-100 pb-20 transition-colors duration-200">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(appJsonLd) }}
       />
 
-      {/* Header Banner */}
-      <div className="border-b border-slate-200/80 bg-white pt-6 pb-8">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      {/* Header Banner with contrasting surface */}
+      <div className="border-b border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 pt-8 pb-10 shadow-xs">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6">
           
           {/* Breadcrumb */}
-          <nav className="flex items-center gap-1.5 text-xs font-medium text-slate-500 mb-4">
-            <Link href="/" className="hover:text-emerald-600 transition-colors">
+          <nav aria-label="Migas de pan" className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400 mb-3 font-semibold">
+            <Link href="/" className="hover:text-emerald-800 dark:hover:text-emerald-400 transition-colors">
               Inicio
             </Link>
             <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
-            <Link href="/" className="hover:text-emerald-600 transition-colors capitalize">
+            <Link href="/#directorio" className="hover:text-emerald-800 dark:hover:text-emerald-400 transition-colors capitalize">
               {meta.category}
             </Link>
             <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
-            <span className="text-slate-800 font-semibold">{meta.shortTitle}</span>
+            <span className="text-slate-900 dark:text-white font-bold">{meta.shortTitle}</span>
           </nav>
 
-          {/* Title and Badges */}
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-            <div>
-              <div className="flex items-center gap-2 mb-1.5">
-                <span className="rounded-md bg-emerald-100 px-2 py-0.5 text-xs font-bold text-emerald-800 border border-emerald-200/60">
-                  🇵🇪 PERÚ {meta.tag}
-                </span>
-                {meta.badge && (
-                  <span className="inline-flex items-center gap-1 rounded-md bg-amber-50 px-2 py-0.5 text-xs font-bold text-amber-700 border border-amber-200">
-                    <Sparkles className="h-3 w-3" />
-                    {meta.badge}
-                  </span>
-                )}
+          {/* Title and Description */}
+          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-6">
+            <div className="max-w-2xl">
+              <div className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-100/80 dark:bg-emerald-950 px-3 py-1 text-xs font-extrabold text-emerald-900 dark:text-emerald-300 border border-emerald-300/80 dark:border-emerald-800 mb-2.5">
+                <ShieldCheck className="h-3.5 w-3.5 text-emerald-700 dark:text-emerald-400" />
+                <span>🇵🇪 PERÚ {meta.tag}</span>
               </div>
-              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-slate-900">
+              <h1 className="text-2xl sm:text-4xl font-black text-slate-950 dark:text-white tracking-tight leading-tight">
                 {meta.title}
               </h1>
-              <p className="mt-2 text-sm sm:text-base text-slate-600 max-w-3xl leading-relaxed">
+              <p className="mt-2 text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
                 {meta.description}
               </p>
             </div>
 
-            {/* Formula Pill */}
             {meta.formulaSummary && (
-              <div className="rounded-2xl border border-emerald-200 bg-emerald-50/70 p-3.5 text-xs text-emerald-950 max-w-xs shrink-0">
-                <div className="font-bold text-emerald-800 uppercase tracking-wider text-[10px] mb-1">
-                  Fórmula estándar
+              <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 p-4 text-xs max-w-xs shrink-0 shadow-2xs">
+                <div className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">
+                  Fórmula de referencia
                 </div>
-                <code className="font-mono font-semibold text-emerald-900 text-xs break-all">
+                <code className="font-mono text-xs text-slate-900 dark:text-slate-200 break-all font-bold">
                   {meta.formulaSummary}
                 </code>
               </div>
@@ -102,21 +92,16 @@ export function CalculatorShell({
       </div>
 
       {/* Main Grid: Calculator Inputs & Results */}
-      <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mt-8">
+      <div className="mx-auto max-w-5xl px-4 sm:px-6 mt-10 space-y-12">
         {children}
 
-        {/* Educational Content Section */}
+        {/* Educational Guide */}
         {educationalContent && (
-          <section className="mt-12 rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 shadow-xs">
-            <div className="flex items-center gap-2.5 mb-5 border-b border-slate-100 pb-4">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-100 text-emerald-800">
-                <BookOpen className="h-4 w-4" />
-              </div>
-              <h2 className="text-xl font-extrabold text-slate-900 tracking-tight">
-                Guía Práctica: ¿Cómo entender este cálculo en Perú?
-              </h2>
-            </div>
-            <div className="prose prose-slate max-w-none text-slate-600 leading-relaxed text-sm sm:text-base space-y-4">
+          <section aria-label="Guía práctica" className="rounded-3xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 sm:p-8 shadow-sm">
+            <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white mb-4 pb-3 border-b border-slate-100 dark:border-slate-800">
+              ¿Cómo funciona este cálculo en el Perú?
+            </h2>
+            <div className="text-slate-700 dark:text-slate-300 leading-relaxed text-sm space-y-3 font-normal">
               {educationalContent}
             </div>
           </section>
@@ -127,41 +112,36 @@ export function CalculatorShell({
           <FaqAccordion items={faqs} title={`Preguntas frecuentes sobre ${meta.shortTitle}`} />
         )}
 
-        {/* Related Calculators */}
-        <section className="mt-12">
-          <h2 className="text-lg font-extrabold text-slate-900 mb-4">
-            Otras calculadoras que te pueden interesar
+        {/* Related */}
+        <section aria-label="Calculadoras relacionadas" className="pt-6 border-t border-slate-200 dark:border-slate-800">
+          <h2 className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-4">
+            Otras calculadoras útiles
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {related.map((calc) => (
               <Link
                 key={calc.id}
                 href={calc.slug}
-                className="rounded-2xl border border-slate-200 bg-white p-4.5 transition-all hover:border-emerald-500 hover:shadow-md group flex flex-col justify-between"
+                className="rounded-2xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 hover:border-emerald-700 dark:hover:border-emerald-500 hover:shadow-md transition-all group shadow-2xs flex flex-col justify-between"
               >
                 <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded">
-                      {calc.tag}
-                    </span>
-                    <span className="text-xs text-slate-400">🇵🇪 S/</span>
+                  <div className="text-sm font-bold text-slate-900 dark:text-white group-hover:text-emerald-800 dark:group-hover:text-emerald-400">
+                    {calc.shortTitle}
                   </div>
-                  <h3 className="font-bold text-slate-900 group-hover:text-emerald-700 transition-colors text-sm">
-                    {calc.title}
-                  </h3>
-                  <p className="text-xs text-slate-500 mt-1 line-clamp-2">
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-1.5 line-clamp-2">
                     {calc.description}
                   </p>
                 </div>
-                <div className="mt-3 flex items-center gap-1 text-xs font-bold text-emerald-600 group-hover:translate-x-1 transition-transform">
+                <span className="inline-flex items-center gap-1 text-xs font-bold text-emerald-800 dark:text-emerald-400 mt-4 group-hover:translate-x-0.5 transition-transform">
                   <span>Abrir calculadora</span>
-                  <span>→</span>
-                </div>
+                  <ArrowRight className="h-3.5 w-3.5" />
+                </span>
               </Link>
             ))}
           </div>
         </section>
-      </main>
+
+      </div>
     </div>
   );
 }

@@ -1,65 +1,34 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --color-primary: #059669; /* Emerald Green Peru */
-  --color-primary-dark: #047857;
-  --color-primary-light: #10b981;
-  --color-navy: #0f172a;
-  --color-navy-dark: #090e1a;
-  --color-navy-light: #1e293b;
-  --color-accent: #f59e0b; /* Golden Amber */
+}
+
+html {
+  color-scheme: light;
+}
+
+html.dark {
+  color-scheme: dark;
 }
 
 body {
   font-family: var(--font-sans);
-  background-color: #f8fafc;
+  background-color: #f1f5f9; /* Soft slate canvas in light mode for great card contrast */
   color: #0f172a;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-/* Custom Utilities */
-.glass-panel {
-  background: rgba(255, 255, 255, 0.88);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(226, 232, 240, 0.8);
+html.dark body {
+  background-color: #020617;
+  color: #f8fafc;
 }
 
-.glass-panel-dark {
-  background: rgba(15, 23, 42, 0.92);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(51, 65, 85, 0.6);
-}
-
-.gradient-hero {
-  background: linear-gradient(135deg, #091a14 0%, #0f2b20 40%, #0b1e2e 100%);
-}
-
-.gradient-emerald-card {
-  background: linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 100%);
-  border: 1px solid #a7f3d0;
-}
-
-.gradient-badge {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-}
-
-.text-gradient-emerald {
-  background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.text-gradient-gold {
-  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-/* Smooth Input Focus ring */
+/* Remove spin buttons on number inputs cleanly */
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
@@ -67,20 +36,4 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 input[type="number"] {
   -moz-appearance: textfield;
-}
-
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-::-webkit-scrollbar-track {
-  background: #f1f5f9;
-}
-::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 4px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
 }

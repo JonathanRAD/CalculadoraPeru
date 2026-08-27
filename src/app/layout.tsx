@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import { Navbar } from '@/shared/components/layout/Navbar';
 import { Footer } from '@/shared/components/layout/Footer';
+import { ThemeProvider } from '@/shared/context/ThemeContext';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -29,6 +30,10 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: 'CalculaPerú' }],
   metadataBase: new URL('https://calculadora-peru.vercel.app'),
+  icons: {
+    icon: '/logo-calc.png',
+    apple: '/logo-calc.png',
+  },
   alternates: {
     canonical: '/',
   },
@@ -40,12 +45,21 @@ export const metadata: Metadata = {
     url: 'https://calculadora-peru.vercel.app',
     locale: 'es_PE',
     type: 'website',
+    images: [
+      {
+        url: '/logo-calc.png',
+        width: 1200,
+        height: 630,
+        alt: 'CalculaPerú - Portal de Calculadoras #1 del Perú',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'CalculaPerú | El Portal de Calculadoras #1 del Perú',
     description:
       'Calculadoras financieras, comerciales y tributarias adaptadas al Perú: IGV 18%, precio de venta y luz.',
+    images: ['/logo-calc.png'],
   },
 };
 
@@ -61,7 +75,7 @@ const rootWebsiteJsonLd = {
     '@type': 'SearchAction',
     target: {
       '@type': 'EntryPoint',
-      urlTemplate: 'https://calculaperu.vercel.app/?q={search_term_string}',
+      urlTemplate: 'https://calculadora-peru.vercel.app/?q={search_term_string}',
     },
     'query-input': 'required name=search_term_string',
   },
@@ -76,16 +90,33 @@ export default function RootLayout({
     <html lang="es" className={`${geistSans.variable} ${geistMono.variable}`} suppressHydrationWarning>
       <head>
         <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              try {
+                const storedTheme = localStorage.getItem('calculaperu-theme');
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                if (storedTheme === 'dark' || (!storedTheme && prefersDark)) {
+                  document.documentElement.classList.add('dark');
+                } else {
+                  document.documentElement.classList.remove('dark');
+                }
+              } catch (e) {}
+            `,
+          }}
+        />
+        <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(rootWebsiteJsonLd) }}
         />
       </head>
-      <body className="min-h-screen flex flex-col bg-slate-50 text-slate-900 font-sans" suppressHydrationWarning>
-        <Navbar />
-        <main id="main-content" className="flex-1">
-          {children}
-        </main>
-        <Footer />
+      <body className="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans antialiased transition-colors duration-200" suppressHydrationWarning>
+        <ThemeProvider>
+          <Navbar />
+          <main id="main-content" className="flex-1">
+            {children}
+          </main>
+          <Footer />
+        </ThemeProvider>
       </body>
     </html>
   );

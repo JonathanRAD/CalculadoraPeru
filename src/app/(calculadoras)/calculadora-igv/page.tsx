@@ -8,35 +8,28 @@ import { formatCurrency } from '@/core/math/formatters';
 import { InputNumber } from '@/shared/components/ui/InputNumber';
 import { ResultMetricCard } from '@/shared/components/ui/ResultMetricCard';
 import { ShareButtons } from '@/shared/components/ui/ShareButtons';
-import { Receipt, Check, ArrowLeftRight } from 'lucide-react';
+import { Receipt, FileText, CheckCircle2 } from 'lucide-react';
 
 export default function CalculadoraIgvPage() {
   const meta = CALCULATORS_REGISTRY.find((c) => c.id === 'calculadora-igv')!;
 
-  const [mode, setMode] = useState<IgvCalculationMode>('add_igv');
   const [amount, setAmount] = useState<number>(100);
+  const [mode, setMode] = useState<IgvCalculationMode>('add_igv');
 
-  const result = calculateIgv({
-    amount,
-    mode,
-  });
+  const result = calculateIgv({ amount, mode });
 
-  const shareSummary = mode === 'add_igv'
-    ? `Base Imponible: ${formatCurrency(result.baseAmount)}
-IGV (18%): ${formatCurrency(result.igvAmount)}
-Total a Facturar: ${formatCurrency(result.totalAmount)}`
-    : `Total Facturado: ${formatCurrency(result.totalAmount)}
-Subtotal (sin IGV): ${formatCurrency(result.baseAmount)}
-IGV Extraído (18%): ${formatCurrency(result.igvAmount)}`;
+  const shareSummary = `Base Imponible: ${formatCurrency(result.baseAmount)}
+IGV (18% SUNAT): ${formatCurrency(result.igvAmount)}
+Total Facturado: ${formatCurrency(result.totalAmount)}`;
 
   const faqs = [
     {
-      question: '¿Cómo se desglosa el 18% del IGV en Perú?',
-      answer: 'El 18% está compuesto por un 16% correspondiente al Impuesto General a las Ventas (IGV propiamente dicho) y un 2% al Impuesto de Promoción Municipal (IPM). Ambos se liquidan de forma unificada ante la SUNAT.',
+      question: '¿Cómo se compone la tasa del IGV del 18% en el Perú?',
+      answer: 'La tasa oficial del 18% está compuesta por un 16% de IGV (Impuesto General a las Ventas) más un 2% de IPM (Impuesto de Promoción Municipal). Ambos se recaudan conjuntamente por la SUNAT en todas las facturas y boletas.',
     },
     {
-      question: '¿Cómo extraer el IGV de un precio total manualmente?',
-      answer: 'Para obtener la Base Imponible a partir del Total con IGV, divide el monto total entre 1.18. Por ejemplo: S/ 118 / 1.18 = S/ 100 de Base, y la diferencia (S/ 18) es el IGV.',
+      question: '¿Cómo extraer el IGV de un total facturado?',
+      answer: 'Para saber la base imponible de un producto con precio final en soles, se divide el monto total entre 1.18. Por ejemplo: S/ 118 / 1.18 = S/ 100 de Base Imponible y S/ 18 de IGV.',
     },
   ];
 
@@ -47,21 +40,12 @@ IGV Extraído (18%): ${formatCurrency(result.igvAmount)}`;
       educationalContent={
         <div className="space-y-3">
           <p>
-            El <strong>Impuesto General a las Ventas (IGV)</strong> grava el valor agregado de todas las transacciones comerciales en el Perú con una tasa oficial del 18%.
+            El <strong>Impuesto General a las Ventas (IGV)</strong> grava todas las transferencias de bienes y prestación de servicios en el Perú con una tasa del <strong>18%</strong>.
           </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-2">
-            <div className="rounded-xl border border-emerald-200 bg-emerald-50/50 p-4">
-              <h4 className="font-bold text-emerald-900 text-sm">Modo: Calcular IGV (Agregar)</h4>
-              <p className="text-xs text-emerald-800 mt-1">
-                Ingresas el valor de tus servicios o productos sin impuestos (Subtotal) y la herramienta le suma el 18% para obtener el total a cobrar en tu factura.
-              </p>
-            </div>
-            <div className="rounded-xl border border-blue-200 bg-blue-50/50 p-4">
-              <h4 className="font-bold text-blue-900 text-sm">Modo: Extraer IGV (Desglosar)</h4>
-              <p className="text-xs text-blue-800 mt-1">
-                Ingresas el total ya cobrado o el monto final de una boleta y la herramienta extrae cuánto es la base real y cuánto debes declarar a SUNAT.
-              </p>
-            </div>
+          <div className="rounded-xl bg-slate-50 dark:bg-slate-950 p-4 border border-slate-200 dark:border-slate-800 space-y-2 text-xs">
+            <div className="font-bold text-slate-800 dark:text-slate-200">Fórmulas SUNAT Oficiales:</div>
+            <div>• <strong>Agregar IGV</strong>: Total = Base Imponible × 1.18</div>
+            <div>• <strong>Extraer IGV</strong>: Base Imponible = Total / 1.18 | IGV = Total - Base Imponible</div>
           </div>
         </div>
       }
@@ -69,99 +53,102 @@ IGV Extraído (18%): ${formatCurrency(result.igvAmount)}`;
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         
         {/* Form Column */}
-        <div className="lg:col-span-7 rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 shadow-xs space-y-6">
-          <div className="flex items-center gap-2 border-b border-slate-100 pb-3">
-            <Receipt className="h-5 w-5 text-emerald-600" />
-            <h2 className="text-lg font-bold text-slate-900">Selecciona la operación tributaria</h2>
+        <div className="lg:col-span-7 rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 sm:p-8 shadow-xs space-y-6">
+          <div className="flex items-center gap-2 border-b border-slate-100 dark:border-slate-800 pb-3">
+            <Receipt className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+            <h2 className="text-lg font-bold text-slate-900 dark:text-white">Selecciona la operación de IGV</h2>
           </div>
 
           {/* Mode Selector Tabs */}
-          <div className="grid grid-cols-2 gap-2 rounded-2xl bg-slate-100 p-1.5 border border-slate-200/60">
+          <div className="grid grid-cols-2 gap-2 rounded-2xl bg-slate-100 dark:bg-slate-950 p-1.5 border border-slate-200 dark:border-slate-800">
             <button
               type="button"
               onClick={() => setMode('add_igv')}
-              className={`flex items-center justify-center gap-2 rounded-xl py-2.5 text-xs font-bold transition-all ${
+              className={`rounded-xl py-3 text-xs sm:text-sm font-bold transition-all cursor-pointer ${
                 mode === 'add_igv'
-                  ? 'bg-white text-emerald-800 shadow-xs ring-1 ring-slate-200'
-                  : 'text-slate-600 hover:text-slate-900'
+                  ? 'bg-white dark:bg-slate-800 text-emerald-800 dark:text-emerald-300 shadow-xs'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
-              <ArrowLeftRight className="h-3.5 w-3.5 text-emerald-600" />
-              Calcular IGV (Agregar 18%)
+              ➕ Agregar IGV (a subtotal)
             </button>
-
             <button
               type="button"
               onClick={() => setMode('extract_igv')}
-              className={`flex items-center justify-center gap-2 rounded-xl py-2.5 text-xs font-bold transition-all ${
+              className={`rounded-xl py-3 text-xs sm:text-sm font-bold transition-all cursor-pointer ${
                 mode === 'extract_igv'
-                  ? 'bg-white text-emerald-800 shadow-xs ring-1 ring-slate-200'
-                  : 'text-slate-600 hover:text-slate-900'
+                  ? 'bg-white dark:bg-slate-800 text-emerald-800 dark:text-emerald-300 shadow-xs'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
-              <ArrowLeftRight className="h-3.5 w-3.5 text-emerald-600" />
-              Extraer IGV (Desglosar)
+              ✂️ Extraer IGV (de total)
             </button>
           </div>
 
           <InputNumber
             id="amount"
-            label={mode === 'add_igv' ? 'Monto Subtotal / Base Imponible (sin IGV)' : 'Monto Total Facturado (con IGV incluido)'}
+            label={mode === 'add_igv' ? 'Monto Subtotal (Base Imponible sin IGV)' : 'Monto Total Facturado (con IGV incluido)'}
             prefix="S/"
             value={amount}
-            onChange={(val) => setAmount(val)}
-            helpText="Monto en Soles"
+            onChange={(amount) => setAmount(amount)}
+            helpText={mode === 'add_igv' ? 'Monto neto a facturar' : 'Precio final de la boleta/factura'}
             placeholder="100.00"
             required
           />
 
-          <div className="flex items-center gap-2 rounded-xl bg-emerald-50 p-3.5 text-xs text-emerald-900 border border-emerald-200/60">
-            <span className="font-bold">Tasa Oficial SUNAT:</span> 18.00% (16% IGV + 2% Impuesto de Promoción Municipal).
+          <div className="rounded-2xl bg-emerald-50/60 dark:bg-emerald-950/40 p-4 border border-emerald-200/80 dark:border-emerald-800 text-xs text-emerald-950 dark:text-emerald-200 space-y-1">
+            <div className="font-bold flex items-center gap-1.5">
+              <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+              <span>Desglose Legal Tributario Perú:</span>
+            </div>
+            <p className="text-[11px] text-emerald-800 dark:text-emerald-300">
+              • IGV (16%): {formatCurrency(result.baseAmount * 0.16)} | • IPM (2%): {formatCurrency(result.baseAmount * 0.02)}
+            </p>
           </div>
         </div>
 
         {/* Results Column */}
         <div className="lg:col-span-5 flex flex-col gap-4">
-          <div className="rounded-3xl border border-emerald-200/80 bg-gradient-to-b from-emerald-50/70 via-white to-white p-6 sm:p-7 shadow-xs">
+          <div className="rounded-3xl border border-emerald-200/80 dark:border-slate-800 bg-gradient-to-b from-emerald-50/70 via-white to-white dark:from-slate-900 dark:via-slate-900 dark:to-slate-900 p-6 sm:p-7 shadow-xs">
             <div className="flex items-center justify-between mb-4">
-              <span className="text-xs font-bold uppercase tracking-wider text-emerald-800">
-                Desglose SUNAT
+              <span className="text-xs font-bold uppercase tracking-wider text-emerald-800 dark:text-emerald-400">
+                Liquidación Tributaria
               </span>
-              <span className="rounded-full bg-emerald-600 px-2.5 py-0.5 text-xs font-bold text-white">
-                Tributario
+              <span className="rounded-full bg-emerald-700 dark:bg-emerald-600 px-2.5 py-0.5 text-xs font-bold text-white">
+                SUNAT 18%
               </span>
             </div>
 
             {/* Big Main Result */}
-            <div className="rounded-2xl bg-white border border-emerald-200/60 p-5 shadow-2xs text-center mb-5">
-              <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">
-                {mode === 'add_igv' ? 'Total Factura a Cobrar' : 'Subtotal Neto (Base)'}
+            <div className="rounded-2xl bg-white dark:bg-slate-950 border border-emerald-200/60 dark:border-slate-800 p-5 shadow-2xs text-center mb-5">
+              <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">
+                Total Facturado (con IGV)
               </span>
-              <div className="text-3xl sm:text-4xl font-black text-emerald-700 mt-1">
-                {formatCurrency(mode === 'add_igv' ? result.totalAmount : result.baseAmount)}
+              <div className="text-3xl sm:text-4xl font-black text-emerald-700 dark:text-emerald-400 mt-1">
+                {formatCurrency(result.totalAmount)}
               </div>
-              <div className="mt-1 text-xs text-slate-500 font-medium">
-                {mode === 'add_igv' ? 'Monto total con IGV incluido' : 'Valor real antes del impuesto'}
+              <div className="mt-1 text-xs text-slate-500 dark:text-slate-400 font-medium">
+                Monto que paga el cliente final
               </div>
             </div>
 
             {/* Sub-Metrics Grid */}
             <div className="grid grid-cols-2 gap-3 mb-5">
               <ResultMetricCard
-                label="IGV (18%)"
-                value={formatCurrency(result.igvAmount)}
-                type="warning"
-                subValue="A declarar ante SUNAT"
+                label="Base Imponible"
+                value={formatCurrency(result.baseAmount)}
+                type="neutral"
+                subValue="Ingreso neto de tu negocio"
               />
               <ResultMetricCard
-                label={mode === 'add_igv' ? 'Base Imponible' : 'Total Cobrado'}
-                value={formatCurrency(mode === 'add_igv' ? result.baseAmount : result.totalAmount)}
-                type="neutral"
-                subValue={mode === 'add_igv' ? 'Subtotal original' : 'Monto total boleta'}
+                label="Monto del IGV (18%)"
+                value={formatCurrency(result.igvAmount)}
+                type="warning"
+                subValue="Para declarar a SUNAT"
               />
             </div>
 
-            <ShareButtons title="Cálculo de IGV 18% SUNAT" shareText={shareSummary} />
+            <ShareButtons title="Cálculo de IGV (18%)" shareText={shareSummary} />
           </div>
         </div>
 

@@ -13,11 +13,20 @@ interface FaqAccordionProps {
   title?: string;
 }
 
-export function FaqAccordion({ items, title = 'Preguntas Frecuentes' }: FaqAccordionProps) {
-  const [openIndex, setOpenIndex] = useState<number | null>(0);
+export function FaqAccordion({
+  items,
+  title = 'Preguntas frecuentes sobre este cálculo',
+}: FaqAccordionProps) {
+  const [openIndices, setOpenIndices] = useState<number[]>([0]);
 
-  // Schema.org FAQPage structured data
-  const jsonLd = {
+  const toggle = (idx: number) => {
+    setOpenIndices((prev) =>
+      prev.includes(idx) ? prev.filter((i) => i !== idx) : [...prev, idx]
+    );
+  };
+
+  // Schema.org FAQPage JSON-LD
+  const faqJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
     mainEntity: items.map((item) => ({
@@ -31,41 +40,43 @@ export function FaqAccordion({ items, title = 'Preguntas Frecuentes' }: FaqAccor
   };
 
   return (
-    <section className="mt-12 rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 shadow-xs">
+    <section aria-label="Preguntas frecuentes" className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 sm:p-8 shadow-xs">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
 
-      <div className="flex items-center gap-2.5 mb-6">
-        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-100 text-emerald-800">
-          <HelpCircle className="h-4 w-4" />
-        </div>
-        <h2 className="text-xl font-extrabold text-slate-900 tracking-tight">
+      <div className="flex items-center gap-2.5 mb-6 pb-4 border-b border-slate-100 dark:border-slate-800">
+        <HelpCircle className="h-5 w-5 text-emerald-700 dark:text-emerald-400" />
+        <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">
           {title}
         </h2>
       </div>
 
-      <div className="divide-y divide-slate-100">
-        {items.map((item, index) => {
-          const isOpen = openIndex === index;
+      <div className="space-y-3">
+        {items.map((item, idx) => {
+          const isOpen = openIndices.includes(idx);
           return (
-            <div key={index} className="py-4 first:pt-0 last:pb-0">
+            <div
+              key={idx}
+              className="rounded-xl border border-slate-100 dark:border-slate-800/80 bg-slate-50/50 dark:bg-slate-950 overflow-hidden transition-colors"
+            >
               <button
-                onClick={() => setOpenIndex(isOpen ? null : index)}
-                className="flex w-full items-center justify-between text-left font-bold text-slate-800 hover:text-emerald-700 transition-colors gap-4"
+                type="button"
+                onClick={() => toggle(idx)}
                 aria-expanded={isOpen}
+                className="flex w-full items-center justify-between p-4 text-left font-bold text-sm text-slate-800 dark:text-slate-200 hover:text-emerald-800 dark:hover:text-emerald-400 cursor-pointer"
               >
-                <span className="text-sm sm:text-base">{item.question}</span>
+                <span>{item.question}</span>
                 <ChevronDown
-                  className={`h-5 w-5 shrink-0 text-slate-400 transition-transform duration-200 ${
-                    isOpen ? 'rotate-180 text-emerald-600' : ''
+                  className={`h-4 w-4 shrink-0 text-slate-400 transition-transform duration-200 ${
+                    isOpen ? 'rotate-180 text-emerald-700 dark:text-emerald-400' : ''
                   }`}
                 />
               </button>
 
               {isOpen && (
-                <div className="mt-3 text-sm text-slate-600 leading-relaxed pl-1 pr-4 animate-in fade-in duration-200">
+                <div className="border-t border-slate-100 dark:border-slate-800/80 px-4 pt-3 pb-4 text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
                   {item.answer}
                 </div>
               )}

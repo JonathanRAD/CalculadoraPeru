@@ -8,28 +8,28 @@ import { formatCurrency, formatNumber } from '@/core/math/formatters';
 import { InputNumber } from '@/shared/components/ui/InputNumber';
 import { ResultMetricCard } from '@/shared/components/ui/ResultMetricCard';
 import { ShareButtons } from '@/shared/components/ui/ShareButtons';
-import { Target, AlertCircle } from 'lucide-react';
+import { Target } from 'lucide-react';
 
 export default function VentasNecesariasPage() {
   const meta = CALCULATORS_REGISTRY.find((c) => c.id === 'ventas-necesarias')!;
 
   const [form, setForm] = useState<TargetSalesInput>({
     targetNetProfit: 5000,
-    fixedMonthlyCosts: 2000,
-    unitSalePrice: 80,
-    unitVariableCost: 35,
+    fixedMonthlyCosts: 3000,
+    unitSalePrice: 50,
+    unitVariableCost: 30,
   });
 
   const result = calculateTargetSales(form);
 
-  const shareSummary = `Meta de Ganancia: ${formatCurrency(form.targetNetProfit)}
-Unidades a Vender: ${formatNumber(result.unitsToSell)} al mes (${result.dailyUnitsToSell}/día)
-Facturación Necesaria: ${formatCurrency(result.totalSalesRequired)}`;
+  const shareSummary = `Meta de Ganancia: ${formatCurrency(form.targetNetProfit)}/mes
+Unidades a Vender: ${formatNumber(result.unitsToSell)} unidades
+Facturación Necesaria: ${formatCurrency(result.totalSalesRequired)} (sin IGV)`;
 
   const faqs = [
     {
-      question: '¿Por qué esta fórmula es más precisa que solo dividir la meta entre el precio?',
-      answer: 'Porque tiene en cuenta que cada producto vendido incurre en un costo variable y que primero debes pagar la totalidad de tus costos fijos antes de poder quedarte con tu meta de ganancia líquida.',
+      question: '¿En qué se diferencia del Punto de Equilibrio?',
+      answer: 'El Punto de Equilibrio calcula las ventas para no ganar ni perder (Utilidad = 0). Las Ventas Necesarias calculan las unidades requeridas para alcanzar una ganancia neta deseada específica por encima de todos tus costos fijos.',
     },
   ];
 
@@ -40,7 +40,7 @@ Facturación Necesaria: ${formatCurrency(result.totalSalesRequired)}`;
       educationalContent={
         <div className="space-y-3">
           <p>
-            Cálculo financiero inverso para fijar metas comerciales claras y alcanzables para tu equipo de ventas o tu tienda.
+            Te permite planificar con exactitud cuántas ventas diarias y mensuales necesitas cerrar para alcanzar tu meta de ingresos netos en el Perú.
           </p>
         </div>
       }
@@ -48,110 +48,101 @@ Facturación Necesaria: ${formatCurrency(result.totalSalesRequired)}`;
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         
         {/* Form Column */}
-        <div className="lg:col-span-7 rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 shadow-xs space-y-6">
-          <div className="flex items-center gap-2 border-b border-slate-100 pb-3">
-            <Target className="h-5 w-5 text-emerald-600" />
-            <h2 className="text-lg font-bold text-slate-900">Define tu objetivo financiero</h2>
+        <div className="lg:col-span-7 rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 sm:p-8 shadow-xs space-y-6">
+          <div className="flex items-center gap-2 border-b border-slate-100 dark:border-slate-800 pb-3">
+            <Target className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+            <h2 className="text-lg font-bold text-slate-900 dark:text-white">Define tu meta y estructura</h2>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <InputNumber
-              id="targetProfit"
-              label="Meta de ganancia neta deseada"
+              id="targetNetProfit"
+              label="Ganancia neta deseada al mes"
               prefix="S/"
               value={form.targetNetProfit}
               onChange={(targetNetProfit) => setForm({ ...form, targetNetProfit })}
-              helpText="Tu sueldo o utilidad libre al mes"
+              helpText="Tu sueldo o utilidad neta"
               placeholder="5000.00"
               required
             />
 
             <InputNumber
-              id="fixedCosts"
+              id="fixedMonthlyCosts"
               label="Costos fijos mensuales"
               prefix="S/"
               value={form.fixedMonthlyCosts}
               onChange={(fixedMonthlyCosts) => setForm({ ...form, fixedMonthlyCosts })}
-              helpText="Alquiler, sueldos fijos, luz"
-              placeholder="2000.00"
+              helpText="Alquiler, sueldos, servicios"
+              placeholder="3000.00"
               required
             />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <InputNumber
-              id="unitPrice"
-              label="Precio de venta por producto"
+              id="unitSalePrice"
+              label="Precio de venta unitario (sin IGV)"
               prefix="S/"
               value={form.unitSalePrice}
               onChange={(unitSalePrice) => setForm({ ...form, unitSalePrice })}
-              placeholder="80.00"
+              placeholder="50.00"
               required
             />
 
             <InputNumber
-              id="unitCost"
-              label="Costo variable por producto"
+              id="unitVariableCost"
+              label="Costo variable por unidad"
               prefix="S/"
               value={form.unitVariableCost}
               onChange={(unitVariableCost) => setForm({ ...form, unitVariableCost })}
-              placeholder="35.00"
+              placeholder="30.00"
               required
             />
           </div>
-
-          {!result.isFeasible && (
-            <div className="flex items-center gap-3 rounded-xl bg-rose-50 p-4 border border-rose-200 text-rose-800 text-xs">
-              <AlertCircle className="h-5 w-5 shrink-0 text-rose-600" />
-              <span>
-                El precio de venta debe ser superior al costo variable unitario.
-              </span>
-            </div>
-          )}
         </div>
 
         {/* Results Column */}
         <div className="lg:col-span-5 flex flex-col gap-4">
-          <div className="rounded-3xl border border-emerald-200/80 bg-gradient-to-b from-emerald-50/70 via-white to-white p-6 sm:p-7 shadow-xs">
+          <div className="rounded-3xl border border-emerald-200/80 dark:border-slate-800 bg-gradient-to-b from-emerald-50/70 via-white to-white dark:from-slate-900 dark:via-slate-900 dark:to-slate-900 p-6 sm:p-7 shadow-xs">
             <div className="flex items-center justify-between mb-4">
-              <span className="text-xs font-bold uppercase tracking-wider text-emerald-800">
+              <span className="text-xs font-bold uppercase tracking-wider text-emerald-800 dark:text-emerald-400">
                 Meta Comercial
               </span>
-              <span className="rounded-full bg-emerald-600 px-2.5 py-0.5 text-xs font-bold text-white">
-                Objetivo
+              <span className="rounded-full bg-emerald-700 dark:bg-emerald-600 px-2.5 py-0.5 text-xs font-bold text-white">
+                🇵🇪 En Soles
               </span>
             </div>
 
             {/* Big Main Result */}
-            <div className="rounded-2xl bg-white border border-emerald-200/60 p-5 shadow-2xs text-center mb-5">
-              <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">
-                Unidades a Vender al Mes
+            <div className="rounded-2xl bg-white dark:bg-slate-950 border border-emerald-200/60 dark:border-slate-800 p-5 shadow-2xs text-center mb-5">
+              <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">
+                Unidades a Vender Requeridas
               </span>
-              <div className="text-3xl sm:text-4xl font-black text-emerald-700 mt-1">
+              <div className="text-3xl sm:text-4xl font-black text-emerald-700 dark:text-emerald-400 mt-1">
                 {formatNumber(result.unitsToSell)} unidades
               </div>
-              <div className="mt-1 text-xs text-slate-500 font-medium">
-                Meta diaria: ~{result.dailyUnitsToSell} unidades / día (26 días hábiles)
+              <div className="mt-1 text-xs text-slate-500 dark:text-slate-400 font-medium">
+                Vender mínimo {result.dailyUnitsToSell} unidades por día (26 días hábiles)
               </div>
             </div>
 
             {/* Sub-Metrics Grid */}
             <div className="grid grid-cols-2 gap-3 mb-5">
               <ResultMetricCard
-                label="Facturación Requerida"
+                label="Facturación requerida"
                 value={formatCurrency(result.totalSalesRequired)}
-                type="neutral"
-                subValue="Ventas brutas a generar"
+                type="success"
+                subValue="Venta neta sin IGV"
               />
               <ResultMetricCard
                 label="Margen Contribución"
                 value={formatCurrency(result.contributionMarginUnit)}
-                type="success"
-                subValue="Por cada producto vendido"
+                type="neutral"
+                subValue="Por cada unidad"
               />
             </div>
 
-            <ShareButtons title="Ventas Necesarias para Ganar S/ X" shareText={shareSummary} />
+            <ShareButtons title="Ventas Necesarias para Ganancia" shareText={shareSummary} />
           </div>
         </div>
 

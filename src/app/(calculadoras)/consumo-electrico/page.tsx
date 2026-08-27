@@ -4,48 +4,67 @@ import React, { useState } from 'react';
 import { CalculatorShell } from '@/features/calculators/components/CalculatorShell';
 import { CALCULATORS_REGISTRY } from '@/features/calculators/registry';
 import { calculateElectricity, ElectricityInput } from '@/core/calculators/electricity';
-import { ELECTRIC_APPLIANCES, PERU_CONSTANTS } from '@/core/constants/peru';
 import { formatCurrency, formatNumber } from '@/core/math/formatters';
+import { ELECTRIC_APPLIANCES } from '@/core/constants/peru';
 import { InputNumber } from '@/shared/components/ui/InputNumber';
 import { ResultMetricCard } from '@/shared/components/ui/ResultMetricCard';
 import { ShareButtons } from '@/shared/components/ui/ShareButtons';
-import { Zap, Sparkles } from 'lucide-react';
+import { Zap, Tv, Plus, Trash2 } from 'lucide-react';
+
+interface ApplianceRow {
+  id: string;
+  name: string;
+  watts: number;
+  hoursPerDay: number;
+  daysPerMonth: number;
+}
 
 export default function ConsumoElectricoPage() {
   const meta = CALCULATORS_REGISTRY.find((c) => c.id === 'consumo-electrico')!;
 
-  const [form, setForm] = useState<ElectricityInput>({
-    powerWatts: 1200,
-    hoursPerDay: 5,
-    daysPerMonth: 30,
-    kwhRate: PERU_CONSTANTS.DEFAULT_KWH_COST,
-  });
+  const [tariffPerKwh, setTariffPerKwh] = useState<number>(0.72);
+  const [appliances, setAppliances] = useState<ApplianceRow[]>([
+    { id: '1', name: 'Refrigeradora (No Frost)', watts: 250, hoursPerDay: 12, daysPerMonth: 30 },
+    { id: '2', name: 'Aire Acondicionado (12000 BTU)', watts: 1200, hoursPerDay: 5, daysPerMonth: 30 },
+    { id: '3', name: 'Computadora / Laptop', watts: 150, hoursPerDay: 8, daysPerMonth: 26 },
+  ]);
 
-  const [selectedApplianceId, setSelectedApplianceId] = useState<string>('aire_acondicionado');
+  const totalMonthlyKwh = appliances.reduce((acc, app) => {
+    return acc + (app.watts * app.hoursPerDay * app.daysPerMonth) / 1000;
+  }, 0);
 
-  const handleSelectAppliance = (appliance: typeof ELECTRIC_APPLIANCES[number]) => {
-    setSelectedApplianceId(appliance.id);
-    setForm({
-      ...form,
-      powerWatts: appliance.watts,
-      hoursPerDay: appliance.defaultHours,
-    });
+  const totalMonthlyCost = totalMonthlyKwh * tariffPerKwh;
+
+  const addAppliance = (presetName: string, presetWatts: number) => {
+    setAppliances([
+      ...appliances,
+      {
+        id: Date.now().toString(),
+        name: presetName,
+        watts: presetWatts,
+        hoursPerDay: 4,
+        daysPerMonth: 30,
+      },
+    ]);
   };
 
-  const result = calculateElectricity(form);
+  const removeAppliance = (id: string) => {
+    setAppliances(appliances.filter((a) => a.id !== id));
+  };
 
-  const shareSummary = `Consumo Mensual: ${formatNumber(result.monthlyKwh, 1)} kWh
-Gasto Estimado en Recibo: ${formatCurrency(result.estimatedMonthlyCost)}/mes
-Gasto Anual: ${formatCurrency(result.estimatedAnnualCost)}/año`;
+  const updateAppliance = (id: string, field: keyof ApplianceRow, val: any) => {
+    setAppliances(
+      appliances.map((a) => (a.id === id ? { ...a, [field]: val } : a))
+    );
+  };
+
+  const shareSummary = `Consumo Eléctrico Estimado: ${formatNumber(totalMonthlyKwh)} kWh/mes
+Gasto Total: ${formatCurrency(totalMonthlyCost)} al mes (Tarifa S/ ${tariffPerKwh}/kWh)`;
 
   const faqs = [
     {
-      question: '¿Cuánto cuesta 1 kWh de luz en Perú actualmente?',
-      answer: 'En Lima (Luz del Sur y Enel / Pliego tarifario residencial BT5B), el costo promedio del kilovatio-hora oscila entre S/ 0.68 y S/ 0.76 dependiendo del rango de consumo mensual y cargos por reposición y alumbrado público.',
-    },
-    {
-      question: '¿Cuáles son los electrodomésticos que más consumen en Perú?',
-      answer: 'Los artefactos de resistencia y climatización encabezan el consumo: Terma eléctrica (1500W a 2000W), Aire acondicionado (1000W a 2200W), Hervidor de agua (1500W) y Plancha (1200W).',
+      question: '¿Cuál es la tarifa promedio por kWh en Perú?',
+      answer: 'En Lima y las principales ciudades del Perú, la tarifa residencial y comercial BT5B de Luz del Sur y Enel (Plena) ronda entre S/ 0.70 y S/ 0.85 por kilovatio-hora (kWh), incluyendo cargos por distribución y alumbrado público.',
     },
   ];
 
@@ -56,143 +75,166 @@ Gasto Anual: ${formatCurrency(result.estimatedAnnualCost)}/año`;
       educationalContent={
         <div className="space-y-3">
           <p>
-            El consumo de energía de tu recibo de luz se factura en <strong>Kilovatios-hora (kWh)</strong>. 
-            1 kWh equivale a 1,000 Watts de potencia utilizados de manera continua durante 1 hora.
+            El consumo de energía se calcula multiplicando la potencia en Watts del artefacto por las horas de uso diario y los días del mes, dividido entre 1,000 para obtener los <strong>kWh</strong>.
           </p>
+          <div className="rounded-xl bg-slate-50 dark:bg-slate-950 p-4 border border-slate-200 dark:border-slate-800 text-xs">
+            <strong>Fórmula:</strong> kWh Mensual = (Watts × Horas/día × Días/mes) / 1000 | Costo = kWh × Tarifa por kWh
+          </div>
         </div>
       }
     >
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         
         {/* Form Column */}
-        <div className="lg:col-span-7 rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 shadow-xs space-y-6">
-          <div className="flex items-center gap-2 border-b border-slate-100 pb-3">
-            <Zap className="h-5 w-5 text-emerald-600" />
-            <h2 className="text-lg font-bold text-slate-900">Selecciona o personaliza tu artefacto</h2>
-          </div>
-
-          {/* Quick Predefined Appliances Carousel / Pills */}
-          <div>
-            <label className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2.5 block">
-              Artefactos populares en Perú:
-            </label>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-              {ELECTRIC_APPLIANCES.slice(0, 6).map((app) => {
-                const isSelected = selectedApplianceId === app.id;
-                return (
-                  <button
-                    key={app.id}
-                    type="button"
-                    onClick={() => handleSelectAppliance(app)}
-                    className={`flex items-center gap-2 rounded-xl p-2.5 text-left border transition-all text-xs font-medium ${
-                      isSelected
-                        ? 'border-emerald-600 bg-emerald-50 text-emerald-950 font-bold shadow-xs ring-1 ring-emerald-600'
-                        : 'border-slate-200 bg-slate-50 hover:bg-white hover:border-slate-300 text-slate-700'
-                    }`}
-                  >
-                    <span className="text-base">{app.icon}</span>
-                    <span className="line-clamp-1">{app.name.split('(')[0]}</span>
-                  </button>
-                );
-              })}
+        <div className="lg:col-span-7 rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 sm:p-8 shadow-xs space-y-6">
+          <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+            <div className="flex items-center gap-2">
+              <Zap className="h-5 w-5 text-teal-600 dark:text-teal-400" />
+              <h2 className="text-lg font-bold text-slate-900 dark:text-white">Artefactos y Equipos</h2>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-slate-500 dark:text-slate-400">Tarifa S/:</span>
+              <input
+                type="number"
+                step="0.01"
+                value={tariffPerKwh}
+                onChange={(e) => setTariffPerKwh(parseFloat(e.target.value) || 0)}
+                className="w-20 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 px-2 py-1 text-xs font-bold text-slate-900 dark:text-white outline-none"
+              />
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-            <InputNumber
-              id="powerWatts"
-              label="Potencia del artefacto"
-              suffix="Watts (W)"
-              value={form.powerWatts}
-              onChange={(powerWatts) => {
-                setSelectedApplianceId('');
-                setForm({ ...form, powerWatts });
-              }}
-              helpText="Ver etiqueta posterior del equipo"
-              placeholder="1200"
-              required
-            />
-
-            <InputNumber
-              id="hoursPerDay"
-              label="Horas de uso al día"
-              suffix="horas/día"
-              value={form.hoursPerDay}
-              onChange={(hoursPerDay) => setForm({ ...form, hoursPerDay })}
-              helpText="Promedio de encendido diario"
-              placeholder="5"
-              max={24}
-              required
-            />
+          {/* Quick presets */}
+          <div>
+            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-2">
+              + Agregar artefactos comunes:
+            </span>
+            <div className="flex flex-wrap gap-1.5">
+              {ELECTRIC_APPLIANCES.slice(0, 6).map((preset) => (
+                <button
+                  key={preset.name}
+                  type="button"
+                  onClick={() => addAppliance(preset.name, preset.watts)}
+                  className="inline-flex items-center gap-1 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-2.5 py-1 text-xs text-slate-700 dark:text-slate-300 hover:bg-teal-50 dark:hover:bg-teal-950 hover:text-teal-800 dark:hover:text-teal-300 cursor-pointer"
+                >
+                  <Plus className="h-3 w-3" />
+                  <span>{preset.name} ({preset.watts}W)</span>
+                </button>
+              ))}
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-            <InputNumber
-              id="daysPerMonth"
-              label="Días de uso al mes"
-              suffix="días"
-              value={form.daysPerMonth}
-              onChange={(daysPerMonth) => setForm({ ...form, daysPerMonth })}
-              helpText="Por defecto 30 días"
-              placeholder="30"
-              max={31}
-            />
+          {/* Appliances List */}
+          <div className="space-y-3">
+            {appliances.map((app) => {
+              const kwh = (app.watts * app.hoursPerDay * app.daysPerMonth) / 1000;
+              const cost = kwh * tariffPerKwh;
+              return (
+                <div
+                  key={app.id}
+                  className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-950 p-4 space-y-3"
+                >
+                  <div className="flex items-center justify-between">
+                    <input
+                      type="text"
+                      value={app.name}
+                      onChange={(e) => updateAppliance(app.id, 'name', e.target.value)}
+                      className="font-bold text-sm text-slate-900 dark:text-white bg-transparent outline-none border-b border-transparent focus:border-slate-300"
+                    />
+                    <div className="flex items-center gap-3">
+                      <span className="text-xs font-bold text-teal-700 dark:text-teal-400 font-mono">
+                        {formatCurrency(cost)} / mes
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => removeAppliance(app.id)}
+                        className="text-slate-400 hover:text-rose-500 cursor-pointer"
+                        aria-label="Eliminar artefacto"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                    </div>
+                  </div>
 
-            <InputNumber
-              id="kwhRate"
-              label="Tarifa por kWh (Luz del Sur / Enel)"
-              prefix="S/"
-              suffix="/ kWh"
-              value={form.kwhRate || PERU_CONSTANTS.DEFAULT_KWH_COST}
-              onChange={(kwhRate) => setForm({ ...form, kwhRate })}
-              helpText="Promedio Lima S/ 0.72"
-              placeholder="0.72"
-            />
+                  <div className="grid grid-cols-3 gap-3">
+                    <div>
+                      <label className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 block mb-1">Potencia (Watts)</label>
+                      <input
+                        type="number"
+                        value={app.watts}
+                        onChange={(e) => updateAppliance(app.id, 'watts', parseFloat(e.target.value) || 0)}
+                        className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-1.5 text-xs font-bold text-slate-900 dark:text-white outline-none"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 block mb-1">Horas / día</label>
+                      <input
+                        type="number"
+                        max="24"
+                        value={app.hoursPerDay}
+                        onChange={(e) => updateAppliance(app.id, 'hoursPerDay', parseFloat(e.target.value) || 0)}
+                        className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-1.5 text-xs font-bold text-slate-900 dark:text-white outline-none"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 block mb-1">Días / mes</label>
+                      <input
+                        type="number"
+                        max="31"
+                        value={app.daysPerMonth}
+                        onChange={(e) => updateAppliance(app.id, 'daysPerMonth', parseFloat(e.target.value) || 0)}
+                        className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-1.5 text-xs font-bold text-slate-900 dark:text-white outline-none"
+                      />
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
 
         {/* Results Column */}
         <div className="lg:col-span-5 flex flex-col gap-4">
-          <div className="rounded-3xl border border-emerald-200/80 bg-gradient-to-b from-emerald-50/70 via-white to-white p-6 sm:p-7 shadow-xs">
+          <div className="rounded-3xl border border-teal-200/80 dark:border-slate-800 bg-gradient-to-b from-teal-50/70 via-white to-white dark:from-slate-900 dark:via-slate-900 dark:to-slate-900 p-6 sm:p-7 shadow-xs">
             <div className="flex items-center justify-between mb-4">
-              <span className="text-xs font-bold uppercase tracking-wider text-emerald-800">
-                Gasto Estimado de Luz
+              <span className="text-xs font-bold uppercase tracking-wider text-teal-800 dark:text-teal-400">
+                Gasto de Energía Mensual
               </span>
-              <span className="rounded-full bg-amber-500 px-2.5 py-0.5 text-xs font-bold text-white">
-                ⚡ Electricidad
+              <span className="rounded-full bg-teal-700 dark:bg-teal-600 px-2.5 py-0.5 text-xs font-bold text-white">
+                Osinergmin
               </span>
             </div>
 
             {/* Big Main Result */}
-            <div className="rounded-2xl bg-white border border-emerald-200/60 p-5 shadow-2xs text-center mb-5">
-              <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">
-                Costo Mensual Estimado
+            <div className="rounded-2xl bg-white dark:bg-slate-950 border border-teal-200/60 dark:border-slate-800 p-5 shadow-2xs text-center mb-5">
+              <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">
+                Gasto Estimado al Mes
               </span>
-              <div className="text-3xl sm:text-4xl font-black text-amber-600 mt-1">
-                {formatCurrency(result.estimatedMonthlyCost)}
+              <div className="text-3xl sm:text-4xl font-black text-teal-700 dark:text-teal-400 mt-1">
+                {formatCurrency(totalMonthlyCost)}
               </div>
-              <div className="mt-1 text-xs text-slate-500 font-medium">
-                Consumo de {formatNumber(result.monthlyKwh, 1)} kWh al mes
+              <div className="mt-1 text-xs text-slate-500 dark:text-slate-400 font-medium">
+                {formatNumber(totalMonthlyKwh)} kWh totales al mes
               </div>
             </div>
 
             {/* Sub-Metrics Grid */}
             <div className="grid grid-cols-2 gap-3 mb-5">
               <ResultMetricCard
-                label="Costo por cada hora"
-                value={formatCurrency(result.costPerHour, true, 3)}
-                type="neutral"
-                subValue="Gasto mientras está encendido"
+                label="Gasto Diario Promedio"
+                value={formatCurrency(totalMonthlyCost / 30)}
+                type="success"
+                subValue="Por cada día de uso"
               />
               <ResultMetricCard
-                label="Impacto Anual"
-                value={formatCurrency(result.estimatedAnnualCost)}
-                type="warning"
-                subValue="Proyección en 12 meses"
+                label="Equipos en lista"
+                value={`${appliances.length} artefactos`}
+                type="neutral"
+                subValue={`Tarifa: S/ ${tariffPerKwh}/kWh`}
               />
             </div>
 
-            <ShareButtons title="Consumo Eléctrico y Recibo de Luz" shareText={shareSummary} />
+            <ShareButtons title="Consumo Eléctrico" shareText={shareSummary} />
           </div>
         </div>
 
