@@ -109,13 +109,25 @@ export function Footer() {
 
         </div>
 
-        {/* Bottom Bar */}
-        <div className="mt-12 border-t border-slate-100 dark:border-slate-800/80 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
-          <p>© 2026 CalculaPerú. Todos los derechos reservados.</p>
+        {/* Bottom Legal & Copyright Bar */}
+        <div className="mt-12 border-t border-slate-100 dark:border-slate-800/80 pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+          <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 font-medium">
+            <span>© 2026 CalculaPerú. Todos los derechos reservados.</span>
+            <Link href="/sobre-nosotros" className="hover:text-emerald-700 dark:hover:text-emerald-400 underline transition-colors">
+              Sobre Nosotros
+            </Link>
+            <Link href="/politica-de-privacidad" className="hover:text-emerald-700 dark:hover:text-emerald-400 underline transition-colors">
+              Política de Privacidad
+            </Link>
+            <Link href="/terminos-y-condiciones" className="hover:text-emerald-700 dark:hover:text-emerald-400 underline transition-colors">
+              Términos y Condiciones
+            </Link>
+          </div>
+          
           <div className="flex items-center gap-1.5 font-medium">
             <span>Hecho con</span>
             <Heart className="h-3.5 w-3.5 text-rose-500 fill-rose-500" />
-            <span>para las microempresas, trabajadores y estudiantes del Perú.</span>
+            <span>para las microempresas y trabajadores del Perú.</span>
           </div>
         </div>
       </div>
