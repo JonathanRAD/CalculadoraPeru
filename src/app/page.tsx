@@ -29,6 +29,9 @@ import {
   Filter,
   Check,
   Share2,
+  Utensils,
+  Fuel,
+  Palmtree,
 } from 'lucide-react';
 import { CALCULATORS_REGISTRY, CATEGORIES, CalculatorMeta } from '@/features/calculators/registry';
 import { DynamicIcon } from '@/shared/components/ui/DynamicIcon';
@@ -40,64 +43,59 @@ const USE_CASES = [
     id: 'todos',
     title: 'Ver Todo',
     icon: Layers,
-    description: 'Catálogo de 10 calculadoras',
-    badgeColor: 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-200',
+    description: 'Catálogo de 22 calculadoras',
   },
   {
-    id: 'ecommerce',
-    title: 'Comercio & Ventas',
+    id: 'negocios',
+    title: 'Negocios & Comercio',
     icon: Store,
-    description: 'Fijar precio, margen y rebajas',
-    badgeColor: 'bg-emerald-50 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300',
-    calcIds: ['precio-de-venta', 'margen-de-ganancia', 'descuentos-y-ofertas', 'ganancia-por-producto'],
+    description: 'Precios, márgenes, recetas y POS',
+    calcIds: ['precio-de-venta', 'margen-de-ganancia', 'descuentos-y-ofertas', 'ganancia-por-producto', 'comisiones-pos-yape', 'costeo-recetas'],
   },
   {
-    id: 'sunat',
-    title: 'Impuestos SUNAT',
-    icon: Receipt,
-    description: 'IGV 18% para boletas y facturas',
-    badgeColor: 'bg-amber-50 text-amber-800 dark:bg-amber-950/80 dark:text-amber-300',
-    calcIds: ['calculadora-igv', 'precio-de-venta'],
+    id: 'laboral',
+    title: 'Laboral & Planilla',
+    icon: Briefcase,
+    description: 'Sueldos, gratificación, CTS y horas extras',
+    calcIds: ['sueldo-neto', 'gratificacion', 'calculadora-cts', 'horas-extras', 'calculadora-vacaciones'],
   },
   {
-    id: 'emprendedor',
+    id: 'finanzas',
     title: 'Finanzas & Metas',
-    icon: Target,
-    description: 'Punto de equilibrio, metas y ROI',
-    badgeColor: 'bg-blue-50 text-blue-800 dark:bg-blue-950/80 dark:text-blue-300',
-    calcIds: ['punto-de-equilibrio', 'ventas-necesarias', 'recuperacion-de-inversion', 'porcentajes'],
+    icon: TrendingUp,
+    description: 'Punto de equilibrio, préstamos y ahorro',
+    calcIds: ['punto-de-equilibrio', 'ventas-necesarias', 'recuperacion-de-inversion', 'prestamo-bancario', 'interes-compuesto', 'porcentajes'],
   },
   {
-    id: 'hogar',
-    title: 'Luz & Servicios',
-    icon: Zap,
-    description: 'Gasto en kWh Luz del Sur / Enel',
-    badgeColor: 'bg-teal-50 text-teal-800 dark:bg-teal-950/80 dark:text-teal-300',
-    calcIds: ['consumo-electrico'],
+    id: 'tributario',
+    title: 'Tributario & Diario',
+    icon: Receipt,
+    description: 'IGV 18%, 4ta, combustible y propinas',
+    calcIds: ['calculadora-igv', 'recibo-por-honorarios', 'dividir-cuenta', 'gasto-combustible', 'consumo-electrico'],
   },
 ];
 
 // Distinct category theme colors
 const CATEGORY_STYLES = {
-  comercio: {
+  negocios: {
     badge: 'bg-emerald-50 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800',
     iconBg: 'bg-emerald-50 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 group-hover:bg-emerald-700 group-hover:text-white',
     link: 'text-emerald-800 dark:text-emerald-400 group-hover:text-emerald-950 dark:group-hover:text-emerald-300',
+  },
+  laboral: {
+    badge: 'bg-indigo-50 text-indigo-800 dark:bg-indigo-950/80 dark:text-indigo-300 border-indigo-200 dark:border-indigo-800',
+    iconBg: 'bg-indigo-50 text-indigo-800 dark:bg-indigo-950 dark:text-indigo-300 group-hover:bg-indigo-700 group-hover:text-white',
+    link: 'text-indigo-800 dark:text-indigo-400 group-hover:text-indigo-950 dark:group-hover:text-indigo-300',
   },
   finanzas: {
     badge: 'bg-blue-50 text-blue-800 dark:bg-blue-950/80 dark:text-blue-300 border-blue-200 dark:border-blue-800',
     iconBg: 'bg-blue-50 text-blue-800 dark:bg-blue-950 dark:text-blue-300 group-hover:bg-blue-700 group-hover:text-white',
     link: 'text-blue-800 dark:text-blue-400 group-hover:text-blue-950 dark:group-hover:text-blue-300',
   },
-  tributaria: {
+  tributario: {
     badge: 'bg-amber-50 text-amber-800 dark:bg-amber-950/80 dark:text-amber-300 border-amber-200 dark:border-amber-800',
     iconBg: 'bg-amber-50 text-amber-800 dark:bg-amber-950 dark:text-amber-300 group-hover:bg-amber-700 group-hover:text-white',
     link: 'text-amber-800 dark:text-amber-400 group-hover:text-amber-950 dark:group-hover:text-amber-300',
-  },
-  hogar: {
-    badge: 'bg-teal-50 text-teal-800 dark:bg-teal-950/80 dark:text-teal-300 border-teal-200 dark:border-teal-800',
-    iconBg: 'bg-teal-50 text-teal-800 dark:bg-teal-950 dark:text-teal-300 group-hover:bg-teal-700 group-hover:text-white',
-    link: 'text-teal-800 dark:text-teal-400 group-hover:text-teal-950 dark:group-hover:text-teal-300',
   },
 };
 
@@ -147,7 +145,7 @@ export default function HomePage() {
                   PORTAL OFICIAL DEL PERÚ
                 </span>
                 <span className="text-xs text-slate-500 dark:text-slate-400 font-semibold hidden sm:inline">
-                  • 100% Gratuito y sin registros
+                  • 22 Calculadoras 100% Gratuitas
                 </span>
               </div>
 
@@ -156,7 +154,7 @@ export default function HomePage() {
               </h1>
 
               <p className="mt-3 text-base sm:text-lg text-slate-600 dark:text-slate-300 font-normal leading-relaxed">
-                Herramientas diseñadas para el mercado peruano: precios, márgenes, IGV al 18% para SUNAT y costos de luz en Soles.
+                Herramientas hechas a la medida de los negocios y familias peruanas: precios, sueldos, gratificaciones, horas extras, IGV 18%, combustible y préstamos.
               </p>
 
             </div>
@@ -199,7 +197,7 @@ export default function HomePage() {
                   setSearchQuery(e.target.value);
                   if (activeUseCase !== 'todos') setActiveUseCase('todos');
                 }}
-                placeholder="Busca por 'precio', 'igv 18', 'margen', 'punto de equilibrio', 'luz', 'descuentos'..."
+                placeholder="Busca por 'horas extras', 'sueldo neto', 'dividir cuenta', 'combustible', 'cts', 'recetas'..."
                 className="ml-3 w-full bg-transparent text-sm sm:text-base font-semibold text-slate-900 dark:text-white placeholder:text-slate-400 outline-none"
               />
               {searchQuery && (
@@ -221,7 +219,7 @@ export default function HomePage() {
         <div className="mx-auto max-w-6xl px-4 sm:px-6 py-4">
           <div className="text-xs font-extrabold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-3 flex items-center gap-1.5">
             <Compass className="h-4 w-4 text-emerald-700 dark:text-emerald-400" />
-            <span>Guía por necesidad:</span>
+            <span>Explorar por necesidad:</span>
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5">
@@ -257,7 +255,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 📦 DIRECTORY & CALCULATOR CARDS (Warm Canvas with Pop-Out Cards) */}
+      {/* 📦 DIRECTORY & CALCULATOR CARDS */}
       <main className="mx-auto max-w-6xl px-4 sm:px-6 py-12">
         
         {/* Category Pills Bar */}
@@ -301,12 +299,12 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* CALCULATOR CARDS (Clean White Pop on Slate Canvas) */}
+        {/* CALCULATOR CARDS */}
         {filteredCalculators.length === 0 ? (
           <div className="rounded-2xl border border-slate-300 dark:border-slate-800 bg-white dark:bg-slate-900 p-12 text-center my-4 shadow-sm">
             <Search className="h-10 w-10 text-slate-300 mx-auto mb-3" />
             <h3 className="text-base font-bold text-slate-900 dark:text-white">No encontramos herramientas con esos filtros</h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Prueba limpiando los filtros para ver las 10 calculadoras.</p>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Prueba limpiando los filtros para ver las 22 calculadoras.</p>
             <button
               onClick={() => {
                 setSearchQuery('');
@@ -321,7 +319,7 @@ export default function HomePage() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {filteredCalculators.map((calc) => {
-              const catStyle = CATEGORY_STYLES[calc.category as keyof typeof CATEGORY_STYLES] || CATEGORY_STYLES.comercio;
+              const catStyle = CATEGORY_STYLES[calc.category as keyof typeof CATEGORY_STYLES] || CATEGORY_STYLES.negocios;
 
               return (
                 <Link
@@ -370,7 +368,7 @@ export default function HomePage() {
                   {/* Card Footer Action */}
                   <div className="mt-5 pt-3.5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
                     <span className="text-[11px] font-semibold text-slate-400 font-mono">
-                      🇵🇪 {calc.category === 'tributaria' ? 'SUNAT 18%' : calc.category === 'hogar' ? 'kWh Soles' : 'En Soles (S/)'}
+                      🇵🇪 {calc.category === 'tributario' ? 'SUNAT & Servicios' : calc.category === 'laboral' ? 'Planilla Perú' : 'En Soles (S/)'}
                     </span>
                     <span className={`inline-flex items-center gap-1 text-xs font-bold group-hover:translate-x-0.5 transition-all ${catStyle.link}`}>
                       <span>Calcular</span>
@@ -385,19 +383,19 @@ export default function HomePage() {
 
       </main>
 
-      {/* 💡 FREQUENT BUSINESS SCENARIOS */}
+      {/* 💡 FREQUENT USE-CASES */}
       <section aria-label="Guía práctica" className="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-14 transition-colors">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
           
           <div className="max-w-2xl mb-8">
             <span className="text-xs font-bold uppercase tracking-wider text-emerald-800 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950 px-2.5 py-1 rounded-md border border-emerald-200 dark:border-emerald-800">
-              GUÍA PRÁCTICA DE NEGOCIOS
+              GUÍA PRÁCTICA DEL PERÚ
             </span>
             <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight mt-2">
-              ¿Cómo calcular correctamente en el Perú?
+              Herramientas diseñadas para la vida real en el Perú
             </h2>
             <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">
-              Evita los tres errores financieros más comunes en comercio y tributación:
+              Cálculos confiables con base en normas de SUNAT, ley laboral y el día a día peruano:
             </p>
           </div>
 
@@ -405,40 +403,40 @@ export default function HomePage() {
             
             <div className="rounded-2xl border border-slate-200 dark:border-slate-800 p-5 bg-slate-50/80 dark:bg-slate-950 shadow-2xs">
               <div className="flex items-center gap-2 font-bold text-slate-900 dark:text-white text-sm mb-2">
-                <Receipt className="h-4 w-4 text-emerald-700 dark:text-emerald-400" />
-                <h3>No confundir Base con Total</h3>
+                <Clock className="h-4 w-4 text-indigo-700 dark:text-indigo-400" />
+                <h3>Horas Extras y Planilla</h3>
               </div>
               <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                El 18% de IGV pertenece a SUNAT. Para saber tu ingreso real de una venta de S/ 100 con boleta, divide entre 1.18 (Base: S/ 84.75, IGV: S/ 15.25).
+                Calcula la sobretasa del 25% y 35% por horas extras trabajadas, y el 100% de recargo si laboraste en domingos o feriados oficiales.
               </p>
-              <Link href="/calculadora-igv" className="inline-flex items-center gap-1 text-xs font-bold text-emerald-700 dark:text-emerald-400 mt-3 hover:underline">
-                Usar calculadora de IGV →
+              <Link href="/horas-extras" className="inline-flex items-center gap-1 text-xs font-bold text-indigo-700 dark:text-indigo-400 mt-3 hover:underline">
+                Calcular Horas Extras →
               </Link>
             </div>
 
             <div className="rounded-2xl border border-slate-200 dark:border-slate-800 p-5 bg-slate-50/80 dark:bg-slate-950 shadow-2xs">
               <div className="flex items-center gap-2 font-bold text-slate-900 dark:text-white text-sm mb-2">
-                <Store className="h-4 w-4 text-emerald-700 dark:text-emerald-400" />
-                <h3>Cubrir comisiones de cobro</h3>
+                <Utensils className="h-4 w-4 text-emerald-700 dark:text-emerald-400" />
+                <h3>Costeo Gastronómico y Recetas</h3>
               </div>
               <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                Si aceptas Yape, Plin o POS (Niubiz/Izipay), te retendrán ~3.5%. Si no lo agregas a tu precio, esa comisión saldrá de tu ganancia neta.
+                Calcula el costo por porción considerando merma de insumos, mano de obra y el precio de carta para ganar el margen que necesitas.
               </p>
-              <Link href="/precio-de-venta" className="inline-flex items-center gap-1 text-xs font-bold text-emerald-700 dark:text-emerald-400 mt-3 hover:underline">
-                Calcular precio de venta →
+              <Link href="/costeo-recetas" className="inline-flex items-center gap-1 text-xs font-bold text-emerald-700 dark:text-emerald-400 mt-3 hover:underline">
+                Costear Receta / Plato →
               </Link>
             </div>
 
             <div className="rounded-2xl border border-slate-200 dark:border-slate-800 p-5 bg-slate-50/80 dark:bg-slate-950 shadow-2xs">
               <div className="flex items-center gap-2 font-bold text-slate-900 dark:text-white text-sm mb-2">
-                <Scale className="h-4 w-4 text-emerald-700 dark:text-emerald-400" />
-                <h3>Conocer tu Punto de Equilibrio</h3>
+                <Fuel className="h-4 w-4 text-amber-700 dark:text-amber-400" />
+                <h3>Viajes y Gasto de Gasolina</h3>
               </div>
               <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                Saber cuántas unidades mínimas necesitas vender al mes para pagar alquiler y sueldos es la clave para no entrar en pérdida operativa.
+                Planifica tu presupuesto de viaje en carretera: galones necesarios, costo por kilómetro y división del gasto por pasajero.
               </p>
-              <Link href="/punto-de-equilibrio" className="inline-flex items-center gap-1 text-xs font-bold text-emerald-700 dark:text-emerald-400 mt-3 hover:underline">
-                Calcular punto de equilibrio →
+              <Link href="/gasto-combustible" className="inline-flex items-center gap-1 text-xs font-bold text-amber-700 dark:text-amber-400 mt-3 hover:underline">
+                Calcular Combustible →
               </Link>
             </div>
 

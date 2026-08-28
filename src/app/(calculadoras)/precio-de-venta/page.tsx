@@ -143,14 +143,17 @@ IGV (18%): ${formatCurrency(result.igvAmount)}`;
             </div>
 
             {/* Big Main Result Box */}
-            <div className="rounded-2xl bg-white dark:bg-slate-950 border-2 border-emerald-200 dark:border-emerald-800/60 p-6 shadow-sm text-center mb-5">
+            <div className="rounded-2xl bg-white dark:bg-slate-950 border-2 border-emerald-200 dark:border-emerald-800/60 p-6 shadow-sm text-center mb-5 overflow-hidden">
               <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">
                 Precio de Venta Recomendado
               </span>
-              <div className="text-3xl sm:text-5xl font-black text-emerald-800 dark:text-emerald-400 mt-1 font-mono tracking-tight">
+              <div
+                title={formatCurrency(result.recommendedSalePrice)}
+                className="text-3xl sm:text-4xl lg:text-5xl font-black text-emerald-800 dark:text-emerald-400 mt-1 font-mono tracking-tight truncate max-w-full px-2"
+              >
                 {formatCurrency(result.recommendedSalePrice)}
               </div>
-              <div className="mt-1.5 text-xs text-slate-600 dark:text-slate-400 font-semibold">
+              <div className="mt-1.5 text-xs text-slate-600 dark:text-slate-400 font-semibold truncate">
                 {form.includeIgv ? '(Incluye IGV 18% para Boleta)' : '(Precio Neto sin IGV)'}
               </div>
             </div>

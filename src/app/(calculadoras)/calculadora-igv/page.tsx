@@ -119,16 +119,21 @@ Total Facturado: ${formatCurrency(result.totalAmount)}`;
               </span>
             </div>
 
-            {/* Big Main Result */}
-            <div className="rounded-2xl bg-white dark:bg-slate-950 border border-emerald-200/60 dark:border-slate-800 p-5 shadow-2xs text-center mb-5">
+            {/* Big Main Result Box */}
+            <div className="rounded-2xl bg-white dark:bg-slate-950 border-2 border-amber-200 dark:border-amber-800/60 p-6 shadow-sm text-center mb-5 overflow-hidden">
               <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">
-                Total Facturado (con IGV)
+                {mode === 'add_igv' ? 'Monto Total Facturado (con IGV)' : 'Base Imponible Neta'}
               </span>
-              <div className="text-3xl sm:text-4xl font-black text-emerald-700 dark:text-emerald-400 mt-1">
-                {formatCurrency(result.totalAmount)}
+              <div
+                title={formatCurrency(mode === 'add_igv' ? result.totalAmount : result.baseAmount)}
+                className="text-3xl sm:text-4xl lg:text-5xl font-black text-amber-900 dark:text-amber-400 mt-1 font-mono tracking-tight truncate max-w-full px-2"
+              >
+                {formatCurrency(mode === 'add_igv' ? result.totalAmount : result.baseAmount)}
               </div>
-              <div className="mt-1 text-xs text-slate-500 dark:text-slate-400 font-medium">
-                Monto que paga el cliente final
+              <div className="mt-1.5 text-xs text-slate-600 dark:text-slate-400 font-semibold truncate">
+                {mode === 'add_igv'
+                  ? `Incluye ${formatCurrency(result.igvAmount)} de IGV (18%)`
+                  : `IGV extraído: ${formatCurrency(result.igvAmount)}`}
               </div>
             </div>
 

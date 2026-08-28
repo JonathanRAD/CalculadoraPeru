@@ -25,6 +25,16 @@ import {
   TrendingDown,
   Info,
   Building2,
+  Briefcase,
+  Gift,
+  CreditCard,
+  Landmark,
+  FileText,
+  ShoppingBag,
+  Clock,
+  Utensils,
+  Fuel,
+  Palmtree,
   LucideProps,
 } from 'lucide-react';
 
@@ -56,6 +66,16 @@ const ICON_MAP: Record<string, React.ComponentType<LucideProps>> = {
   TrendingDown,
   Info,
   Building2,
+  Briefcase,
+  Gift,
+  CreditCard,
+  Landmark,
+  FileText,
+  ShoppingBag,
+  Clock,
+  Utensils,
+  Fuel,
+  Palmtree,
 };
 
 export function DynamicIcon({ name, ...props }: DynamicIconProps) {

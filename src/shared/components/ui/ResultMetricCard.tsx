@@ -35,32 +35,35 @@ export function ResultMetricCard({
   };
 
   return (
-    <div className={`relative overflow-hidden rounded-2xl border p-4.5 sm:p-5 transition-all shadow-2xs ${styles[type]}`}>
+    <div className={`relative overflow-hidden rounded-2xl border p-4.5 sm:p-5 transition-all shadow-2xs min-w-0 ${styles[type]}`}>
       <div className="flex items-center justify-between gap-2">
-        <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+        <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 truncate">
           {label}
         </span>
         {badge && (
-          <span className="inline-flex items-center gap-1 rounded-md bg-white/80 dark:bg-slate-800 px-2 py-0.5 text-[11px] font-bold text-slate-700 dark:text-slate-300 border border-slate-200/60 dark:border-slate-700">
+          <span className="inline-flex items-center gap-1 rounded-md bg-white/80 dark:bg-slate-800 px-2 py-0.5 text-[11px] font-bold text-slate-700 dark:text-slate-300 border border-slate-200/60 dark:border-slate-700 shrink-0">
             <Sparkles className="h-3 w-3 text-amber-500" />
             {badge}
           </span>
         )}
       </div>
 
-      <div className="mt-2.5 flex items-baseline gap-2">
-        <div className={`text-2xl sm:text-3xl font-black tracking-tight ${valueColors[type]}`}>
+      <div className="mt-2.5 flex items-baseline gap-2 min-w-0">
+        <div
+          title={value}
+          className={`text-xl sm:text-2xl lg:text-3xl font-black tracking-tight truncate min-w-0 ${valueColors[type]}`}
+        >
           {value}
         </div>
         {trend && (
-          <div className={`flex items-center text-xs font-bold ${trend === 'up' ? 'text-emerald-600' : 'text-rose-600'}`}>
+          <div className={`flex items-center text-xs font-bold shrink-0 ${trend === 'up' ? 'text-emerald-600' : 'text-rose-600'}`}>
             {trend === 'up' ? <ArrowUpRight className="h-4 w-4" /> : <ArrowDownRight className="h-4 w-4" />}
           </div>
         )}
       </div>
 
       {subValue && (
-        <p className="mt-1 text-xs font-medium text-slate-600 dark:text-slate-400">
+        <p className="mt-1 text-xs font-medium text-slate-600 dark:text-slate-400 truncate" title={subValue}>
           {subValue}
         </p>
       )}
