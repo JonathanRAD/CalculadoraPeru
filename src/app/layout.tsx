@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     'mypes peru',
   ],
   authors: [{ name: 'CalculaPerú' }],
-  metadataBase: new URL('https://calculadora-peru.vercel.app'),
+  metadataBase: new URL('https://www.calculaperu.com.pe'),
   icons: {
     icon: '/logo-calc.png',
     apple: '/logo-calc.png',
@@ -42,7 +42,7 @@ export const metadata: Metadata = {
     title: 'CalculaPerú | El Portal de Calculadoras #1 del Perú',
     description:
       'Calculadoras financieras, comerciales y tributarias del Perú: IGV 18%, precio de venta y luz en Soles.',
-    url: 'https://calculadora-peru.vercel.app',
+    url: 'https://www.calculaperu.com.pe',
     locale: 'es_PE',
     type: 'website',
     images: [
@@ -68,14 +68,14 @@ const rootWebsiteJsonLd = {
   '@type': 'WebSite',
   name: 'CalculaPerú',
   alternateName: 'Calcula Peru',
-  url: 'https://calculadora-peru.vercel.app',
+  url: 'https://www.calculaperu.com.pe',
   description:
     'El portal de calculadoras financieras, comerciales y tributarias #1 del Perú para MYPES y emprendedores.',
   potentialAction: {
     '@type': 'SearchAction',
     target: {
       '@type': 'EntryPoint',
-      urlTemplate: 'https://calculadora-peru.vercel.app/?q={search_term_string}',
+      urlTemplate: 'https://www.calculaperu.com.pe/?q={search_term_string}',
     },
     'query-input': 'required name=search_term_string',
   },

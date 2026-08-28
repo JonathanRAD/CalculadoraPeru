@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { ChevronRight, ArrowRight, ShieldCheck } from 'lucide-react';
+import { ChevronRight, ArrowRight, ShieldCheck, Sparkles } from 'lucide-react';
 import { CALCULATORS_REGISTRY, CalculatorMeta } from '../registry';
 import { FaqAccordion, FaqItem } from '@/shared/components/ui/FaqAccordion';
 
@@ -92,8 +92,37 @@ export function CalculatorShell({
       </div>
 
       {/* Main Grid: Calculator Inputs & Results */}
-      <div className="mx-auto max-w-5xl px-4 sm:px-6 mt-10 space-y-12">
+      <div className="mx-auto max-w-5xl px-4 sm:px-6 mt-10 space-y-10">
         {children}
+
+        {/* 🌟 Cotizador MYPE Banner Callout */}
+        <div className="rounded-3xl border-2 border-amber-400/70 dark:border-amber-500/40 bg-gradient-to-r from-amber-50/80 via-white to-amber-50/50 dark:from-slate-900 dark:via-slate-900 dark:to-slate-900 p-5 sm:p-6 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-3.5">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-amber-500/20 text-amber-900 dark:text-amber-300 font-bold border border-amber-400/40">
+              <Sparkles className="h-5 w-5 text-amber-700 dark:text-amber-400" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-black text-slate-950 dark:text-white">
+                  ¿Haces cotizaciones a menudo para tus clientes?
+                </span>
+                <span className="rounded bg-[#E3A62F] text-slate-950 px-1.5 py-0.2 text-[9px] font-black uppercase">
+                  Nuevo
+                </span>
+              </div>
+              <p className="text-xs text-slate-600 dark:text-slate-400 mt-0.5">
+                Guarda tus productos y arma proformas formales con IGV para WhatsApp en 30 segundos.
+              </p>
+            </div>
+          </div>
+          <Link
+            href="/cotizador"
+            className="rounded-xl bg-[#E3A62F] hover:bg-[#f0b443] px-4 py-2.5 text-xs font-black text-slate-950 transition-all flex items-center justify-center gap-1.5 shrink-0 shadow-xs cursor-pointer"
+          >
+            <span>Probar Cotizador Gratis</span>
+            <ArrowRight className="h-3.5 w-3.5" />
+          </Link>
+        </div>
 
         {/* Educational Guide */}
         {educationalContent && (

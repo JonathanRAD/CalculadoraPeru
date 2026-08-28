@@ -128,8 +128,19 @@ export function Navbar() {
             })}
           </nav>
 
-          {/* Right Actions: Search + ThemeToggle + Mobile Toggle */}
+          {/* Right Actions: Cotizador CTA + Search + ThemeToggle + Mobile Toggle */}
           <div className="flex items-center gap-2.5">
+            <Link
+              href="/cotizador"
+              className="hidden md:flex items-center gap-1.5 rounded-xl bg-amber-500/15 dark:bg-amber-400/10 border border-amber-600/30 px-3 py-2 text-xs font-black text-amber-900 dark:text-amber-400 hover:bg-amber-500/25 transition-all shadow-2xs group"
+            >
+              <Sparkles className="h-3.5 w-3.5 text-amber-600 dark:text-amber-400 group-hover:rotate-12 transition-transform" />
+              <span>Cotizador MYPES</span>
+              <span className="rounded-md bg-[#E3A62F] text-slate-950 px-1.5 py-0.2 text-[9px] font-black uppercase">
+                Nuevo
+              </span>
+            </Link>
+
             <button
               onClick={() => setIsSearchOpen(true)}
               aria-label="Buscar calculadora"
@@ -160,6 +171,25 @@ export function Navbar() {
         {/* Mobile Menu Drawer (Grouped by 4 Categories) */}
         {isMobileMenuOpen && (
           <div className="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-4 lg:hidden max-h-[80vh] overflow-y-auto space-y-4 shadow-xl">
+            
+            {/* Mobile Cotizador Highlight */}
+            <Link
+              href="/cotizador"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="flex items-center justify-between p-3 rounded-2xl bg-[#12261F] text-white border border-[#2B5445] shadow-xs"
+            >
+              <div className="flex items-center gap-2.5">
+                <div className="h-8 w-8 rounded-xl bg-[#E3A62F] flex items-center justify-center text-slate-950 font-bold">
+                  <Sparkles className="h-4 w-4" />
+                </div>
+                <div>
+                  <div className="text-xs font-black text-white">Cotizador para MYPES</div>
+                  <div className="text-[10px] text-[#E3A62F]">Crea proformas en 30 seg</div>
+                </div>
+              </div>
+              <ArrowRight className="h-4 w-4 text-[#E3A62F]" />
+            </Link>
+
             {navCategories.map((cat) => {
               const calcsInCat = CALCULATORS_REGISTRY.filter(c => c.category === cat.id);
               return (
