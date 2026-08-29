@@ -8,7 +8,7 @@ import { formatCurrency, formatNumber, formatPercent } from '@/core/math/formatt
 import { InputNumber } from '@/shared/components/ui/InputNumber';
 import { ResultMetricCard } from '@/shared/components/ui/ResultMetricCard';
 import { ShareButtons } from '@/shared/components/ui/ShareButtons';
-import { PackageCheck } from 'lucide-react';
+import { PackageCheck, Info } from 'lucide-react';
 
 export default function GananciaPorProductoPage() {
   const meta = CALCULATORS_REGISTRY.find((c) => c.id === 'ganancia-por-producto')!;
@@ -24,9 +24,14 @@ export default function GananciaPorProductoPage() {
 
   const shareSummary = `Ganancia Total Proyectada: ${formatCurrency(result.estimatedMonthlyTotalProfit)}
 Ventas Totales: ${formatCurrency(result.estimatedMonthlyGrossRevenue)} (${formatNumber(form.estimatedMonthlyUnits)} unidades)
-Ganancia Neta por Unidad: ${formatCurrency(result.unitProfit)}`;
+Ganancia Neta por Unidad: ${formatCurrency(result.unitProfit)}
+Margen sobre Venta: ${formatPercent(result.marginPercentage)} | Mark-up sobre Costo: ${formatPercent(result.markupPercentage)}`;
 
   const faqs = [
+    {
+      question: '¿Cuál es la diferencia entre Margen de Ganancia y Mark-up?',
+      answer: 'El Margen mide qué porcentaje del precio de venta final es ganancia neta (ej: 50%). El Mark-up (o retorno sobre el costo) mide cuánto ganas en relación a tu inversión en comprar el producto (ej: 100%). Ambos son correctos y útiles.',
+    },
     {
       question: '¿Qué es el costo de publicidad por unidad?',
       answer: 'Es el gasto promedio en anuncios de Facebook, TikTok o volantes necesario para generar una venta. Si gastas S/ 200 en pauta y vendes 100 productos, tu costo de publicidad por unidad es S/ 2.',
@@ -42,6 +47,18 @@ Ganancia Neta por Unidad: ${formatCurrency(result.unitProfit)}`;
           <p>
             Te permite proyectar la ganancia neta unitaria y total que dejará un producto considerando el costo de adquisición o fabricación y los gastos de marketing.
           </p>
+          <div className="rounded-2xl bg-emerald-50 dark:bg-emerald-950/50 p-4 border border-emerald-200 dark:border-emerald-800 text-xs text-emerald-950 dark:text-emerald-200 space-y-1.5">
+            <div className="font-bold flex items-center gap-1.5">
+              <Info className="h-4 w-4" />
+              <span>Diferencia entre Margen y Mark-up:</span>
+            </div>
+            <p>
+              • <strong>Margen sobre Venta ({formatPercent(result.marginPercentage)}):</strong> Porcentaje del precio cobrado al cliente que te queda limpio en el bolsillo.
+            </p>
+            <p>
+              • <strong>Mark-up sobre Costo ({formatPercent(result.markupPercentage)}):</strong> Porcentaje que le aumentaste al costo del producto para fijar el precio.
+            </p>
+          </div>
         </div>
       }
     >
@@ -115,7 +132,7 @@ Ganancia Neta por Unidad: ${formatCurrency(result.unitProfit)}`;
               <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">
                 Ganancia Neta Mensual
               </span>
-              <div className="text-3xl sm:text-4xl font-black text-emerald-700 dark:text-emerald-400 mt-1">
+              <div className="text-2xl sm:text-3xl lg:text-4xl font-black text-emerald-700 dark:text-emerald-400 mt-1 font-mono break-words">
                 {formatCurrency(result.estimatedMonthlyTotalProfit)}
               </div>
               <div className="mt-1 text-xs text-slate-500 dark:text-slate-400 font-medium">
@@ -129,7 +146,7 @@ Ganancia Neta por Unidad: ${formatCurrency(result.unitProfit)}`;
                 label="Ganancia por Unidad"
                 value={formatCurrency(result.unitProfit)}
                 type="success"
-                subValue={`Margen: ${formatPercent(result.marginPercentage)}`}
+                subValue={`Margen: ${formatPercent(result.marginPercentage)} | Mark-up: ${formatPercent(result.markupPercentage)}`}
               />
               <ResultMetricCard
                 label="Ingreso Total Bruto"

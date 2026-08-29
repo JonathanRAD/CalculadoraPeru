@@ -35,35 +35,37 @@ export function ResultMetricCard({
   };
 
   return (
-    <div className={`relative overflow-hidden rounded-2xl border p-4.5 sm:p-5 transition-all shadow-2xs min-w-0 ${styles[type]}`}>
-      <div className="flex items-center justify-between gap-2">
-        <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 truncate">
-          {label}
-        </span>
-        {badge && (
-          <span className="inline-flex items-center gap-1 rounded-md bg-white/80 dark:bg-slate-800 px-2 py-0.5 text-[11px] font-bold text-slate-700 dark:text-slate-300 border border-slate-200/60 dark:border-slate-700 shrink-0">
-            <Sparkles className="h-3 w-3 text-amber-500" />
-            {badge}
+    <div className={`relative rounded-2xl border p-4 sm:p-5 transition-all shadow-2xs min-w-0 flex flex-col justify-between ${styles[type]}`}>
+      <div>
+        <div className="flex items-center justify-between gap-1.5">
+          <span className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 line-clamp-1" title={label}>
+            {label}
           </span>
-        )}
-      </div>
-
-      <div className="mt-2.5 flex items-baseline gap-2 min-w-0">
-        <div
-          title={value}
-          className={`text-xl sm:text-2xl lg:text-3xl font-black tracking-tight truncate min-w-0 ${valueColors[type]}`}
-        >
-          {value}
+          {badge && (
+            <span className="inline-flex items-center gap-1 rounded-md bg-white/80 dark:bg-slate-800 px-1.5 py-0.2 text-[10px] font-bold text-slate-700 dark:text-slate-300 border border-slate-200/60 dark:border-slate-700 shrink-0">
+              <Sparkles className="h-3 w-3 text-amber-500" />
+              {badge}
+            </span>
+          )}
         </div>
-        {trend && (
-          <div className={`flex items-center text-xs font-bold shrink-0 ${trend === 'up' ? 'text-emerald-600' : 'text-rose-600'}`}>
-            {trend === 'up' ? <ArrowUpRight className="h-4 w-4" /> : <ArrowDownRight className="h-4 w-4" />}
+
+        <div className="mt-2 flex items-baseline gap-1.5 flex-wrap">
+          <div
+            title={value}
+            className={`text-lg sm:text-xl lg:text-2xl font-black tracking-tight font-mono leading-none ${valueColors[type]}`}
+          >
+            {value}
           </div>
-        )}
+          {trend && (
+            <div className={`flex items-center text-xs font-bold shrink-0 ${trend === 'up' ? 'text-emerald-600' : 'text-rose-600'}`}>
+              {trend === 'up' ? <ArrowUpRight className="h-4 w-4" /> : <ArrowDownRight className="h-4 w-4" />}
+            </div>
+          )}
+        </div>
       </div>
 
       {subValue && (
-        <p className="mt-1 text-xs font-medium text-slate-600 dark:text-slate-400 truncate" title={subValue}>
+        <p className="mt-2 text-[11px] sm:text-xs font-medium text-slate-600 dark:text-slate-400 leading-snug break-words" title={subValue}>
           {subValue}
         </p>
       )}

@@ -9,13 +9,14 @@ export interface ProfitPerProductInput {
 
 export interface ProfitPerProductResult {
   unitProfit: number; // Ganancia neta por cada unidad (S/)
-  marginPercentage: number; // Margen neto por unidad (%)
+  marginPercentage: number; // Margen sobre el precio de venta (%)
+  markupPercentage: number; // Mark-up / Retorno sobre el costo (%)
   estimatedMonthlyGrossRevenue: number; // Ingresos brutos mensuales (S/)
   estimatedMonthlyTotalProfit: number; // Ganancia neta mensual proyectada (S/)
 }
 
 /**
- * Calcula la ganancia unitaria por producto y la proyección de rentabilidad mensual.
+ * Calcula la ganancia unitaria por producto, margen sobre venta y mark-up sobre costo.
  */
 export function calculateProfitPerProduct(input: ProfitPerProductInput): ProfitPerProductResult {
   const cost = Math.max(0, input.costPrice || 0);
@@ -26,6 +27,7 @@ export function calculateProfitPerProduct(input: ProfitPerProductInput): ProfitP
   const totalUnitCost = cost + ads;
   const unitProfit = price - totalUnitCost;
   const marginPercentage = price > 0 ? (unitProfit / price) * 100 : 0;
+  const markupPercentage = totalUnitCost > 0 ? (unitProfit / totalUnitCost) * 100 : 0;
   
   const estimatedMonthlyGrossRevenue = price * units;
   const estimatedMonthlyTotalProfit = unitProfit * units;
@@ -33,6 +35,7 @@ export function calculateProfitPerProduct(input: ProfitPerProductInput): ProfitP
   return {
     unitProfit: roundTo(unitProfit, 2),
     marginPercentage: roundTo(marginPercentage, 2),
+    markupPercentage: roundTo(markupPercentage, 2),
     estimatedMonthlyGrossRevenue: roundTo(estimatedMonthlyGrossRevenue, 2),
     estimatedMonthlyTotalProfit: roundTo(estimatedMonthlyTotalProfit, 2),
   };

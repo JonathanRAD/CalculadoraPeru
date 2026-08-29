@@ -3,14 +3,13 @@
 import React, { useState } from 'react';
 import { CalculatorShell } from '@/features/calculators/components/CalculatorShell';
 import { CALCULATORS_REGISTRY } from '@/features/calculators/registry';
-import { calculateVacations, VacationsInput } from '@/core/calculators/vacations';
-import { CompanyRegime } from '@/core/calculators/gratification';
+import { calculateVacations, VacationRegime } from '@/core/calculators/vacations';
 import { formatCurrency } from '@/core/math/formatters';
 import { InputNumber } from '@/shared/components/ui/InputNumber';
 import { SwitchToggle } from '@/shared/components/ui/SwitchToggle';
 import { ResultMetricCard } from '@/shared/components/ui/ResultMetricCard';
 import { ShareButtons } from '@/shared/components/ui/ShareButtons';
-import { Palmtree } from 'lucide-react';
+import { Palmtree, Info } from 'lucide-react';
 
 export default function CalculadoraVacacionesPage() {
   const meta = CALCULATORS_REGISTRY.find((c) => c.id === 'calculadora-vacaciones')!;
@@ -19,7 +18,8 @@ export default function CalculadoraVacacionesPage() {
   const [hasFamilyAllowance, setHasFamilyAllowance] = useState<boolean>(false);
   const [monthsWorked, setMonthsWorked] = useState<number>(8);
   const [daysWorked, setDaysWorked] = useState<number>(0);
-  const [companyRegime, setCompanyRegime] = useState<CompanyRegime>('general');
+  const [companyRegime, setCompanyRegime] = useState<VacationRegime>('general');
+  const [customDaysPerYear, setCustomDaysPerYear] = useState<number>(20);
   const [daysToSell, setDaysToSell] = useState<number>(0);
 
   const result = calculateVacations({
@@ -28,22 +28,25 @@ export default function CalculadoraVacacionesPage() {
     monthsWorked,
     daysWorked,
     companyRegime,
+    customDaysPerYear,
     daysToSell,
   });
 
-  const shareSummary = `Liquidación de Vacaciones:
+  const maxSellAllowed = Math.floor(result.annualVacationDays / 2);
+
+  const shareSummary = `Liquidación de Vacaciones (${result.annualVacationDays} días/año):
 Vacaciones Truncas: ${formatCurrency(result.totalTruncatedVacations)} (${monthsWorked} meses)
 Venta de Vacaciones: ${formatCurrency(result.soldVacationsPay)} (${daysToSell} días)
 Total a Percibir: ${formatCurrency(result.totalPay)}`;
 
   const faqs = [
     {
-      question: '¿Cuántos días de vacaciones corresponden por ley en Perú?',
-      answer: 'En el Régimen General corresponden 30 días calendario de descanso remunerado por cada año completo de servicios (D.L. 713). En el régimen de Pequeña Empresa MYPE y Microempresa corresponden 15 días calendario.',
+      question: '¿Qué regímenes laborales tienen 20 o 15 días de vacaciones?',
+      answer: 'En el Régimen General corresponden 30 días calendario (D.L. 713). En regímenes especiales (como el Agrario bajo Ley 31110, construcción o convenios sectoriales) corresponden 20 o 25 días. En el régimen MYPE (Pequeña y Microempresa) corresponden 15 días.',
     },
     {
       question: '¿Se pueden vender las vacaciones?',
-      answer: 'Sí, el trabajador puede acordar por escrito con su empleador la venta de hasta 15 días de sus vacaciones en el Régimen General (descansando obligatoriamente los otros 15 días). La empresa paga la remuneración normal más la compensación por los días vendidos.',
+      answer: 'Sí, por acuerdo escrito entre trabajador y empleador se puede vender hasta la mitad de los días anuales de vacaciones (ejemplo: hasta 15 días en régimen de 30 días, o hasta 10 días en régimen de 20 días).',
     },
   ];
 
@@ -54,7 +57,7 @@ Total a Percibir: ${formatCurrency(result.totalPay)}`;
       educationalContent={
         <div className="space-y-3">
           <p>
-            Calcula el monto correspondiente por vacaciones truncas ante el término del vínculo laboral o la compra/venta legal de días de descanso.
+            Calcula el monto exacto correspondiente por vacaciones truncas al término del contrato o la venta de días de descanso en cualquier régimen laboral peruano.
           </p>
         </div>
       }
@@ -83,53 +86,107 @@ Total a Percibir: ${formatCurrency(result.totalPay)}`;
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div>
               <label className="text-xs sm:text-sm font-bold text-slate-900 dark:text-slate-200 block mb-2">
-                Régimen Laboral
+                Régimen Laboral / Días al año
               </label>
               <select
                 value={companyRegime}
-                onChange={(e) => setCompanyRegime(e.target.value as CompanyRegime)}
-                className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 p-2.5 text-xs font-bold text-slate-900 dark:text-white outline-none"
+                onChange={(e) => setCompanyRegime(e.target.value as VacationRegime)}
+                className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 p-2.5 text-xs font-bold text-slate-900 dark:text-white outline-none focus:border-blue-600"
               >
-                <option value="general">Régimen General (30 días año)</option>
-                <option value="pequena_empresa">Pequeña Empresa (15 días año)</option>
-                <option value="microempresa">Microempresa (15 días año)</option>
+                <option value="general">Régimen General (30 días/año)</option>
+                <option value="especial_20">Régimen Especial / Agrario (20 días/año)</option>
+                <option value="pequena_empresa">Pequeña Empresa MYPE (15 días/año)</option>
+                <option value="microempresa">Microempresa (15 días/año)</option>
+                <option value="personalizado">Personalizado (Ingresar días)</option>
               </select>
             </div>
 
-            <InputNumber
-              id="monthsWorked"
-              label="Meses laborados en el periodo"
-              value={monthsWorked}
-              onChange={(monthsWorked) => setMonthsWorked(monthsWorked)}
-              min={0}
-              max={12}
-              placeholder="8"
-              required
-            />
+            {companyRegime === 'personalizado' ? (
+              <InputNumber
+                id="customDays"
+                label="Días de vacaciones que te corresponden por año"
+                value={customDaysPerYear}
+                onChange={(customDaysPerYear) => setCustomDaysPerYear(customDaysPerYear)}
+                min={1}
+                max={60}
+                placeholder="20"
+                required
+              />
+            ) : (
+              <InputNumber
+                id="monthsWorked"
+                label="Meses laborados en el periodo"
+                value={monthsWorked}
+                onChange={(monthsWorked) => setMonthsWorked(monthsWorked)}
+                min={0}
+                max={12}
+                placeholder="8"
+                required
+              />
+            )}
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-            <InputNumber
-              id="daysWorked"
-              label="Días adicionales laborados"
-              value={daysWorked}
-              onChange={(daysWorked) => setDaysWorked(daysWorked)}
-              min={0}
-              max={29}
-              placeholder="0"
-            />
+          {companyRegime === 'personalizado' && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <InputNumber
+                id="monthsWorkedCustom"
+                label="Meses laborados en el periodo"
+                value={monthsWorked}
+                onChange={(monthsWorked) => setMonthsWorked(monthsWorked)}
+                min={0}
+                max={12}
+                placeholder="8"
+                required
+              />
+              <InputNumber
+                id="daysWorked"
+                label="Días adicionales laborados"
+                value={daysWorked}
+                onChange={(daysWorked) => setDaysWorked(daysWorked)}
+                min={0}
+                max={29}
+                placeholder="0"
+              />
+            </div>
+          )}
 
+          {companyRegime !== 'personalizado' && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <InputNumber
+                id="daysWorked"
+                label="Días adicionales laborados"
+                value={daysWorked}
+                onChange={(daysWorked) => setDaysWorked(daysWorked)}
+                min={0}
+                max={29}
+                placeholder="0"
+              />
+
+              <InputNumber
+                id="daysToSell"
+                label="Días de vacaciones a vender (opcional)"
+                value={daysToSell}
+                onChange={(daysToSell) => setDaysToSell(daysToSell)}
+                min={0}
+                max={maxSellAllowed}
+                helpText={`Máximo ${maxSellAllowed} días según ley`}
+                placeholder="0"
+              />
+            </div>
+          )}
+
+          {companyRegime === 'personalizado' && (
             <InputNumber
-              id="daysToSell"
+              id="daysToSellCustom"
               label="Días de vacaciones a vender (opcional)"
               value={daysToSell}
               onChange={(daysToSell) => setDaysToSell(daysToSell)}
               min={0}
-              max={15}
-              helpText="Máximo 15 días según ley"
+              max={maxSellAllowed}
+              helpText={`Máximo ${maxSellAllowed} días`}
               placeholder="0"
             />
-          </div>
+          )}
 
           <SwitchToggle
             id="hasFamilyAllowance"
@@ -148,7 +205,7 @@ Total a Percibir: ${formatCurrency(result.totalPay)}`;
                 Liquidación de Vacaciones
               </span>
               <span className="rounded-full bg-blue-700 dark:bg-blue-600 px-3 py-0.5 text-xs font-bold text-white shadow-xs">
-                D.L. 713
+                {result.annualVacationDays} días/año
               </span>
             </div>
 
@@ -159,12 +216,12 @@ Total a Percibir: ${formatCurrency(result.totalPay)}`;
               </span>
               <div
                 title={formatCurrency(result.totalPay)}
-                className="text-3xl sm:text-4xl lg:text-5xl font-black text-blue-900 dark:text-blue-400 mt-1 font-mono tracking-tight truncate max-w-full px-2"
+                className="text-3xl sm:text-4xl lg:text-5xl font-black text-blue-900 dark:text-blue-400 mt-1 font-mono tracking-tight break-words px-2"
               >
                 {formatCurrency(result.totalPay)}
               </div>
               <div className="mt-1.5 text-xs text-slate-600 dark:text-slate-400 font-semibold truncate">
-                Por {monthsWorked} meses laborados {daysToSell > 0 ? `+ ${daysToSell} días vendidos` : ''}
+                Por {monthsWorked} meses laborados ({result.annualVacationDays} días anuales)
               </div>
             </div>
 
@@ -174,13 +231,13 @@ Total a Percibir: ${formatCurrency(result.totalPay)}`;
                 label="Vacaciones Truncas"
                 value={formatCurrency(result.totalTruncatedVacations)}
                 type="neutral"
-                subValue="Por periodo laborado"
+                subValue={`Base: ${result.annualVacationDays} días/año`}
               />
               <ResultMetricCard
                 label="Venta de Vacaciones"
                 value={formatCurrency(result.soldVacationsPay)}
                 type="success"
-                subValue={`${daysToSell} días`}
+                subValue={`${daysToSell} días vendidos`}
               />
             </div>
 

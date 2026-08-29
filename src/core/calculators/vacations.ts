@@ -1,18 +1,21 @@
 import { roundTo } from '../math/formatters';
-import { CompanyRegime } from './gratification';
+
+export type VacationRegime = 'general' | 'especial_20' | 'pequena_empresa' | 'microempresa' | 'personalizado';
 
 export interface VacationsInput {
   baseSalary: number; // Sueldo bruto mensual (S/)
   hasFamilyAllowance?: boolean; // Asignación familiar (+S/ 102.50)
   monthsWorked: number; // Meses laborados en el periodo (1 a 12)
   daysWorked?: number; // Días adicionales laborados (0 a 29)
-  companyRegime: CompanyRegime; // Régimen general (30 días) o pequeña empresa (15 días)
-  daysToSell?: number; // Días de vacaciones que se compran/venden a la empresa (máx 15)
+  companyRegime: VacationRegime; // Régimen general (30d), especial (20d), MYPE (15d) o personalizado
+  customDaysPerYear?: number; // Días de vacaciones al año si es personalizado
+  daysToSell?: number; // Días de vacaciones que se compran/venden a la empresa
 }
 
 export interface VacationsResult {
   computableSalary: number; // Remuneración computable mensual
   dailyRate: number; // Valor remuneración diaria
+  annualVacationDays: number; // Días de vacaciones que corresponden al año
   vacationPayForMonths: number; // Pago por meses laborados
   vacationPayForDays: number; // Pago por días laborados
   totalTruncatedVacations: number; // Total vacaciones truncas
@@ -21,7 +24,7 @@ export interface VacationsResult {
 }
 
 /**
- * Calcula las Vacaciones Truncas y Venta de Vacaciones en Perú (D.L. 713).
+ * Calcula las Vacaciones Truncas y Venta de Vacaciones en Perú para todos los regímenes laborales.
  */
 export function calculateVacations(input: VacationsInput): VacationsResult {
   const salary = Math.max(0, input.baseSalary || 0);
@@ -29,8 +32,18 @@ export function calculateVacations(input: VacationsInput): VacationsResult {
   const computableSalary = salary + familyAllowance;
   const dailyRate = computableSalary / 30;
 
-  // Factor de régimen: Régimen General (1 sueldo completo por 12 meses) / Pequeña empresa (15 días = 50% de sueldo) / Microempresa (15 días = 50% de sueldo)
-  const regimeFactor = input.companyRegime === 'general' ? 1.0 : 0.5;
+  // Determinar días de vacaciones por año según régimen
+  let annualVacationDays = 30;
+  if (input.companyRegime === 'pequena_empresa' || input.companyRegime === 'microempresa') {
+    annualVacationDays = 15;
+  } else if (input.companyRegime === 'especial_20') {
+    annualVacationDays = 20;
+  } else if (input.companyRegime === 'personalizado') {
+    annualVacationDays = Math.max(1, Math.min(60, input.customDaysPerYear || 30));
+  }
+
+  // Factor de proporción sobre el mes de 30 días
+  const regimeFactor = annualVacationDays / 30;
 
   const months = Math.max(0, Math.min(12, input.monthsWorked || 0));
   const days = Math.max(0, Math.min(29, input.daysWorked || 0));
@@ -43,15 +56,17 @@ export function calculateVacations(input: VacationsInput): VacationsResult {
 
   const totalTruncatedVacations = vacationPayForMonths + vacationPayForDays;
 
-  // Venta de vacaciones (máximo 15 días según ley)
-  const daysToSell = Math.max(0, Math.min(15, input.daysToSell || 0));
-  const soldVacationsPay = daysToSell * dailyRate * regimeFactor;
+  // Venta de vacaciones (máximo la mitad de sus días anuales según ley)
+  const maxSellDays = Math.floor(annualVacationDays / 2);
+  const daysToSell = Math.max(0, Math.min(maxSellDays, input.daysToSell || 0));
+  const soldVacationsPay = daysToSell * dailyRate;
 
   const totalPay = totalTruncatedVacations + soldVacationsPay;
 
   return {
     computableSalary: roundTo(computableSalary, 2),
     dailyRate: roundTo(dailyRate, 2),
+    annualVacationDays,
     vacationPayForMonths: roundTo(vacationPayForMonths, 2),
     vacationPayForDays: roundTo(vacationPayForDays, 2),
     totalTruncatedVacations: roundTo(totalTruncatedVacations, 2),
