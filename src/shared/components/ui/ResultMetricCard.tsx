@@ -37,8 +37,8 @@ export function ResultMetricCard({
   return (
     <div className={`relative rounded-2xl border p-4 sm:p-5 transition-all shadow-2xs min-w-0 flex flex-col justify-between ${styles[type]}`}>
       <div>
-        <div className="flex items-center justify-between gap-1.5">
-          <span className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 line-clamp-1" title={label}>
+        <div className="flex items-start justify-between gap-1.5 min-h-[32px]">
+          <span className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 leading-tight" title={label}>
             {label}
           </span>
           {badge && (
@@ -49,10 +49,10 @@ export function ResultMetricCard({
           )}
         </div>
 
-        <div className="mt-2 flex items-baseline gap-1.5 flex-wrap">
+        <div className="mt-1.5 flex items-baseline gap-1.5 flex-wrap">
           <div
             title={value}
-            className={`text-lg sm:text-xl lg:text-2xl font-black tracking-tight font-mono leading-none ${valueColors[type]}`}
+            className={`text-lg sm:text-xl lg:text-2xl font-black tracking-tight font-mono leading-tight ${valueColors[type]}`}
           >
             {value}
           </div>

@@ -104,7 +104,7 @@ Total a Percibir: ${formatCurrency(result.totalPay)}`;
             {companyRegime === 'personalizado' ? (
               <InputNumber
                 id="customDays"
-                label="Días de vacaciones que te corresponden por año"
+                label="Días de vacaciones por año"
                 value={customDaysPerYear}
                 onChange={(customDaysPerYear) => setCustomDaysPerYear(customDaysPerYear)}
                 min={1}
