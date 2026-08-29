@@ -1,0 +1,23 @@
+{
+  "name": "CalculaPerú - Portal Financiero del Perú",
+  "short_name": "CalculaPerú",
+  "description": "Calculadoras financieras, tributarias y comerciales para el Perú: sueldos, gratificaciones, CTS, IGV, tipo de cambio y cotizador.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#090d16",
+  "theme_color": "#059669",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/favicon.ico",
+      "sizes": "48x48",
+      "type": "image/x-icon"
+    }
+  ]
+}

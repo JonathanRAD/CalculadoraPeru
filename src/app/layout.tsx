@@ -5,6 +5,7 @@ import { Navbar } from '@/shared/components/layout/Navbar';
 import { Footer } from '@/shared/components/layout/Footer';
 import { ThemeProvider } from '@/shared/context/ThemeContext';
 import { Analytics } from '@vercel/analytics/next';
+import { PwaInstallBanner } from '@/shared/components/ui/PwaInstallBanner';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -109,6 +110,11 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(rootWebsiteJsonLd) }}
         />
+        {/* PWA Manifest & Theme */}
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#059669" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         {/* Google AdSense */}
         <script
           async
@@ -124,6 +130,7 @@ export default function RootLayout({
           </main>
           <Footer />
           <Analytics />
+          <PwaInstallBanner />
         </ThemeProvider>
       </body>
     </html>

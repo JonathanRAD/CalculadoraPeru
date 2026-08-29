@@ -9,6 +9,7 @@ import { InputNumber } from '@/shared/components/ui/InputNumber';
 import { SwitchToggle } from '@/shared/components/ui/SwitchToggle';
 import { ResultMetricCard } from '@/shared/components/ui/ResultMetricCard';
 import { ShareButtons } from '@/shared/components/ui/ShareButtons';
+import { ExportPdfButton } from '@/shared/components/ui/ExportPdfButton';
 import { Briefcase, Building, ShieldCheck } from 'lucide-react';
 
 export default function SueldoNetoPage() {
@@ -182,6 +183,32 @@ Sueldo Neto en Cuenta: ${formatCurrency(result.netSalary)}`;
                 <span>Aporte EsSalud (Paga la empresa 9%):</span>
                 <span className="font-semibold text-slate-700 dark:text-slate-300">{formatCurrency(result.essaludContributionEmployer)}</span>
               </div>
+            </div>
+
+            <div className="mb-4">
+              <ExportPdfButton
+                className="w-full"
+                label="Descargar Boleta de Sueldo en PDF"
+                getReportOptions={() => ({
+                  title: 'Boleta Informativa de Sueldo Neto',
+                  subtitle: `Desglose de remuneración y aportes según legislación laboral de Perú`,
+                  items: [
+                    { label: 'Sueldo Básico Mensual', value: formatCurrency(grossSalary) },
+                    { label: 'Asignación Familiar', value: hasDependents ? 'S/ 102.50' : 'S/ 0.00' },
+                    { label: 'Remuneración Bruta Total', value: formatCurrency(result.totalGrossIncome), isHighlight: true },
+                    { label: `Descuento de Pensión (${pensionSystem === 'onp' ? 'ONP 13%' : 'AFP'})`, value: `- ${formatCurrency(result.pensionDeduction)}` },
+                    ...(result.fifthCategoryTaxMonthly > 0 ? [{ label: 'Retención 5ta Categoría (SUNAT)', value: `- ${formatCurrency(result.fifthCategoryTaxMonthly)}` }] : []),
+                    { label: 'SUELDO NETO A RECIBIR (EN MANO)', value: formatCurrency(result.netSalary), isHighlight: true },
+                    { label: 'Aporte Empleador a EsSalud (9%)', value: formatCurrency(result.essaludContributionEmployer) },
+                  ],
+                  totalLabel: 'Neto a Percibir',
+                  totalValue: formatCurrency(result.netSalary),
+                  notes: [
+                    'Documento informativo generado mediante CalculaPerú.',
+                    'El impuesto a la renta de quinta categoría se proyecta anualmente descontando las 7 UIT inafectas de ley.',
+                  ],
+                })}
+              />
             </div>
 
             <ShareButtons title="Cálculo de Sueldo Neto Perú" shareText={shareSummary} />

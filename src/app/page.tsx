@@ -26,7 +26,7 @@ const USE_CASES = [
     id: 'todos',
     title: 'Ver Todo',
     icon: Layers,
-    description: 'Catálogo de 22 calculadoras',
+    description: 'Catálogo de 25 calculadoras',
   },
   {
     id: 'negocios',
@@ -39,8 +39,8 @@ const USE_CASES = [
     id: 'laboral',
     title: 'Laboral & Planilla',
     icon: Briefcase,
-    description: 'Sueldos, gratificación, CTS y horas extras',
-    calcIds: ['sueldo-neto', 'gratificacion', 'calculadora-cts', 'horas-extras', 'calculadora-vacaciones'],
+    description: 'Liquidación, sueldos, gratificación, CTS y horas extras',
+    calcIds: ['liquidacion-laboral', 'sueldo-neto', 'gratificacion', 'calculadora-cts', 'horas-extras', 'calculadora-vacaciones'],
   },
   {
     id: 'finanzas',
@@ -53,8 +53,8 @@ const USE_CASES = [
     id: 'tributario',
     title: 'Tributario & Diario',
     icon: Receipt,
-    description: 'IGV 18%, 4ta, combustible y propinas',
-    calcIds: ['calculadora-igv', 'recibo-por-honorarios', 'dividir-cuenta', 'gasto-combustible', 'consumo-electrico'],
+    description: 'Tipo de cambio, regímenes SUNAT, IGV 18% y luz',
+    calcIds: ['tipo-de-cambio-dolar-sunat', 'regimenes-tributarios-sunat', 'calculadora-igv', 'recibo-por-honorarios', 'dividir-cuenta', 'gasto-combustible', 'consumo-electrico'],
   },
 ];
 
@@ -206,6 +206,13 @@ const TAG_THEMES: Record<string, {
     badgeStyle: 'bg-purple-50 text-purple-800 border-purple-200 dark:bg-purple-950/60 dark:text-purple-300 dark:border-purple-800',
     btnStyle: 'bg-purple-50/70 hover:bg-purple-100/90 text-purple-800 border-purple-200/80 dark:bg-purple-950/50 dark:hover:bg-purple-900/60 dark:text-purple-300 dark:border-purple-800',
   },
+  DÓLAR: {
+    iconBg: 'bg-emerald-50 dark:bg-emerald-950/70 border-emerald-100 dark:border-emerald-900',
+    iconColor: 'text-emerald-600 dark:text-emerald-400',
+    tagColor: 'text-emerald-600 dark:text-emerald-400',
+    badgeStyle: 'bg-emerald-50 text-emerald-800 border-emerald-200 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800',
+    btnStyle: 'bg-emerald-50/70 hover:bg-emerald-100/90 text-emerald-800 border-emerald-200/80 dark:bg-emerald-950/50 dark:hover:bg-emerald-900/60 dark:text-emerald-300 dark:border-emerald-800',
+  },
 };
 
 const DEFAULT_THEME = {
@@ -263,7 +270,7 @@ export default function HomePage() {
                   PORTAL OFICIAL DEL PERÚ
                 </span>
                 <span className="text-xs text-slate-500 dark:text-slate-400 font-semibold hidden sm:inline">
-                  • 22 Calculadoras 100% Gratuitas
+                  • 25 Calculadoras 100% Gratuitas
                 </span>
               </div>
 

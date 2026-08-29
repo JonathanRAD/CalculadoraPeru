@@ -362,11 +362,11 @@ export default function CotizadorLandingPage() {
                   </div>
 
                   {/* Quick Action Preview */}
-                  <div className="mt-3 pt-2.5 border-t-2 border-dashed border-slate-300 flex items-center justify-between text-[11px] font-sans gap-2">
+                  <div className="mt-3 pt-2.5 border-t-2 border-dashed border-slate-300 flex flex-col sm:flex-row items-center justify-between text-[11px] font-sans gap-2">
                     <button
                       type="button"
                       onClick={handleCopyWhatsApp}
-                      className="flex-1 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-1.5 px-2 text-center text-xs flex items-center justify-center gap-1.5 cursor-pointer shadow-xs"
+                      className="w-full sm:flex-1 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-2 px-2 text-center text-xs flex items-center justify-center gap-1.5 cursor-pointer shadow-xs"
                     >
                       {copiedLink ? (
                         <>
@@ -379,6 +379,40 @@ export default function CotizadorLandingPage() {
                           <span>Copiar a WhatsApp</span>
                         </>
                       )}
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        import('@/shared/utils/pdfGenerator').then(({ generateOfficialPdf }) => {
+                          generateOfficialPdf({
+                            title: 'PROFORMA / COTIZACIÓN COMERCIAL',
+                            subtitle: 'Documento generado formalmente vía CalculaPerú Cotizador',
+                            businessName: 'CONFECCIONES TEXTIL LIMA S.A.C.',
+                            businessRuc: '20601984712',
+                            businessPhone: '+51 987 654 321',
+                            items: [
+                              ...ticketItems.map((i) => ({
+                                label: `${i.qty}x ${i.name}`,
+                                value: `S/ ${(i.qty * i.price).toFixed(2)}`,
+                              })),
+                              { label: 'Subtotal (Neto)', value: `S/ ${subtotal.toFixed(2)}` },
+                              ...(includeIgv ? [{ label: 'IGV (18% SUNAT)', value: `S/ ${igv.toFixed(2)}` }] : []),
+                            ],
+                            totalLabel: 'Total a Pagar',
+                            totalValue: `S/ ${total.toFixed(2)}`,
+                            notes: [
+                              'Validez de la presente cotización: 15 días calendario.',
+                              'Condiciones de pago: 50% de adelanto al confirmar y 50% contra entrega.',
+                              'Precios expresados en Soles Peruanos (PEN).',
+                            ],
+                          });
+                        });
+                      }}
+                      className="w-full sm:flex-1 rounded-lg bg-slate-900 hover:bg-slate-800 text-amber-400 font-bold py-2 px-2 text-center text-xs flex items-center justify-center gap-1.5 cursor-pointer shadow-xs"
+                    >
+                      <Download className="h-3.5 w-3.5" />
+                      <span>Descargar PDF</span>
                     </button>
                   </div>
 
