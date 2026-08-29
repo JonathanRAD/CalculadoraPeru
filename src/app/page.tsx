@@ -8,30 +8,13 @@ import {
   TrendingUp,
   Receipt,
   Store,
-  Zap,
-  Percent,
-  CheckCircle2,
-  Sparkles,
-  HelpCircle,
-  Tag,
-  Scale,
-  DollarSign,
-  PackageCheck,
-  Target,
-  PiggyBank,
-  LineChart,
-  ShoppingCart,
-  Compass,
-  Briefcase,
   Layers,
   Clock,
-  ChevronRight,
-  Filter,
+  Compass,
+  Briefcase,
   Check,
-  Share2,
   Utensils,
   Fuel,
-  Palmtree,
 } from 'lucide-react';
 import { CALCULATORS_REGISTRY, CATEGORIES, CalculatorMeta } from '@/features/calculators/registry';
 import { DynamicIcon } from '@/shared/components/ui/DynamicIcon';
@@ -75,28 +58,162 @@ const USE_CASES = [
   },
 ];
 
-// Distinct category theme colors
-const CATEGORY_STYLES = {
-  negocios: {
-    badge: 'bg-emerald-50 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800',
-    iconBg: 'bg-emerald-50 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 group-hover:bg-emerald-700 group-hover:text-white',
-    link: 'text-emerald-800 dark:text-emerald-400 group-hover:text-emerald-950 dark:group-hover:text-emerald-300',
+// Rich Tag Theming matching reference UI
+const TAG_THEMES: Record<string, {
+  iconBg: string;
+  iconColor: string;
+  tagColor: string;
+  badgeStyle: string;
+  btnStyle: string;
+}> = {
+  COMERCIAL: {
+    iconBg: 'bg-emerald-50 dark:bg-emerald-950/70 border-emerald-100 dark:border-emerald-900',
+    iconColor: 'text-emerald-600 dark:text-emerald-400',
+    tagColor: 'text-emerald-600 dark:text-emerald-400',
+    badgeStyle: 'bg-amber-50 text-amber-800 border-amber-200 dark:bg-amber-950/60 dark:text-amber-300 dark:border-amber-800',
+    btnStyle: 'bg-emerald-50/70 hover:bg-emerald-100/90 text-emerald-800 border-emerald-200/80 dark:bg-emerald-950/50 dark:hover:bg-emerald-900/60 dark:text-emerald-300 dark:border-emerald-800',
   },
-  laboral: {
-    badge: 'bg-indigo-50 text-indigo-800 dark:bg-indigo-950/80 dark:text-indigo-300 border-indigo-200 dark:border-indigo-800',
-    iconBg: 'bg-indigo-50 text-indigo-800 dark:bg-indigo-950 dark:text-indigo-300 group-hover:bg-indigo-700 group-hover:text-white',
-    link: 'text-indigo-800 dark:text-indigo-400 group-hover:text-indigo-950 dark:group-hover:text-indigo-300',
+  RENTABILIDAD: {
+    iconBg: 'bg-emerald-50 dark:bg-emerald-950/70 border-emerald-100 dark:border-emerald-900',
+    iconColor: 'text-emerald-600 dark:text-emerald-400',
+    tagColor: 'text-emerald-600 dark:text-emerald-400',
+    badgeStyle: 'bg-emerald-50 text-emerald-800 border-emerald-200 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800',
+    btnStyle: 'bg-emerald-50/70 hover:bg-emerald-100/90 text-emerald-800 border-emerald-200/80 dark:bg-emerald-950/50 dark:hover:bg-emerald-900/60 dark:text-emerald-300 dark:border-emerald-800',
   },
-  finanzas: {
-    badge: 'bg-blue-50 text-blue-800 dark:bg-blue-950/80 dark:text-blue-300 border-blue-200 dark:border-blue-800',
-    iconBg: 'bg-blue-50 text-blue-800 dark:bg-blue-950 dark:text-blue-300 group-hover:bg-blue-700 group-hover:text-white',
-    link: 'text-blue-800 dark:text-blue-400 group-hover:text-blue-950 dark:group-hover:text-blue-300',
+  OFERTAS: {
+    iconBg: 'bg-rose-50 dark:bg-rose-950/70 border-rose-100 dark:border-rose-900',
+    iconColor: 'text-rose-500 dark:text-rose-400',
+    tagColor: 'text-rose-600 dark:text-rose-400',
+    badgeStyle: 'bg-rose-50 text-rose-800 border-rose-200 dark:bg-rose-950/60 dark:text-rose-300 dark:border-rose-800',
+    btnStyle: 'bg-rose-50/70 hover:bg-rose-100/90 text-rose-800 border-rose-200/80 dark:bg-rose-950/50 dark:hover:bg-rose-900/60 dark:text-rose-300 dark:border-rose-800',
   },
-  tributario: {
-    badge: 'bg-amber-50 text-amber-800 dark:bg-amber-950/80 dark:text-amber-300 border-amber-200 dark:border-amber-800',
-    iconBg: 'bg-amber-50 text-amber-800 dark:bg-amber-950 dark:text-amber-300 group-hover:bg-amber-700 group-hover:text-white',
-    link: 'text-amber-800 dark:text-amber-400 group-hover:text-amber-950 dark:group-hover:text-amber-300',
+  VENTAS: {
+    iconBg: 'bg-sky-50 dark:bg-sky-950/70 border-sky-100 dark:border-sky-900',
+    iconColor: 'text-sky-500 dark:text-sky-400',
+    tagColor: 'text-sky-600 dark:text-sky-400',
+    badgeStyle: 'bg-sky-50 text-sky-800 border-sky-200 dark:bg-sky-950/60 dark:text-sky-300 dark:border-sky-800',
+    btnStyle: 'bg-sky-50/70 hover:bg-sky-100/90 text-sky-800 border-sky-200/80 dark:bg-sky-950/50 dark:hover:bg-sky-900/60 dark:text-sky-300 dark:border-sky-800',
   },
+  PASARELAS: {
+    iconBg: 'bg-purple-50 dark:bg-purple-950/70 border-purple-100 dark:border-purple-900',
+    iconColor: 'text-purple-600 dark:text-purple-400',
+    tagColor: 'text-purple-600 dark:text-purple-400',
+    badgeStyle: 'bg-purple-50 text-purple-800 border-purple-200 dark:bg-purple-950/60 dark:text-purple-300 dark:border-purple-800',
+    btnStyle: 'bg-purple-50/70 hover:bg-purple-100/90 text-purple-800 border-purple-200/80 dark:bg-purple-950/50 dark:hover:bg-purple-900/60 dark:text-purple-300 dark:border-purple-800',
+  },
+  GASTRONOMÍA: {
+    iconBg: 'bg-amber-50 dark:bg-amber-950/70 border-amber-100 dark:border-amber-900',
+    iconColor: 'text-amber-600 dark:text-amber-400',
+    tagColor: 'text-amber-600 dark:text-amber-400',
+    badgeStyle: 'bg-amber-50 text-amber-800 border-amber-200 dark:bg-amber-950/60 dark:text-amber-300 dark:border-amber-800',
+    btnStyle: 'bg-amber-50/70 hover:bg-amber-100/90 text-amber-800 border-amber-200/80 dark:bg-amber-950/50 dark:hover:bg-amber-900/60 dark:text-amber-300 dark:border-amber-800',
+  },
+  PLANILLA: {
+    iconBg: 'bg-amber-50 dark:bg-amber-950/70 border-amber-100 dark:border-amber-900',
+    iconColor: 'text-amber-600 dark:text-amber-400',
+    tagColor: 'text-amber-600 dark:text-amber-400',
+    badgeStyle: 'bg-amber-50 text-amber-800 border-amber-200 dark:bg-amber-950/60 dark:text-amber-300 dark:border-amber-800',
+    btnStyle: 'bg-amber-50/70 hover:bg-amber-100/90 text-amber-800 border-amber-200/80 dark:bg-amber-950/50 dark:hover:bg-amber-900/60 dark:text-amber-300 dark:border-amber-800',
+  },
+  BENEFICIOS: {
+    iconBg: 'bg-teal-50 dark:bg-teal-950/70 border-teal-100 dark:border-teal-900',
+    iconColor: 'text-teal-600 dark:text-teal-400',
+    tagColor: 'text-teal-600 dark:text-teal-400',
+    badgeStyle: 'bg-teal-50 text-teal-800 border-teal-200 dark:bg-teal-950/60 dark:text-teal-300 dark:border-teal-800',
+    btnStyle: 'bg-teal-50/70 hover:bg-teal-100/90 text-teal-800 border-teal-200/80 dark:bg-teal-950/50 dark:hover:bg-teal-900/60 dark:text-teal-300 dark:border-teal-800',
+  },
+  SOBRETASA: {
+    iconBg: 'bg-indigo-50 dark:bg-indigo-950/70 border-indigo-100 dark:border-indigo-900',
+    iconColor: 'text-indigo-600 dark:text-indigo-400',
+    tagColor: 'text-indigo-600 dark:text-indigo-400',
+    badgeStyle: 'bg-indigo-50 text-indigo-800 border-indigo-200 dark:bg-indigo-950/60 dark:text-indigo-300 dark:border-indigo-800',
+    btnStyle: 'bg-indigo-50/70 hover:bg-indigo-100/90 text-indigo-800 border-indigo-200/80 dark:bg-indigo-950/50 dark:hover:bg-indigo-900/60 dark:text-indigo-300 dark:border-indigo-800',
+  },
+  DESCANSO: {
+    iconBg: 'bg-blue-50 dark:bg-blue-950/70 border-blue-100 dark:border-blue-900',
+    iconColor: 'text-blue-600 dark:text-blue-400',
+    tagColor: 'text-blue-600 dark:text-blue-400',
+    badgeStyle: 'bg-blue-50 text-blue-800 border-blue-200 dark:bg-blue-950/60 dark:text-blue-300 dark:border-blue-800',
+    btnStyle: 'bg-blue-50/70 hover:bg-blue-100/90 text-blue-800 border-blue-200/80 dark:bg-blue-950/50 dark:hover:bg-blue-900/60 dark:text-blue-300 dark:border-blue-800',
+  },
+  SUNAT: {
+    iconBg: 'bg-amber-50 dark:bg-amber-950/70 border-amber-100 dark:border-amber-900',
+    iconColor: 'text-amber-600 dark:text-amber-400',
+    tagColor: 'text-amber-700 dark:text-amber-400',
+    badgeStyle: 'bg-amber-50 text-amber-800 border-amber-200 dark:bg-amber-950/60 dark:text-amber-300 dark:border-amber-800',
+    btnStyle: 'bg-amber-50/70 hover:bg-amber-100/90 text-amber-800 border-amber-200/80 dark:bg-amber-950/50 dark:hover:bg-amber-900/60 dark:text-amber-300 dark:border-amber-800',
+  },
+  FINANZAS: {
+    iconBg: 'bg-blue-50 dark:bg-blue-950/70 border-blue-100 dark:border-blue-900',
+    iconColor: 'text-blue-600 dark:text-blue-400',
+    tagColor: 'text-blue-600 dark:text-blue-400',
+    badgeStyle: 'bg-blue-50 text-blue-800 border-blue-200 dark:bg-blue-950/60 dark:text-blue-300 dark:border-blue-800',
+    btnStyle: 'bg-blue-50/70 hover:bg-blue-100/90 text-blue-800 border-blue-200/80 dark:bg-blue-950/50 dark:hover:bg-blue-900/60 dark:text-blue-300 dark:border-blue-800',
+  },
+  METAS: {
+    iconBg: 'bg-emerald-50 dark:bg-emerald-950/70 border-emerald-100 dark:border-emerald-900',
+    iconColor: 'text-emerald-600 dark:text-emerald-400',
+    tagColor: 'text-emerald-600 dark:text-emerald-400',
+    badgeStyle: 'bg-emerald-50 text-emerald-800 border-emerald-200 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800',
+    btnStyle: 'bg-emerald-50/70 hover:bg-emerald-100/90 text-emerald-800 border-emerald-200/80 dark:bg-emerald-950/50 dark:hover:bg-emerald-900/60 dark:text-emerald-300 dark:border-emerald-800',
+  },
+  INVERSIÓN: {
+    iconBg: 'bg-indigo-50 dark:bg-indigo-950/70 border-indigo-100 dark:border-indigo-900',
+    iconColor: 'text-indigo-600 dark:text-indigo-400',
+    tagColor: 'text-indigo-600 dark:text-indigo-400',
+    badgeStyle: 'bg-indigo-50 text-indigo-800 border-indigo-200 dark:bg-indigo-950/60 dark:text-indigo-300 dark:border-indigo-800',
+    btnStyle: 'bg-indigo-50/70 hover:bg-indigo-100/90 text-indigo-800 border-indigo-200/80 dark:bg-indigo-950/50 dark:hover:bg-indigo-900/60 dark:text-indigo-300 dark:border-indigo-800',
+  },
+  CRÉDITO: {
+    iconBg: 'bg-sky-50 dark:bg-sky-950/70 border-sky-100 dark:border-sky-900',
+    iconColor: 'text-sky-600 dark:text-sky-400',
+    tagColor: 'text-sky-600 dark:text-sky-400',
+    badgeStyle: 'bg-sky-50 text-sky-800 border-sky-200 dark:bg-sky-950/60 dark:text-sky-300 dark:border-sky-800',
+    btnStyle: 'bg-sky-50/70 hover:bg-sky-100/90 text-sky-800 border-sky-200/80 dark:bg-sky-950/50 dark:hover:bg-sky-900/60 dark:text-sky-300 dark:border-sky-800',
+  },
+  AHORRO: {
+    iconBg: 'bg-emerald-50 dark:bg-emerald-950/70 border-emerald-100 dark:border-emerald-900',
+    iconColor: 'text-emerald-600 dark:text-emerald-400',
+    tagColor: 'text-emerald-600 dark:text-emerald-400',
+    badgeStyle: 'bg-emerald-50 text-emerald-800 border-emerald-200 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800',
+    btnStyle: 'bg-emerald-50/70 hover:bg-emerald-100/90 text-emerald-800 border-emerald-200/80 dark:bg-emerald-950/50 dark:hover:bg-emerald-900/60 dark:text-emerald-300 dark:border-emerald-800',
+  },
+  VIAJES: {
+    iconBg: 'bg-amber-50 dark:bg-amber-950/70 border-amber-100 dark:border-amber-900',
+    iconColor: 'text-amber-600 dark:text-amber-400',
+    tagColor: 'text-amber-600 dark:text-amber-400',
+    badgeStyle: 'bg-amber-50 text-amber-800 border-amber-200 dark:bg-amber-950/60 dark:text-amber-300 dark:border-amber-800',
+    btnStyle: 'bg-amber-50/70 hover:bg-amber-100/90 text-amber-800 border-amber-200/80 dark:bg-amber-950/50 dark:hover:bg-amber-900/60 dark:text-amber-300 dark:border-amber-800',
+  },
+  SERVICIOS: {
+    iconBg: 'bg-indigo-50 dark:bg-indigo-950/70 border-indigo-100 dark:border-indigo-900',
+    iconColor: 'text-indigo-600 dark:text-indigo-400',
+    tagColor: 'text-indigo-600 dark:text-indigo-400',
+    badgeStyle: 'bg-indigo-50 text-indigo-800 border-indigo-200 dark:bg-indigo-950/60 dark:text-indigo-300 dark:border-indigo-800',
+    btnStyle: 'bg-indigo-50/70 hover:bg-indigo-100/90 text-indigo-800 border-indigo-200/80 dark:bg-indigo-950/50 dark:hover:bg-indigo-900/60 dark:text-indigo-300 dark:border-indigo-800',
+  },
+  DIARIO: {
+    iconBg: 'bg-orange-50 dark:bg-orange-950/70 border-orange-100 dark:border-orange-900',
+    iconColor: 'text-orange-600 dark:text-orange-400',
+    tagColor: 'text-orange-600 dark:text-orange-400',
+    badgeStyle: 'bg-orange-50 text-orange-800 border-orange-200 dark:bg-orange-950/60 dark:text-orange-300 dark:border-orange-800',
+    btnStyle: 'bg-orange-50/70 hover:bg-orange-100/90 text-orange-800 border-orange-200/80 dark:bg-orange-950/50 dark:hover:bg-orange-900/60 dark:text-orange-300 dark:border-orange-800',
+  },
+  UTILIDAD: {
+    iconBg: 'bg-purple-50 dark:bg-purple-950/70 border-purple-100 dark:border-purple-900',
+    iconColor: 'text-purple-600 dark:text-purple-400',
+    tagColor: 'text-purple-600 dark:text-purple-400',
+    badgeStyle: 'bg-purple-50 text-purple-800 border-purple-200 dark:bg-purple-950/60 dark:text-purple-300 dark:border-purple-800',
+    btnStyle: 'bg-purple-50/70 hover:bg-purple-100/90 text-purple-800 border-purple-200/80 dark:bg-purple-950/50 dark:hover:bg-purple-900/60 dark:text-purple-300 dark:border-purple-800',
+  },
+};
+
+const DEFAULT_THEME = {
+  iconBg: 'bg-emerald-50 dark:bg-emerald-950/70 border-emerald-100 dark:border-emerald-900',
+  iconColor: 'text-emerald-600 dark:text-emerald-400',
+  tagColor: 'text-emerald-600 dark:text-emerald-400',
+  badgeStyle: 'bg-slate-50 text-slate-700 border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700',
+  btnStyle: 'bg-emerald-50/70 hover:bg-emerald-100/90 text-emerald-800 border-emerald-200/80 dark:bg-emerald-950/50 dark:hover:bg-emerald-900/60 dark:text-emerald-300 dark:border-emerald-800',
 };
 
 export default function HomePage() {
@@ -113,6 +230,7 @@ export default function HomePage() {
       const matchesSearch =
         searchQuery.trim() === '' ||
         calc.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        calc.shortTitle.toLowerCase().includes(searchQuery.toLowerCase()) ||
         calc.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
         calc.keywords.some((k) => k.toLowerCase().includes(searchQuery.toLowerCase()));
 
@@ -130,7 +248,7 @@ export default function HomePage() {
   }, [searchQuery, activeUseCase, activeCategory]);
 
   return (
-    <div className="min-h-screen bg-slate-100/70 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-200">
+    <div className="min-h-screen bg-[#eef2f6] dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-200">
       
       {/* 🇵🇪 HERO & SEARCH SECTION */}
       <section className="border-b border-slate-200/90 dark:border-slate-800/80 bg-white dark:bg-slate-900/90 shadow-2xs">
@@ -255,7 +373,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 📦 DIRECTORY & CALCULATOR CARDS */}
+      {/* 📦 DIRECTORY & CLEAN MINIMALIST CARDS */}
       <main className="mx-auto max-w-6xl px-4 sm:px-6 py-12">
         
         {/* Category Pills Bar */}
@@ -299,7 +417,7 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* CALCULATOR CARDS */}
+        {/* CALCULATOR CARDS (Clean Minimalist Style) */}
         {filteredCalculators.length === 0 ? (
           <div className="rounded-2xl border border-slate-300 dark:border-slate-800 bg-white dark:bg-slate-900 p-12 text-center my-4 shadow-sm">
             <Search className="h-10 w-10 text-slate-300 mx-auto mb-3" />
@@ -317,63 +435,54 @@ export default function HomePage() {
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredCalculators.map((calc) => {
-              const catStyle = CATEGORY_STYLES[calc.category as keyof typeof CATEGORY_STYLES] || CATEGORY_STYLES.negocios;
+              const theme = TAG_THEMES[calc.tag] || DEFAULT_THEME;
 
               return (
                 <Link
                   key={calc.id}
                   href={calc.slug}
-                  className="group relative flex flex-col justify-between rounded-2xl border border-slate-200 dark:border-slate-800/90 bg-white dark:bg-slate-900 p-5 sm:p-6 shadow-sm shadow-slate-900/5 hover:border-emerald-600 dark:hover:border-emerald-500 hover:shadow-md transition-all duration-150"
+                  className="group relative flex flex-col justify-between rounded-3xl border border-slate-200/90 dark:border-slate-800/90 bg-white dark:bg-slate-900 p-6 shadow-sm shadow-slate-900/5 hover:border-slate-300 dark:hover:border-slate-700 hover:shadow-md transition-all duration-150"
                 >
                   <div>
                     
-                    {/* Card Top: Icon + Category Badge */}
-                    <div className="flex items-center justify-between mb-3.5">
-                      <div className="flex items-center gap-2.5">
-                        <div className={`flex h-10 w-10 items-center justify-center rounded-xl border border-slate-100 dark:border-slate-800 transition-colors ${catStyle.iconBg}`}>
-                          <DynamicIcon name={calc.icon} className="h-5 w-5" />
+                    {/* Card Top: Large Rounded Icon + Tag + Badge */}
+                    <div className="flex items-center justify-between gap-2 mb-4">
+                      <div className="flex items-center gap-3">
+                        <div className={`flex h-12 w-12 items-center justify-center rounded-2xl border transition-transform group-hover:scale-105 ${theme.iconBg} ${theme.iconColor}`}>
+                          <DynamicIcon name={calc.icon} className="h-6 w-6" />
                         </div>
-                        <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                        <span className={`text-xs font-black uppercase tracking-wider ${theme.tagColor}`}>
                           {calc.tag}
                         </span>
                       </div>
 
                       {calc.badge && (
-                        <span className="rounded-md bg-amber-50 dark:bg-amber-950/80 px-2 py-0.5 text-[11px] font-extrabold text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-800">
+                        <span className={`rounded-xl px-2.5 py-0.5 text-[11px] font-extrabold border shadow-2xs ${theme.badgeStyle}`}>
                           {calc.badge}
                         </span>
                       )}
                     </div>
 
-                    {/* Title & Description */}
-                    <h2 className="text-lg font-bold text-slate-900 dark:text-white group-hover:text-emerald-700 dark:group-hover:text-emerald-400 transition-colors leading-snug">
-                      {calc.title}
+                    {/* Clean Title */}
+                    <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white leading-snug group-hover:text-slate-950 dark:group-hover:text-white transition-colors">
+                      {calc.shortTitle}
                     </h2>
-                    <p className="mt-2 text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-normal line-clamp-2">
-                      {calc.description}
-                    </p>
 
-                    {/* Formula Preview Box */}
-                    {calc.formulaSummary && (
-                      <div className="mt-3.5 rounded-lg bg-slate-50 dark:bg-slate-950 border border-slate-200/70 dark:border-slate-800/80 p-2.5 text-[11px] font-mono text-slate-600 dark:text-slate-300 line-clamp-1">
-                        <span className="font-bold text-slate-400 not-mono mr-1">Fórmula:</span>
-                        {calc.formulaSummary}
-                      </div>
-                    )}
+                    {/* Short 1-line description */}
+                    <p className="mt-1.5 text-xs sm:text-sm text-slate-500 dark:text-slate-400 leading-relaxed font-normal line-clamp-2">
+                      {calc.cardSummary || calc.description}
+                    </p>
 
                   </div>
 
-                  {/* Card Footer Action */}
-                  <div className="mt-5 pt-3.5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
-                    <span className="text-[11px] font-semibold text-slate-400 font-mono">
-                      🇵🇪 {calc.category === 'tributario' ? 'SUNAT & Servicios' : calc.category === 'laboral' ? 'Planilla Perú' : 'En Soles (S/)'}
-                    </span>
-                    <span className={`inline-flex items-center gap-1 text-xs font-bold group-hover:translate-x-0.5 transition-all ${catStyle.link}`}>
+                  {/* Full-width Action Button Pill */}
+                  <div className="mt-6">
+                    <div className={`w-full flex items-center justify-center gap-1.5 py-2.5 px-4 rounded-xl border text-xs sm:text-sm font-bold transition-all group-hover:shadow-xs ${theme.btnStyle}`}>
                       <span>Calcular</span>
-                      <ArrowRight className="h-3.5 w-3.5" />
-                    </span>
+                      <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                    </div>
                   </div>
                 </Link>
               );
