@@ -1,4 +1,5 @@
 import { roundTo } from '../math/formatters';
+import { PERU_CONSTANTS } from '../constants/peru';
 
 export type LaborRegime = 'general' | 'pequena_empresa' | 'microempresa';
 export type SeparationReason = 'renuncia' | 'fin_contrato' | 'mutuo_disenso' | 'despido_arbitrario';
@@ -35,7 +36,7 @@ export interface SeverancePayResult {
  */
 export function calculateSeverancePay(input: SeverancePayInput): SeverancePayResult {
   const salary = Math.max(0, input.baseSalary || 0);
-  const familyAllowance = input.hasFamilyAllowance ? 102.5 : 0;
+  const familyAllowance = input.hasFamilyAllowance ? PERU_CONSTANTS.FAMILY_ALLOWANCE : 0;
   const baseComputable = salary + familyAllowance;
 
   const regimeFactor = input.laborRegime === 'general' ? 1.0 : input.laborRegime === 'pequena_empresa' ? 0.5 : 0.0;
@@ -48,11 +49,15 @@ export function calculateSeverancePay(input: SeverancePayInput): SeverancePayRes
     : ((baseComputable * regimeFactor) / 6) * gratiMonths;
 
   // Bonificación EsSalud (9% o 6.75% EPS)
-  const bonusRate = input.hasEps ? 0.0675 : 0.09;
+  const bonusRate = input.hasEps
+    ? PERU_CONSTANTS.EPS_EXTRAORDINARY_BONUS_RATE
+    : PERU_CONSTANTS.ESSALUD_RATE;
   const essaludBonus = truncatedGrati * bonusRate;
 
   // 2. CTS Trunca (Remuneración computable incluye 1/6 de gratificación)
-  const sixthOfGrati = input.laborRegime === 'microempresa' ? 0 : baseComputable / 6;
+  const sixthOfGrati = input.laborRegime === 'microempresa'
+    ? 0
+    : (baseComputable * regimeFactor) / 6;
   const computableForCts = baseComputable + sixthOfGrati;
 
   const ctsMonths = Math.max(0, Math.min(6, input.monthsInLastSemesterCts || 0));

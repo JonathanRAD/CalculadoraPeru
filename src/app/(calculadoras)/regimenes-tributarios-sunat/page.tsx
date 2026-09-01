@@ -7,13 +7,14 @@ import {
   calculateTaxRegimes,
   ClientType,
   ActivityType,
+  TaxpayerType,
 } from '@/core/calculators/taxRegimes';
 import { formatCurrency } from '@/core/math/formatters';
 import { InputNumber } from '@/shared/components/ui/InputNumber';
 import { ResultMetricCard } from '@/shared/components/ui/ResultMetricCard';
 import { ShareButtons } from '@/shared/components/ui/ShareButtons';
 import { ExportPdfButton } from '@/shared/components/ui/ExportPdfButton';
-import { Building, Sparkles, Check, X, HelpCircle, FileSpreadsheet } from 'lucide-react';
+import { Building, Sparkles, Check, X } from 'lucide-react';
 
 export default function RegimenesTributariosPage() {
   const meta = CALCULATORS_REGISTRY.find((c) => c.id === 'regimenes-tributarios-sunat') || {
@@ -34,12 +35,14 @@ export default function RegimenesTributariosPage() {
   const [estimatedMonthlyPurchases, setEstimatedMonthlyPurchases] = useState<number>(1500);
   const [clientType, setClientType] = useState<ClientType>('final_consumer');
   const [activityType, setActivityType] = useState<ActivityType>('commerce_trade');
+  const [taxpayerType, setTaxpayerType] = useState<TaxpayerType>('natural_person');
 
   const result = calculateTaxRegimes({
     estimatedMonthlyRevenue,
     estimatedMonthlyPurchases,
     clientType,
     activityType,
+    taxpayerType,
   });
 
   const shareSummary = `Diagnóstico Tributario SUNAT:
@@ -88,7 +91,7 @@ Motivo: ${result.recommendedReason}`;
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <InputNumber
               id="monthlyRevenue"
-              label="Ventas estimadas al mes"
+              label="Ventas netas mensuales (sin IGV)"
               prefix="S/"
               value={estimatedMonthlyRevenue}
               onChange={(val) => setEstimatedMonthlyRevenue(val)}
@@ -98,7 +101,7 @@ Motivo: ${result.recommendedReason}`;
 
             <InputNumber
               id="monthlyPurchases"
-              label="Compras con factura al mes"
+              label="Compras netas mensuales (sin IGV)"
               prefix="S/"
               value={estimatedMonthlyPurchases}
               onChange={(val) => setEstimatedMonthlyPurchases(val)}
@@ -108,6 +111,20 @@ Motivo: ${result.recommendedReason}`;
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div>
+              <label className="text-xs sm:text-sm font-bold text-slate-900 dark:text-slate-200 block mb-2">
+                Tipo de contribuyente
+              </label>
+              <select
+                value={taxpayerType}
+                onChange={(e) => setTaxpayerType(e.target.value as TaxpayerType)}
+                className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 p-2.5 text-xs font-bold text-slate-900 dark:text-white outline-none focus:border-amber-600"
+              >
+                <option value="natural_person">Persona natural con negocio</option>
+                <option value="legal_entity">Persona jurídica / Empresa</option>
+              </select>
+            </div>
+
             <div>
               <label className="text-xs sm:text-sm font-bold text-slate-900 dark:text-slate-200 block mb-2">
                 ¿A quiénes le venderás principalmente?
@@ -251,6 +268,7 @@ Motivo: ${result.recommendedReason}`;
                     { label: 'Ventas Mensuales Estimadas', value: formatCurrency(estimatedMonthlyRevenue) },
                     { label: 'Compras Mensuales con Factura', value: formatCurrency(estimatedMonthlyPurchases) },
                     { label: 'Perfil de Clientes', value: clientType === 'final_consumer' ? 'Consumidor Final' : clientType === 'businesses_factura' ? 'Empresas (Factura)' : 'Mixto' },
+                    { label: 'Tipo de contribuyente', value: taxpayerType === 'natural_person' ? 'Persona natural' : 'Persona jurídica' },
                     { label: 'Régimen Recomendado', value: result.recommendedRegimeName, isHighlight: true },
                     { label: 'Impuesto Mensual Proyectado', value: formatCurrency(result.monthlyEstimatedTax), isHighlight: true },
                   ],

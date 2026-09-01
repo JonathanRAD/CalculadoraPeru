@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { CalculatorShell } from '@/features/calculators/components/CalculatorShell';
 import { CALCULATORS_REGISTRY } from '@/features/calculators/registry';
-import { calculateCts, CtsInput } from '@/core/calculators/cts';
+import { calculateCts } from '@/core/calculators/cts';
 import { CompanyRegime } from '@/core/calculators/gratification';
 import { formatCurrency } from '@/core/math/formatters';
 import { InputNumber } from '@/shared/components/ui/InputNumber';
@@ -111,7 +111,7 @@ Periodo: ${monthsWorkedInSemester} meses laborados`;
 
           <SwitchToggle
             id="hasFamilyAllowance"
-            label="¿Percibes Asignación Familiar (+S/ 102.50)?"
+            label="¿Percibes Asignación Familiar (+S/ 113.00)?"
             description="Se incorpora como remuneración computable para el cálculo de la CTS"
             checked={hasFamilyAllowance}
             onChange={(hasFamilyAllowance) => setHasFamilyAllowance(hasFamilyAllowance)}

@@ -1,12 +1,10 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
-import { Search, X, ArrowRight, Menu, ChevronDown, Sparkles } from 'lucide-react';
+import { Search, ChevronDown, Receipt, ArrowRight, Menu, X } from 'lucide-react';
 import { CALCULATORS_REGISTRY, CATEGORIES, CalculatorCategory } from '@/features/calculators/registry';
 import { ThemeToggle } from '@/shared/components/ui/ThemeToggle';
-import { DynamicIcon } from '@/shared/components/ui/DynamicIcon';
 
 export function Navbar() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -15,6 +13,11 @@ export function Navbar() {
   const [activeDropdown, setActiveDropdown] = useState<CalculatorCategory | null>(null);
 
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const closeSearch = useCallback(() => {
+    setIsSearchOpen(false);
+    setSearchQuery('');
+  }, []);
 
   // Close dropdown on outside click
   useEffect(() => {
@@ -27,10 +30,21 @@ export function Navbar() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  useEffect(() => {
+    if (!isSearchOpen) return;
+
+    function handleEscape(event: KeyboardEvent) {
+      if (event.key === 'Escape') closeSearch();
+    }
+
+    document.addEventListener('keydown', handleEscape);
+    return () => document.removeEventListener('keydown', handleEscape);
+  }, [closeSearch, isSearchOpen]);
+
   const navCategories = CATEGORIES.filter(c => c.id !== 'todas');
 
   const filteredCalculators = searchQuery.trim() === ''
-    ? CALCULATORS_REGISTRY.slice(0, 6)
+    ? CALCULATORS_REGISTRY.slice(0, 8)
     : CALCULATORS_REGISTRY.filter(c =>
         c.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         c.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -39,35 +53,35 @@ export function Navbar() {
 
   return (
     <>
-      <header className="sticky top-0 z-40 w-full border-b border-slate-200/90 dark:border-slate-800/90 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md transition-colors shadow-2xs">
-        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
+      <header className="bg-[#0A1128] text-white sticky top-0 z-50 border-b border-slate-800">
+        <div className="mx-auto flex h-18 max-w-7xl items-center justify-between px-4 sm:px-6">
           
-          {/* Brand Logo */}
-          <Link href="/" className="flex items-center gap-3 group">
-            <div className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-tr from-emerald-800 to-emerald-600 p-0.5 shadow-md shadow-emerald-950/20 group-hover:scale-105 transition-transform">
-              <Image
-                src="/logo-calc.png"
-                alt="CalculaPerú"
-                width={36}
-                height={36}
-                className="h-full w-full object-contain rounded-lg"
-                priority
-              />
+          {/* Brand Logo (Matching Screenshot) */}
+          <Link href="/" className="flex items-center gap-2.5 group">
+            <div className="w-10 h-10 bg-slate-900 border border-slate-700 rounded-lg flex items-center justify-center p-1.5 shadow-sm">
+              <svg viewBox="0 0 24 24" fill="none" className="w-full h-full text-white" stroke="currentColor" strokeWidth="2">
+                <rect x="4" y="2" width="16" height="20" rx="2" />
+                <rect x="7" y="5" width="10" height="4" fill="#38BDF8" stroke="none" />
+                <circle cx="8" cy="13" r="1" fill="currentColor" />
+                <circle cx="12" cy="13" r="1" fill="currentColor" />
+                <circle cx="16" cy="13" r="1" fill="currentColor" />
+                <circle cx="8" cy="17" r="1" fill="currentColor" />
+                <circle cx="12" cy="17" r="1" fill="currentColor" />
+                <circle cx="16" cy="17" r="1" fill="currentColor" />
+              </svg>
             </div>
             <div className="flex flex-col">
-              <div className="flex items-center gap-1.5">
-                <span className="text-lg font-black tracking-tight text-slate-900 dark:text-white">
-                  Calcula<span className="text-emerald-700 dark:text-emerald-400">Perú</span>
-                </span>
-                <span className="inline-flex items-center rounded-md bg-emerald-50 dark:bg-emerald-950/80 px-1.5 py-0.2 text-[10px] font-extrabold text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
-                  🇵🇪 PERÚ
-                </span>
-              </div>
+              <span className="text-lg font-black tracking-tight leading-none text-white">
+                Calcula<span className="text-[#00C853]">Perú</span>
+              </span>
+              <span className="text-[10px] text-slate-400 font-normal mt-1 leading-none">
+                Calcula mejor, decide mejor.
+              </span>
             </div>
           </Link>
 
           {/* Desktop Categories Navigation with Dropdowns */}
-          <nav ref={dropdownRef} className="hidden lg:flex items-center gap-1 text-sm font-bold text-slate-700 dark:text-slate-200">
+          <nav ref={dropdownRef} className="hidden lg:flex items-center gap-6 text-sm font-medium text-slate-200">
             {navCategories.map((cat) => {
               const isOpen = activeDropdown === cat.id;
               const calcsInCat = CALCULATORS_REGISTRY.filter(c => c.category === cat.id);
@@ -77,24 +91,18 @@ export function Navbar() {
                   <button
                     type="button"
                     onClick={() => setActiveDropdown(isOpen ? null : (cat.id as CalculatorCategory))}
-                    onMouseEnter={() => setActiveDropdown(cat.id as CalculatorCategory)}
-                    className={`flex items-center gap-1.5 rounded-xl px-3.5 py-2 transition-all cursor-pointer ${
-                      isOpen
-                        ? 'bg-slate-100 dark:bg-slate-800 text-emerald-800 dark:text-emerald-400'
-                        : 'hover:bg-slate-50 dark:hover:bg-slate-800/60 hover:text-slate-900 dark:hover:text-white'
+                    className={`flex items-center gap-1.5 hover:text-white transition-colors cursor-pointer py-2 ${
+                      isOpen ? 'text-[#00C853] font-bold' : ''
                     }`}
                   >
                     <span>{cat.label}</span>
-                    <ChevronDown className={`h-3.5 w-3.5 transition-transform duration-150 ${isOpen ? 'rotate-180 text-emerald-700 dark:text-emerald-400' : 'text-slate-400'}`} />
+                    <ChevronDown className={`h-3.5 w-3.5 transition-transform duration-150 ${isOpen ? 'rotate-180 text-[#00C853]' : 'text-slate-400'}`} />
                   </button>
 
-                  {/* Dropdown Menu Popover */}
+                  {/* Dropdown Menu */}
                   {isOpen && (
-                    <div
-                      onMouseLeave={() => setActiveDropdown(null)}
-                      className="absolute top-full left-0 mt-1.5 w-72 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-2 shadow-xl shadow-slate-900/10 dark:shadow-slate-950/50 animate-in fade-in slide-in-from-top-1 duration-150"
-                    >
-                      <div className="px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-wider text-slate-400 dark:text-slate-500 border-b border-slate-100 dark:border-slate-800 mb-1">
+                    <div className="absolute left-0 top-full mt-2 w-72 rounded-xl bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 shadow-2xl dark:shadow-black/40 p-2 z-50 animate-in fade-in zoom-in-95 border border-slate-100 dark:border-slate-700">
+                      <div className="text-[10px] font-mono uppercase tracking-wider text-slate-400 dark:text-slate-500 px-3 py-1.5 mb-1 border-b border-slate-100 dark:border-slate-800">
                         {cat.label} ({calcsInCat.length})
                       </div>
                       <div className="space-y-0.5">
@@ -103,21 +111,10 @@ export function Navbar() {
                             key={calc.id}
                             href={calc.slug}
                             onClick={() => setActiveDropdown(null)}
-                            className="flex items-center justify-between p-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/80 group transition-colors"
+                            className="flex items-center justify-between p-2 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 text-xs font-medium text-slate-800 dark:text-slate-200 hover:text-[#00875A] dark:hover:text-emerald-400 transition-colors group"
                           >
-                            <div className="flex items-center gap-2.5">
-                              <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 group-hover:bg-emerald-50 dark:group-hover:bg-emerald-950 group-hover:text-emerald-700 dark:group-hover:text-emerald-400 transition-colors">
-                                <DynamicIcon name={calc.icon} className="h-4 w-4" />
-                              </div>
-                              <span className="text-xs font-bold text-slate-800 dark:text-slate-200 group-hover:text-emerald-800 dark:group-hover:text-emerald-400">
-                                {calc.shortTitle}
-                              </span>
-                            </div>
-                            {calc.badge && (
-                              <span className="rounded bg-emerald-50 dark:bg-emerald-950 px-1.5 py-0.2 text-[9px] font-bold text-emerald-800 dark:text-emerald-300">
-                                {calc.badge}
-                              </span>
-                            )}
+                            <span className="truncate">{calc.shortTitle}</span>
+                            <ArrowRight className="h-3 w-3 opacity-0 group-hover:opacity-100 text-[#00875A] dark:text-emerald-400 transition-opacity shrink-0" />
                           </Link>
                         ))}
                       </div>
@@ -128,73 +125,54 @@ export function Navbar() {
             })}
           </nav>
 
-          {/* Right Actions: Cotizador CTA + Search + ThemeToggle + Mobile Toggle */}
-          <div className="flex items-center gap-2.5">
+          {/* Right Actions: Cotizador MYPES + Search + ThemeToggle */}
+          <div className="flex items-center gap-3">
             <Link
               href="/cotizador"
-              className="hidden md:flex items-center gap-1.5 rounded-xl bg-amber-500/15 dark:bg-amber-400/10 border border-amber-600/30 px-3 py-2 text-xs font-black text-amber-900 dark:text-amber-400 hover:bg-amber-500/25 transition-all shadow-2xs group"
+              className="hidden sm:inline-flex items-center gap-2 rounded-lg bg-[#00875A] hover:bg-[#00704A] text-white px-3.5 py-2 text-xs font-bold transition-colors shadow-xs"
             >
-              <Sparkles className="h-3.5 w-3.5 text-amber-600 dark:text-amber-400 group-hover:rotate-12 transition-transform" />
+              <Receipt className="h-4 w-4" />
               <span>Cotizador MYPES</span>
-              <span className="rounded-md bg-[#E3A62F] text-slate-950 px-1.5 py-0.2 text-[9px] font-black uppercase">
-                Nuevo
-              </span>
             </Link>
 
             <button
               onClick={() => setIsSearchOpen(true)}
               aria-label="Buscar calculadora"
-              className="flex items-center gap-2 rounded-xl border border-slate-300/80 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 px-3 py-2 text-xs font-bold text-slate-600 dark:text-slate-300 hover:border-emerald-700 dark:hover:border-emerald-500 transition-all cursor-pointer shadow-2xs"
+              className="p-2 text-slate-300 hover:text-white hover:bg-slate-800/80 rounded-lg transition-colors cursor-pointer"
             >
-              <Search className="h-4 w-4 text-slate-400" />
-              <span className="hidden sm:inline">Buscar...</span>
-              <kbd className="hidden sm:inline-block rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-1.5 py-0.5 text-[10px] text-slate-400">
-                /
-              </kbd>
+              <Search className="h-4.5 w-4.5" />
             </button>
 
-            {/* Tactile Theme Toggle */}
-            <ThemeToggle />
+            {/* Ingenious Day / Night Animated Theme Switch */}
+            <div className="flex items-center pl-1 border-l border-slate-800">
+              <ThemeToggle />
+            </div>
 
-            {/* Mobile Menu Button */}
+            {/* Mobile Toggle */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="lg:hidden p-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl cursor-pointer"
-              aria-label="Abrir menú de navegación"
+              className="lg:hidden p-2 text-slate-300 hover:text-white rounded-lg cursor-pointer"
+              aria-label="Menú"
             >
-              <Menu className="h-5 w-5" />
+              {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </button>
           </div>
 
         </div>
 
-        {/* Mobile Menu Drawer (Grouped by 4 Categories) */}
+        {/* Mobile Menu Drawer */}
         {isMobileMenuOpen && (
-          <div className="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-4 lg:hidden max-h-[80vh] overflow-y-auto space-y-4 shadow-xl">
-            
-            {/* Mobile Cotizador Highlight */}
-            <Link
-              href="/cotizador"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="flex items-center justify-between p-3 rounded-2xl bg-[#12261F] text-white border border-[#2B5445] shadow-xs"
-            >
-              <div className="flex items-center gap-2.5">
-                <div className="h-8 w-8 rounded-xl bg-[#E3A62F] flex items-center justify-center text-slate-950 font-bold">
-                  <Sparkles className="h-4 w-4" />
-                </div>
-                <div>
-                  <div className="text-xs font-black text-white">Cotizador para MYPES</div>
-                  <div className="text-[10px] text-[#E3A62F]">Crea proformas en 30 seg</div>
-                </div>
-              </div>
-              <ArrowRight className="h-4 w-4 text-[#E3A62F]" />
-            </Link>
+          <div className="border-t border-slate-800 bg-[#0A1128] px-4 py-4 lg:hidden max-h-[80vh] overflow-y-auto space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+              <span className="text-xs text-slate-300 font-semibold">Tema (Día / Noche)</span>
+              <ThemeToggle />
+            </div>
 
             {navCategories.map((cat) => {
               const calcsInCat = CALCULATORS_REGISTRY.filter(c => c.category === cat.id);
               return (
-                <div key={cat.id} className="space-y-1">
-                  <div className="text-[11px] font-black uppercase tracking-wider text-emerald-800 dark:text-emerald-400 px-2">
+                <div key={cat.id} className="pt-2">
+                  <div className="text-xs font-bold uppercase text-[#00C853] mb-2">
                     {cat.label}
                   </div>
                   <div className="grid grid-cols-1 gap-1">
@@ -203,17 +181,9 @@ export function Navbar() {
                         key={calc.id}
                         href={calc.slug}
                         onClick={() => setIsMobileMenuOpen(false)}
-                        className="flex items-center justify-between py-2 px-2.5 rounded-xl text-xs font-bold text-slate-800 dark:text-slate-200 hover:bg-emerald-50 dark:hover:bg-emerald-950/40 hover:text-emerald-800 dark:hover:text-emerald-300"
+                        className="p-2 rounded-lg hover:bg-slate-800 text-xs font-medium text-slate-200"
                       >
-                        <div className="flex items-center gap-2">
-                          <DynamicIcon name={calc.icon} className="h-4 w-4 text-slate-400" />
-                          <span>{calc.shortTitle}</span>
-                        </div>
-                        {calc.badge && (
-                          <span className="text-[9px] font-bold bg-slate-100 dark:bg-slate-800 px-1.5 py-0.2 rounded text-slate-600 dark:text-slate-400">
-                            {calc.badge}
-                          </span>
-                        )}
+                        {calc.shortTitle}
                       </Link>
                     ))}
                   </div>
@@ -224,57 +194,55 @@ export function Navbar() {
         )}
       </header>
 
-      {/* Global Search Modal */}
+      {/* Global Quick Search Modal */}
       {isSearchOpen && (
         <div
-          className="fixed inset-0 z-50 flex items-start justify-center bg-slate-950/60 p-4 pt-20 backdrop-blur-xs animate-in fade-in duration-150"
-          onClick={() => setIsSearchOpen(false)}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Buscar calculadora"
+          onMouseDown={(event) => {
+            if (event.target === event.currentTarget) closeSearch();
+          }}
+          className="fixed inset-0 z-50 flex items-start justify-center pt-20 bg-black/60 backdrop-blur-xs p-4 animate-in fade-in duration-100"
         >
-          <div
-            className="w-full max-w-xl rounded-2xl bg-white dark:bg-slate-900 shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex items-center border-b border-slate-100 dark:border-slate-800 px-4 py-3.5">
-              <Search className="h-5 w-5 text-emerald-700 dark:text-emerald-400 shrink-0" />
+          <div className="w-full max-w-xl bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 rounded-2xl shadow-2xl dark:shadow-black/50 p-4 border border-slate-200 dark:border-slate-700">
+            <div className="flex items-center gap-3 border-b border-slate-100 dark:border-slate-800 pb-3">
+              <Search className="h-5 w-5 text-slate-400 dark:text-slate-500" />
               <input
                 type="text"
                 autoFocus
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Escribe lo que deseas calcular (ej: sueldo neto, igv, cts, precio)..."
-                className="ml-3 flex-1 text-sm font-bold text-slate-900 dark:text-white placeholder:text-slate-400 outline-none bg-transparent"
+                placeholder="Busca por 'horas extras', 'sueldo', 'cts', 'dólar', 'igv'..."
+                className="w-full bg-transparent text-sm font-semibold text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 outline-none"
               />
               <button
-                onClick={() => setIsSearchOpen(false)}
-                className="p-1.5 text-slate-400 hover:text-slate-700 dark:hover:text-white rounded-lg cursor-pointer"
+                type="button"
+                onClick={closeSearch}
                 aria-label="Cerrar búsqueda"
+                className="text-xs font-mono text-slate-400 dark:text-slate-500 hover:text-slate-700 dark:hover:text-slate-200 p-1"
               >
-                <X className="h-5 w-5" />
+                ESC
               </button>
             </div>
 
-            <div className="max-h-80 overflow-y-auto p-2 space-y-1">
+            <div className="mt-3 max-h-80 overflow-y-auto space-y-1 dark:[color-scheme:dark]">
               {filteredCalculators.map((calc) => (
                 <Link
                   key={calc.id}
                   href={calc.slug}
-                  onClick={() => setIsSearchOpen(false)}
-                  className="flex items-center justify-between rounded-xl p-3 hover:bg-emerald-50 dark:hover:bg-slate-800/80 group transition-colors"
+                  onClick={closeSearch}
+                  className="flex items-center justify-between p-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors group"
                 >
-                  <div className="flex items-center gap-3">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 group-hover:bg-emerald-100 dark:group-hover:bg-emerald-950 group-hover:text-emerald-800 dark:group-hover:text-emerald-400 transition-colors">
-                      <DynamicIcon name={calc.icon} className="h-4.5 w-4.5" />
+                  <div>
+                    <div className="text-xs font-bold text-slate-900 dark:text-slate-100 group-hover:text-[#00875A] dark:group-hover:text-emerald-400">
+                      {calc.title}
                     </div>
-                    <div>
-                      <div className="text-sm font-bold text-slate-900 dark:text-white group-hover:text-emerald-700 dark:group-hover:text-emerald-400">
-                        {calc.title}
-                      </div>
-                      <div className="text-xs text-slate-500 dark:text-slate-400 line-clamp-1 mt-0.5">
-                        {calc.description}
-                      </div>
+                    <div className="text-[11px] text-slate-500 dark:text-slate-400 line-clamp-1">
+                      {calc.cardSummary || calc.description}
                     </div>
                   </div>
-                  <ArrowRight className="h-4 w-4 text-slate-300 dark:text-slate-600 group-hover:text-emerald-700 dark:group-hover:text-emerald-400" />
+                  <ArrowRight className="h-3.5 w-3.5 text-slate-400 dark:text-slate-500 group-hover:text-[#00875A] dark:group-hover:text-emerald-400 transition-colors" />
                 </Link>
               ))}
             </div>

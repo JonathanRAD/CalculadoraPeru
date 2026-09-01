@@ -14,7 +14,7 @@ import { SwitchToggle } from '@/shared/components/ui/SwitchToggle';
 import { ResultMetricCard } from '@/shared/components/ui/ResultMetricCard';
 import { ShareButtons } from '@/shared/components/ui/ShareButtons';
 import { ExportPdfButton } from '@/shared/components/ui/ExportPdfButton';
-import { Briefcase, AlertCircle, FileCheck2 } from 'lucide-react';
+import { Briefcase, AlertCircle } from 'lucide-react';
 
 export default function LiquidacionLaboralPage() {
   const meta = CALCULATORS_REGISTRY.find((c) => c.id === 'liquidacion-laboral') || {
@@ -219,7 +219,7 @@ ${isDismissal ? `Indemnización por Despido: ${formatCurrency(result.arbitraryDi
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
             <SwitchToggle
               id="hasFamilyAllowance"
-              label="Asignación Familiar (+S/ 102.50)"
+              label="Asignación Familiar (+S/ 113.00)"
               description="Hijos menores o universitarios"
               checked={hasFamilyAllowance}
               onChange={(val) => setHasFamilyAllowance(val)}
@@ -307,7 +307,7 @@ ${isDismissal ? `Indemnización por Despido: ${formatCurrency(result.arbitraryDi
                   subtitle: `Liquidación integral laboral calculada bajo normativa MTPE Perú`,
                   items: [
                     { label: 'Último Sueldo Básico', value: formatCurrency(baseSalary) },
-                    { label: 'Asignación Familiar', value: hasFamilyAllowance ? 'S/ 102.50' : 'S/ 0.00' },
+                    { label: 'Asignación Familiar', value: hasFamilyAllowance ? 'S/ 113.00' : 'S/ 0.00' },
                     { label: 'Régimen Laboral', value: laborRegime === 'general' ? 'Régimen General (100%)' : laborRegime === 'pequena_empresa' ? 'Pequeña Empresa MYPE (50%)' : 'Microempresa' },
                     { label: 'CTS Trunca', value: formatCurrency(result.truncatedCts) },
                     { label: 'Gratificación Trunca', value: formatCurrency(result.truncatedGrati) },

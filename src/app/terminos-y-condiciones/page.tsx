@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { Scale, AlertTriangle, ShieldCheck, ArrowLeft } from 'lucide-react';
+import { Scale, AlertTriangle, ArrowLeft } from 'lucide-react';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {

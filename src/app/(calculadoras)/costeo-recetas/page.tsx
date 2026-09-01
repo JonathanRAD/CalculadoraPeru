@@ -3,12 +3,12 @@
 import React, { useState } from 'react';
 import { CalculatorShell } from '@/features/calculators/components/CalculatorShell';
 import { CALCULATORS_REGISTRY } from '@/features/calculators/registry';
-import { calculateRecipeCost, RecipeCostInput } from '@/core/calculators/recipeCost';
-import { formatCurrency, formatPercent } from '@/core/math/formatters';
+import { calculateRecipeCost } from '@/core/calculators/recipeCost';
+import { formatCurrency } from '@/core/math/formatters';
 import { InputNumber } from '@/shared/components/ui/InputNumber';
 import { ResultMetricCard } from '@/shared/components/ui/ResultMetricCard';
 import { ShareButtons } from '@/shared/components/ui/ShareButtons';
-import { Utensils, ChefHat } from 'lucide-react';
+import { Utensils } from 'lucide-react';
 
 export default function CosteoRecetasPage() {
   const meta = CALCULATORS_REGISTRY.find((c) => c.id === 'costeo-recetas')!;

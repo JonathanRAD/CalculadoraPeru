@@ -1,4 +1,5 @@
 import { roundTo } from '../math/formatters';
+import { PERU_CONSTANTS } from '../constants/peru';
 
 export interface HonorariosInput {
   grossAmount: number; // Monto pactado o bruto (S/)
@@ -19,8 +20,8 @@ export interface HonorariosResult {
  */
 export function calculateHonorarios(input: HonorariosInput): HonorariosResult {
   const gross = Math.max(0, input.grossAmount || 0);
-  const isRetentionApplicable = gross > 1500 && !input.hasSuspension;
-  const retentionRate = isRetentionApplicable ? 8.0 : 0;
+  const isRetentionApplicable = gross > PERU_CONSTANTS.FOURTH_CATEGORY_RECEIPT_THRESHOLD && !input.hasSuspension;
+  const retentionRate = isRetentionApplicable ? PERU_CONSTANTS.FOURTH_CATEGORY_RETENTION_RATE * 100 : 0;
   const retentionAmount = roundTo((gross * retentionRate) / 100, 2);
   const netAmountToReceive = roundTo(gross - retentionAmount, 2);
 

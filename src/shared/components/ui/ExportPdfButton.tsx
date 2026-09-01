@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { FileDown, Check, Loader2 } from 'lucide-react';
-import { generateOfficialPdf, PdfReportOptions } from '@/shared/utils/pdfGenerator';
+import type { PdfReportOptions } from '@/shared/utils/pdfGenerator';
 
 interface ExportPdfButtonProps {
   getReportOptions: () => PdfReportOptions;
@@ -18,10 +18,11 @@ export function ExportPdfButton({
   const [isGenerating, setIsGenerating] = useState(false);
   const [isDone, setIsDone] = useState(false);
 
-  const handleExport = () => {
+  const handleExport = async () => {
     try {
       setIsGenerating(true);
       const options = getReportOptions();
+      const { generateOfficialPdf } = await import('@/shared/utils/pdfGenerator');
       generateOfficialPdf(options);
       setIsDone(true);
       setTimeout(() => setIsDone(false), 3000);

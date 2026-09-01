@@ -1,13 +1,30 @@
 'use client';
 
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useSyncExternalStore } from 'react';
 
 type Theme = 'light' | 'dark';
 
 interface ThemeContextType {
   theme: Theme;
   toggleTheme: () => void;
-  setTheme: (t: Theme) => void;
+  setTheme: (theme: Theme) => void;
+}
+
+const THEME_EVENT = 'calculaperu-theme-change';
+
+function getThemeSnapshot(): Theme {
+  return document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+}
+
+function subscribeToTheme(callback: () => void) {
+  window.addEventListener(THEME_EVENT, callback);
+  return () => window.removeEventListener(THEME_EVENT, callback);
+}
+
+function applyTheme(theme: Theme) {
+  document.documentElement.classList.toggle('dark', theme === 'dark');
+  localStorage.setItem('calculaperu-theme', theme);
+  window.dispatchEvent(new Event(THEME_EVENT));
 }
 
 const ThemeContext = createContext<ThemeContextType>({
@@ -17,40 +34,16 @@ const ThemeContext = createContext<ThemeContextType>({
 });
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setThemeState] = useState<Theme>('light');
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-    const stored = localStorage.getItem('calculaperu-theme') as Theme | null;
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    
-    const initialTheme: Theme = stored ? stored : (prefersDark ? 'dark' : 'light');
-    setThemeState(initialTheme);
-    
-    if (initialTheme === 'dark') {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  }, []);
-
-  const setTheme = (newTheme: Theme) => {
-    setThemeState(newTheme);
-    localStorage.setItem('calculaperu-theme', newTheme);
-    if (newTheme === 'dark') {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  };
-
-  const toggleTheme = () => {
-    setTheme(theme === 'light' ? 'dark' : 'light');
-  };
+  const theme = useSyncExternalStore<Theme>(subscribeToTheme, getThemeSnapshot, () => 'light');
 
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme, setTheme }}>
+    <ThemeContext.Provider
+      value={{
+        theme,
+        setTheme: applyTheme,
+        toggleTheme: () => applyTheme(theme === 'light' ? 'dark' : 'light'),
+      }}
+    >
       {children}
     </ThemeContext.Provider>
   );

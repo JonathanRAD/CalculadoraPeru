@@ -1,4 +1,5 @@
 import { roundTo } from '../math/formatters';
+import { AFP_FLOW_RATES_2026, PERU_CONSTANTS } from '../constants/peru';
 
 export type PensionSystem = 'onp' | 'afp_integra' | 'afp_prima' | 'afp_profuturo' | 'afp_habitat';
 
@@ -10,7 +11,7 @@ export interface PayrollInput {
 
 export interface PayrollResult {
   grossSalary: number; // Sueldo bruto
-  familyAllowance: number; // Asignación familiar (10% de RMV: S/ 102.50)
+  familyAllowance: number; // Asignación familiar (10% de la RMV)
   totalGrossIncome: number; // Total ingresos imponibles
   pensionDeduction: number; // Descuento ONP o AFP
   pensionRate: number; // Tasa porcentual efectiva del descuento de pensión (%)
@@ -19,13 +20,13 @@ export interface PayrollResult {
   essaludContributionEmployer: number; // Aporte de EsSalud 9% a cargo del empleador
 }
 
-// Tasas referenciales AFP Perú (Aporte obligatorio 10% + Seguro de invalidez ~1.84% + Comisión sobre flujo)
+// Tasas de descuento sobre la remuneración para comisión sobre flujo.
 const PENSION_RATES: Record<PensionSystem, { rate: number; name: string }> = {
-  onp: { rate: 13.0, name: 'ONP (13.0%)' },
-  afp_integra: { rate: 12.68, name: 'AFP Integra (~12.68%)' },
-  afp_prima: { rate: 12.78, name: 'AFP Prima (~12.78%)' },
-  afp_profuturo: { rate: 12.89, name: 'AFP Profuturo (~12.89%)' },
-  afp_habitat: { rate: 12.67, name: 'AFP Habitat (~12.67%)' },
+  onp: { rate: PERU_CONSTANTS.ONP_RATE * 100, name: 'ONP (13.00%)' },
+  afp_integra: { rate: AFP_FLOW_RATES_2026.afp_integra.rate * 100, name: AFP_FLOW_RATES_2026.afp_integra.name },
+  afp_prima: { rate: AFP_FLOW_RATES_2026.afp_prima.rate * 100, name: AFP_FLOW_RATES_2026.afp_prima.name },
+  afp_profuturo: { rate: AFP_FLOW_RATES_2026.afp_profuturo.rate * 100, name: AFP_FLOW_RATES_2026.afp_profuturo.name },
+  afp_habitat: { rate: AFP_FLOW_RATES_2026.afp_habitat.rate * 100, name: AFP_FLOW_RATES_2026.afp_habitat.name },
 };
 
 /**
@@ -33,7 +34,7 @@ const PENSION_RATES: Record<PensionSystem, { rate: number; name: string }> = {
  */
 export function calculateNetSalary(input: PayrollInput): PayrollResult {
   const gross = Math.max(0, input.grossSalary || 0);
-  const familyAllowance = input.hasDependents ? 102.5 : 0; // 10% de RMV vigente
+  const familyAllowance = input.hasDependents ? PERU_CONSTANTS.FAMILY_ALLOWANCE : 0;
   const totalGrossIncome = gross + familyAllowance;
 
   // Deducción previsional (AFP o ONP)
@@ -43,8 +44,8 @@ export function calculateNetSalary(input: PayrollInput): PayrollResult {
   // Estimación Impuesto a la Renta de 5ta Categoría (SUNAT)
   // Proyección anual: (12 sueldos + 2 gratificaciones) - 7 UIT
   const annualIncome = totalGrossIncome * 14;
-  const uit2026 = 5350;
-  const exempt7Uit = 7 * uit2026; // S/ 37,450 no afectos
+  const uit2026 = PERU_CONSTANTS.CURRENT_UIT;
+  const exempt7Uit = 7 * uit2026; // S/ 38,500 no afectos en 2026
   const taxableAnnual = Math.max(0, annualIncome - exempt7Uit);
 
   let annualTax = 0;
@@ -66,7 +67,7 @@ export function calculateNetSalary(input: PayrollInput): PayrollResult {
 
   const fifthCategoryTaxMonthly = roundTo(annualTax / 12, 2);
   const netSalary = roundTo(totalGrossIncome - pensionDeduction - fifthCategoryTaxMonthly, 2);
-  const essaludContributionEmployer = roundTo(totalGrossIncome * 0.09, 2);
+  const essaludContributionEmployer = roundTo(totalGrossIncome * PERU_CONSTANTS.ESSALUD_RATE, 2);
 
   return {
     grossSalary: roundTo(gross, 2),

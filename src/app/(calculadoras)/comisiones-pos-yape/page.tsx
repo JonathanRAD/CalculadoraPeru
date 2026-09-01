@@ -3,12 +3,12 @@
 import React, { useState } from 'react';
 import { CalculatorShell } from '@/features/calculators/components/CalculatorShell';
 import { CALCULATORS_REGISTRY } from '@/features/calculators/registry';
-import { calculatePosCommission, PosCommissionInput, PosGateway, GATEWAY_RATES } from '@/core/calculators/posCommissions';
+import { calculatePosCommission, PosGateway, GATEWAY_RATES } from '@/core/calculators/posCommissions';
 import { formatCurrency, formatPercent } from '@/core/math/formatters';
 import { InputNumber } from '@/shared/components/ui/InputNumber';
 import { ResultMetricCard } from '@/shared/components/ui/ResultMetricCard';
 import { ShareButtons } from '@/shared/components/ui/ShareButtons';
-import { CreditCard, ArrowRight, Zap } from 'lucide-react';
+import { CreditCard } from 'lucide-react';
 
 export default function ComisionesPosYapePage() {
   const meta = CALCULATORS_REGISTRY.find((c) => c.id === 'comisiones-pos-yape')!;

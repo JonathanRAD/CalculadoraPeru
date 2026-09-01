@@ -3,13 +3,13 @@
 import React, { useState } from 'react';
 import { CalculatorShell } from '@/features/calculators/components/CalculatorShell';
 import { CALCULATORS_REGISTRY } from '@/features/calculators/registry';
-import { calculateFuelCost, FuelInput, FuelType } from '@/core/calculators/fuel';
+import { calculateFuelCost } from '@/core/calculators/fuel';
 import { formatCurrency, formatNumber } from '@/core/math/formatters';
 import { InputNumber } from '@/shared/components/ui/InputNumber';
 import { SwitchToggle } from '@/shared/components/ui/SwitchToggle';
 import { ResultMetricCard } from '@/shared/components/ui/ResultMetricCard';
 import { ShareButtons } from '@/shared/components/ui/ShareButtons';
-import { Fuel, Car } from 'lucide-react';
+import { Fuel } from 'lucide-react';
 
 const COMMON_FUELS = [
   { id: 'regular', name: 'Gasolina Regular (90)', price: 16.20 },

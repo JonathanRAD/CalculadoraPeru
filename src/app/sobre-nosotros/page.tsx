@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { Heart, Code2, Sparkles, Mail, ArrowLeft, CheckCircle2, ShieldCheck, ExternalLink } from 'lucide-react';
+import { Heart, Code2, Sparkles, Mail, ArrowLeft, ExternalLink } from 'lucide-react';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {

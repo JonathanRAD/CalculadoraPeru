@@ -1,9 +1,10 @@
 import { roundTo } from '../math/formatters';
+import { PERU_CONSTANTS } from '../constants/peru';
 import { CompanyRegime } from './gratification';
 
 export interface CtsInput {
   baseSalary: number; // Sueldo bruto mensual (S/)
-  hasFamilyAllowance?: boolean; // Asignación familiar (+S/ 102.50)
+  hasFamilyAllowance?: boolean; // Asignación familiar (10% de la RMV)
   monthsWorkedInSemester: number; // Meses completos laborados en el semestre (1 a 6)
   companyRegime: CompanyRegime; // Régimen laboral
 }
@@ -22,7 +23,7 @@ export interface CtsResult {
  */
 export function calculateCts(input: CtsInput): CtsResult {
   const salary = Math.max(0, input.baseSalary || 0);
-  const familyAllowance = input.hasFamilyAllowance ? 102.5 : 0;
+  const familyAllowance = input.hasFamilyAllowance ? PERU_CONSTANTS.FAMILY_ALLOWANCE : 0;
   const computableSalary = salary + familyAllowance;
   const months = Math.max(1, Math.min(6, input.monthsWorkedInSemester || 6));
 

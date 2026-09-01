@@ -3,12 +3,12 @@
 import React, { useState } from 'react';
 import { CalculatorShell } from '@/features/calculators/components/CalculatorShell';
 import { CALCULATORS_REGISTRY } from '@/features/calculators/registry';
-import { calculateLoan, LoanInput } from '@/core/calculators/loan';
-import { formatCurrency, formatPercent } from '@/core/math/formatters';
+import { calculateLoan } from '@/core/calculators/loan';
+import { formatCurrency } from '@/core/math/formatters';
 import { InputNumber } from '@/shared/components/ui/InputNumber';
 import { ResultMetricCard } from '@/shared/components/ui/ResultMetricCard';
 import { ShareButtons } from '@/shared/components/ui/ShareButtons';
-import { Landmark, Table } from 'lucide-react';
+import { Landmark } from 'lucide-react';
 
 export default function PrestamoBancarioPage() {
   const meta = CALCULATORS_REGISTRY.find((c) => c.id === 'prestamo-bancario')!;

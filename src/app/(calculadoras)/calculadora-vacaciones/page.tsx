@@ -9,7 +9,7 @@ import { InputNumber } from '@/shared/components/ui/InputNumber';
 import { SwitchToggle } from '@/shared/components/ui/SwitchToggle';
 import { ResultMetricCard } from '@/shared/components/ui/ResultMetricCard';
 import { ShareButtons } from '@/shared/components/ui/ShareButtons';
-import { Palmtree, Info } from 'lucide-react';
+import { Palmtree } from 'lucide-react';
 
 export default function CalculadoraVacacionesPage() {
   const meta = CALCULATORS_REGISTRY.find((c) => c.id === 'calculadora-vacaciones')!;
@@ -190,7 +190,7 @@ Total a Percibir: ${formatCurrency(result.totalPay)}`;
 
           <SwitchToggle
             id="hasFamilyAllowance"
-            label="¿Percibes Asignación Familiar (+S/ 102.50)?"
+            label="¿Percibes Asignación Familiar (+S/ 113.00)?"
             description="Forma parte de la remuneración computable para las vacaciones"
             checked={hasFamilyAllowance}
             onChange={(hasFamilyAllowance) => setHasFamilyAllowance(hasFamilyAllowance)}

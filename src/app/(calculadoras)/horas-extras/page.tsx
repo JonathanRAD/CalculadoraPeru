@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { CalculatorShell } from '@/features/calculators/components/CalculatorShell';
 import { CALCULATORS_REGISTRY } from '@/features/calculators/registry';
-import { calculateOvertime, OvertimeInput } from '@/core/calculators/overtime';
+import { calculateOvertime } from '@/core/calculators/overtime';
 import { formatCurrency } from '@/core/math/formatters';
 import { InputNumber } from '@/shared/components/ui/InputNumber';
 import { SwitchToggle } from '@/shared/components/ui/SwitchToggle';
@@ -112,7 +112,7 @@ Total Horas Extras a Cobrar: ${formatCurrency(result.totalOvertimePay)}`;
 
           <SwitchToggle
             id="hasFamilyAllowance"
-            label="¿Percibes Asignación Familiar (+S/ 102.50)?"
+            label="¿Percibes Asignación Familiar (+S/ 113.00)?"
             description="Se suma al sueldo para calcular el valor de la hora ordinaria"
             checked={hasFamilyAllowance}
             onChange={(hasFamilyAllowance) => setHasFamilyAllowance(hasFamilyAllowance)}

@@ -1,13 +1,16 @@
 import { roundTo } from '../math/formatters';
+import { PERU_CONSTANTS } from '../constants/peru';
 
 export type ClientType = 'final_consumer' | 'businesses_factura' | 'both';
 export type ActivityType = 'commerce_trade' | 'services' | 'manufacturing';
+export type TaxpayerType = 'natural_person' | 'legal_entity';
 
 export interface TaxRegimesInput {
   estimatedMonthlyRevenue: number; // Ingresos brutos estimados mensuales (S/)
   estimatedMonthlyPurchases: number; // Compras con factura mensuales (S/)
   clientType: ClientType; // Clientes a los que vende
   activityType: ActivityType;
+  taxpayerType?: TaxpayerType;
   workerCount?: number;
 }
 
@@ -42,6 +45,7 @@ export function calculateTaxRegimes(input: TaxRegimesInput): TaxRegimesResult {
   const annualRev = rev * 12;
   const annualPurchases = purchases * 12;
   const workers = Math.max(0, input.workerCount || 1);
+  const taxpayerType = input.taxpayerType ?? 'natural_person';
 
   // 1. NUEVO RUS
   const isRusEligible =
@@ -49,6 +53,8 @@ export function calculateTaxRegimes(input: TaxRegimesInput): TaxRegimesResult {
     annualPurchases <= 96000 &&
     rev <= 8000 &&
     purchases <= 8000 &&
+    taxpayerType === 'natural_person' &&
+    input.activityType !== 'services' &&
     input.clientType !== 'businesses_factura'; // RUS no puede emitir facturas
 
   let rusMonthlyTax = 0;
@@ -61,7 +67,11 @@ export function calculateTaxRegimes(input: TaxRegimesInput): TaxRegimesResult {
     name: 'Nuevo RUS (Régimen Único Simplificado)',
     isEligible: isRusEligible,
     ineligibleReason: !isRusEligible
-      ? (input.clientType === 'businesses_factura'
+      ? (taxpayerType === 'legal_entity'
+          ? 'El Nuevo RUS está disponible únicamente para personas naturales'
+          : input.activityType === 'services'
+          ? 'Las actividades profesionales o técnicas descritas no pueden acogerse al Nuevo RUS'
+          : input.clientType === 'businesses_factura'
           ? 'Tus clientes te piden factura (el RUS solo emite boletas)'
           : 'Tus ingresos o compras mensuales superan los S/ 8,000 (S/ 96,000 al año)')
       : undefined,
@@ -88,7 +98,7 @@ export function calculateTaxRegimes(input: TaxRegimesInput): TaxRegimesResult {
     name: 'RER (Régimen Especial de Renta)',
     isEligible: isRerEligible,
     ineligibleReason: !isRerEligible
-      ? 'Tus ingresos o compras anuales superan los S/ 525,000 o tienes más de 10 trabajadores'
+      ? 'Tus ingresos o compras anuales superan los S/ 525,000 o tienes más de 10 trabajadores por turno'
       : undefined,
     monthlyIncomeTax: roundTo(rerMonthlyIncomeTax, 2),
     monthlyIgv: roundTo(estimatedIgvPay, 2),
@@ -100,10 +110,11 @@ export function calculateTaxRegimes(input: TaxRegimesInput): TaxRegimesResult {
   };
 
   // 3. RMT (Régimen MYPE Tributario)
-  // Tope: 1,700 UIT (S/ 8.75M)
-  const isRmtEligible = annualRev <= 8755000;
+  const rmtAnnualLimit = PERU_CONSTANTS.RMT_MAX_UIT * PERU_CONSTANTS.CURRENT_UIT;
+  const rmtReducedPaymentLimit = PERU_CONSTANTS.RMT_REDUCED_PAYMENT_UIT * PERU_CONSTANTS.CURRENT_UIT;
+  const isRmtEligible = annualRev <= rmtAnnualLimit;
   // Si ingresos anuales < 300 UIT paga 1% a cuenta mensual de Renta, si no 1.5%
-  const rmtRate = annualRev <= 1545000 ? 0.01 : 0.015;
+  const rmtRate = annualRev <= rmtReducedPaymentLimit ? 0.01 : 0.015;
   const rmtMonthlyIncomeTax = rev * rmtRate;
   const rmtTotalMonthly = rmtMonthlyIncomeTax + estimatedIgvPay;
 
@@ -118,7 +129,7 @@ export function calculateTaxRegimes(input: TaxRegimesInput): TaxRegimesResult {
     canIssueFactura: true,
     annualDeclarationRequired: true,
     accountingBooksRequired: 'Compras, Ventas y Libro Diario simplificado',
-    annualRevenueLimitText: 'Hasta 1,700 UIT (S/ 8,755,000 / año)',
+    annualRevenueLimitText: `Hasta 1,700 UIT (S/ ${rmtAnnualLimit.toLocaleString('es-PE')} / año)`,
   };
 
   // 4. Régimen General (RG)
@@ -160,7 +171,7 @@ export function calculateTaxRegimes(input: TaxRegimesInput): TaxRegimesResult {
     } else {
       recommendedRegimeId = 'rmt';
       recommendedRegimeName = 'Régimen MYPE Tributario (RMT)';
-      recommendedReason = 'Pagas solo el 1% de pago a cuenta mensual de Renta y una tasa reducida del 10% anual sobre tus utilidades netas reales deduciendo todos tus gastos operativos.';
+      recommendedReason = 'El pago a cuenta puede ser 1% mensual mientras no superes 300 UIT y el impuesto anual aplica 10% sobre las primeras 15 UIT de renta neta; el exceso tiene la tasa general vigente.';
       monthlyEstimatedTax = rmtTotalMonthly;
     }
   }

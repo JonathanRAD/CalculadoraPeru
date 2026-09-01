@@ -47,7 +47,7 @@ Ganancia Neta: ${formatCurrency(result.profitPerUnit)} por unidad`;
             El <strong>Margen de Ganancia</strong> es el indicador de rentabilidad más importante para cualquier comerciante o empresa en el Perú.
           </p>
           <div className="rounded-xl bg-slate-50 dark:bg-slate-950 p-4 border border-slate-200 dark:border-slate-800 space-y-2 text-xs">
-            <div className="font-bold text-slate-800 dark:text-slate-200">Fórmulas Oficiales:</div>
+            <div className="font-bold text-slate-800 dark:text-slate-200">Fórmulas utilizadas:</div>
             <div>• <strong>Margen de Utilidad (%)</strong> = (Precio Neto - Costo) / Precio Neto × 100</div>
             <div>• <strong>Mark-up sobre Costo (%)</strong> = (Precio Neto - Costo) / Costo × 100</div>
           </div>

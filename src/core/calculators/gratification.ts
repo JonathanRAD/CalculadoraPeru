@@ -1,11 +1,12 @@
 import { roundTo } from '../math/formatters';
+import { PERU_CONSTANTS } from '../constants/peru';
 
 export type CompanyRegime = 'general' | 'pequena_empresa' | 'microempresa';
 export type HealthInsurance = 'essalud' | 'eps';
 
 export interface GratificationInput {
   baseSalary: number; // Sueldo bruto mensual (S/)
-  hasFamilyAllowance?: boolean; // Asignación familiar (+S/ 102.50)
+  hasFamilyAllowance?: boolean; // Asignación familiar (10% de la RMV)
   monthsWorkedInSemester: number; // Meses completos laborados (1 a 6)
   companyRegime: CompanyRegime; // Régimen laboral
   healthInsurance: HealthInsurance; // EsSalud (9%) o EPS (6.75%)
@@ -25,7 +26,7 @@ export interface GratificationResult {
  */
 export function calculateGratification(input: GratificationInput): GratificationResult {
   const salary = Math.max(0, input.baseSalary || 0);
-  const familyAllowance = input.hasFamilyAllowance ? 102.5 : 0;
+  const familyAllowance = input.hasFamilyAllowance ? PERU_CONSTANTS.FAMILY_ALLOWANCE : 0;
   const computableSalary = salary + familyAllowance;
   const months = Math.max(1, Math.min(6, input.monthsWorkedInSemester || 6));
 
@@ -44,7 +45,9 @@ export function calculateGratification(input: GratificationInput): Gratification
   const regimeMultiplier = input.companyRegime === 'pequena_empresa' ? 0.5 : 1.0;
   const rawGratification = roundTo(((computableSalary * regimeMultiplier) / 6) * months, 2);
 
-  const bonusPercentage = input.healthInsurance === 'eps' ? 6.75 : 9.0;
+  const bonusPercentage = input.healthInsurance === 'eps'
+    ? PERU_CONSTANTS.EPS_EXTRAORDINARY_BONUS_RATE * 100
+    : PERU_CONSTANTS.ESSALUD_RATE * 100;
   const extraordinaryBonus = roundTo((rawGratification * bonusPercentage) / 100, 2);
   const totalToReceive = roundTo(rawGratification + extraordinaryBonus, 2);
 

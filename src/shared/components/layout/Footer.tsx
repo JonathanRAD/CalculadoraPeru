@@ -1,134 +1,110 @@
-import React from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
-import { ShieldCheck, Heart } from 'lucide-react';
-import { CALCULATORS_REGISTRY } from '@/features/calculators/registry';
+import { Calculator, LockKeyhole, ShieldCheck } from 'lucide-react';
+import {
+  CALCULATORS_REGISTRY,
+  CATEGORIES,
+  type CalculatorCategory,
+} from '@/features/calculators/registry';
+
+const FOOTER_CATEGORIES = CATEGORIES.filter(
+  (category): category is (typeof CATEGORIES)[number] & { id: CalculatorCategory } =>
+    category.id !== 'todas',
+);
+
+const LEGAL_LINKS = [
+  { href: '/sobre-nosotros', label: 'Sobre nosotros' },
+  { href: '/terminos-y-condiciones', label: 'Términos y condiciones' },
+  { href: '/politica-de-privacidad', label: 'Política de privacidad' },
+];
 
 export function Footer() {
-  const negociosCalcs = CALCULATORS_REGISTRY.filter(c => c.category === 'negocios');
-  const laboralCalcs = CALCULATORS_REGISTRY.filter(c => c.category === 'laboral');
-  const finanzasCalcs = CALCULATORS_REGISTRY.filter(c => c.category === 'finanzas');
-  const tributariasCalcs = CALCULATORS_REGISTRY.filter(c => c.category === 'tributario');
-
   return (
-    <footer className="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-slate-600 dark:text-slate-400 transition-colors">
-      {/* Main Grid */}
-      <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6">
-        <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-5">
-          
-          {/* Columna 1: Brand Info */}
-          <div className="lg:col-span-1 space-y-4">
-            <Link href="/" className="flex items-center gap-2.5 group inline-flex">
-              <div className="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-gradient-to-tr from-emerald-800 to-emerald-600 p-0.5 shadow-md shadow-emerald-950/20">
-                <Image
-                  src="/logo-calc.png"
-                  alt="CalculaPerú Logo"
-                  width={32}
-                  height={32}
-                  className="h-full w-full object-contain rounded-lg"
-                />
-              </div>
-              <span className="text-xl font-black tracking-tight text-slate-900 dark:text-white">
-                Calcula<span className="text-emerald-700 dark:text-emerald-400">Perú</span>
+    <footer className="border-t border-slate-800 bg-[#060B1D] text-slate-300">
+      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-14">
+        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-5 lg:gap-8">
+          <div className="sm:col-span-2 lg:col-span-1">
+            <Link
+              href="/"
+              aria-label="Ir al inicio de CalculaPerú"
+              className="inline-flex items-center gap-3 rounded-lg focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald-400"
+            >
+              <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-emerald-500/40 bg-emerald-500/15 text-emerald-400">
+                <Calculator className="h-5 w-5" aria-hidden="true" />
+              </span>
+              <span className="text-xl font-black tracking-tight text-white">
+                Calcula<span className="text-emerald-400">Perú</span>
               </span>
             </Link>
 
-            <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed font-normal">
-              El portal oficial con 22 calculadoras financieras, laborales y tributarias del Perú.
+            <p className="mt-5 max-w-xs text-sm leading-6 text-slate-400">
+              Calculadoras gratuitas para negocios, trabajo, finanzas y obligaciones tributarias del Perú.
             </p>
 
-            <div className="flex items-center gap-1.5 text-[11px] text-emerald-800 dark:text-emerald-400 font-bold pt-2">
-              <ShieldCheck className="h-4 w-4 shrink-0" />
-              <span>Normas SUNAT, Ley Laboral y Osinergmin.</span>
+            <div className="mt-5 flex items-start gap-2 text-xs font-semibold leading-5 text-emerald-400">
+              <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
+              <span>Parámetros basados en fuentes oficiales peruanas.</span>
             </div>
           </div>
 
-          {/* Columna 2: Negocios & Comercio */}
-          <div>
-            <h3 className="text-xs font-black uppercase tracking-wider text-slate-900 dark:text-white mb-3">
-              Negocios & Comercio
-            </h3>
-            <ul className="space-y-2 text-xs">
-              {negociosCalcs.map((calc) => (
-                <li key={calc.id}>
-                  <Link href={calc.slug} className="text-slate-600 dark:text-slate-400 hover:text-emerald-800 dark:hover:text-emerald-400 transition-colors">
-                    {calc.shortTitle}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+          {FOOTER_CATEGORIES.map((category) => {
+            const calculators = CALCULATORS_REGISTRY.filter(
+              (calculator) => calculator.category === category.id,
+            );
 
-          {/* Columna 3: Laboral & Planilla */}
-          <div>
-            <h3 className="text-xs font-black uppercase tracking-wider text-slate-900 dark:text-white mb-3">
-              Laboral & Planilla
-            </h3>
-            <ul className="space-y-2 text-xs">
-              {laboralCalcs.map((calc) => (
-                <li key={calc.id}>
-                  <Link href={calc.slug} className="text-slate-600 dark:text-slate-400 hover:text-emerald-800 dark:hover:text-emerald-400 transition-colors">
-                    {calc.shortTitle}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Columna 4: Finanzas & Inversión */}
-          <div>
-            <h3 className="text-xs font-black uppercase tracking-wider text-slate-900 dark:text-white mb-3">
-              Finanzas & Metas
-            </h3>
-            <ul className="space-y-2 text-xs">
-              {finanzasCalcs.map((calc) => (
-                <li key={calc.id}>
-                  <Link href={calc.slug} className="text-slate-600 dark:text-slate-400 hover:text-emerald-800 dark:hover:text-emerald-400 transition-colors">
-                    {calc.shortTitle}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Columna 5: Tributario & Servicios */}
-          <div>
-            <h3 className="text-xs font-black uppercase tracking-wider text-slate-900 dark:text-white mb-3">
-              Tributario & Diario
-            </h3>
-            <ul className="space-y-2 text-xs">
-              {tributariasCalcs.map((calc) => (
-                <li key={calc.id}>
-                  <Link href={calc.slug} className="text-slate-600 dark:text-slate-400 hover:text-emerald-800 dark:hover:text-emerald-400 transition-colors">
-                    {calc.shortTitle}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
+            return (
+              <nav key={category.id} aria-label={`Calculadoras de ${category.label}`}>
+                <h2 className="text-xs font-black uppercase tracking-wide text-white">
+                  {category.label}
+                </h2>
+                <ul className="mt-4 space-y-2.5">
+                  {calculators.map((calculator) => (
+                    <li key={calculator.id}>
+                      <Link
+                        href={calculator.slug}
+                        className="text-xs leading-5 text-slate-400 transition-colors hover:text-emerald-400 focus-visible:text-emerald-400 focus-visible:outline-none"
+                      >
+                        {calculator.shortTitle}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+            );
+          })}
         </div>
 
-        {/* Bottom Legal & Copyright Bar */}
-        <div className="mt-12 border-t border-slate-100 dark:border-slate-800/80 pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-500">
-          <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 font-medium">
-            <span>© 2026 CalculaPerú. Todos los derechos reservados.</span>
-            <Link href="/sobre-nosotros" className="hover:text-emerald-700 dark:hover:text-emerald-400 underline transition-colors">
-              Sobre Nosotros
-            </Link>
-            <Link href="/politica-de-privacidad" className="hover:text-emerald-700 dark:hover:text-emerald-400 underline transition-colors">
-              Política de Privacidad
-            </Link>
-            <Link href="/terminos-y-condiciones" className="hover:text-emerald-700 dark:hover:text-emerald-400 underline transition-colors">
-              Términos y Condiciones
-            </Link>
+        <div className="mt-12 border-t border-slate-800 pt-6">
+          <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-2 text-xs text-slate-400">
+              <span className="inline-flex items-center gap-1.5 font-semibold text-slate-300">
+                <LockKeyhole className="h-3.5 w-3.5" aria-hidden="true" />
+                100% gratis
+              </span>
+              <span aria-hidden="true" className="text-slate-600">·</span>
+              <span>Sin registro</span>
+              <span aria-hidden="true" className="text-slate-600">·</span>
+              <span>Calcula mejor, decide mejor</span>
+            </div>
+
+            <nav aria-label="Información institucional y legal">
+              <ul className="flex flex-wrap gap-x-5 gap-y-3 text-xs font-semibold">
+                {LEGAL_LINKS.map((link) => (
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      className="text-slate-300 transition-colors hover:text-emerald-400 focus-visible:text-emerald-400 focus-visible:outline-none"
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
           </div>
-          
-          <div className="flex items-center gap-1.5 font-medium">
-            <span>Hecho con</span>
-            <Heart className="h-3.5 w-3.5 text-rose-500 fill-rose-500" />
-            <span>para las microempresas y trabajadores del Perú.</span>
-          </div>
+
+          <p className="mt-6 text-[11px] leading-5 text-slate-500">
+            © 2026 CalculaPerú. Los resultados son referenciales y no sustituyen asesoría profesional ni la información publicada por cada entidad competente.
+          </p>
         </div>
       </div>
     </footer>

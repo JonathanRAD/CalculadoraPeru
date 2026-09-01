@@ -1,10 +1,11 @@
 import { roundTo } from '../math/formatters';
+import { PERU_CONSTANTS } from '../constants/peru';
 
 export type VacationRegime = 'general' | 'especial_20' | 'pequena_empresa' | 'microempresa' | 'personalizado';
 
 export interface VacationsInput {
   baseSalary: number; // Sueldo bruto mensual (S/)
-  hasFamilyAllowance?: boolean; // Asignación familiar (+S/ 102.50)
+  hasFamilyAllowance?: boolean; // Asignación familiar (10% de la RMV)
   monthsWorked: number; // Meses laborados en el periodo (1 a 12)
   daysWorked?: number; // Días adicionales laborados (0 a 29)
   companyRegime: VacationRegime; // Régimen general (30d), especial (20d), MYPE (15d) o personalizado
@@ -28,7 +29,7 @@ export interface VacationsResult {
  */
 export function calculateVacations(input: VacationsInput): VacationsResult {
   const salary = Math.max(0, input.baseSalary || 0);
-  const familyAllowance = input.hasFamilyAllowance ? 102.5 : 0;
+  const familyAllowance = input.hasFamilyAllowance ? PERU_CONSTANTS.FAMILY_ALLOWANCE : 0;
   const computableSalary = salary + familyAllowance;
   const dailyRate = computableSalary / 30;
 

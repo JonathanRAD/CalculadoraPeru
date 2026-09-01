@@ -9,7 +9,7 @@ import { InputNumber } from '@/shared/components/ui/InputNumber';
 import { SwitchToggle } from '@/shared/components/ui/SwitchToggle';
 import { ResultMetricCard } from '@/shared/components/ui/ResultMetricCard';
 import { ShareButtons } from '@/shared/components/ui/ShareButtons';
-import { ShoppingBag, TrendingUp, DollarSign, Percent, ShieldAlert } from 'lucide-react';
+import { ShoppingBag } from 'lucide-react';
 
 export default function PrecioDeVentaPage() {
   const meta = CALCULATORS_REGISTRY.find((c) => c.id === 'precio-de-venta')!;

@@ -1,93 +1,135 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { CalculatorShell } from '@/features/calculators/components/CalculatorShell';
 import { CALCULATORS_REGISTRY } from '@/features/calculators/registry';
 import {
   calculateExchangeRate,
   ExchangeConversionMode,
   ExchangeSource,
-  PERU_EXCHANGE_RATES,
 } from '@/core/calculators/exchangeRate';
 import { formatCurrency, formatNumber } from '@/core/math/formatters';
 import { InputNumber } from '@/shared/components/ui/InputNumber';
 import { ResultMetricCard } from '@/shared/components/ui/ResultMetricCard';
 import { ShareButtons } from '@/shared/components/ui/ShareButtons';
 import { ExportPdfButton } from '@/shared/components/ui/ExportPdfButton';
-import { ArrowLeftRight, Landmark, DollarSign, Settings2, RefreshCw, CheckCircle2 } from 'lucide-react';
+import { ArrowLeftRight, DollarSign, Settings2, RefreshCw } from 'lucide-react';
+
+interface PublishedExchangeRate {
+  buyRate: number;
+  sellRate: number;
+  effectiveDate: string;
+  sourceName: string;
+}
+
+type PublishedSource = Exclude<ExchangeSource, 'custom'>;
+
+interface PublishedExchangeResponse {
+  defaultSource: PublishedSource;
+  rates: Partial<Record<PublishedSource, PublishedExchangeRate>>;
+  cachedAt?: number;
+}
+
+const EXCHANGE_RATE_CACHE_KEY = 'calculaperu:exchange-rates:v2';
+
+function hasValidQuote(quote: PublishedExchangeRate | undefined): quote is PublishedExchangeRate {
+  return Boolean(quote && quote.buyRate > 0 && quote.sellRate > 0);
+}
+
+function readCachedRates(): PublishedExchangeResponse | null {
+  try {
+    const cached = JSON.parse(localStorage.getItem(EXCHANGE_RATE_CACHE_KEY) ?? 'null') as PublishedExchangeResponse | null;
+    const isFresh = typeof cached?.cachedAt === 'number' && Date.now() - cached.cachedAt < 86_400_000;
+    if (!cached || !isFresh || (!hasValidQuote(cached.rates.market) && !hasValidQuote(cached.rates.sbs))) return null;
+    return cached;
+  } catch {
+    return null;
+  }
+}
+
+function keepAvailableSource(current: ExchangeSource, data: PublishedExchangeResponse): ExchangeSource {
+  if (current === 'custom') return current;
+  return hasValidQuote(data.rates[current]) ? current : data.defaultSource;
+}
+
+async function requestPublishedRate(): Promise<PublishedExchangeResponse> {
+  const response = await fetch(`/api/tipo-de-cambio?refresh=${Date.now()}`, { cache: 'no-store' });
+  const data = await response.json();
+  if (!response.ok || !data.success || !data.rates) {
+    throw new Error(data.message ?? 'Respuesta inválida');
+  }
+  const rates = data.rates as Partial<Record<PublishedSource, PublishedExchangeRate>>;
+  if (!hasValidQuote(rates.market) && !hasValidQuote(rates.sbs)) {
+    throw new Error('La API no devolvió una cotización completa');
+  }
+  return { defaultSource: data.defaultSource, rates };
+}
 
 export default function TipoDeCambioPage() {
   const meta = CALCULATORS_REGISTRY.find((c) => c.id === 'tipo-de-cambio-dolar-sunat') || {
     id: 'tipo-de-cambio-dolar-sunat',
     slug: '/tipo-de-cambio-dolar-sunat',
-    title: 'Calculadora de Tipo de Cambio Dólar / Soles (SUNAT, SBS y Ocoña)',
+    title: 'Calculadora de Tipo de Cambio Dólar / Soles Hoy',
     shortTitle: 'Tipo de Cambio Dólar / Soles',
-    description: 'Convierte dólares a soles peruanos y compara el tipo de cambio oficial de SUNAT, SBS y casas de cambio del mercado paralelo en tiempo real.',
-    cardSummary: 'Calcula conversión Dólar/Soles con tasas en vivo',
+    description: 'Convierte dólares a soles automáticamente con la tasa USD/PEN actualizada y la última cotización SBS disponible.',
+    cardSummary: 'Calcula conversiones con una tasa USD/PEN actualizada',
     category: 'tributario' as const,
     tag: 'DÓLAR',
     icon: 'DollarSign',
-    badge: 'En Vivo',
-    keywords: ['tipo de cambio sunat en vivo', 'dolar a soles hoy', 'precio del dolar en tiempo real peru', 'tipo de cambio sbs hoy'],
+    badge: 'Actualizado',
+    keywords: ['tipo de cambio sunat', 'dolar a soles hoy', 'tipo de cambio sbs hoy'],
   };
 
   const [amount, setAmount] = useState<number>(100);
   const [conversionMode, setConversionMode] = useState<ExchangeConversionMode>('usd_to_pen');
-  const [source, setSource] = useState<ExchangeSource>('sunat');
-  
-  // Dynamic live rates state
-  const [liveRates, setLiveRates] = useState(PERU_EXCHANGE_RATES);
-  const [lastUpdatedText, setLastUpdatedText] = useState<string>('Cargando cotización en vivo...');
+  const [source, setSource] = useState<ExchangeSource>('market');
+  const [publishedRates, setPublishedRates] = useState<PublishedExchangeResponse['rates']>({});
+  const [lastUpdatedText, setLastUpdatedText] = useState<string>('Consultando el precio del dólar...');
   const [isLoadingLive, setIsLoadingLive] = useState<boolean>(false);
 
-  const [customBuyRate, setCustomBuyRate] = useState<number>(3.345);
-  const [customSellRate, setCustomSellRate] = useState<number>(3.355);
+  const [customBuyRate, setCustomBuyRate] = useState<number>(0);
+  const [customSellRate, setCustomSellRate] = useState<number>(0);
   const [showCustomRates, setShowCustomRates] = useState<boolean>(false);
 
-  // Fetch live exchange rates from our internal API on mount
-  const fetchLiveRates = async () => {
+  const fetchLiveRates = useCallback(async () => {
     try {
       setIsLoadingLive(true);
-      const res = await fetch('/api/tipo-de-cambio');
-      if (res.ok) {
-        const data = await res.json();
-        if (data.rates) {
-          setLiveRates({
-            sunat: {
-              ...liveRates.sunat,
-              buyRate: data.rates.sunat.buyRate,
-              sellRate: data.rates.sunat.sellRate,
-            },
-            parallel_ocona: {
-              ...liveRates.parallel_ocona,
-              buyRate: data.rates.parallel_ocona.buyRate,
-              sellRate: data.rates.parallel_ocona.sellRate,
-            },
-            sbs_banks: {
-              ...liveRates.sbs_banks,
-              buyRate: data.rates.sbs_banks.buyRate,
-              sellRate: data.rates.sbs_banks.sellRate,
-            },
-          });
-          setCustomBuyRate(data.rates.sunat.buyRate);
-          setCustomSellRate(data.rates.sunat.sellRate);
-          setLastUpdatedText(`Actualizado hoy automáticamente (${new Date().toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit' })})`);
-        }
+      const data = await requestPublishedRate();
+      setPublishedRates(data.rates);
+      localStorage.setItem(EXCHANGE_RATE_CACHE_KEY, JSON.stringify({ ...data, cachedAt: Date.now() }));
+      setSource((current) => keepAvailableSource(current, data));
+      const preferred = data.rates[data.defaultSource];
+      setLastUpdatedText(`Actualizado automáticamente · ${preferred?.effectiveDate ?? 'hoy'}`);
+    } catch {
+      const cached = readCachedRates();
+      if (cached) {
+        setPublishedRates(cached.rates);
+        setSource((current) => keepAvailableSource(current, cached));
+        setLastUpdatedText('Sin conexión · usando la última cotización guardada');
+      } else {
+        setSource('custom');
+        setShowCustomRates(true);
+        setLastUpdatedText('No se pudo actualizar; ingresa ambas tasas manualmente');
       }
-    } catch (e) {
-      setLastUpdatedText('Cotización referencial del día');
     } finally {
       setIsLoadingLive(false);
     }
-  };
-
-  useEffect(() => {
-    fetchLiveRates();
   }, []);
 
-  const activeSourceConfig = source !== 'custom' ? liveRates[source] : null;
-  const currentBuy = showCustomRates ? customBuyRate : (activeSourceConfig?.buyRate || 3.345);
-  const currentSell = showCustomRates ? customSellRate : (activeSourceConfig?.sellRate || 3.355);
+  useEffect(() => {
+    const timeoutId = window.setTimeout(() => void fetchLiveRates(), 0);
+    return () => window.clearTimeout(timeoutId);
+  }, [fetchLiveRates]);
+
+  const selectedPublishedRate = source === 'custom' ? undefined : publishedRates[source];
+  const currentBuy = source === 'custom' ? customBuyRate : selectedPublishedRate?.buyRate ?? 0;
+  const currentSell = source === 'custom' ? customSellRate : selectedPublishedRate?.sellRate ?? 0;
+  const hasCompleteRate = currentBuy > 0 && currentSell > 0;
+  const availablePublishedSource: PublishedSource | null = hasValidQuote(publishedRates.market)
+    ? 'market'
+    : hasValidQuote(publishedRates.sbs)
+      ? 'sbs'
+      : null;
 
   const result = calculateExchangeRate({
     amount,
@@ -106,7 +148,7 @@ Compra: S/ ${result.buyRate.toFixed(3)} | Venta: S/ ${result.sellRate.toFixed(3)
   const faqs = [
     {
       question: '¿Con qué frecuencia se actualiza el tipo de cambio?',
-      answer: 'Nuestra plataforma sincroniza automáticamente las cotizaciones de mercado y SUNAT a lo largo del día para ofrecerte la tasa exacta al segundo.',
+      answer: 'La tasa media USD/PEN se actualiza automáticamente cada 30 minutos. También mostramos la última compra y venta del sistema bancario publicada por la SBS mediante BCRPData. Ninguna de estas tasas reemplaza la cotización final de tu banco o casa de cambio.',
     },
     {
       question: '¿Qué tipo de cambio se utiliza para declarar en SUNAT y emitir facturas?',
@@ -125,7 +167,7 @@ Compra: S/ ${result.buyRate.toFixed(3)} | Venta: S/ ${result.sellRate.toFixed(3)
       educationalContent={
         <div className="space-y-3">
           <p>
-            Calcula la equivalencia exacta entre Dólares Estadounidenses (USD) y Soles Peruanos (PEN) con cotizaciones sincronizadas en tiempo real de la SUNAT, el promedio bancario y el mercado paralelo de Ocoña.
+            Calcula equivalencias entre dólares y soles con una tasa USD/PEN actualizada automáticamente o con la última compra y venta SBS disponible. Verifica la cotización final de tu banco o cambista antes de realizar una operación.
           </p>
         </div>
       }
@@ -142,7 +184,7 @@ Compra: S/ ${result.buyRate.toFixed(3)} | Venta: S/ ${result.sellRate.toFixed(3)
                 <DollarSign className="h-4.5 w-4.5" />
               </div>
               <div>
-                <h2 className="text-lg font-bold text-slate-900 dark:text-white leading-tight">Conversión en Vivo</h2>
+                <h2 className="text-lg font-bold text-slate-900 dark:text-white leading-tight">Conversión referencial</h2>
                 <div className="flex items-center gap-1.5 text-[11px] font-semibold text-emerald-700 dark:text-emerald-400">
                   <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
                   <span>{lastUpdatedText}</span>
@@ -179,64 +221,45 @@ Compra: S/ ${result.buyRate.toFixed(3)} | Venta: S/ ${result.sellRate.toFixed(3)
               <select
                 value={source}
                 onChange={(e) => {
-                  const s = e.target.value as ExchangeSource;
-                  setSource(s);
-                  if (s !== 'custom') {
-                    setCustomBuyRate(liveRates[s].buyRate);
-                    setCustomSellRate(liveRates[s].sellRate);
-                  }
+                  const nextSource = e.target.value as ExchangeSource;
+                  setSource(nextSource);
+                  setShowCustomRates(nextSource === 'custom');
                 }}
                 className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 p-2.5 text-xs font-bold text-slate-900 dark:text-white outline-none focus:border-emerald-600"
               >
-                <option value="sunat">SUNAT Oficial (Facturación e Impuestos)</option>
-                <option value="parallel_ocona">Paralelo / Ocoña y Casas Digitales</option>
-                <option value="sbs_banks">Bancos Tradicionales / SBS</option>
+                <option value="market" disabled={!hasValidQuote(publishedRates.market)}>
+                  Mercado USD/PEN actualizado
+                </option>
+                <option value="sbs" disabled={!hasValidQuote(publishedRates.sbs)}>
+                  Compra y venta SBS vía BCRPData
+                </option>
                 <option value="custom">Ingresar Tasa Personalizada</option>
               </select>
             </div>
           </div>
 
-          {/* Rates Cards Grid with Live Data */}
-          <div className="grid grid-cols-3 gap-2.5 pt-2">
-            {(Object.keys(liveRates) as Array<Exclude<ExchangeSource, 'custom'>>).map((srcKey) => {
-              const r = liveRates[srcKey];
-              const isSelected = source === srcKey && !showCustomRates;
-              return (
-                <button
-                  key={srcKey}
-                  type="button"
-                  onClick={() => {
-                    setSource(srcKey);
-                    setShowCustomRates(false);
-                    setCustomBuyRate(r.buyRate);
-                    setCustomSellRate(r.sellRate);
-                  }}
-                  className={`p-3 rounded-2xl border text-left transition-all cursor-pointer ${
-                    isSelected
-                      ? 'border-emerald-600 bg-emerald-50/90 dark:bg-emerald-950/70 ring-1 ring-emerald-600 dark:ring-emerald-500'
-                      : 'border-slate-200 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-950 hover:bg-slate-100'
-                  }`}
-                >
-                  <span className="text-[10px] font-bold text-slate-500 uppercase block truncate">
-                    {r.badge}
-                  </span>
-                  <span className="text-xs font-black text-slate-900 dark:text-white block mt-0.5 truncate">
-                    {r.name.split(' ')[0]}
-                  </span>
-                  <div className="mt-2 text-[11px] font-mono text-slate-600 dark:text-slate-300 space-y-0.5">
-                    <div>C: <strong className="text-emerald-700 dark:text-emerald-400">S/ {r.buyRate.toFixed(3)}</strong></div>
-                    <div>V: <strong className="text-slate-800 dark:text-slate-200">S/ {r.sellRate.toFixed(3)}</strong></div>
-                  </div>
-                </button>
-              );
-            })}
+          <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 p-4 text-xs text-slate-600 dark:text-slate-300">
+            <strong>Fuente:</strong>{' '}
+            {source === 'market'
+              ? 'tasa media USD/PEN del mercado, actualizada automáticamente. Compra y venta son iguales porque el proveedor no publica spread.'
+              : source === 'sbs'
+                ? 'BCRPData, series SBS PD04639PD y PD04640PD; corresponde al último día publicado.'
+                : 'tasas ingresadas manualmente por ti.'}
           </div>
 
           {/* Toggle Custom Rates Box */}
           <div className="pt-2 flex items-center justify-between">
             <button
               type="button"
-              onClick={() => setShowCustomRates(!showCustomRates)}
+              onClick={() => {
+                if (showCustomRates || source === 'custom') {
+                  setShowCustomRates(false);
+                  if (availablePublishedSource) setSource(availablePublishedSource);
+                } else {
+                  setShowCustomRates(true);
+                  setSource('custom');
+                }
+              }}
               className="text-xs font-bold text-emerald-800 dark:text-emerald-400 hover:underline flex items-center gap-1 cursor-pointer"
             >
               <Settings2 className="h-3.5 w-3.5" />
@@ -245,7 +268,7 @@ Compra: S/ ${result.buyRate.toFixed(3)} | Venta: S/ ${result.sellRate.toFixed(3)
 
             <button
               type="button"
-              onClick={fetchLiveRates}
+              onClick={() => void fetchLiveRates()}
               disabled={isLoadingLive}
               className="text-xs text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 flex items-center gap-1 cursor-pointer"
               title="Actualizar tipo de cambio"
@@ -296,13 +319,19 @@ Compra: S/ ${result.buyRate.toFixed(3)} | Venta: S/ ${result.sellRate.toFixed(3)
                 {isUsdToPen ? 'Monto Recibido en Soles' : 'Monto Recibido en Dólares'}
               </span>
               <div
-                title={isUsdToPen ? formatCurrency(result.convertedAmount) : `$ ${formatNumber(result.convertedAmount)} USD`}
+                title={hasCompleteRate ? (isUsdToPen ? formatCurrency(result.convertedAmount) : `$ ${formatNumber(result.convertedAmount)} USD`) : 'Esperando una cotización completa'}
                 className="text-3xl sm:text-4xl lg:text-5xl font-black text-emerald-800 dark:text-emerald-400 mt-1 font-mono tracking-tight break-words px-2"
               >
-                {isUsdToPen ? formatCurrency(result.convertedAmount) : `$ ${formatNumber(result.convertedAmount)} USD`}
+                {hasCompleteRate
+                  ? isUsdToPen
+                    ? formatCurrency(result.convertedAmount)
+                    : `$ ${formatNumber(result.convertedAmount)} USD`
+                  : '—'}
               </div>
               <div className="mt-1.5 text-xs text-slate-600 dark:text-slate-400 font-semibold truncate">
-                Tasa aplicada: S/ {isUsdToPen ? result.buyRate.toFixed(3) : result.sellRate.toFixed(3)}
+                {hasCompleteRate
+                  ? `Tasa aplicada: S/ ${isUsdToPen ? result.buyRate.toFixed(3) : result.sellRate.toFixed(3)}`
+                  : 'Esperando una cotización completa'}
               </div>
             </div>
 
@@ -310,45 +339,49 @@ Compra: S/ ${result.buyRate.toFixed(3)} | Venta: S/ ${result.sellRate.toFixed(3)
             <div className="grid grid-cols-2 gap-3 mb-5">
               <ResultMetricCard
                 label="Tipo de Cambio Compra"
-                value={`S/ ${result.buyRate.toFixed(3)}`}
+                value={hasCompleteRate ? `S/ ${result.buyRate.toFixed(3)}` : '—'}
                 type="success"
                 subValue="Si vendes dólares"
               />
               <ResultMetricCard
                 label="Tipo de Cambio Venta"
-                value={`S/ ${result.sellRate.toFixed(3)}`}
+                value={hasCompleteRate ? `S/ ${result.sellRate.toFixed(3)}` : '—'}
                 type="neutral"
                 subValue="Si compras dólares"
               />
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-2.5">
+            {hasCompleteRate && <div className="flex flex-col sm:flex-row gap-2.5">
               <ExportPdfButton
                 className="flex-1"
                 getReportOptions={() => ({
                   title: 'Liquidación de Cambio de Moneda',
-                  subtitle: `Conversión en tiempo real realizada vía CalculaPerú (${result.sourceName})`,
+                  subtitle: `Conversión referencial realizada vía CalculaPerú (${result.sourceName})`,
                   items: [
                     { label: 'Monto ingresado', value: isUsdToPen ? `$ ${formatNumber(amount)} USD` : formatCurrency(amount) },
                     { label: 'Operación realizada', value: isUsdToPen ? 'Venta de Dólares (USD a PEN)' : 'Compra de Dólares (PEN a USD)' },
-                    { label: 'Tasa de Compra (En vivo)', value: `S/ ${result.buyRate.toFixed(3)}` },
-                    { label: 'Tasa de Venta (En vivo)', value: `S/ ${result.sellRate.toFixed(3)}` },
+                    { label: 'Tasa de Compra', value: `S/ ${result.buyRate.toFixed(3)}` },
+                    { label: 'Tasa de Venta', value: `S/ ${result.sellRate.toFixed(3)}` },
                     { label: 'Diferencial Cambiario (Spread)', value: `S/ ${result.spreadDifference.toFixed(3)}` },
                     { label: 'Total Convertido', value: isUsdToPen ? formatCurrency(result.convertedAmount) : `$ ${formatNumber(result.convertedAmount)} USD`, isHighlight: true },
                   ],
                   totalLabel: 'Importe Resultante',
                   totalValue: isUsdToPen ? formatCurrency(result.convertedAmount) : `$ ${formatNumber(result.convertedAmount)} USD`,
                   notes: [
-                    'Tipo de cambio sincronizado en tiempo real para el mercado peruano.',
+                    source === 'market'
+                      ? 'Tasa media USD/PEN actualizada automáticamente; no representa el spread de una entidad financiera.'
+                      : source === 'sbs'
+                        ? 'Tipo de cambio basado en la última publicación disponible de las series SBS en BCRPData.'
+                        : 'Conversión realizada con las tasas ingresadas manualmente por el usuario.',
                     'Para transacciones bancarias o en ventanilla, consulte la cotización en tiempo real de su entidad financiera.',
                   ],
                 })}
               />
-            </div>
+            </div>}
 
-            <div className="mt-3">
-              <ShareButtons title="Tipo de Cambio Dólar Soles Perú en Vivo" shareText={shareSummary} />
-            </div>
+            {hasCompleteRate && <div className="mt-3">
+              <ShareButtons title="Tipo de Cambio Dólar Soles Perú" shareText={shareSummary} />
+            </div>}
           </div>
         </div>
 

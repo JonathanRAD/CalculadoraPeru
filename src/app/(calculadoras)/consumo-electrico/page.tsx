@@ -1,15 +1,13 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { CalculatorShell } from '@/features/calculators/components/CalculatorShell';
 import { CALCULATORS_REGISTRY } from '@/features/calculators/registry';
-import { calculateElectricity, ElectricityInput } from '@/core/calculators/electricity';
 import { formatCurrency, formatNumber } from '@/core/math/formatters';
 import { ELECTRIC_APPLIANCES } from '@/core/constants/peru';
-import { InputNumber } from '@/shared/components/ui/InputNumber';
 import { ResultMetricCard } from '@/shared/components/ui/ResultMetricCard';
 import { ShareButtons } from '@/shared/components/ui/ShareButtons';
-import { Zap, Tv, Plus, Trash2 } from 'lucide-react';
+import { Zap, Plus, Trash2 } from 'lucide-react';
 
 interface ApplianceRow {
   id: string;
@@ -23,6 +21,7 @@ export default function ConsumoElectricoPage() {
   const meta = CALCULATORS_REGISTRY.find((c) => c.id === 'consumo-electrico')!;
 
   const [tariffPerKwh, setTariffPerKwh] = useState<number>(0.72);
+  const nextApplianceId = useRef(4);
   const [appliances, setAppliances] = useState<ApplianceRow[]>([
     { id: '1', name: 'Refrigeradora (No Frost)', watts: 250, hoursPerDay: 12, daysPerMonth: 30 },
     { id: '2', name: 'Aire Acondicionado (12000 BTU)', watts: 1200, hoursPerDay: 5, daysPerMonth: 30 },
@@ -36,10 +35,12 @@ export default function ConsumoElectricoPage() {
   const totalMonthlyCost = totalMonthlyKwh * tariffPerKwh;
 
   const addAppliance = (presetName: string, presetWatts: number) => {
+    const id = `appliance-${nextApplianceId.current}`;
+    nextApplianceId.current += 1;
     setAppliances([
       ...appliances,
       {
-        id: Date.now().toString(),
+        id,
         name: presetName,
         watts: presetWatts,
         hoursPerDay: 4,
@@ -52,7 +53,7 @@ export default function ConsumoElectricoPage() {
     setAppliances(appliances.filter((a) => a.id !== id));
   };
 
-  const updateAppliance = (id: string, field: keyof ApplianceRow, val: any) => {
+  const updateAppliance = (id: string, field: keyof ApplianceRow, val: string | number) => {
     setAppliances(
       appliances.map((a) => (a.id === id ? { ...a, [field]: val } : a))
     );

@@ -4,14 +4,38 @@
  */
 
 export const PERU_CONSTANTS = {
+  CURRENT_YEAR: 2026,
   IGV_RATE: 0.18, // 18% (16% IGV + 2% IPM)
   UIT_2024: 5150, // S/ 5,150
   UIT_2025: 5350, // S/ 5,350
-  UIT_2026: 5350, // S/ 5,350
+  UIT_2026: 5500, // D.S. N.° 301-2025-EF
+  CURRENT_UIT: 5500,
+  RMV: 1130, // Vigente desde el 1 de enero de 2025
+  FAMILY_ALLOWANCE_RATE: 0.1,
+  FAMILY_ALLOWANCE: 113, // 10% de la RMV
+  ONP_RATE: 0.13,
+  ESSALUD_RATE: 0.09,
+  EPS_EXTRAORDINARY_BONUS_RATE: 0.0675,
+  FOURTH_CATEGORY_RETENTION_RATE: 0.08,
+  FOURTH_CATEGORY_RECEIPT_THRESHOLD: 1500,
+  RMT_MAX_UIT: 1700,
+  RMT_REDUCED_PAYMENT_UIT: 300,
   DEFAULT_KWH_COST: 0.72, // S/ 0.72 por kWh (Promedio Lima Luz del Sur / Enel Pliego BT5B)
   CURRENCY_SYMBOL: 'S/',
   CURRENCY_CODE: 'PEN',
   LOCALE: 'es-PE',
+} as const;
+
+/**
+ * Descuento mensual AFP para afiliados bajo comisión sobre flujo.
+ * Composición: aporte obligatorio (10%) + prima de seguro (1.37%) + comisión.
+ * Fuente: tabla SBS, mes de devengue julio de 2026.
+ */
+export const AFP_FLOW_RATES_2026 = {
+  afp_habitat: { rate: 0.1284, name: 'AFP Habitat (flujo 12.84%)' },
+  afp_integra: { rate: 0.1292, name: 'AFP Integra (flujo 12.92%)' },
+  afp_prima: { rate: 0.1297, name: 'AFP Prima (flujo 12.97%)' },
+  afp_profuturo: { rate: 0.1306, name: 'AFP Profuturo (flujo 13.06%)' },
 } as const;
 
 export const ELECTRIC_APPLIANCES = [

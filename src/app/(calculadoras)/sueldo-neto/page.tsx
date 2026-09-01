@@ -3,14 +3,14 @@
 import React, { useState } from 'react';
 import { CalculatorShell } from '@/features/calculators/components/CalculatorShell';
 import { CALCULATORS_REGISTRY } from '@/features/calculators/registry';
-import { calculateNetSalary, PayrollInput, PensionSystem } from '@/core/calculators/payroll';
+import { calculateNetSalary, PensionSystem } from '@/core/calculators/payroll';
 import { formatCurrency, formatPercent } from '@/core/math/formatters';
 import { InputNumber } from '@/shared/components/ui/InputNumber';
 import { SwitchToggle } from '@/shared/components/ui/SwitchToggle';
 import { ResultMetricCard } from '@/shared/components/ui/ResultMetricCard';
 import { ShareButtons } from '@/shared/components/ui/ShareButtons';
 import { ExportPdfButton } from '@/shared/components/ui/ExportPdfButton';
-import { Briefcase, Building, ShieldCheck } from 'lucide-react';
+import { Briefcase } from 'lucide-react';
 
 export default function SueldoNetoPage() {
   const meta = CALCULATORS_REGISTRY.find((c) => c.id === 'sueldo-neto')!;
@@ -32,11 +32,11 @@ Sueldo Neto en Cuenta: ${formatCurrency(result.netSalary)}`;
   const faqs = [
     {
       question: '¿Qué descuentos se aplican al sueldo bruto en planilla en Perú?',
-      answer: 'Principalmente el aporte de pensiones obligatorio: 13% si estás en la ONP, o entre 12.67% y 12.89% si estás en una AFP (10% fondo individual + seguro de invalidez + comisión). Además, si tus ingresos anuales proyectados superan las 7 UIT (S/ 37,450), se descuenta el Impuesto a la Renta de 5ta Categoría.',
+      answer: 'Principalmente el aporte de pensiones obligatorio: 13% si estás en la ONP, o entre 12.84% y 13.06% bajo comisión AFP sobre flujo (10% fondo individual + seguro + comisión, tabla SBS julio de 2026). Además, si la renta anual proyectada supera las 7 UIT (S/ 38,500), puede corresponder retención de quinta categoría.',
     },
     {
       question: '¿Qué es la Asignación Familiar?',
-      answer: 'Es un beneficio legal equivalente al 10% de la Remuneración Mínima Vital (RMV) vigente (actualmente S/ 102.50) para los trabajadores que tengan a su cargo uno o más hijos menores de 18 años (o hasta 24 si estudian).',
+      answer: 'Es un beneficio legal equivalente al 10% de la Remuneración Mínima Vital (RMV) vigente (actualmente S/ 113.00) para los trabajadores que tengan a su cargo uno o más hijos menores de 18 años (o hasta 24 si estudian).',
     },
     {
       question: '¿El 9% de EsSalud se le descuenta al trabajador?',
@@ -55,8 +55,8 @@ Sueldo Neto en Cuenta: ${formatCurrency(result.netSalary)}`;
           </p>
           <div className="rounded-xl bg-slate-50 dark:bg-slate-950 p-4 border border-slate-200 dark:border-slate-800 space-y-2 text-xs">
             <div className="font-bold text-slate-800 dark:text-slate-200">Estructura del cálculo:</div>
-            <div>• <strong>Total Ingreso</strong> = Sueldo Básico + Asignación Familiar (S/ 102.50)</div>
-            <div>• <strong>Descuentos de Ley</strong> = Pensión (AFP ~12.8% u ONP 13%) + Impuesto de 5ta Categoría</div>
+            <div>• <strong>Total Ingreso</strong> = Sueldo Básico + Asignación Familiar (S/ 113.00)</div>
+            <div>• <strong>Descuentos de Ley</strong> = Pensión (AFP flujo 12.84%–13.06% u ONP 13%) + Impuesto de 5ta Categoría</div>
             <div>• <strong>Sueldo Neto</strong> = Total Ingreso - Descuentos de Ley</div>
           </div>
         </div>
@@ -91,10 +91,10 @@ Sueldo Neto en Cuenta: ${formatCurrency(result.netSalary)}`;
             </label>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
               {[
-                { id: 'afp_integra', name: 'AFP Integra (~12.68%)' },
-                { id: 'afp_prima', name: 'AFP Prima (~12.78%)' },
-                { id: 'afp_profuturo', name: 'AFP Profuturo (~12.89%)' },
-                { id: 'afp_habitat', name: 'AFP Habitat (~12.67%)' },
+                { id: 'afp_integra', name: 'AFP Integra (flujo 12.92%)' },
+                { id: 'afp_prima', name: 'AFP Prima (flujo 12.97%)' },
+                { id: 'afp_profuturo', name: 'AFP Profuturo (flujo 13.06%)' },
+                { id: 'afp_habitat', name: 'AFP Habitat (flujo 12.84%)' },
                 { id: 'onp', name: 'ONP (13.00%)' },
               ].map((p) => (
                 <button
@@ -116,7 +116,7 @@ Sueldo Neto en Cuenta: ${formatCurrency(result.netSalary)}`;
           <SwitchToggle
             id="hasDependents"
             label="¿Tienes hijos menores de edad o dependientes?"
-            description="Agrega el 10% de Asignación Familiar legal (+S/ 102.50)"
+            description="Agrega el 10% de Asignación Familiar legal (+S/ 113.00)"
             checked={hasDependents}
             onChange={(hasDependents) => setHasDependents(hasDependents)}
             badge="Beneficio"
@@ -194,7 +194,7 @@ Sueldo Neto en Cuenta: ${formatCurrency(result.netSalary)}`;
                   subtitle: `Desglose de remuneración y aportes según legislación laboral de Perú`,
                   items: [
                     { label: 'Sueldo Básico Mensual', value: formatCurrency(grossSalary) },
-                    { label: 'Asignación Familiar', value: hasDependents ? 'S/ 102.50' : 'S/ 0.00' },
+                    { label: 'Asignación Familiar', value: hasDependents ? 'S/ 113.00' : 'S/ 0.00' },
                     { label: 'Remuneración Bruta Total', value: formatCurrency(result.totalGrossIncome), isHighlight: true },
                     { label: `Descuento de Pensión (${pensionSystem === 'onp' ? 'ONP 13%' : 'AFP'})`, value: `- ${formatCurrency(result.pensionDeduction)}` },
                     ...(result.fifthCategoryTaxMonthly > 0 ? [{ label: 'Retención 5ta Categoría (SUNAT)', value: `- ${formatCurrency(result.fifthCategoryTaxMonthly)}` }] : []),

@@ -51,7 +51,7 @@ export function generateOfficialPdf(options: PdfReportOptions) {
     year: 'numeric',
   });
   doc.text(`Fecha de emisión: ${dateStr}`, pageWidth - 20, currentY - 2, { align: 'right' });
-  doc.text(`Plataforma Financiera Oficial • calculaperu.com.pe`, pageWidth - 20, currentY + 3, { align: 'right' });
+  doc.text(`Herramientas de cálculo para Perú • calculaperu.com.pe`, pageWidth - 20, currentY + 3, { align: 'right' });
 
   if (options.businessRuc || options.businessPhone) {
     currentY += 6;

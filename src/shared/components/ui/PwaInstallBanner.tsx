@@ -11,17 +11,11 @@ interface BeforeInstallPromptEvent extends Event {
 export function PwaInstallBanner() {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [isVisible, setIsVisible] = useState(false);
-  const [isDismissed, setIsDismissed] = useState(false);
+  const [isDismissed, setIsDismissed] = useState(() => {
+    return typeof window !== 'undefined' && localStorage.getItem('calculaperu_pwa_dismissed') === 'true';
+  });
 
   useEffect(() => {
-    // Check if dismissed before in localStorage
-    if (typeof window !== 'undefined') {
-      const dismissed = localStorage.getItem('calculaperu_pwa_dismissed');
-      if (dismissed) {
-        setIsDismissed(true);
-      }
-    }
-
     const handler = (e: Event) => {
       e.preventDefault();
       setDeferredPrompt(e as BeforeInstallPromptEvent);

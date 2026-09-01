@@ -3,12 +3,12 @@
 import React, { useState } from 'react';
 import { CalculatorShell } from '@/features/calculators/components/CalculatorShell';
 import { CALCULATORS_REGISTRY } from '@/features/calculators/registry';
-import { calculateIgv, IgvInput, IgvCalculationMode } from '@/core/calculators/tax';
+import { calculateIgv, IgvCalculationMode } from '@/core/calculators/tax';
 import { formatCurrency } from '@/core/math/formatters';
 import { InputNumber } from '@/shared/components/ui/InputNumber';
 import { ResultMetricCard } from '@/shared/components/ui/ResultMetricCard';
 import { ShareButtons } from '@/shared/components/ui/ShareButtons';
-import { Receipt, FileText, CheckCircle2 } from 'lucide-react';
+import { Receipt, CheckCircle2 } from 'lucide-react';
 
 export default function CalculadoraIgvPage() {
   const meta = CALCULATORS_REGISTRY.find((c) => c.id === 'calculadora-igv')!;
@@ -43,7 +43,7 @@ Total Facturado: ${formatCurrency(result.totalAmount)}`;
             El <strong>Impuesto General a las Ventas (IGV)</strong> grava todas las transferencias de bienes y prestación de servicios en el Perú con una tasa del <strong>18%</strong>.
           </p>
           <div className="rounded-xl bg-slate-50 dark:bg-slate-950 p-4 border border-slate-200 dark:border-slate-800 space-y-2 text-xs">
-            <div className="font-bold text-slate-800 dark:text-slate-200">Fórmulas SUNAT Oficiales:</div>
+            <div className="font-bold text-slate-800 dark:text-slate-200">Fórmulas del IGV:</div>
             <div>• <strong>Agregar IGV</strong>: Total = Base Imponible × 1.18</div>
             <div>• <strong>Extraer IGV</strong>: Base Imponible = Total / 1.18 | IGV = Total - Base Imponible</div>
           </div>

@@ -3,35 +3,21 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import {
-  FileSpreadsheet,
-  MessageSquare,
-  Clock,
-  Sparkles,
   ArrowRight,
   CheckCircle2,
   Share2,
-  FileText,
-  ShieldCheck,
-  Zap,
-  Building,
-  Smartphone,
-  ChevronRight,
-  TrendingUp,
   Store,
-  Receipt,
   Download,
   Send,
   AlertCircle,
-  Package,
   Plus,
   Trash2,
   Check,
   XCircle,
   Gift,
-  Users,
-  Award,
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { CALCULATORS_REGISTRY } from '@/features/calculators/registry';
 
 const FORMSPREE_ENDPOINT = 'https://formspree.io/f/mqpkkwno';
 
@@ -82,7 +68,7 @@ export default function CotizadorLandingPage() {
     } else {
       setTicketItems([
         ...ticketItems,
-        { id: String(Date.now()), name: catalogItem.name, qty: 1, price: catalogItem.price },
+        { id: `catalog-${catalogItem.id}`, name: catalogItem.name, qty: 1, price: catalogItem.price },
       ]);
     }
   };
@@ -137,11 +123,11 @@ export default function CotizadorLandingPage() {
             origin: { y: 0.6 },
             colors: ['#E3A62F', '#3E8967', '#ffffff'],
           });
-        } catch (e) {}
+        } catch {}
       } else {
         setStatus('error');
       }
-    } catch (error) {
+    } catch {
       setStatus('error');
     }
   };
@@ -631,7 +617,7 @@ export default function CotizadorLandingPage() {
 
           <div className="pt-8 border-t border-[#1C3B2F] flex items-center justify-center gap-3 text-xs text-slate-400">
             <Link href="/" className="text-[#E3A62F] hover:underline font-bold">
-              ← Volver al Portal de 22 Calculadoras
+              ← Volver al Portal de {CALCULATORS_REGISTRY.length} Calculadoras
             </Link>
           </div>
 

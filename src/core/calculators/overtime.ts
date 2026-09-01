@@ -1,8 +1,9 @@
 import { roundTo } from '../math/formatters';
+import { PERU_CONSTANTS } from '../constants/peru';
 
 export interface OvertimeInput {
   baseMonthlySalary: number; // Sueldo básico mensual (S/)
-  hasFamilyAllowance?: boolean; // Asignación familiar (+S/ 102.50)
+  hasFamilyAllowance?: boolean; // Asignación familiar (10% de la RMV)
   hoursFirstTwo: number; // Horas extras al 25% (primeras 2 horas del día)
   hoursAfterTwo: number; // Horas extras al 35% (a partir de la 3era hora)
   holidayHours: number; // Horas trabajadas en feriado o día de descanso (sobretasa 100%)
@@ -23,7 +24,7 @@ export interface OvertimeResult {
  */
 export function calculateOvertime(input: OvertimeInput): OvertimeResult {
   const baseSalary = Math.max(0, input.baseMonthlySalary || 0);
-  const familyAllowance = input.hasFamilyAllowance ? 102.5 : 0;
+  const familyAllowance = input.hasFamilyAllowance ? PERU_CONSTANTS.FAMILY_ALLOWANCE : 0;
   const computableSalary = baseSalary + familyAllowance;
 
   // Valor hora ordinaria = Remuneración mensual / 240

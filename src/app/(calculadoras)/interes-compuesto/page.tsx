@@ -3,12 +3,12 @@
 import React, { useState } from 'react';
 import { CalculatorShell } from '@/features/calculators/components/CalculatorShell';
 import { CALCULATORS_REGISTRY } from '@/features/calculators/registry';
-import { calculateCompoundInterest, CompoundInterestInput } from '@/core/calculators/compoundInterest';
-import { formatCurrency, formatPercent } from '@/core/math/formatters';
+import { calculateCompoundInterest } from '@/core/calculators/compoundInterest';
+import { formatCurrency } from '@/core/math/formatters';
 import { InputNumber } from '@/shared/components/ui/InputNumber';
 import { ResultMetricCard } from '@/shared/components/ui/ResultMetricCard';
 import { ShareButtons } from '@/shared/components/ui/ShareButtons';
-import { LineChart, TrendingUp, PiggyBank } from 'lucide-react';
+import { LineChart } from 'lucide-react';
 
 export default function InteresCompuestoPage() {
   const meta = CALCULATORS_REGISTRY.find((c) => c.id === 'interes-compuesto')!;

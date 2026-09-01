@@ -1,24 +1,31 @@
-import type { Metadata } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
+import type { Metadata, Viewport } from 'next';
+import Script from 'next/script';
+import { Inter, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 import { Navbar } from '@/shared/components/layout/Navbar';
 import { Footer } from '@/shared/components/layout/Footer';
 import { ThemeProvider } from '@/shared/context/ThemeContext';
 import { Analytics } from '@vercel/analytics/next';
 import { PwaInstallBanner } from '@/shared/components/ui/PwaInstallBanner';
+import { PwaRegistration } from '@/shared/components/ui/PwaRegistration';
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
+const inter = Inter({
+  variable: '--font-inter',
   subsets: ['latin'],
+  display: 'swap',
 });
 
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
+const jetbrainsMono = JetBrains_Mono({
+  variable: '--font-mono',
   subsets: ['latin'],
+  display: 'swap',
 });
 
 export const metadata: Metadata = {
-  title: 'CalculaPerú | El Portal de Calculadoras #1 del Perú',
+  title: {
+    default: 'CalculaPerú | Calculadoras para Perú',
+    template: '%s | CalculaPerú',
+  },
   description:
     'Calculadoras financieras, comerciales y tributarias del Perú: precio de venta, IGV 18%, margen de ganancia, punto de equilibrio y luz en Soles (S/).',
   keywords: [
@@ -33,15 +40,24 @@ export const metadata: Metadata = {
   authors: [{ name: 'CalculaPerú' }],
   metadataBase: new URL('https://www.calculaperu.com.pe'),
   icons: {
-    icon: '/logo-calc.png',
-    apple: '/logo-calc.png',
+    icon: [
+      { url: '/calculaperu-icon-192.png', sizes: '192x192', type: 'image/png' },
+      { url: '/calculaperu-icon-512.png', sizes: '512x512', type: 'image/png' },
+    ],
+    apple: [{ url: '/calculaperu-icon-180.png', sizes: '180x180', type: 'image/png' }],
+  },
+  manifest: '/manifest.webmanifest',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'CalculaPerú',
   },
   alternates: {
     canonical: '/',
   },
   openGraph: {
     siteName: 'CalculaPerú',
-    title: 'CalculaPerú | El Portal de Calculadoras #1 del Perú',
+    title: 'CalculaPerú | Calculadoras para Perú',
     description:
       'Calculadoras financieras, comerciales y tributarias del Perú: IGV 18%, precio de venta y luz en Soles.',
     url: 'https://www.calculaperu.com.pe',
@@ -52,17 +68,21 @@ export const metadata: Metadata = {
         url: '/logo-calc.png',
         width: 1200,
         height: 630,
-        alt: 'CalculaPerú - Portal de Calculadoras #1 del Perú',
+        alt: 'CalculaPerú - Calculadoras para Perú',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'CalculaPerú | El Portal de Calculadoras #1 del Perú',
+    title: 'CalculaPerú | Calculadoras para Perú',
     description:
       'Calculadoras financieras, comerciales y tributarias adaptadas al Perú: IGV 18%, precio de venta y luz.',
     images: ['/logo-calc.png'],
   },
+};
+
+export const viewport: Viewport = {
+  themeColor: '#059669',
 };
 
 const rootWebsiteJsonLd = {
@@ -72,15 +92,7 @@ const rootWebsiteJsonLd = {
   alternateName: 'Calcula Peru',
   url: 'https://www.calculaperu.com.pe',
   description:
-    'El portal de calculadoras financieras, comerciales y tributarias #1 del Perú para MYPES y emprendedores.',
-  potentialAction: {
-    '@type': 'SearchAction',
-    target: {
-      '@type': 'EntryPoint',
-      urlTemplate: 'https://www.calculaperu.com.pe/?q={search_term_string}',
-    },
-    'query-input': 'required name=search_term_string',
-  },
+    'Portal de calculadoras financieras, comerciales y tributarias para MYPES, trabajadores y emprendedores del Perú.',
 };
 
 export default function RootLayout({
@@ -89,9 +101,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es" className={`${geistSans.variable} ${geistMono.variable}`} suppressHydrationWarning>
+    <html lang="es" className={`${inter.variable} ${jetbrainsMono.variable}`} suppressHydrationWarning>
       <head>
-        <script
+        <Script
+          id="theme-initializer"
+          strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
             __html: `
               try {
@@ -110,15 +124,10 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(rootWebsiteJsonLd) }}
         />
-        {/* PWA Manifest & Theme */}
-        <link rel="manifest" href="/manifest.json" />
-        <meta name="theme-color" content="#059669" />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        {/* Google AdSense */}
-        <script
-          async
+        <Script
+          id="google-adsense"
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1171972985538083"
+          strategy="lazyOnload"
           crossOrigin="anonymous"
         />
       </head>
@@ -130,6 +139,7 @@ export default function RootLayout({
           </main>
           <Footer />
           <Analytics />
+          <PwaRegistration />
           <PwaInstallBanner />
         </ThemeProvider>
       </body>

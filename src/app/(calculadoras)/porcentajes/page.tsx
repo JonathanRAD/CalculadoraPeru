@@ -10,7 +10,6 @@ import {
 } from '@/core/calculators/percentages';
 import { formatNumber, formatPercent } from '@/core/math/formatters';
 import { InputNumber } from '@/shared/components/ui/InputNumber';
-import { ResultMetricCard } from '@/shared/components/ui/ResultMetricCard';
 import { ShareButtons } from '@/shared/components/ui/ShareButtons';
 import { Percent } from 'lucide-react';
 

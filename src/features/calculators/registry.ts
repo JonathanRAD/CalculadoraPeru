@@ -30,6 +30,19 @@ export const CATEGORIES: CategoryInfo[] = [
   { id: 'tributario', label: 'Tributario & Diario', icon: 'Receipt', description: 'IGV 18% SUNAT, 4ta, combustible, dividir cuenta y luz' },
 ];
 
+export function getCalculatorCode(calc: CalculatorMeta): string {
+  const categoryCodeMap: Record<CalculatorCategory, string> = {
+    negocios: 'COM',
+    laboral: 'LAB',
+    finanzas: 'FIN',
+    tributario: 'TRI',
+  };
+  const sameCategory = CALCULATORS_REGISTRY.filter(c => c.category === calc.category);
+  const index = sameCategory.findIndex(c => c.id === calc.id) + 1;
+  const prefix = categoryCodeMap[calc.category] || 'GEN';
+  return `${String(index).padStart(3, '0')}-${prefix}`;
+}
+
 export const CALCULATORS_REGISTRY: CalculatorMeta[] = [
   // --- NEGOCIOS & COMERCIO ---
   {
@@ -343,14 +356,14 @@ export const CALCULATORS_REGISTRY: CalculatorMeta[] = [
   {
     id: 'tipo-de-cambio-dolar-sunat',
     slug: '/tipo-de-cambio-dolar-sunat',
-    title: 'Calculadora de Tipo de Cambio Dólar / Soles (SUNAT, SBS y Ocoña)',
+    title: 'Calculadora de Tipo de Cambio Dólar / Soles Hoy',
     shortTitle: 'Tipo de Cambio Dólar / Soles',
-    description: 'Convierte dólares a soles peruanos y compara el tipo de cambio oficial de SUNAT, SBS y casas de cambio del mercado paralelo.',
-    cardSummary: 'Calcula conversión Dólar/Soles con tasas SUNAT y SBS',
+    description: 'Convierte dólares a soles automáticamente con la tasa USD/PEN actualizada y consulta también la última compra y venta SBS publicada mediante BCRPData.',
+    cardSummary: 'Convierte dólares y soles con una tasa actualizada automáticamente',
     category: 'tributario',
     tag: 'DÓLAR',
     icon: 'DollarSign',
-    badge: 'En Vivo',
+    badge: 'Actualizado',
     formulaSummary: 'Total PEN = Monto USD × Tipo Cambio Compra | Total USD = Monto PEN / Venta',
     keywords: ['tipo de cambio sunat', 'dolar a soles', 'precio del dolar hoy', 'tipo de cambio sbs', 'cambiar dolares peru'],
   },

@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { CalculatorShell } from '@/features/calculators/components/CalculatorShell';
 import { CALCULATORS_REGISTRY } from '@/features/calculators/registry';
-import { calculateGratification, GratificationInput, CompanyRegime, HealthInsurance } from '@/core/calculators/gratification';
+import { calculateGratification, CompanyRegime, HealthInsurance } from '@/core/calculators/gratification';
 import { formatCurrency } from '@/core/math/formatters';
 import { InputNumber } from '@/shared/components/ui/InputNumber';
 import { SwitchToggle } from '@/shared/components/ui/SwitchToggle';
@@ -121,7 +121,7 @@ Total en Mano: ${formatCurrency(result.totalToReceive)} (100% libre de descuento
 
           <SwitchToggle
             id="hasFamilyAllowance"
-            label="¿Percibes Asignación Familiar (+S/ 102.50)?"
+            label="¿Percibes Asignación Familiar (+S/ 113.00)?"
             description="Se suma a la base computable para el cálculo de la gratificación"
             checked={hasFamilyAllowance}
             onChange={(hasFamilyAllowance) => setHasFamilyAllowance(hasFamilyAllowance)}

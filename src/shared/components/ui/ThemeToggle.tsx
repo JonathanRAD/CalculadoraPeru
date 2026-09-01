@@ -1,55 +1,33 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useTheme } from '@/shared/context/ThemeContext';
-import { Sun, Moon } from 'lucide-react';
 
 export function ThemeToggle() {
   const { theme, toggleTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) {
-    return (
-      <div className="h-9 w-9 rounded-xl border border-slate-200 bg-slate-100 dark:border-slate-800 dark:bg-slate-800" />
-    );
-  }
-
-  const isDark = theme === 'dark';
+  // If theme is 'light', checkbox is checked (sky blue + sun + cloud)
+  // If theme is 'dark', checkbox is unchecked (night sky + moon + stars)
+  const isLight = theme === 'light';
 
   return (
-    <button
-      type="button"
-      onClick={toggleTheme}
-      aria-label={isDark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
-      className="relative flex h-9 items-center rounded-xl border border-slate-200 bg-slate-100/90 p-1 transition-all hover:border-slate-300 dark:border-slate-700/80 dark:bg-slate-800 cursor-pointer shadow-2xs group"
-    >
-      <div className="flex items-center gap-1">
-        {/* Light Icon Container */}
-        <div
-          className={`flex h-7 w-7 items-center justify-center rounded-lg transition-all ${
-            !isDark
-              ? 'bg-white text-amber-500 shadow-xs scale-100'
-              : 'text-slate-400 hover:text-slate-200 scale-95'
-          }`}
-        >
-          <Sun className="h-4 w-4" />
-        </div>
-
-        {/* Dark Icon Container */}
-        <div
-          className={`flex h-7 w-7 items-center justify-center rounded-lg transition-all ${
-            isDark
-              ? 'bg-slate-900 text-teal-400 shadow-xs scale-100 ring-1 ring-slate-700'
-              : 'text-slate-400 hover:text-slate-600 scale-95'
-          }`}
-        >
-          <Moon className="h-4 w-4" />
-        </div>
-      </div>
-    </button>
+    <label className="theme-switch inline-flex items-center" aria-label="Cambiar tema claro u oscuro">
+      <input
+        type="checkbox"
+        checked={isLight}
+        onChange={toggleTheme}
+      />
+      <span className="theme-slider">
+        <div className="theme-star theme-star_1"></div>
+        <div className="theme-star theme-star_2"></div>
+        <div className="theme-star theme-star_3"></div>
+        <svg viewBox="0 0 16 16" className="theme-cloud">
+          <path
+            transform="matrix(.77976 0 0 .78395-299.99-418.63)"
+            fill="#ffffff"
+            d="m391.84 540.91c-.421-.329-.949-.524-1.523-.524-1.351 0-2.451 1.084-2.485 2.435-1.395.526-2.388 1.88-2.388 3.466 0 1.874 1.385 3.423 3.182 3.667v.034h12.73v-.006c1.775-.104 3.182-1.584 3.182-3.395 0-1.747-1.309-3.186-2.994-3.379.007-.106.011-.214.011-.322 0-2.707-2.271-4.901-5.072-4.901-2.073 0-3.856 1.202-4.643 2.925"
+          />
+        </svg>
+      </span>
+    </label>
   );
 }
