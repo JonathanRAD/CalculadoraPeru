@@ -3,6 +3,7 @@ import { PERU_CONSTANTS } from '@/core/constants/peru';
 import { calculateCts } from '@/core/calculators/cts';
 import { calculateExchangeRate } from '@/core/calculators/exchangeRate';
 import { calculateHonorarios } from '@/core/calculators/honorarios';
+import { analyzeAtypicalSchedule } from '@/core/calculators/overtime';
 import { calculateNetSalary } from '@/core/calculators/payroll';
 import { calculateSeverancePay } from '@/core/calculators/severancePay';
 import { calculateTaxRegimes } from '@/core/calculators/taxRegimes';
@@ -30,6 +31,42 @@ describe('parámetros regulatorios 2026', () => {
     const result = calculateNetSalary({ grossSalary: 3000, pensionSystem: 'afp_prima' });
     expect(result.pensionRate).toBeCloseTo(12.97, 5);
     expect(result.pensionDeduction).toBe(389.1);
+  });
+
+  it('aplica 11.37% al sueldo para afiliados en comisión mixta/saldo', () => {
+    const result = calculateNetSalary({
+      grossSalary: 3000,
+      pensionSystem: 'afp_prima',
+      afpCommissionScheme: 'balance',
+    });
+    expect(result.pensionRate).toBeCloseTo(11.37, 5);
+    expect(result.pensionDeduction).toBe(341.1);
+  });
+
+  it('separa ingresos afectos, no remunerativos y otros descuentos', () => {
+    const result = calculateNetSalary({
+      grossSalary: 2000,
+      pensionSystem: 'onp',
+      variableRemuneration: 500,
+      nonRemunerativeIncome: 100,
+      otherDeductions: 50,
+      fifthCategoryMode: 'none',
+    });
+    expect(result.pensionableIncome).toBe(2500);
+    expect(result.totalGrossIncome).toBe(2600);
+    expect(result.pensionDeduction).toBe(325);
+    expect(result.totalDeductions).toBe(375);
+    expect(result.netSalary).toBe(2225);
+  });
+
+  it('permite usar la retención exacta de quinta categoría de la boleta', () => {
+    const result = calculateNetSalary({
+      grossSalary: 6000,
+      pensionSystem: 'onp',
+      fifthCategoryMode: 'manual',
+      manualFifthCategoryTax: 275.5,
+    });
+    expect(result.fifthCategoryTaxMonthly).toBe(275.5);
   });
 });
 
@@ -138,5 +175,27 @@ describe('tipo de cambio', () => {
       customSellRate: 0,
     });
     expect(result.convertedAmount).toBe(0);
+  });
+});
+
+describe('jornadas acumulativas o atípicas', () => {
+  it('considera un rol 14x14 de 12 horas dentro del promedio general', () => {
+    const result = analyzeAtypicalSchedule({ workDays: 14, restDays: 14, hoursPerShift: 12 });
+    expect(result.averageWeeklyHours).toBe(42);
+    expect(result.excessHoursPerCycle).toBe(0);
+    expect(result.isWithinGeneralWeeklyLimit).toBe(true);
+  });
+
+  it('advierte que un rol 14x7 de 12 horas supera el promedio general', () => {
+    const result = analyzeAtypicalSchedule({ workDays: 14, restDays: 7, hoursPerShift: 12 });
+    expect(result.averageWeeklyHours).toBe(56);
+    expect(result.excessHoursPerCycle).toBe(24);
+    expect(result.isWithinGeneralWeeklyLimit).toBe(false);
+  });
+
+  it('evalúa la duración del turno y no solo el nombre del rol', () => {
+    const result = analyzeAtypicalSchedule({ workDays: 14, restDays: 7, hoursPerShift: 10 });
+    expect(result.averageWeeklyHours).toBe(46.67);
+    expect(result.isWithinGeneralWeeklyLimit).toBe(true);
   });
 });

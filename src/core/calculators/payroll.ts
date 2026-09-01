@@ -2,20 +2,33 @@ import { roundTo } from '../math/formatters';
 import { AFP_FLOW_RATES_2026, PERU_CONSTANTS } from '../constants/peru';
 
 export type PensionSystem = 'onp' | 'afp_integra' | 'afp_prima' | 'afp_profuturo' | 'afp_habitat';
+export type AfpCommissionScheme = 'flow' | 'balance';
+export type FifthCategoryMode = 'estimated' | 'manual' | 'none';
 
 export interface PayrollInput {
   grossSalary: number; // Sueldo bruto mensual (S/)
   pensionSystem: PensionSystem; // ONP o AFP
   hasDependents?: boolean; // Hijos / Asignación familiar
+  afpCommissionScheme?: AfpCommissionScheme;
+  variableRemuneration?: number; // Horas extras, comisiones o bonos remunerativos
+  nonRemunerativeIncome?: number; // Movilidad condicionada u otros conceptos no afectos
+  otherDeductions?: number; // Préstamos, adelantos u otros descuentos de boleta
+  fifthCategoryMode?: FifthCategoryMode;
+  manualFifthCategoryTax?: number;
 }
 
 export interface PayrollResult {
   grossSalary: number; // Sueldo bruto
   familyAllowance: number; // Asignación familiar (10% de la RMV)
-  totalGrossIncome: number; // Total ingresos imponibles
+  variableRemuneration: number;
+  nonRemunerativeIncome: number;
+  pensionableIncome: number;
+  totalGrossIncome: number; // Total de ingresos antes de descuentos
   pensionDeduction: number; // Descuento ONP o AFP
   pensionRate: number; // Tasa porcentual efectiva del descuento de pensión (%)
   fifthCategoryTaxMonthly: number; // Retención mensual estimada de 5ta Categoría
+  otherDeductions: number;
+  totalDeductions: number;
   netSalary: number; // Sueldo neto a recibir en cuenta
   essaludContributionEmployer: number; // Aporte de EsSalud 9% a cargo del empleador
 }
@@ -35,15 +48,25 @@ const PENSION_RATES: Record<PensionSystem, { rate: number; name: string }> = {
 export function calculateNetSalary(input: PayrollInput): PayrollResult {
   const gross = Math.max(0, input.grossSalary || 0);
   const familyAllowance = input.hasDependents ? PERU_CONSTANTS.FAMILY_ALLOWANCE : 0;
-  const totalGrossIncome = gross + familyAllowance;
+  const variableRemuneration = Math.max(0, input.variableRemuneration || 0);
+  const nonRemunerativeIncome = Math.max(0, input.nonRemunerativeIncome || 0);
+  const otherDeductions = Math.max(0, input.otherDeductions || 0);
+  const pensionableIncome = gross + familyAllowance + variableRemuneration;
+  const totalGrossIncome = pensionableIncome + nonRemunerativeIncome;
 
   // Deducción previsional (AFP o ONP)
   const pensionInfo = PENSION_RATES[input.pensionSystem] || PENSION_RATES.onp;
-  const pensionDeduction = roundTo((totalGrossIncome * pensionInfo.rate) / 100, 2);
+  const afpBalancePayrollRate = (
+    PERU_CONSTANTS.AFP_MANDATORY_CONTRIBUTION_RATE + PERU_CONSTANTS.AFP_INSURANCE_RATE
+  ) * 100;
+  const pensionRate = input.pensionSystem !== 'onp' && input.afpCommissionScheme === 'balance'
+    ? afpBalancePayrollRate
+    : pensionInfo.rate;
+  const pensionDeduction = roundTo((pensionableIncome * pensionRate) / 100, 2);
 
   // Estimación Impuesto a la Renta de 5ta Categoría (SUNAT)
   // Proyección anual: (12 sueldos + 2 gratificaciones) - 7 UIT
-  const annualIncome = totalGrossIncome * 14;
+  const annualIncome = pensionableIncome * 14;
   const uit2026 = PERU_CONSTANTS.CURRENT_UIT;
   const exempt7Uit = 7 * uit2026; // S/ 38,500 no afectos en 2026
   const taxableAnnual = Math.max(0, annualIncome - exempt7Uit);
@@ -65,17 +88,28 @@ export function calculateNetSalary(input: PayrollInput): PayrollResult {
       tramo5 * 0.30;
   }
 
-  const fifthCategoryTaxMonthly = roundTo(annualTax / 12, 2);
-  const netSalary = roundTo(totalGrossIncome - pensionDeduction - fifthCategoryTaxMonthly, 2);
-  const essaludContributionEmployer = roundTo(totalGrossIncome * PERU_CONSTANTS.ESSALUD_RATE, 2);
+  const fifthCategoryMode = input.fifthCategoryMode ?? 'estimated';
+  const fifthCategoryTaxMonthly = fifthCategoryMode === 'manual'
+    ? roundTo(Math.max(0, input.manualFifthCategoryTax || 0), 2)
+    : fifthCategoryMode === 'none'
+      ? 0
+      : roundTo(annualTax / 12, 2);
+  const totalDeductions = pensionDeduction + fifthCategoryTaxMonthly + otherDeductions;
+  const netSalary = roundTo(Math.max(0, totalGrossIncome - totalDeductions), 2);
+  const essaludContributionEmployer = roundTo(pensionableIncome * PERU_CONSTANTS.ESSALUD_RATE, 2);
 
   return {
     grossSalary: roundTo(gross, 2),
     familyAllowance: roundTo(familyAllowance, 2),
+    variableRemuneration: roundTo(variableRemuneration, 2),
+    nonRemunerativeIncome: roundTo(nonRemunerativeIncome, 2),
+    pensionableIncome: roundTo(pensionableIncome, 2),
     totalGrossIncome: roundTo(totalGrossIncome, 2),
     pensionDeduction,
-    pensionRate: pensionInfo.rate,
+    pensionRate,
     fifthCategoryTaxMonthly,
+    otherDeductions: roundTo(otherDeductions, 2),
+    totalDeductions: roundTo(totalDeductions, 2),
     netSalary,
     essaludContributionEmployer,
   };
