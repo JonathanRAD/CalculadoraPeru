@@ -79,6 +79,9 @@ export const metadata: Metadata = {
       'Calculadoras financieras, comerciales y tributarias adaptadas al Perú: IGV 18%, precio de venta y luz.',
     images: ['/logo-calc.png'],
   },
+  verification: {
+    google: 'google95fd4173f084d844',
+  },
 };
 
 export const viewport: Viewport = {
@@ -124,10 +127,9 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(rootWebsiteJsonLd) }}
         />
-        <Script
-          id="google-adsense"
+        <script
+          async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1171972985538083"
-          strategy="lazyOnload"
           crossOrigin="anonymous"
         />
       </head>

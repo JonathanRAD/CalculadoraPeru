@@ -136,6 +136,7 @@ export default function HomePage() {
             src="/machu_pichu.jpg"
             alt="Machu Picchu Perú"
             fill
+            sizes="(max-width: 1024px) 100vw, 60vw"
             priority
             className="object-cover object-center"
           />
