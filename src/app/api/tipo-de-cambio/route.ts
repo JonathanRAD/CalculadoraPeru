@@ -3,7 +3,8 @@ import { NextResponse } from 'next/server';
 export const dynamic = 'force-dynamic';
 
 const REVALIDATE_SECONDS = 1800;
-const REQUEST_TIMEOUT_MS = 8000;
+const REQUEST_TIMEOUT_MS = 7000;
+const MAX_FETCH_ATTEMPTS = 2;
 
 interface BcrpPeriod {
   name: string;
@@ -32,21 +33,52 @@ function parseRate(value: string | number | undefined) {
   return Number.isFinite(parsed) && parsed > 0 ? parsed : null;
 }
 
-async function fetchBcrpQuote(): Promise<RateQuote> {
-  // Sin rango de fechas, BCRPData devuelve automáticamente sus observaciones más recientes.
-  const response = await fetch(
-    'https://estadisticas.bcrp.gob.pe/estadisticas/series/api/PD04639PD-PD04640PD/json',
-    {
-      next: { revalidate: REVALIDATE_SECONDS },
-      signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
-    },
-  );
+async function fetchJsonWithRetry<T>(url: string, providerName: string): Promise<T> {
+  let lastError: unknown;
 
-  if (!response.ok) {
-    throw new Error(`BCRP respondió con estado ${response.status}`);
+  for (let attempt = 1; attempt <= MAX_FETCH_ATTEMPTS; attempt += 1) {
+    try {
+      const response = await fetch(url, {
+        next: { revalidate: REVALIDATE_SECONDS },
+        signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
+        headers: { Accept: 'application/json' },
+      });
+
+      if (!response.ok) {
+        throw new Error(`${providerName} respondió con estado ${response.status}`);
+      }
+
+      const responseText = await response.text();
+
+      try {
+        return JSON.parse(responseText) as T;
+      } catch (parseError) {
+        // BCRPData puede anexar avisos HTML de su servidor después de un JSON válido.
+        // Conservamos únicamente el bloque JSON y nunca intentamos interpretar el HTML.
+        const htmlSuffixIndex = responseText.search(/<br\s*\/?\s*>|<font\b|<!doctype\b|<html\b/i);
+        if (htmlSuffixIndex > 0) {
+          return JSON.parse(responseText.slice(0, htmlSuffixIndex).trim()) as T;
+        }
+        throw parseError;
+      }
+    } catch (error) {
+      lastError = error;
+      if (attempt < MAX_FETCH_ATTEMPTS) {
+        await new Promise((resolve) => setTimeout(resolve, 350));
+      }
+    }
   }
 
-  const data = (await response.json()) as BcrpResponse;
+  throw lastError instanceof Error
+    ? lastError
+    : new Error(`${providerName} no está disponible`);
+}
+
+async function fetchBcrpQuote(): Promise<RateQuote> {
+  const data = await fetchJsonWithRetry<BcrpResponse>(
+    'https://estadisticas.bcrp.gob.pe/estadisticas/series/api/PD04639PD-PD04640PD/json/',
+    'BCRP',
+  );
   const latest = [...(data.periods ?? [])].reverse().find((period) => {
     return parseRate(period.values[0]) !== null && parseRate(period.values[1]) !== null;
   });
@@ -66,16 +98,10 @@ async function fetchBcrpQuote(): Promise<RateQuote> {
 }
 
 async function fetchMarketQuote(): Promise<RateQuote> {
-  const response = await fetch('https://open.er-api.com/v6/latest/USD', {
-    next: { revalidate: REVALIDATE_SECONDS },
-    signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
-  });
-
-  if (!response.ok) {
-    throw new Error(`Proveedor de mercado respondió con estado ${response.status}`);
-  }
-
-  const data = (await response.json()) as MarketResponse;
+  const data = await fetchJsonWithRetry<MarketResponse>(
+    'https://open.er-api.com/v6/latest/USD',
+    'Proveedor de mercado',
+  );
   const midRate = parseRate(data.rates?.PEN);
 
   if (data.result !== 'success' || midRate === null) {
@@ -99,6 +125,13 @@ export async function GET() {
 
   const market = marketResult.status === 'fulfilled' ? marketResult.value : null;
   const sbs = bcrpResult.status === 'fulfilled' ? bcrpResult.value : null;
+
+  if (marketResult.status === 'rejected') {
+    console.warn('La cotización de mercado USD/PEN no estuvo disponible', String(marketResult.reason));
+  }
+  if (bcrpResult.status === 'rejected') {
+    console.warn('La cotización SBS/BCRP no estuvo disponible', String(bcrpResult.reason));
+  }
 
   if (!market && !sbs) {
     console.error('No se pudo obtener ninguna cotización USD/PEN', {

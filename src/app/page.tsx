@@ -1,660 +1,223 @@
-'use client';
-
-import React, { useState, useMemo } from 'react';
-import Link from 'next/link';
+import type { Metadata } from 'next';
 import Image from 'next/image';
+import Link from 'next/link';
 import {
-  Search,
-  ArrowRight,
-  Calculator,
-  ShieldCheck,
-  Tag,
-  TrendingUp,
-  Scale,
-  Percent,
-  Zap,
-  User,
-  Clock,
-  MapPin,
-  CheckCircle2,
-  BookOpen,
-  Edit3,
-  Store,
-  Building2,
-  Briefcase,
+  ArrowRight, BadgeCheck, Banknote, BookOpenCheck, BriefcaseBusiness,
+  Building2, Calculator, ChevronDown, Clock3, Percent, ReceiptText,
+  ShieldCheck, Store, TrendingUp,
 } from 'lucide-react';
-import { CALCULATORS_REGISTRY, CATEGORIES } from '@/features/calculators/registry';
-import { calculateNetSalary, PensionSystem } from '@/core/calculators/payroll';
-import { formatCurrency } from '@/core/math/formatters';
+import { CALCULATORS_REGISTRY, CATEGORIES, type CalculatorCategory } from '@/features/calculators/registry';
+import { HomeSearch } from '@/features/home/components/HomeSearch';
+import { QuickSalaryCalculator } from '@/features/home/components/QuickSalaryCalculator';
+import { ResponsiveDetails } from '@/features/home/components/ResponsiveDetails';
+
+export const metadata: Metadata = {
+  title: 'Calculadoras Perú 2026: sueldo, IGV, negocios y finanzas',
+  description: 'Calcula sueldo neto, IGV, CTS, precios, préstamos y obligaciones tributarias con 25 herramientas gratuitas adaptadas al Perú.',
+  alternates: { canonical: '/' },
+  openGraph: {
+    title: 'Calculadoras Perú 2026 | CalculaPerú',
+    description: '25 calculadoras gratuitas para trabajo, negocios, finanzas e impuestos en Perú.',
+    url: 'https://www.calculaperu.com.pe',
+  },
+};
+
+const FEATURED_CALCULATORS = [
+  { id: 'sueldo-neto', label: 'Sueldo neto', eyebrow: 'Trabajo', image: '/home/featured-sueldo-v2.webp', imageAlt: 'Planilla, calculadora, calendario y monedas para calcular el sueldo neto' },
+  { id: 'calculadora-igv', label: 'IGV 18%', eyebrow: 'SUNAT', image: '/home/featured-igv-v2.webp', imageAlt: 'Recibo, calculadora y documentos para calcular el IGV de una venta' },
+  { id: 'precio-de-venta', label: 'Precio de venta', eyebrow: 'Negocios', image: '/home/featured-precio-venta-v2.webp', imageAlt: 'Producto, etiqueta y calculadora para definir un precio de venta' },
+  { id: 'punto-de-equilibrio', label: 'Punto de equilibrio', eyebrow: 'Finanzas', image: '/home/featured-punto-equilibrio-v2.webp', imageAlt: 'Balanza equilibrando productos, costos y monedas de un negocio' },
+  { id: 'calculadora-cts', label: 'CTS', eyebrow: 'Beneficios', image: '/home/featured-cts-v2.webp', imageAlt: 'Alcancía, monedas, calendario y documentos relacionados con la CTS' },
+  { id: 'tipo-de-cambio-dolar-sunat', label: 'Dólar a soles', eyebrow: 'Actualizado', image: '/home/featured-dolar-v2.webp', imageAlt: 'Billetes y monedas junto a una calculadora de tipo de cambio' },
+].map((featured) => ({
+  ...featured,
+  calculator: CALCULATORS_REGISTRY.find((calculator) => calculator.id === featured.id)!,
+}));
+
+const CATEGORY_ICONS: Record<CalculatorCategory, typeof Calculator> = {
+  negocios: Store,
+  laboral: BriefcaseBusiness,
+  finanzas: TrendingUp,
+  tributario: ReceiptText,
+};
+
+const POPULAR_LINKS = [
+  { label: 'Sueldo neto', href: '/sueldo-neto' },
+  { label: 'IGV 18%', href: '/calculadora-igv' },
+  { label: 'CTS', href: '/calculadora-cts' },
+  { label: 'Precio de venta', href: '/precio-de-venta' },
+];
+
+const FAQS = [
+  {
+    question: '¿De dónde salen las tasas y los parámetros?',
+    answer: 'Las fórmulas indican sus referencias y utilizan parámetros publicados por entidades peruanas como SUNAT, MTPE, SBS, BCRP y normas laborales vigentes, según corresponda.',
+  },
+  {
+    question: '¿Los resultados tienen validez legal?',
+    answer: 'Los resultados son estimaciones informativas. Sirven para planificar y comprobar escenarios, pero no reemplazan una declaración oficial ni la asesoría de un profesional.',
+  },
+  {
+    question: '¿Necesito registrarme o entregar mis datos?',
+    answer: 'No. Puedes usar las calculadoras gratuitamente y sin crear una cuenta. Los datos ingresados en los formularios se procesan para mostrar el cálculo solicitado.',
+  },
+];
+
+const homeItemListJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'Calculadoras más utilizadas de CalculaPerú',
+  numberOfItems: FEATURED_CALCULATORS.length,
+  itemListElement: FEATURED_CALCULATORS.map(({ calculator }, index) => ({
+    '@type': 'ListItem',
+    position: index + 1,
+    name: calculator.title,
+    url: `https://www.calculaperu.com.pe${calculator.slug}`,
+  })),
+};
 
 export default function HomePage() {
-  const [searchQuery, setSearchQuery] = useState<string>('');
-
-  // 💼 Hero Interactive Calculator State
-  const [grossSalary, setGrossSalary] = useState<number>(3000);
-  const [pensionSystem, setPensionSystem] = useState<'onp' | 'afp'>('afp');
-  const [afpProvider, setAfpProvider] = useState<PensionSystem>('afp_prima');
-  const [showExtras, setShowExtras] = useState<boolean>(false);
-  const [hasDependents, setHasDependents] = useState<boolean>(false);
-
-  // Live calculation
-  const payrollResult = useMemo(() => {
-    const system: PensionSystem = pensionSystem === 'onp' ? 'onp' : afpProvider;
-    return calculateNetSalary({
-      grossSalary: grossSalary,
-      pensionSystem: system,
-      hasDependents: hasDependents,
-    });
-  }, [grossSalary, pensionSystem, afpProvider, hasDependents]);
-
-  const filteredCalculators = useMemo(() => {
-    const query = searchQuery
-      .trim()
-      .toLocaleLowerCase('es-PE')
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '');
-
-    if (!query) return CALCULATORS_REGISTRY;
-
-    return CALCULATORS_REGISTRY.filter((calculator) => {
-      const searchableText = [
-        calculator.title,
-        calculator.shortTitle,
-        calculator.description,
-        calculator.category,
-        ...calculator.keywords,
-      ]
-        .join(' ')
-        .toLocaleLowerCase('es-PE')
-        .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '');
-      return searchableText.includes(query);
-    });
-  }, [searchQuery]);
-
-  // Main 6 Highlighted Calculators (Matching Screenshot)
-  const MAIN_CALCULATORS = [
-    {
-      title: 'Precio de venta',
-      desc: 'Define el precio ideal de tu producto o servicio.',
-      slug: '/precio-de-venta',
-      icon: Tag,
-      iconBg: 'bg-[#00875A]',
-      arrowColor: 'text-[#00875A]',
-    },
-    {
-      title: 'Margen de ganancia',
-      desc: 'Calcula tu margen y mejora tu rentabilidad.',
-      slug: '/margen-de-ganancia',
-      icon: TrendingUp,
-      iconBg: 'bg-[#0052CC]',
-      arrowColor: 'text-[#0052CC]',
-    },
-    {
-      title: 'Punto de equilibrio',
-      desc: 'Descubre cuánto debes vender para no perder ni ganar.',
-      slug: '/punto-de-equilibrio',
-      icon: Scale,
-      iconBg: 'bg-[#6554C0]',
-      arrowColor: 'text-[#6554C0]',
-    },
-    {
-      title: 'IGV 18%',
-      desc: 'Calcula IGV, precios con y sin impuestos fácilmente.',
-      slug: '/calculadora-igv',
-      icon: Percent,
-      iconBg: 'bg-[#FF5630]',
-      arrowColor: 'text-[#FF5630]',
-    },
-    {
-      title: 'Consumo eléctrico',
-      desc: 'Estima el costo de tus artefactos y consumo de energía.',
-      slug: '/consumo-electrico',
-      icon: Zap,
-      iconBg: 'bg-[#FFAB00]',
-      arrowColor: 'text-[#FFAB00]',
-    },
-    {
-      title: 'Sueldo neto',
-      desc: 'Calcula tu sueldo neto según leyes laborales vigentes.',
-      slug: '/sueldo-neto',
-      icon: User,
-      iconBg: 'bg-[#00B8D9]',
-      arrowColor: 'text-[#00B8D9]',
-    },
-  ];
+  const categories = CATEGORIES.filter(
+    (category): category is (typeof CATEGORIES)[number] & { id: CalculatorCategory } => category.id !== 'todas',
+  );
 
   return (
-    <div className="min-h-screen bg-[#F4F6F8] dark:bg-[#0B132B] text-slate-900 dark:text-slate-100 transition-colors">
+    <div className="min-h-screen bg-[#f6f7f9] text-slate-950 transition-colors dark:bg-[#091127] dark:text-slate-100">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(homeItemListJsonLd) }} />
 
-      {/* 🏔️ HERO SECTION WITH MACHU PICCHU BACKGROUND & INTERACTIVE CALCULATOR */}
-      <section className="relative overflow-hidden bg-gradient-to-r from-[#EBF3FA] via-[#F0F6FC] to-[#F7FAFD] dark:from-[#0B132B] dark:via-[#101B3D] dark:to-[#0E1736] border-b border-slate-200 dark:border-slate-800">
-
-        {/* Machu Picchu Background Image positioned on the right */}
-        <div className="absolute right-0 top-0 bottom-0 w-full lg:w-3/5 z-0 pointer-events-none opacity-40 lg:opacity-75">
-          <Image
-            src="/machu_pichu.jpg"
-            alt="Machu Picchu Perú"
-            fill
-            sizes="(max-width: 1024px) 100vw, 60vw"
-            priority
-            className="object-cover object-center"
-          />
-          {/* Soft gradient fade from left to right */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#EBF3FA] via-[#EBF3FA]/90 lg:via-[#EBF3FA]/60 to-transparent dark:from-[#0B132B] dark:via-[#0B132B]/90 dark:lg:via-[#0B132B]/65" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#EBF3FA] via-transparent to-transparent dark:from-[#0B132B] lg:hidden" />
+      <section className="relative isolate overflow-hidden border-b border-slate-200 bg-[#eef4f3] dark:border-slate-800 dark:bg-[#0b1530]">
+        <div className="pointer-events-none absolute inset-0 lg:left-auto lg:w-[58%]" aria-hidden="true">
+          <Image src="/machu_pichu.jpg" alt="" fill priority sizes="(max-width: 1023px) 100vw, 58vw" className="object-cover object-[62%_center] opacity-90 saturate-[1.08] dark:opacity-55 lg:object-center lg:opacity-85 dark:lg:opacity-48" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#eef4f3]/82 via-[#eef4f3]/52 to-[#eef4f3]/84 dark:from-[#0b1530]/88 dark:via-[#0b1530]/66 dark:to-[#0b1530]/88 lg:hidden" />
+          <div className="absolute inset-0 hidden bg-gradient-to-r from-[#eef4f3] via-[#eef4f3]/50 to-transparent dark:from-[#0b1530] dark:via-[#0b1530]/62 lg:block" />
+          <div className="absolute inset-0 hidden bg-gradient-to-t from-[#eef4f3]/75 via-transparent to-[#eef4f3]/10 dark:from-[#0b1530]/78 dark:to-[#0b1530]/10 lg:block" />
         </div>
 
-        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 py-10 lg:py-16">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center">
-
-            {/* LEFT COLUMN: TITLE, SEARCH, AND SOCIAL PROOF */}
-            <div className="lg:col-span-6 space-y-6">
-
-              <h1 className="text-3xl sm:text-5xl font-black text-[#0A1128] dark:text-white tracking-tight leading-[1.12]">
-                Todas las calculadoras <br />
-                que necesitas, en un solo lugar
-              </h1>
-
-              <p className="text-sm sm:text-base text-slate-700 dark:text-slate-300 leading-relaxed font-normal max-w-xl">
-                Herramientas <strong>100% gratuitas</strong> adaptadas a parámetros publicados por SUNAT, MTPE, SBS y BCRP.
-              </p>
-
-              {/* Big Search Bar */}
-              <div className="pt-2 max-w-xl">
-                <div className="flex items-center bg-white dark:bg-[#0E1736] rounded-xl border border-slate-300 dark:border-slate-700 px-4 py-3.5 shadow-sm focus-within:border-[#00875A] focus-within:ring-2 focus-within:ring-[#00875A]/20 transition-all">
-                  <Search className="h-5 w-5 text-slate-400 shrink-0" />
-                  <input
-                    type="text"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="Buscar calculadora (ej. IGV, sueldo neto, ROI...)"
-                    className="ml-3 w-full bg-transparent text-sm sm:text-base font-semibold text-slate-800 dark:text-white placeholder:text-slate-400 outline-none"
-                  />
-                  {searchQuery && (
-                    <button
-                      onClick={() => setSearchQuery('')}
-                      className="text-xs font-semibold text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 px-2"
-                    >
-                      Limpiar
-                    </button>
-                  )}
-                </div>
-
-                {searchQuery.trim() && (
-                  <div className="mt-2 overflow-hidden rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-[#0E1736] shadow-lg" role="listbox" aria-label="Resultados de búsqueda">
-                    {filteredCalculators.length > 0 ? (
-                      filteredCalculators.slice(0, 6).map((calculator) => (
-                        <Link
-                          key={calculator.id}
-                          href={calculator.slug}
-                          className="flex items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800 px-4 py-3 text-sm last:border-0 hover:bg-emerald-50 dark:hover:bg-emerald-950/40"
-                        >
-                          <span>
-                            <strong className="block text-slate-900 dark:text-white">{calculator.shortTitle}</strong>
-                            <span className="text-xs text-slate-500 dark:text-slate-400">{calculator.cardSummary}</span>
-                          </span>
-                          <ArrowRight className="h-4 w-4 shrink-0 text-[#00875A]" />
-                        </Link>
-                      ))
-                    ) : (
-                      <p className="px-4 py-3 text-sm text-slate-600 dark:text-slate-300">No encontramos una calculadora con ese término.</p>
-                    )}
-                  </div>
-                )}
-
-                {/* Búsquedas Populares */}
-                <div className="mt-3 flex flex-wrap items-center gap-2 text-xs">
-                  <span className="text-slate-500 dark:text-slate-400 font-medium">Búsquedas populares:</span>
-                  {[
-                    { label: 'Sueldo neto', slug: '/sueldo-neto' },
-                    { label: 'IGV 18%', slug: '/calculadora-igv' },
-                    { label: 'CTS', slug: '/calculadora-cts' },
-                    { label: 'Liquidación', slug: '/liquidacion-laboral' },
-                  ].map((tag) => (
-                    <Link
-                      key={tag.label}
-                      href={tag.slug}
-                      className="px-2.5 py-1 rounded-md bg-sky-50 hover:bg-sky-100 text-sky-800 border border-sky-200 font-medium transition-colors"
-                    >
-                      {tag.label}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-
-              {/* Social Proof & Trust Badges */}
-              <div className="pt-4 flex flex-wrap items-center gap-6 text-xs text-slate-700 dark:text-slate-300">
-                <div className="flex items-center gap-3">
-                  <div className="flex -space-x-2">
-                    <div className="w-8 h-8 rounded-full bg-amber-500 border-2 border-white flex items-center justify-center text-white font-bold text-xs">👨🏻</div>
-                    <div className="w-8 h-8 rounded-full bg-blue-500 border-2 border-white flex items-center justify-center text-white font-bold text-xs">👩🏻</div>
-                    <div className="w-8 h-8 rounded-full bg-emerald-500 border-2 border-white flex items-center justify-center text-white font-bold text-xs">👨🏽</div>
-                  </div>
-                  <div>
-                    <strong className="font-bold text-slate-900 dark:text-white">{CALCULATORS_REGISTRY.length} herramientas</strong> gratuitas <br />
-                    para decisiones cotidianas y de negocio.
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-2 bg-white/80 dark:bg-[#0E1736]/85 backdrop-blur-xs px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 shadow-2xs">
-                  <ShieldCheck className="h-5 w-5 text-[#00875A] shrink-0" />
-                  <div>
-                    <strong className="font-bold text-slate-900 dark:text-white">Información segura</strong> <br />
-                    y sin registro.
-                  </div>
-                </div>
-              </div>
-
+        <div className="relative mx-auto grid max-w-7xl gap-10 px-4 py-12 sm:px-6 sm:py-16 lg:grid-cols-12 lg:items-center lg:gap-12 lg:py-20">
+          <div className="home-hero-copy lg:col-span-7">
+            <div className="inline-flex items-center gap-2 rounded-full border border-emerald-700/20 bg-white/75 px-3 py-1.5 text-xs font-bold text-emerald-800 shadow-sm backdrop-blur dark:border-emerald-400/25 dark:bg-slate-950/35 dark:text-emerald-300">
+              <BadgeCheck className="h-4 w-4" aria-hidden="true" />
+              25 herramientas gratuitas · Perú 2026
             </div>
-
-            {/* RIGHT COLUMN: HERO FEATURED INTERACTIVE CALCULATOR (SUELDO NETO) */}
-            <div className="lg:col-span-6">
-              <div className="bg-white dark:bg-[#0E1736] rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xl p-6 sm:p-7 max-w-lg mx-auto lg:ml-auto">
-
-                {/* Header */}
-                <div className="flex items-center justify-between pb-4 mb-4 border-b border-slate-100 dark:border-slate-800">
-                  <div className="flex items-center gap-2.5">
-                    <div className="w-8 h-8 rounded-full bg-[#00875A] text-white flex items-center justify-center shadow-xs">
-                      <span className="font-bold text-sm">S/</span>
-                    </div>
-                    <div>
-                      <span className="text-[11px] font-semibold text-slate-400 block leading-tight">
-                        Calculadora destacada
-                      </span>
-                      <span className="text-base font-bold text-slate-900 dark:text-white leading-tight">
-                        Sueldo neto mensual
-                      </span>
-                    </div>
-                  </div>
-                  <Link
-                    href="/sueldo-neto"
-                    className="text-xs font-semibold text-sky-700 hover:text-sky-900 flex items-center gap-1"
-                  >
-                    <span>Ver calculadora completa</span>
-                    <ArrowRight className="h-3 w-3" />
-                  </Link>
-                </div>
-
-                {/* Form Fields */}
-                <div className="space-y-3.5 text-xs">
-
-                  {/* Row 1: Remuneración Bruta */}
-                  <div>
-                    <div>
-                      <label className="block text-slate-600 dark:text-slate-300 font-semibold mb-1">
-                        Remuneración bruta mensual
-                      </label>
-                      <div className="flex items-center border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 bg-slate-50/50 dark:bg-slate-950/50 focus-within:border-[#00875A] focus-within:bg-white dark:focus-within:bg-slate-950 transition-all">
-                        <span className="font-mono text-slate-500 dark:text-slate-400 mr-2">S/</span>
-                        <input
-                          type="number"
-                          step="100"
-                          value={grossSalary}
-                          onChange={(e) => setGrossSalary(Number(e.target.value) || 0)}
-                          className="w-full bg-transparent font-mono font-bold text-slate-900 dark:text-white text-sm outline-none"
-                        />
-                      </div>
-                    </div>
-
-                  </div>
-
-                  {/* Row 2: Sistema Pensionario & AFP Select */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 items-center pt-1">
-                    <div>
-                      <label className="block text-slate-600 dark:text-slate-300 font-semibold mb-1">
-                        Sistema pensionario
-                      </label>
-                      <div className="flex items-center gap-4 py-1.5">
-                        <label className="inline-flex items-center gap-1.5 cursor-pointer font-semibold text-slate-700 dark:text-slate-300">
-                          <input
-                            type="radio"
-                            name="hero_pension"
-                            checked={pensionSystem === 'onp'}
-                            onChange={() => setPensionSystem('onp')}
-                            className="accent-[#00875A]"
-                          />
-                          <span>ONP</span>
-                        </label>
-                        <label className="inline-flex items-center gap-1.5 cursor-pointer font-semibold text-slate-700 dark:text-slate-300">
-                          <input
-                            type="radio"
-                            name="hero_pension"
-                            checked={pensionSystem === 'afp'}
-                            onChange={() => setPensionSystem('afp')}
-                            className="accent-[#00875A]"
-                          />
-                          <span>AFP</span>
-                        </label>
-                      </div>
-                    </div>
-
-                    {pensionSystem === 'afp' ? (
-                      <div>
-                        <label className="block text-slate-600 dark:text-slate-300 font-semibold mb-1">
-                          AFP
-                        </label>
-                        <select
-                          value={afpProvider}
-                          onChange={(e) => setAfpProvider(e.target.value as PensionSystem)}
-                          className="w-full border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 bg-slate-50/50 dark:bg-slate-950/50 text-slate-900 dark:text-white font-semibold text-xs outline-none cursor-pointer"
-                        >
-                          <option value="afp_prima">Prima AFP</option>
-                          <option value="afp_integra">AFP Integra</option>
-                          <option value="afp_profuturo">Profuturo AFP</option>
-                          <option value="afp_habitat">Habitat AFP</option>
-                        </select>
-                      </div>
-                    ) : (
-                      <div className="text-[11px] text-slate-500 dark:text-slate-400 pt-3">
-                        Tasa única nacional 13.0%
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Extra Toggle Link */}
-                  <div className="pt-1">
-                    <button
-                      type="button"
-                      onClick={() => setShowExtras(!showExtras)}
-                      className="text-[#0052CC] dark:text-sky-400 hover:underline font-semibold text-xs cursor-pointer"
-                    >
-                      + Agregar asignación familiar
-                    </button>
-                    {showExtras && (
-                      <div className="mt-2 p-2.5 rounded-lg bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-700">
-                        <label className="inline-flex items-center gap-2 cursor-pointer">
-                          <input
-                            type="checkbox"
-                            checked={hasDependents}
-                            onChange={(e) => setHasDependents(e.target.checked)}
-                            className="accent-[#00875A]"
-                          />
-                          <span className="text-slate-700 dark:text-slate-300 font-medium">Tiene asignación familiar (+S/ 113.00)</span>
-                        </label>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Results Box */}
-                  <div className="mt-4 p-4 rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-700">
-                    <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 pb-2">
-                      <div>
-                        <span className="text-xs text-slate-500 dark:text-slate-400 font-semibold block">Tu sueldo neto estimado</span>
-                        <span className="font-mono text-2xl sm:text-3xl font-black text-[#00875A]">
-                          {formatCurrency(payrollResult.netSalary)}
-                        </span>
-                      </div>
-
-                      <div className="flex sm:flex-col gap-4 sm:gap-1 text-[11px] text-slate-600 dark:text-slate-300 sm:text-right">
-                        <div>
-                          <span className="text-slate-400">Aportes del trabajador:</span>{' '}
-                          <strong className="font-mono text-slate-800 dark:text-slate-100">
-                            {formatCurrency(payrollResult.pensionDeduction + payrollResult.fifthCategoryTaxMonthly)}
-                          </strong>
-                        </div>
-                        <div>
-                          <span className="text-slate-400">Aportes del empleador:</span>{' '}
-                          <strong className="font-mono text-slate-800 dark:text-slate-100">
-                            {formatCurrency(payrollResult.essaludContributionEmployer)}
-                          </strong>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Big Green CTA Button */}
-                  <Link
-                    href="/sueldo-neto"
-                    className="w-full py-3 rounded-lg bg-[#00875A] hover:bg-[#00704A] text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-colors shadow-sm"
-                  >
-                    <Calculator className="h-4 w-4" />
-                    <span>Calcular sueldo neto</span>
-                  </Link>
-
-                </div>
-
-              </div>
+            <h1 className="mt-5 max-w-3xl text-[2.45rem] font-bold leading-[1.05] tracking-[-0.045em] text-[#08152f] dark:text-white sm:text-5xl lg:text-[3.65rem]">
+              Calculadoras para Perú, claras desde el primer número
+            </h1>
+            <p className="mt-5 max-w-2xl text-base leading-7 text-slate-700 dark:text-slate-300 sm:text-lg sm:leading-8">
+              Calcula sueldo, IGV, beneficios laborales, precios y finanzas con herramientas adaptadas a parámetros publicados por SUNAT, MTPE, SBS y BCRP.
+            </p>
+            <div className="mt-7"><HomeSearch calculators={CALCULATORS_REGISTRY} /></div>
+            <nav aria-label="Calculadoras populares" className="mt-4 flex flex-wrap items-center gap-2">
+              <span className="mr-1 text-xs font-semibold text-slate-600 dark:text-slate-400">Más buscadas</span>
+              {POPULAR_LINKS.map((link) => (
+                <Link key={link.href} href={link.href} className="inline-flex min-h-9 items-center rounded-full border border-slate-300 bg-white/70 px-3 text-xs font-semibold text-slate-700 transition-[border-color,background-color,color] hover:border-emerald-600 hover:bg-white hover:text-emerald-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600 dark:border-slate-700 dark:bg-slate-900/60 dark:text-slate-300 dark:hover:border-emerald-500 dark:hover:bg-slate-900 dark:hover:text-emerald-300">
+                  {link.label}
+                </Link>
+              ))}
+            </nav>
+            <div className="mt-7 flex flex-wrap gap-x-6 gap-y-3 text-sm font-semibold text-slate-700 dark:text-slate-300">
+              <span className="inline-flex items-center gap-2"><ShieldCheck className="h-4 w-4 text-emerald-700 dark:text-emerald-400" aria-hidden="true" /> Sin registro</span>
+              <span className="inline-flex items-center gap-2"><BookOpenCheck className="h-4 w-4 text-emerald-700 dark:text-emerald-400" aria-hidden="true" /> Fórmulas explicadas</span>
+              <span className="inline-flex items-center gap-2"><Clock3 className="h-4 w-4 text-emerald-700 dark:text-emerald-400" aria-hidden="true" /> Resultados inmediatos</span>
             </div>
-
           </div>
+          <div className="home-hero-calculator lg:col-span-5"><QuickSalaryCalculator /></div>
         </div>
       </section>
 
-      {/* 🌟 SECTION 2: CALCULADORAS PRINCIPALES (6 CARDS GRID) */}
-      <section className="mx-auto max-w-7xl px-4 sm:px-6 py-10">
-        <div className="flex items-baseline justify-between mb-5">
-          <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white tracking-tight">
-            Calculadoras principales
-          </h2>
-          <Link
-            href="/#todas-las-calculadoras"
-            className="text-xs font-semibold text-sky-700 hover:text-sky-900 flex items-center gap-1"
-          >
-            <span>Ver todas las calculadoras</span>
-            <ArrowRight className="h-3.5 w-3.5" />
+      <section aria-labelledby="featured-title" className="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-[0.16em] text-emerald-700 dark:text-emerald-400">Empieza por aquí</p>
+            <h2 id="featured-title" className="mt-2 text-2xl font-bold tracking-[-0.025em] text-slate-950 dark:text-white sm:text-3xl">Las calculadoras más utilizadas</h2>
+            <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-400 sm:text-base">Accesos directos para las decisiones más frecuentes.</p>
+          </div>
+          <Link href="#todas-las-calculadoras" className="group inline-flex min-h-11 items-center gap-2 self-start text-sm font-bold text-emerald-800 hover:text-emerald-950 dark:text-emerald-400 dark:hover:text-emerald-300 sm:self-auto">
+            Ver las 25 herramientas <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
           </Link>
         </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3.5">
-          {MAIN_CALCULATORS.map((item) => {
-            const IconComp = item.icon;
-            return (
-              <Link
-                key={item.title}
-                href={item.slug}
-                className="bg-white dark:bg-[#0E1736] rounded-xl border border-slate-200 dark:border-slate-800 p-4 shadow-2xs hover:shadow-md hover:border-slate-300 dark:hover:border-emerald-700 transition-all flex flex-col justify-between group"
-              >
-                <div>
-                  <div className={`w-8 h-8 rounded-lg ${item.iconBg} text-white flex items-center justify-center mb-3 shadow-2xs`}>
-                    <IconComp className="h-4 w-4" />
-                  </div>
-                  <h3 className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-[#00875A] dark:group-hover:text-emerald-400 transition-colors leading-snug">
-                    {item.title}
-                  </h3>
-                  <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1 leading-relaxed line-clamp-2">
-                    {item.desc}
-                  </p>
-                </div>
-                <div className="mt-3 text-right">
-                  <ArrowRight className={`h-3.5 w-3.5 inline-block ${item.arrowColor} transition-transform group-hover:translate-x-1`} />
-                </div>
-              </Link>
-            );
-          })}
-        </div>
-      </section>
-
-      {/* 🇵🇪 SECTION 3: VALUE PROPS HORIZONTAL BAR */}
-      <section className="mx-auto max-w-7xl px-4 sm:px-6 py-4">
-        <div className="bg-white dark:bg-[#0E1736] rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-2xs grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 items-center">
-
-          <div className="flex items-center gap-3.5">
-            <div className="w-10 h-10 rounded-full bg-sky-50 dark:bg-sky-950/50 border border-sky-100 dark:border-sky-900 flex items-center justify-center text-sky-700 dark:text-sky-300 shrink-0">
-              <Store className="h-5 w-5" />
-            </div>
-            <div>
-              <strong className="text-xs font-bold text-slate-900 dark:text-white block">Datos actualizados</strong>
-              <span className="text-[11px] text-slate-500 dark:text-slate-400 leading-tight block">Parámetros y tasas actualizados constantemente.</span>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-3.5">
-            <div className="w-10 h-10 rounded-full bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-100 dark:border-emerald-900 flex items-center justify-center text-emerald-700 dark:text-emerald-300 shrink-0">
-              <Building2 className="h-5 w-5" />
-            </div>
-            <div>
-              <strong className="text-xs font-bold text-slate-900 dark:text-white block">Parámetros oficiales</strong>
-              <span className="text-[11px] text-slate-500 dark:text-slate-400 leading-tight block">Basados en SUNAT, MTPE, SBS y otras entidades.</span>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-3.5">
-            <div className="w-10 h-10 rounded-full bg-rose-50 dark:bg-rose-950/40 border border-rose-100 dark:border-rose-900 flex items-center justify-center text-rose-700 dark:text-rose-300 shrink-0">
-              <span className="font-bold text-sm">🇵🇪</span>
-            </div>
-            <div>
-              <strong className="text-xs font-bold text-slate-900 dark:text-white block">Hecho en Perú</strong>
-              <span className="text-[11px] text-slate-500 dark:text-slate-400 leading-tight block">Diseñado para la realidad empresarial peruana.</span>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-3.5">
-            <div className="w-10 h-10 rounded-full bg-teal-50 dark:bg-teal-950/50 border border-teal-100 dark:border-teal-900 flex items-center justify-center text-teal-700 dark:text-teal-300 shrink-0">
-              <Briefcase className="h-5 w-5" />
-            </div>
-            <div>
-              <strong className="text-xs font-bold text-slate-900 dark:text-white block">+ 25 herramientas</strong>
-              <span className="text-[11px] text-slate-500 dark:text-slate-400 leading-tight block">Para empresas, emprendedores y profesionales.</span>
-            </div>
-          </div>
-
-        </div>
-      </section>
-
-      {/* 📊 SECTION 4: ¿POR QUÉ ELEGIR CALCULAPERÚ? & PARÁMETROS ACTUALES */}
-      <section className="mx-auto max-w-7xl px-4 sm:px-6 py-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-
-          {/* LEFT: ¿Por qué elegir CalculaPerú? */}
-          <div className="lg:col-span-6 bg-white dark:bg-[#0E1736] rounded-2xl border border-slate-200 dark:border-slate-800 p-6 sm:p-7 shadow-2xs">
-            <h3 className="text-base font-bold text-slate-900 dark:text-white mb-5">
-              ¿Por qué elegir CalculaPerú?
-            </h3>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 text-xs">
-              <div className="flex items-start gap-3">
-                <div className="w-7 h-7 rounded-full bg-emerald-100 text-[#00875A] flex items-center justify-center shrink-0 mt-0.5">
-                  <Clock className="h-4 w-4" />
-                </div>
-                <div>
-                  <strong className="font-bold text-slate-900 dark:text-white block">Rápido y fácil</strong>
-                  <p className="text-slate-500 dark:text-slate-400 mt-0.5 leading-relaxed">Resultados al instante con una experiencia simple e intuitiva.</p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3">
-                <div className="w-7 h-7 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center shrink-0 mt-0.5">
-                  <MapPin className="h-4 w-4" />
-                </div>
-                <div>
-                  <strong className="font-bold text-slate-900 dark:text-white block">Contexto peruano</strong>
-                  <p className="text-slate-500 dark:text-slate-400 mt-0.5 leading-relaxed">Calculadoras adaptadas a nuestras leyes, tasas y normas locales.</p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3">
-                <div className="w-7 h-7 rounded-full bg-purple-100 text-purple-700 flex items-center justify-center shrink-0 mt-0.5">
-                  <CheckCircle2 className="h-4 w-4" />
-                </div>
-                <div>
-                  <strong className="font-bold text-slate-900 dark:text-white block">Resultados confiables</strong>
-                  <p className="text-slate-500 dark:text-slate-400 mt-0.5 leading-relaxed">Fórmulas con fuentes identificadas y pruebas automatizadas de regresión.</p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3">
-                <div className="w-7 h-7 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center shrink-0 mt-0.5">
-                  <BookOpen className="h-4 w-4" />
-                </div>
-                <div>
-                  <strong className="font-bold text-slate-900 dark:text-white block">Contenido útil</strong>
-                  <p className="text-slate-500 dark:text-slate-400 mt-0.5 leading-relaxed">Guías, ejemplos y tips para tomar mejores decisiones.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* RIGHT: Parámetros y tasas actuales */}
-          <div className="lg:col-span-6 bg-white dark:bg-[#0E1736] rounded-2xl border border-slate-200 dark:border-slate-800 p-6 sm:p-7 shadow-2xs flex flex-col justify-between">
-            <div>
-              <div className="flex items-baseline justify-between mb-4">
-                <h3 className="text-base font-bold text-slate-900 dark:text-white">
-                  Parámetros y tasas actuales
-                </h3>
-                <span className="text-[10px] text-slate-400 font-mono">
-                  Actualizado al 2026
+        <div className="mt-7 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          {FEATURED_CALCULATORS.map(({ calculator, label, eyebrow, image, imageAlt }, index) => (
+            <Link key={calculator.id} href={calculator.slug} className="home-feature-card group overflow-hidden rounded-[1.15rem] border border-slate-200 bg-white shadow-[0_12px_34px_-28px_rgba(15,23,42,0.55)] transition-[transform,border-color,box-shadow] hover:-translate-y-0.5 hover:border-slate-400 hover:shadow-[0_20px_42px_-30px_rgba(15,23,42,0.55)] focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-emerald-600 dark:border-slate-700 dark:bg-[#111a31] dark:hover:border-slate-500">
+              <div className="relative aspect-[16/8.5] overflow-hidden bg-slate-200 dark:bg-slate-800">
+                <Image src={image} alt={imageAlt} fill sizes="(max-width: 767px) 100vw, (max-width: 1279px) 50vw, 33vw" className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.025]" />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/35 via-transparent to-transparent" aria-hidden="true" />
+                <span className="absolute bottom-3 left-3 rounded-full bg-white/92 px-2.5 py-1 text-[0.68rem] font-bold uppercase tracking-[0.1em] text-slate-700 shadow-sm backdrop-blur-sm dark:bg-slate-950/82 dark:text-slate-200">
+                  <span className="font-mono text-emerald-700 dark:text-emerald-400">0{index + 1}</span> · {eyebrow}
                 </span>
               </div>
-
-              <div className="grid grid-cols-3 gap-3 text-center mb-5">
-                <div className="bg-emerald-50/60 dark:bg-emerald-950/40 border border-emerald-200/80 dark:border-emerald-900 rounded-xl p-3">
-                  <span className="text-[10px] font-bold text-emerald-800 dark:text-emerald-300 block uppercase">IGV</span>
-                  <span className="font-mono text-xl sm:text-2xl font-black text-[#00875A] dark:text-emerald-400">18%</span>
-                  <span className="text-[10px] text-emerald-700 dark:text-emerald-400 block mt-0.5">Tasa vigente</span>
-                </div>
-
-                <div className="bg-sky-50/60 dark:bg-sky-950/40 border border-sky-200/80 dark:border-sky-900 rounded-xl p-3">
-                  <span className="text-[10px] font-bold text-sky-800 dark:text-sky-300 block uppercase">UIT 2026</span>
-                  <span className="font-mono text-lg sm:text-xl font-black text-sky-900 dark:text-sky-200">S/ 5,500</span>
-                  <span className="text-[10px] text-sky-700 dark:text-sky-400 block mt-0.5">Valor oficial</span>
-                </div>
-
-                <div className="bg-purple-50/60 dark:bg-purple-950/40 border border-purple-200/80 dark:border-purple-900 rounded-xl p-3">
-                  <span className="text-[10px] font-bold text-purple-800 dark:text-purple-300 block uppercase leading-tight">Asignación familiar</span>
-                  <span className="font-mono text-lg sm:text-xl font-black text-purple-900 dark:text-purple-200">S/ 113.00</span>
-                  <span className="text-[10px] text-purple-700 dark:text-purple-400 block mt-0.5">Monto mensual</span>
-                </div>
+              <div className="flex min-h-48 flex-col p-5">
+                <h3 className="text-lg font-bold tracking-tight text-slate-950 transition-colors group-hover:text-emerald-800 dark:text-white dark:group-hover:text-emerald-300">{label}</h3>
+                <p className="mt-2 max-w-sm text-sm leading-6 text-slate-600 dark:text-slate-400">{calculator.cardSummary}</p>
+                <span className="mt-auto pt-5 text-sm font-bold text-slate-800 dark:text-slate-200">Abrir calculadora <ArrowRight className="ml-1 inline h-4 w-4 text-emerald-700 transition-transform group-hover:translate-x-1 dark:text-emerald-400" aria-hidden="true" /></span>
               </div>
-            </div>
-
-            <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex flex-wrap items-center justify-between gap-2 text-xs font-semibold text-sky-700 dark:text-sky-400">
-              <Link href="/regimenes-tributarios-sunat" className="hover:underline flex items-center gap-1">
-                <span>Ver todos los parámetros</span>
-                <ArrowRight className="h-3 w-3" />
-              </Link>
-              <Link href="/cotizador" className="hover:underline flex items-center gap-1">
-                <Edit3 className="h-3 w-3" />
-                <span>Sugerir calculadora</span>
-              </Link>
-            </div>
-          </div>
-
+            </Link>
+          ))}
         </div>
       </section>
 
-      {/* 📚 SECTION 5: COMPLETE DIRECTORY OF ALL 25 TOOLS */}
-      <section id="todas-las-calculadoras" className="mx-auto max-w-7xl px-4 sm:px-6 py-10">
-        <div className="border-t border-slate-200 dark:border-slate-800 pt-8 mb-6">
-          <h2 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight">
-            Catálogo completo de las {CALCULATORS_REGISTRY.length} calculadoras
-          </h2>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Explora todas las herramientas clasificadas por rubro.</p>
+      <section aria-label="Confianza y parámetros" className="border-y border-slate-200 bg-white dark:border-slate-800 dark:bg-[#0d1732]">
+        <div className="mx-auto grid max-w-7xl gap-px bg-slate-200 px-4 sm:grid-cols-2 sm:px-6 lg:grid-cols-4 dark:bg-slate-800">
+          {[
+            { label: 'IGV vigente', value: '18%', detail: 'Tasa general SUNAT', icon: Percent },
+            { label: 'UIT 2026', value: 'S/ 5,500', detail: 'Valor oficial', icon: Banknote },
+            { label: 'Cobertura', value: '25', detail: 'Calculadoras gratuitas', icon: Calculator },
+            { label: 'Fuentes', value: 'Oficiales', detail: 'SUNAT, MTPE, SBS y BCRP', icon: Building2 },
+          ].map(({ label, value, detail, icon: Icon }) => (
+            <div key={label} className="flex items-center gap-4 bg-white px-3 py-6 dark:bg-[#0d1732] sm:px-5">
+              <Icon className="h-5 w-5 shrink-0 text-emerald-700 dark:text-emerald-400" aria-hidden="true" />
+              <div><p className="text-xs font-bold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-400">{label}</p><p className="mt-1 font-mono text-xl font-bold text-slate-950 dark:text-white">{value}</p><p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400">{detail}</p></div>
+            </div>
+          ))}
         </div>
+      </section>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {CATEGORIES.filter(c => c.id !== 'todas').map((cat) => {
-            const calcs = filteredCalculators.filter(c => c.category === cat.id);
+      <section id="todas-las-calculadoras" aria-labelledby="directory-title" className="scroll-mt-24 mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16">
+        <div className="max-w-2xl">
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-emerald-700 dark:text-emerald-400">Directorio completo</p>
+          <h2 id="directory-title" className="mt-2 text-2xl font-bold tracking-[-0.025em] text-slate-950 dark:text-white sm:text-3xl">Encuentra la herramienta según tu necesidad</h2>
+          <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-400 sm:text-base">Organizamos las 25 calculadoras en cuatro áreas para que llegues al resultado sin recorrer listas interminables.</p>
+        </div>
+        <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+          {categories.map((category, index) => {
+            const calculators = CALCULATORS_REGISTRY.filter((calculator) => calculator.category === category.id);
+            const Icon = CATEGORY_ICONS[category.id];
             return (
-              <div key={cat.id} className="bg-white dark:bg-[#0E1736] rounded-2xl border border-slate-200 dark:border-slate-800 p-5 shadow-2xs">
-                <h3 className="text-sm font-bold text-slate-900 dark:text-white pb-2 mb-3 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
-                  <span>{cat.label}</span>
-                  <span className="text-xs font-mono text-slate-400">({calcs.length})</span>
-                </h3>
-                <ul className="space-y-2">
-                  {calcs.map((calc) => (
-                    <li key={calc.id}>
-                      <Link
-                        href={calc.slug}
-                        className="text-xs text-slate-600 dark:text-slate-300 hover:text-[#00875A] dark:hover:text-emerald-400 font-medium transition-colors flex items-center justify-between group"
-                      >
-                        <span className="truncate">{calc.shortTitle}</span>
-                        <ArrowRight className="h-3 w-3 text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity shrink-0" />
-                      </Link>
-                    </li>
+              <ResponsiveDetails id={category.id} key={category.id} defaultMobileOpen={index === 0} className="directory-details group scroll-mt-24 rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-[#0e1834]">
+                <summary className="flex min-h-12 cursor-pointer list-none items-start justify-between gap-4 marker:content-none focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-emerald-600">
+                  <span className="flex min-w-0 items-start gap-3"><span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300"><Icon className="h-4.5 w-4.5" aria-hidden="true" /></span><span><span className="block text-sm font-bold text-slate-950 dark:text-white">{category.label}</span><span className="mt-1 block text-xs text-slate-500 dark:text-slate-400">{calculators.length} herramientas</span></span></span>
+                  <ChevronDown className="mt-2 h-4 w-4 shrink-0 text-slate-500 transition-transform group-open:rotate-180 md:hidden" aria-hidden="true" />
+                </summary>
+                <ul className="mt-4 space-y-1 border-t border-slate-100 pt-3 dark:border-slate-800">
+                  {calculators.map((calculator) => (
+                    <li key={calculator.id}><Link href={calculator.slug} className="group/link flex min-h-11 items-center justify-between gap-3 rounded-lg px-2 text-sm font-medium leading-5 text-slate-700 transition-colors hover:bg-emerald-50 hover:text-emerald-900 focus-visible:outline-2 focus-visible:outline-emerald-600 dark:text-slate-300 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300"><span>{calculator.shortTitle}</span><ArrowRight className="h-3.5 w-3.5 shrink-0 text-slate-400 transition-transform group-hover/link:translate-x-0.5 group-hover/link:text-emerald-700 dark:group-hover/link:text-emerald-400" aria-hidden="true" /></Link></li>
                   ))}
                 </ul>
-              </div>
+              </ResponsiveDetails>
             );
           })}
         </div>
-        {filteredCalculators.length === 0 && (
-          <p className="mt-6 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0E1736] p-5 text-center text-sm text-slate-600 dark:text-slate-300">
-            No hay resultados para “{searchQuery}”. Prueba con IGV, sueldo, CTS o préstamos.
-          </p>
-        )}
       </section>
 
+      <section aria-labelledby="method-title" className="border-t border-slate-200 bg-[#edf2f1] dark:border-slate-800 dark:bg-[#0b1530]">
+        <div className="mx-auto grid max-w-7xl gap-10 px-4 py-12 sm:px-6 sm:py-16 lg:grid-cols-12 lg:gap-16">
+          <div className="lg:col-span-4">
+            <p className="text-xs font-bold uppercase tracking-[0.16em] text-emerald-700 dark:text-emerald-400">Transparencia antes que promesas</p>
+            <h2 id="method-title" className="mt-3 text-2xl font-bold tracking-[-0.025em] text-slate-950 dark:text-white sm:text-3xl">Sabes qué se calcula y con qué referencia</h2>
+            <p className="mt-4 text-sm leading-7 text-slate-600 dark:text-slate-400 sm:text-base">Cada herramienta explica su fórmula, los parámetros utilizados y el alcance del resultado. Así puedes revisar el cálculo, no solamente aceptarlo.</p>
+            <Link href="/sobre-nosotros" className="group mt-6 inline-flex min-h-11 items-center gap-2 text-sm font-bold text-emerald-800 dark:text-emerald-400">Conoce cómo trabaja CalculaPerú <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" aria-hidden="true" /></Link>
+          </div>
+          <div className="lg:col-span-8">
+            <div className="divide-y divide-slate-200 border-y border-slate-300 dark:divide-slate-700 dark:border-slate-700">
+              {FAQS.map((faq, index) => (
+                <details key={faq.question} className="group py-1" open={index === 0}>
+                  <summary className="flex min-h-15 cursor-pointer list-none items-center justify-between gap-5 py-3 text-base font-bold text-slate-950 marker:content-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600 dark:text-white">{faq.question}<ChevronDown className="h-4 w-4 shrink-0 text-emerald-700 transition-transform group-open:rotate-180 dark:text-emerald-400" aria-hidden="true" /></summary>
+                  <p className="max-w-3xl pb-5 pr-8 text-sm leading-7 text-slate-600 dark:text-slate-400 sm:text-base">{faq.answer}</p>
+                </details>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

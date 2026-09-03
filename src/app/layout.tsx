@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import Script from 'next/script';
-import { Inter, JetBrains_Mono } from 'next/font/google';
+import { IBM_Plex_Sans, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 import { Navbar } from '@/shared/components/layout/Navbar';
 import { Footer } from '@/shared/components/layout/Footer';
@@ -8,9 +8,11 @@ import { ThemeProvider } from '@/shared/context/ThemeContext';
 import { Analytics } from '@vercel/analytics/next';
 import { PwaInstallBanner } from '@/shared/components/ui/PwaInstallBanner';
 import { PwaRegistration } from '@/shared/components/ui/PwaRegistration';
+import { GoogleAnalyticsPageViews } from '@/shared/components/analytics/GoogleAnalytics';
 
-const inter = Inter({
-  variable: '--font-inter',
+const plexSans = IBM_Plex_Sans({
+  variable: '--font-plex-sans',
+  weight: 'variable',
   subsets: ['latin'],
   display: 'swap',
 });
@@ -23,7 +25,7 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: 'CalculaPerú | Calculadoras para Perú',
+    default: 'Calculadoras Perú 2026: sueldo, IGV y finanzas | CalculaPerú',
     template: '%s | CalculaPerú',
   },
   description:
@@ -57,7 +59,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     siteName: 'CalculaPerú',
-    title: 'CalculaPerú | Calculadoras para Perú',
+    title: 'Calculadoras Perú 2026 | CalculaPerú',
     description:
       'Calculadoras financieras, comerciales y tributarias del Perú: IGV 18%, precio de venta y luz en Soles.',
     url: 'https://www.calculaperu.com.pe',
@@ -74,7 +76,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'CalculaPerú | Calculadoras para Perú',
+    title: 'Calculadoras Perú 2026 | CalculaPerú',
     description:
       'Calculadoras financieras, comerciales y tributarias adaptadas al Perú: IGV 18%, precio de venta y luz.',
     images: ['/logo-calc.png'],
@@ -98,13 +100,23 @@ const rootWebsiteJsonLd = {
     'Portal de calculadoras financieras, comerciales y tributarias para MYPES, trabajadores y emprendedores del Perú.',
 };
 
+const rootOrganizationJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'CalculaPerú',
+  alternateName: 'Calcula Peru',
+  url: 'https://www.calculaperu.com.pe',
+  logo: 'https://www.calculaperu.com.pe/calculaperu-icon-512.png',
+  description: 'Portal peruano de calculadoras gratuitas para trabajo, negocios, finanzas y obligaciones tributarias.',
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es" className={`${inter.variable} ${jetbrainsMono.variable}`} suppressHydrationWarning>
+    <html lang="es-PE" className={`${plexSans.variable} ${jetbrainsMono.variable}`} suppressHydrationWarning>
       <head>
         <Script
           id="theme-initializer"
@@ -128,17 +140,22 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(rootWebsiteJsonLd) }}
         />
         <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(rootOrganizationJsonLd) }}
+        />
+        <script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1171972985538083"
           crossOrigin="anonymous"
         />
         {/* Google Analytics 4 (gtag.js) */}
-        <script
-          async
+        <Script
+          strategy="afterInteractive"
           src="https://www.googletagmanager.com/gtag/js?id=G-Q9EC3XKGJH"
         />
-        <script
+        <Script
           id="google-analytics"
+          strategy="afterInteractive"
           dangerouslySetInnerHTML={{
             __html: `
               window.dataLayer = window.dataLayer || [];
@@ -158,6 +175,7 @@ export default function RootLayout({
             {children}
           </main>
           <Footer />
+          <GoogleAnalyticsPageViews />
           <Analytics />
           <PwaRegistration />
           <PwaInstallBanner />

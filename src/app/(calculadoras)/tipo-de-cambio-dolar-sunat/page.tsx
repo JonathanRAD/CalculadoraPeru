@@ -31,6 +31,7 @@ interface PublishedExchangeResponse {
 }
 
 const EXCHANGE_RATE_CACHE_KEY = 'calculaperu:exchange-rates:v2';
+const FALLBACK_CACHE_MAX_AGE_MS = 7 * 86_400_000;
 
 function hasValidQuote(quote: PublishedExchangeRate | undefined): quote is PublishedExchangeRate {
   return Boolean(quote && quote.buyRate > 0 && quote.sellRate > 0);
@@ -39,7 +40,7 @@ function hasValidQuote(quote: PublishedExchangeRate | undefined): quote is Publi
 function readCachedRates(): PublishedExchangeResponse | null {
   try {
     const cached = JSON.parse(localStorage.getItem(EXCHANGE_RATE_CACHE_KEY) ?? 'null') as PublishedExchangeResponse | null;
-    const isFresh = typeof cached?.cachedAt === 'number' && Date.now() - cached.cachedAt < 86_400_000;
+    const isFresh = typeof cached?.cachedAt === 'number' && Date.now() - cached.cachedAt < FALLBACK_CACHE_MAX_AGE_MS;
     if (!cached || !isFresh || (!hasValidQuote(cached.rates.market) && !hasValidQuote(cached.rates.sbs))) return null;
     return cached;
   } catch {
@@ -53,10 +54,10 @@ function keepAvailableSource(current: ExchangeSource, data: PublishedExchangeRes
 }
 
 async function requestPublishedRate(): Promise<PublishedExchangeResponse> {
-  const response = await fetch(`/api/tipo-de-cambio?refresh=${Date.now()}`, { cache: 'no-store' });
-  const data = await response.json();
+  const response = await fetch('/api/tipo-de-cambio', { cache: 'no-store' });
+  const data = await response.json().catch(() => null);
   if (!response.ok || !data.success || !data.rates) {
-    throw new Error(data.message ?? 'Respuesta inválida');
+    throw new Error(data?.message ?? 'Respuesta inválida');
   }
   const rates = data.rates as Partial<Record<PublishedSource, PublishedExchangeRate>>;
   if (!hasValidQuote(rates.market) && !hasValidQuote(rates.sbs)) {
@@ -280,13 +281,19 @@ Compra: S/ ${result.buyRate.toFixed(3)} | Venta: S/ ${result.sellRate.toFixed(3)
 
           {showCustomRates && (
             <div className="p-4 rounded-2xl bg-emerald-50/60 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 grid grid-cols-2 gap-4 animate-in fade-in">
+              {!availablePublishedSource && (
+                <p className="col-span-2 text-xs font-semibold leading-5 text-amber-800 dark:text-amber-300">
+                  La actualización automática no respondió. Los campos están vacíos: escribe ambas tasas para calcular o pulsa Refrescar.
+                </p>
+              )}
               <InputNumber
                 id="customBuy"
                 label="Tasa de Compra (S/)"
                 value={customBuyRate}
                 onChange={(val) => setCustomBuyRate(val)}
                 step={0.001}
-                placeholder="3.345"
+                placeholder="Escribe la tasa"
+                helpText="Obligatoria"
               />
               <InputNumber
                 id="customSell"
@@ -294,7 +301,8 @@ Compra: S/ ${result.buyRate.toFixed(3)} | Venta: S/ ${result.sellRate.toFixed(3)
                 value={customSellRate}
                 onChange={(val) => setCustomSellRate(val)}
                 step={0.001}
-                placeholder="3.355"
+                placeholder="Escribe la tasa"
+                helpText="Obligatoria"
               />
             </div>
           )}
