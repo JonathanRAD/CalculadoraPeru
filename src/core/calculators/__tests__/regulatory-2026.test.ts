@@ -3,6 +3,7 @@ import { PERU_CONSTANTS } from '@/core/constants/peru';
 import { calculateCts } from '@/core/calculators/cts';
 import { calculateExchangeRate } from '@/core/calculators/exchangeRate';
 import { calculateHonorarios } from '@/core/calculators/honorarios';
+import { calculateCompleteGratificationMonths } from '@/core/calculators/laborPeriods';
 import { analyzeAtypicalSchedule } from '@/core/calculators/overtime';
 import { calculateNetSalary } from '@/core/calculators/payroll';
 import { calculateSeverancePay } from '@/core/calculators/severancePay';
@@ -71,6 +72,24 @@ describe('parámetros regulatorios 2026', () => {
 });
 
 describe('beneficios laborales', () => {
+  it('cuenta solo meses calendario completos para la gratificación trunca', () => {
+    expect(calculateCompleteGratificationMonths('2026-07-01', '2026-09-30')).toBe(3);
+    expect(calculateCompleteGratificationMonths('2026-07-15', '2026-09-30')).toBe(2);
+    expect(calculateCompleteGratificationMonths('2025-01-01', '2026-09-15')).toBe(2);
+  });
+
+  it('respeta los límites de ambos semestres de gratificación', () => {
+    expect(calculateCompleteGratificationMonths('2026-01-01', '2026-06-30')).toBe(6);
+    expect(calculateCompleteGratificationMonths('2025-02-10', '2026-07-31')).toBe(1);
+    expect(calculateCompleteGratificationMonths('2026-07-15', '2026-09-15')).toBe(1);
+    expect(calculateCompleteGratificationMonths('2026-07-01', '2026-07-15')).toBe(0);
+  });
+
+  it('rechaza fechas inválidas y rangos laborales invertidos', () => {
+    expect(calculateCompleteGratificationMonths('2026-09-01', '2026-08-31')).toBeNull();
+    expect(calculateCompleteGratificationMonths('2026-02-30', '2026-08-31')).toBeNull();
+  });
+
   it('mantiene consistente la CTS de pequeña empresa', () => {
     const standalone = calculateCts({
       baseSalary: 3000,

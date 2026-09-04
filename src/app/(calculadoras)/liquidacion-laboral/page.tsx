@@ -8,6 +8,7 @@ import {
   LaborRegime,
   SeparationReason,
 } from '@/core/calculators/severancePay';
+import { calculateCompleteGratificationMonths } from '@/core/calculators/laborPeriods';
 import { formatCurrency } from '@/core/math/formatters';
 import { InputNumber } from '@/shared/components/ui/InputNumber';
 import { SwitchToggle } from '@/shared/components/ui/SwitchToggle';
@@ -41,10 +42,18 @@ export default function LiquidacionLaboralPage() {
   const [monthsInLastSemesterCts, setMonthsInLastSemesterCts] = useState<number>(4);
   const [monthsInLastSemesterGrati, setMonthsInLastSemesterGrati] = useState<number>(4);
   const [monthsInLastYearVacations, setMonthsInLastYearVacations] = useState<number>(8);
+  const [employmentStartDate, setEmploymentStartDate] = useState<string>('');
+  const [terminationDate, setTerminationDate] = useState<string>('');
 
   // Despido arbitrario
   const [totalYearsWorked, setTotalYearsWorked] = useState<number>(2);
   const [totalMonthsWorked, setTotalMonthsWorked] = useState<number>(6);
+
+  const automaticGratiMonths = employmentStartDate && terminationDate
+    ? calculateCompleteGratificationMonths(employmentStartDate, terminationDate)
+    : null;
+  const hasInvalidDateRange = Boolean(employmentStartDate && terminationDate && automaticGratiMonths === null);
+  const effectiveGratiMonths = automaticGratiMonths ?? monthsInLastSemesterGrati;
 
   const result = calculateSeverancePay({
     baseSalary,
@@ -53,7 +62,7 @@ export default function LiquidacionLaboralPage() {
     separationReason,
     hasEps,
     monthsInLastSemesterCts,
-    monthsInLastSemesterGrati,
+    monthsInLastSemesterGrati: effectiveGratiMonths,
     monthsInLastYearVacations,
     totalYearsWorkedForIndemnity: totalYearsWorked,
     totalMonthsWorkedForIndemnity: totalMonthsWorked,
@@ -182,6 +191,45 @@ ${isDismissal ? `Indemnización por Despido: ${formatCurrency(result.arbitraryDi
               Meses laborados pendientes de liquidar:
             </h3>
 
+            <div className="rounded-2xl border border-indigo-200 bg-indigo-50/60 p-4 dark:border-indigo-900 dark:bg-indigo-950/30">
+              <div className="mb-3">
+                <p className="text-sm font-bold text-slate-900 dark:text-white">Calcular gratificación desde fechas</p>
+                <p className="mt-1 text-xs leading-5 text-slate-600 dark:text-slate-400">Ingresa el inicio laboral y el cese; se contarán únicamente los meses calendario completos del semestre.</p>
+              </div>
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <label className="flex flex-col gap-1.5 text-xs font-bold text-slate-900 dark:text-slate-200 sm:text-sm">
+                  Fecha de inicio laboral
+                  <input
+                    type="date"
+                    value={employmentStartDate}
+                    max={terminationDate || undefined}
+                    onInput={(event) => setEmploymentStartDate(event.currentTarget.value)}
+                    onChange={(event) => setEmploymentStartDate(event.target.value)}
+                    className="rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 font-semibold text-slate-900 outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600/15 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
+                  />
+                </label>
+                <label className="flex flex-col gap-1.5 text-xs font-bold text-slate-900 dark:text-slate-200 sm:text-sm">
+                  Fecha de cese
+                  <input
+                    type="date"
+                    value={terminationDate}
+                    min={employmentStartDate || undefined}
+                    onInput={(event) => setTerminationDate(event.currentTarget.value)}
+                    onChange={(event) => setTerminationDate(event.target.value)}
+                    className="rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 font-semibold text-slate-900 outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600/15 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
+                  />
+                </label>
+              </div>
+              {hasInvalidDateRange && (
+                <p className="mt-3 text-xs font-semibold text-rose-700 dark:text-rose-300">La fecha de cese debe ser igual o posterior al inicio laboral.</p>
+              )}
+              {automaticGratiMonths !== null && (
+                <p className="mt-3 text-xs font-semibold text-indigo-800 dark:text-indigo-300">
+                  Gratificación trunca: {automaticGratiMonths} {automaticGratiMonths === 1 ? 'mes calendario completo' : 'meses calendario completos'} en el semestre del cese.
+                </p>
+              )}
+            </div>
+
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <InputNumber
                 id="ctsMonths"
@@ -196,12 +244,13 @@ ${isDismissal ? `Indemnización por Despido: ${formatCurrency(result.arbitraryDi
               <InputNumber
                 id="gratiMonths"
                 label="Meses para Grati"
-                helpText="Desde enero o julio"
-                value={monthsInLastSemesterGrati}
+                helpText={automaticGratiMonths !== null ? 'Calculado por fechas' : 'Desde enero o julio'}
+                value={effectiveGratiMonths}
                 onChange={(val) => setMonthsInLastSemesterGrati(val)}
                 min={0}
                 max={6}
                 placeholder="4"
+                disabled={automaticGratiMonths !== null}
               />
               <InputNumber
                 id="vacMonths"
@@ -274,7 +323,7 @@ ${isDismissal ? `Indemnización por Despido: ${formatCurrency(result.arbitraryDi
                 label="Gratificación + Bono"
                 value={formatCurrency(result.truncatedGrati + result.essaludBonus)}
                 type="success"
-                subValue={`Grati + Bono ${hasEps ? '6.75%' : '9%'}`}
+                subValue={`${effectiveGratiMonths} meses · Bono ${hasEps ? '6.75%' : '9%'}`}
               />
               <ResultMetricCard
                 label="Vacaciones Truncas"
@@ -309,6 +358,11 @@ ${isDismissal ? `Indemnización por Despido: ${formatCurrency(result.arbitraryDi
                     { label: 'Último Sueldo Básico', value: formatCurrency(baseSalary) },
                     { label: 'Asignación Familiar', value: hasFamilyAllowance ? 'S/ 113.00' : 'S/ 0.00' },
                     { label: 'Régimen Laboral', value: laborRegime === 'general' ? 'Régimen General (100%)' : laborRegime === 'pequena_empresa' ? 'Pequeña Empresa MYPE (50%)' : 'Microempresa' },
+                    ...(employmentStartDate && terminationDate && !hasInvalidDateRange ? [
+                      { label: 'Fecha de inicio laboral', value: employmentStartDate },
+                      { label: 'Fecha de cese', value: terminationDate },
+                      { label: 'Meses completos para gratificación', value: String(effectiveGratiMonths) },
+                    ] : []),
                     { label: 'CTS Trunca', value: formatCurrency(result.truncatedCts) },
                     { label: 'Gratificación Trunca', value: formatCurrency(result.truncatedGrati) },
                     { label: `Bonificación EsSalud (${hasEps ? '6.75%' : '9%'})`, value: formatCurrency(result.essaludBonus) },

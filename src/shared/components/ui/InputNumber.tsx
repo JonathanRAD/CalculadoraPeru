@@ -16,6 +16,7 @@ interface InputNumberProps {
   step?: number | string;
   helpText?: string;
   required?: boolean;
+  disabled?: boolean;
 }
 
 export function InputNumber({
@@ -32,6 +33,7 @@ export function InputNumber({
   step = 'any',
   helpText,
   required = false,
+  disabled = false,
 }: InputNumberProps) {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let raw = e.target.value;
@@ -67,13 +69,10 @@ export function InputNumber({
   };
 
   return (
-    <div className="flex flex-col gap-1.5 min-w-0">
-      <div className="flex items-center justify-between">
-        <label htmlFor={id} className="text-xs sm:text-sm font-bold text-slate-900 dark:text-slate-200 truncate">
-          {label} {required && <span className="text-rose-500">*</span>}
-        </label>
-        {helpText && <span className="text-xs text-slate-500 dark:text-slate-400 font-normal shrink-0 ml-2">{helpText}</span>}
-      </div>
+    <div className="flex min-w-0 flex-col gap-1.5">
+      <label htmlFor={id} title={label} className="text-xs font-bold leading-snug text-slate-900 dark:text-slate-200 sm:min-h-10 sm:text-sm">
+        {label} {required && <span className="text-rose-500">*</span>}
+      </label>
 
       <div className="relative flex items-center rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 shadow-2xs transition-all focus-within:border-emerald-700 dark:focus-within:border-emerald-500 focus-within:bg-white dark:focus-within:bg-slate-900 focus-within:ring-2 focus-within:ring-emerald-700/15 overflow-hidden">
         {prefix && (
@@ -86,13 +85,15 @@ export function InputNumber({
           id={id}
           type="number"
           inputMode="decimal"
-          value={value === 0 ? '' : value}
+          value={value === 0 && !disabled ? '' : value}
           onChange={handleChange}
+          disabled={disabled}
           placeholder={placeholder}
           min={min}
           max={max}
           step={step}
-          className={`w-full py-2.5 text-base font-black text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-600 outline-none bg-transparent min-w-0 ${
+          aria-describedby={helpText ? `${id}-help` : undefined}
+          className={`w-full min-w-0 bg-transparent py-2.5 text-base font-black text-slate-900 outline-none placeholder:text-slate-400 disabled:cursor-not-allowed disabled:text-slate-500 dark:text-white dark:placeholder:text-slate-600 dark:disabled:text-slate-400 ${
             prefix ? 'pl-1.5' : 'pl-3.5'
           } ${suffix ? 'pr-1.5' : 'pr-3.5'}`}
         />
@@ -103,6 +104,12 @@ export function InputNumber({
           </div>
         )}
       </div>
+
+      {helpText && (
+        <span id={`${id}-help`} className="text-xs font-normal leading-relaxed text-slate-500 dark:text-slate-400">
+          {helpText}
+        </span>
+      )}
     </div>
   );
 }
