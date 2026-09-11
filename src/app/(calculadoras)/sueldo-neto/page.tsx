@@ -50,20 +50,28 @@ Sueldo Neto en Cuenta: ${formatCurrency(result.netSalary)}`;
 
   const faqs = [
     {
-      question: '¿Qué descuentos se aplican al sueldo bruto en planilla en Perú?',
-      answer: 'Principalmente el aporte previsional: 13% si estás en la ONP; en AFP depende de si permaneces en comisión sobre flujo o en comisión mixta/saldo. También puede corresponder retención de quinta categoría y otros descuentos autorizados o registrados en la boleta.',
+      question: '¿Qué descuentos obligatorios se aplican al sueldo bruto en planilla en Perú?',
+      answer: 'Todo trabajador bajo el régimen laboral general de la actividad privada (D.L. 728) tiene descuentos por concepto de aportes previsionales obligatorios. Si estás afiliado al Sistema Nacional de Pensiones (ONP), el descuento es una tasa fija del 13.00% sobre tu remuneración asegurable. Si estás en el Sistema Privado de Pensiones (AFP: Integra, Prima, Profuturo o Habitat), el aporte se compone del fondo de jubilación obligatorio (10.00%), la prima de seguro de invalidez y sobrevivencia (~1.39%) y la comisión de la administradora (comisión mixta o sobre flujo). Adicionalmente, si tus ingresos brutos anuales superan las 7 UIT vigentes, la empresa está obligada a retener el Impuesto a la Renta de Quinta Categoría según escalas progresivas del 8% al 30%.',
     },
     {
-      question: '¿Qué es la Asignación Familiar?',
-      answer: 'Es un beneficio legal equivalente al 10% de la Remuneración Mínima Vital (RMV) vigente (actualmente S/ 113.00) para los trabajadores que tengan a su cargo uno o más hijos menores de 18 años (o hasta 24 si estudian).',
+      question: '¿Qué es la Asignación Familiar y quiénes tienen derecho a cobrarla?',
+      answer: 'La Asignación Familiar es un beneficio social de carácter remunerativo amparado en la Ley N° 25129. Equivale exactamente al 10% de la Remuneración Mínima Vital (RMV) vigente en el Perú. Tienen derecho a percibirla todos los trabajadores del sector privado con hijos menores de 18 años a su cargo, o hasta los 24 años si los hijos se encuentran cursando estudios superiores o universitarios con acreditación. Este monto no se multiplica por la cantidad de hijos; es un importe único mensual que forma parte del cálculo para gratificaciones, CTS y aportes a la seguridad social.',
     },
     {
-      question: '¿El 9% de EsSalud se le descuenta al trabajador?',
-      answer: 'NO. El aporte del 9% a EsSalud lo paga íntegramente el empleador sobre tu sueldo computable; no se resta de tu salario en mano.',
+      question: '¿El aporte del 9% a EsSalud se le resta al sueldo del trabajador?',
+      answer: 'No. El aporte a EsSalud (9%) es una contribución patronal a cargo exclusivo del empleador conforme a la Ley N° 26790. La empresa debe asumir y pagar este 9% por encima de tu sueldo bruto acordado. No debe aparecer descontado de tu remuneración neta bajo ninguna circunstancia en tu boleta de pago.',
     },
     {
-      question: '¿Por qué el neto puede ser diferente al de mi boleta?',
-      answer: 'La boleta puede incluir horas extras, comisiones, bonos, tardanzas, adelantos, préstamos, ingresos no remunerativos y una retención de quinta categoría calculada según el mes y tus ingresos acumulados. Abre “Personalizar otros conceptos de planilla” para incorporarlos o usar la retención exacta indicada por tu empleador.',
+      question: '¿A partir de qué monto mensual se empieza a retener el Impuesto a la Renta de 5ta Categoría?',
+      answer: 'En el Perú, la Ley del Impuesto a la Renta establece una deducción inafecta de 7 UIT anuales (más hasta 3 UIT adicionales por gastos deducibles de sustento). Si proyectando tus 12 sueldos del año más las dos gratificaciones legales (julio y diciembre) el ingreso bruto no supera las 7 UIT (aproximadamente S/ 36,050 anuales o sueldos brutos menores a ~S/ 2,575 al mes sin otros ingresos), no se te aplicará ninguna retención de quinta categoría. Quienes perciban salarios superiores ingresan al primer tramo impositivo del 8% sobre el excedente.',
+    },
+    {
+      question: '¿Cuál es la diferencia entre comisión por flujo y comisión mixta en las AFP?',
+      answer: 'En la comisión sobre flujo, la AFP cobra un porcentaje mensual directamente deducido del sueldo bruto del afiliado por la administración de sus fondos. En la comisión mixta (saldo), el cobro mensual sobre el sueldo es 0.00% para las comisiones sobre remuneración en las AFP activas, y la administradora cobra un porcentaje anual sobre el saldo total acumulado en el fondo individual de pensiones.',
+    },
+    {
+      question: '¿Por qué mi sueldo neto real en boleta puede diferir levemente del simulador?',
+      answer: 'Una boleta de pago oficial en planilla electrónica (PLAME) puede contener rubros variables como horas extras al 25% y 35%, comisiones de ventas, bonificaciones extraordinarias de ley (9% sobre gratificación), tardanzas o faltas injustificadas, adelantos de quincena, préstamos de empresa, retenciones judiciales por alimentos o aportes sindicales. Nuestra calculadora te permite activar la sección de personalización para incluir estos conceptos exactos.',
     },
   ];
 
@@ -72,16 +80,99 @@ Sueldo Neto en Cuenta: ${formatCurrency(result.netSalary)}`;
       meta={meta}
       faqs={faqs}
       educationalContent={
-        <div className="space-y-3">
-          <p>
-            El <strong>Sueldo Neto</strong> es la cantidad líquida de dinero que el trabajador recibe directamente en su cuenta bancaria al final de cada mes tras descontar aportes de ley.
-          </p>
-          <div className="rounded-xl bg-slate-50 dark:bg-slate-950 p-4 border border-slate-200 dark:border-slate-800 space-y-2 text-xs">
-            <div className="font-bold text-slate-800 dark:text-slate-200">Estructura del cálculo:</div>
-            <div>• <strong>Base afecta</strong> = Sueldo + Asignación Familiar + conceptos remunerativos variables</div>
-            <div>• <strong>Total Ingreso</strong> = Base afecta + conceptos no remunerativos ingresados</div>
-            <div>• <strong>Descuentos</strong> = AFP/ONP + quinta categoría + otros descuentos de boleta</div>
-            <div>• <strong>Sueldo Neto</strong> = Total Ingreso - Descuentos</div>
+        <div className="space-y-6">
+          <div>
+            <h2 className="text-lg font-bold text-slate-900 dark:text-white mb-2">
+              Guía Laboral: ¿Cómo se calcula el Sueldo Neto en planilla en el Perú?
+            </h2>
+            <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+              El <strong>Sueldo Neto</strong> (también denominado salario líquido o dinero en mano) representa el importe final que el empleador deposita en la cuenta bancaria del trabajador tras efectuar las retenciones y deducciones establecidas por la legislación laboral y tributaria peruana (Decreto Legislativo N° 728, TUO de la Ley de Productividad y Competitividad Laboral).
+            </p>
+          </div>
+
+          <div className="rounded-2xl bg-slate-50 dark:bg-slate-900 p-5 border border-slate-200 dark:border-slate-800 space-y-3 text-xs leading-relaxed">
+            <h3 className="font-bold text-sm text-slate-900 dark:text-white">
+              1. Estructura matemática del cálculo en boleta de pago
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
+              <div className="space-y-1.5">
+                <span className="font-bold text-emerald-800 dark:text-emerald-400 block">• Total Ingresos Remunerativos:</span>
+                <p className="text-slate-600 dark:text-slate-300">
+                  Comprende el sueldo básico pactado más la Asignación Familiar (10% de la RMV si corresponde) y remuneraciones variables computables (comisiones y horas extras).
+                </p>
+              </div>
+              <div className="space-y-1.5">
+                <span className="font-bold text-red-700 dark:text-red-400 block">• Deducciones de Ley al Trabajador:</span>
+                <p className="text-slate-600 dark:text-slate-300">
+                  Descuento previsional predeterminado: 13% para ONP o ~11.39% a 12.80% en AFP (fondo obligatorio + seguro + comisión), sumado a la retención de Impuesto a la Renta de Quinta Categoría de SUNAT si supera el umbral de 7 UIT.
+                </p>
+              </div>
+            </div>
+            <div className="p-3 bg-white dark:bg-slate-950 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-[11px] text-slate-800 dark:text-slate-200">
+              Fórmula Oficial: Sueldo Neto = (Sueldo Básico + Asignación Familiar + Conceptos No Remunerativos) - (Descuento Previsional AFP/ONP + Retención 5ta Categoría + Otros Descuentos)
+            </div>
+          </div>
+
+          <div className="space-y-3">
+            <h3 className="font-bold text-sm text-slate-900 dark:text-white">
+              2. Caso práctico con cifras reales (Ejemplo de remuneración)
+            </h3>
+            <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+              Imaginemos un trabajador contratado a tiempo completo con un sueldo bruto básico de <strong>S/ 3,000.00</strong> mensuales, con un hijo menor (recibe Asignación Familiar) y afiliado a AFP Integra:
+            </p>
+            <div className="overflow-x-auto">
+              <table className="w-full text-xs text-left border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden">
+                <thead className="bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white">
+                  <tr>
+                    <th className="p-2.5">Concepto en Boleta</th>
+                    <th className="p-2.5">Monto (PEN)</th>
+                    <th className="p-2.5">Naturaleza</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                  <tr>
+                    <td className="p-2.5">Sueldo Básico Contratado</td>
+                    <td className="p-2.5 font-mono">S/ 3,000.00</td>
+                    <td className="p-2.5 text-emerald-700 dark:text-emerald-400 font-semibold">Haber computable</td>
+                  </tr>
+                  <tr>
+                    <td className="p-2.5">Asignación Familiar (Ley 25129)</td>
+                    <td className="p-2.5 font-mono">S/ 102.50</td>
+                    <td className="p-2.5 text-emerald-700 dark:text-emerald-400 font-semibold">Beneficio social de ley</td>
+                  </tr>
+                  <tr className="bg-slate-50/60 dark:bg-slate-900/60 font-bold">
+                    <td className="p-2.5">Total Remuneración Bruta Afecta</td>
+                    <td className="p-2.5 font-mono">S/ 3,102.50</td>
+                    <td className="p-2.5">Base de cálculo</td>
+                  </tr>
+                  <tr>
+                    <td className="p-2.5">Aporte Obligatorio AFP (10%) + Prima Seguro (1.39%)</td>
+                    <td className="p-2.5 font-mono text-red-600 dark:text-red-400">- S/ 353.37</td>
+                    <td className="p-2.5 text-slate-500">Descuento previsional</td>
+                  </tr>
+                  <tr>
+                    <td className="p-2.5">Retención Proyectada 5ta Categoría SUNAT</td>
+                    <td className="p-2.5 font-mono text-red-600 dark:text-red-400">- S/ 47.50</td>
+                    <td className="p-2.5 text-slate-500">Tributo a la renta</td>
+                  </tr>
+                  <tr className="bg-emerald-50 dark:bg-emerald-950 font-bold text-slate-900 dark:text-white">
+                    <td className="p-2.5 text-emerald-800 dark:text-emerald-300">Sueldo Neto Líquido a Depositar</td>
+                    <td className="p-2.5 font-mono text-emerald-800 dark:text-emerald-300 text-sm">S/ 2,701.63</td>
+                    <td className="p-2.5 text-emerald-800 dark:text-emerald-300">Ingreso efectivo en cuenta</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div className="rounded-2xl border border-slate-200 dark:border-slate-800 p-4 space-y-2 text-xs text-slate-500 dark:text-slate-400 bg-slate-50/50 dark:bg-slate-900/30">
+            <span className="font-bold text-slate-700 dark:text-slate-300 block">Marco legal y referencias oficiales:</span>
+            <p>
+              • <strong>D.L. 728:</strong> Ley de Productividad y Competitividad Laboral.<br />
+              • <strong>D.S. N° 054-97-EF:</strong> Texto Único Ordenado de la Ley del Sistema Privado de Administración de Fondos de Pensiones.<br />
+              • <strong>D.L. 19990:</strong> Sistema Nacional de Pensiones administrado por la Oficina de Normalización Previsional (ONP).<br />
+              • <strong>D.S. N° 179-2004-EF:</strong> Texto Único Ordenado de la Ley del Impuesto a la Renta (Quinta Categoría).
+            </p>
           </div>
         </div>
       }

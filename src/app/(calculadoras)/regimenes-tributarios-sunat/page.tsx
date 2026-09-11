@@ -52,16 +52,24 @@ Motivo: ${result.recommendedReason}`;
 
   const faqs = [
     {
-      question: '¿Qué es el Nuevo RUS y a quiénes les conviene?',
-      answer: 'El Nuevo RUS es ideal para pequeños negocios dirigidos al consumidor final (bodegas, peluquerías, bazares). Solo pagas una cuota fija de S/ 20 o S/ 50 al mes, pero NO puedes emitir facturas a empresas.',
+      question: '¿Cuáles son los 4 regímenes tributarios para empresas y negocios en SUNAT?',
+      answer: 'En el Perú existen cuatro regímenes tributarios vigentes para rentas de tercera categoría: 1) Nuevo Régimen Único Simplificado (NRUS), 2) Régimen Especial de Renta (RER), 3) Régimen MYPE Tributario (RMT), y 4) Régimen General (RG). Cada uno tiene requisitos de ingresos, topes de activos, tipos de comprobantes permitidos y obligaciones de libros contables diferenciadas.',
     },
     {
-      question: '¿Cuál es la ventaja del Régimen MYPE Tributario (RMT)?',
-      answer: 'El RMT te permite emitir todo tipo de comprobantes (facturas y boletas) con una tasa reducida de Impuesto a la Renta anual del 10% (hasta 15 UIT de ganancia neta) y pagos a cuenta del 1% mensual.',
+      question: '¿Por qué en el Nuevo RUS no se pueden emitir facturas?',
+      answer: 'Por disposición expresa de la Ley del Nuevo RUS, este régimen está diseñado exclusivamente para pequeños comerciantes o prestadores de oficios dirigidos al consumidor final (personas sin RUC). Al estar exonerados de declarar el IGV mensualmente, no pueden trasladar crédito fiscal a terceros, por lo que solo pueden emitir Boletas de Venta y Tickets de máquina registradora.',
     },
     {
-      question: '¿Puedo cambiarme de régimen tributario durante el año?',
-      answer: 'Sí. Puedes pasar a un régimen superior en cualquier mes del año con tu declaración jurada mensual. Para bajar a un régimen más simple (como del RMT al RER o RUS), el cambio solo se realiza en el mes de enero.',
+      question: '¿Qué actividades económicas NO pueden acogerse al Régimen Especial (RER)?',
+      answer: 'El RER prohíbe actividades de asesoría profesional, consultoría jurídica o contable, servicios de ingeniería, agencias de viaje, transporte de carga con vehículos mayores a 2 toneladas métricas y contratos de construcción. Estos negocios deben acogerse obligatoriamente al Régimen MYPE Tributario (RMT) o Régimen General.',
+    },
+    {
+      question: '¿Cuál es la escala del Impuesto a la Renta en el Régimen MYPE Tributario (RMT)?',
+      answer: 'El RMT aplica una tasa progresiva muy ventajosa sobre la utilidad neta anual: 10% por las primeras 15 UIT de renta neta y 29.5% por el exceso de 15 UIT. Además, los pagos a cuenta mensuales son de solo 1% de los ingresos netos mientras las ventas anuales no superen las 300 UIT.',
+    },
+    {
+      question: '¿Cómo y cuándo puedo cambiarme de régimen tributario en SUNAT?',
+      answer: 'Puedes subir a un régimen de mayor exigencia (ej. de NRUS a RER o RMT) en cualquier mes del año fiscal con la presentación oportuna de tu declaración jurada mensual. Sin embargo, para descender a un régimen inferior (ej. de RMT a RER o NRUS), la ley tributaria exige realizar el cambio únicamente con la declaración mensual correspondiente al periodo enero.',
     },
   ];
 
@@ -70,9 +78,64 @@ Motivo: ${result.recommendedReason}`;
       meta={meta}
       faqs={faqs}
       educationalContent={
-        <div className="space-y-3">
+        <div className="space-y-4 text-sm leading-relaxed text-slate-700 dark:text-slate-300">
           <p>
-            Compara los 4 regímenes tributarios de la SUNAT según tus ingresos proyectados, compras con factura y el tipo de clientes a los que vendes para elegir el régimen que te permita ahorrar legalmente.
+            Elegir el régimen tributario adecuado ante la <strong>Superintendencia Nacional de Aduanas y de Administración Tributaria (SUNAT)</strong> es una de las decisiones estratégicas más importantes para cualquier emprendedor o empresa en el Perú. Un régimen mal elegido puede ocasionar pagos en exceso de impuestos o contingencias por infracciones formales.
+          </p>
+
+          <h3 className="text-base font-bold text-slate-900 dark:text-white pt-2">
+            Matriz Comparativa de Regímenes Tributarios SUNAT
+          </h3>
+
+          <div className="my-4 overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-800">
+            <table className="w-full text-left text-xs sm:text-sm">
+              <thead className="bg-slate-100 dark:bg-slate-800/80 font-bold text-slate-900 dark:text-white">
+                <tr>
+                  <th className="p-3">Régimen</th>
+                  <th className="p-3">Límite de Ingresos Anuales</th>
+                  <th className="p-3">Comprobantes Permitidos</th>
+                  <th className="p-3">Tasa Impuesto a la Renta</th>
+                  <th className="p-3">Libros Contables</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                <tr>
+                  <td className="p-3 font-semibold">Nuevo RUS (NRUS)</td>
+                  <td className="p-3">Hasta S/ 96,000 / año (S/ 8,000 / mes)</td>
+                  <td className="p-3">Solo Boletas de Venta y Guías</td>
+                  <td className="p-3 font-mono">Cuota fija S/ 20 o S/ 50</td>
+                  <td className="p-3 font-bold text-emerald-600 dark:text-emerald-400">Sin libros</td>
+                </tr>
+                <tr>
+                  <td className="p-3 font-semibold">Régimen Especial (RER)</td>
+                  <td className="p-3">Hasta S/ 525,000 / año</td>
+                  <td className="p-3">Facturas, Boletas y todos</td>
+                  <td className="p-3 font-mono">1.5% mensual (definitivo)</td>
+                  <td className="p-3">Registro de Compras y Ventas</td>
+                </tr>
+                <tr>
+                  <td className="p-3 font-semibold">MYPE Tributario (RMT)</td>
+                  <td className="p-3">Hasta 1,700 UIT anuales</td>
+                  <td className="p-3">Facturas, Boletas y todos</td>
+                  <td className="p-3 font-mono">1% a cuenta / 10% anual (≤15 UIT)</td>
+                  <td className="p-3">Compras, Ventas y Diario Simplif.</td>
+                </tr>
+                <tr>
+                  <td className="p-3 font-semibold">Régimen General (RG)</td>
+                  <td className="p-3">Sin límite de ingresos</td>
+                  <td className="p-3">Facturas, Boletas y todos</td>
+                  <td className="p-3 font-mono">1.5% o coeficiente / 29.5% anual</td>
+                  <td className="p-3">Contabilidad completa según UIT</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3 className="text-base font-bold text-slate-900 dark:text-white pt-2">
+            Recomendación Estratégica para tu Negocio
+          </h3>
+          <p>
+            Si tus clientes son personas naturales (comercio minorista local), el <strong>Nuevo RUS</strong> te brinda la mayor simplicidad y mínimo costo tributario. Si necesitas vender a empresas con Factura Electrónica para que deduzcan costo y crédito fiscal, el <strong>Régimen MYPE Tributario</strong> suele ser la opción fiscalmente más eficiente en sus primeros años de operación.
           </p>
         </div>
       }

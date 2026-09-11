@@ -52,16 +52,24 @@ Total Horas Extras a Cobrar: ${formatCurrency(result.totalOvertimePay)}`;
 
   const faqs = [
     {
-      question: '¿Cómo se calcula el valor de una hora de trabajo ordinaria en Perú?',
-      answer: 'Se toma la remuneración mensual computable (Sueldo + Asignación Familiar) y se divide entre 240 (considerando una jornada de 8 horas diarias por 30 días laborales).',
+      question: '¿Cómo se determina legalmente el valor de una hora ordinaria de trabajo en el Perú?',
+      answer: 'De acuerdo con el artículo 12 del D.S. N° 007-2002-TR, el valor de la hora de trabajo ordinaria se obtiene dividiendo la remuneración ordinaria mensual (sueldo básico mensual más la Asignación Familiar y conceptos remunerativos fijos) entre 30 días, y ese resultado entre el número de horas de la jornada ordinaria diaria del trabajador (usualmente 8 horas, lo que equivale a dividir la base mensual entre 240).',
     },
     {
-      question: '¿Cuáles son las sobretasas legales para horas extras?',
-      answer: 'Por ley (D.S. 007-2002-TR), las 2 primeras horas extras del día se pagan con una sobretasa del 25% sobre el valor hora ordinaria. A partir de la tercera hora extra, la sobretasa sube al 35%. Si trabajas en tu día de descanso o feriado sin descanso sustitutorio, la sobretasa es del 100%.',
+      question: '¿Cuáles son los porcentajes de sobretasa fijados por ley para las horas extras?',
+      answer: 'La legislación laboral peruana establece dos tramos de recargo mínimo obligatorio: 1) Para las dos primeras horas extras laboradas en el día, el valor de la hora se remunera con una sobretasa del 25% sobre el valor hora ordinaria; 2) A partir de la tercera hora extra en adelante en el mismo día, la sobretasa legal aumenta al 35% sobre el valor hora ordinaria.',
     },
     {
-      question: '¿Cómo se evalúa una jornada atípica 14×7, 14×14 o 20×10?',
-      answer: 'Se consideran los días trabajados, los días de descanso y las horas efectivas por turno. El total del ciclo se convierte a un promedio semanal, que bajo la regla general no debe superar 48 horas. El nombre del rol por sí solo no permite concluir si existe sobretiempo.',
+      question: '¿Cuánto se debe pagar por laborar en día feriado o día de descanso semanal obligatorio?',
+      answer: 'Conforme al Decreto Legislativo N° 713, si un trabajador presta servicios durante su día de descanso semanal obligatorio o en un feriado no laborable de ámbito nacional sin que se le otorgue un día de descanso sustitutorio posterior, la empresa debe abonarle una triple remuneración: una por el día feriado (ya incluida en el sueldo mensual básico), otra por el trabajo efectivamente realizado, y una tercera como sobretasa o indemnización del 100%.',
+    },
+    {
+      question: '¿El trabajo en sobretiempo (horas extras) es obligatorio o voluntario?',
+      answer: 'El trabajo en sobretiempo es de naturaleza estrictamente voluntaria tanto para el trabajador como para el empleador. Ningún colaborador puede ser forzado a quedarse más allá de su jornada pactada, salvo en casos excepcionales calificados de fuerza mayor o peligro inminente que pongan en riesgo a las personas o los bienes del centro laboral. Imponer horas extras obligatorias constituye una falta laboral grave sancionable por la SUNAFIL.',
+    },
+    {
+      question: '¿Las horas extras pueden compensarse con descanso físico en lugar de dinero?',
+      answer: 'Sí. El artículo 26 del Reglamento de la Ley de Jornada de Trabajo permite que, previo acuerdo escrito celebrado entre el empleador y el trabajador, el sobretiempo realizado pueda compensarse con el otorgamiento de periodos equivalentes de descanso físico dentro del mes siguiente a aquel en que se realizó el trabajo adicional.',
     },
   ];
 
@@ -70,13 +78,98 @@ Total Horas Extras a Cobrar: ${formatCurrency(result.totalOvertimePay)}`;
       meta={meta}
       faqs={faqs}
       educationalContent={
-        <div className="space-y-3">
-          <p>
-            El trabajo en sobretiempo (horas extras) es voluntario y debe ser remunerado en la misma boleta de pago del mes con las sobretasas de ley vigentes.
-          </p>
-          <p>
-            En jornadas acumulativas o atípicas, el diagnóstico usa el promedio del ciclo indicado por el artículo 25 de la Constitución y el D.S. 007-2002-TR. El resultado es orientativo: convenios colectivos, regímenes sectoriales y labores excluidas de la jornada máxima pueden cambiar el análisis.
-          </p>
+        <div className="space-y-6">
+          <div>
+            <h2 className="text-lg font-bold text-slate-900 dark:text-white mb-2">
+              Guía Laboral: ¿Cómo se calculan las Horas Extras según el D.S. 007-2002-TR?
+            </h2>
+            <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+              El <strong>Trabajo en Sobretiempo</strong> (horas extras) es aquel servicio prestado más allá de la jornada ordinaria máxima legal (8 horas diarias o 48 horas semanales) establecida por el artículo 25 de la Constitución Política del Perú y el Texto Único Ordenado del Decreto Legislativo N° 854 (aprobado por Decreto Supremo N° 007-2002-TR).
+            </p>
+          </div>
+
+          <div className="rounded-2xl bg-slate-50 dark:bg-slate-900 p-5 border border-slate-200 dark:border-slate-800 space-y-3 text-xs leading-relaxed">
+            <h3 className="font-bold text-sm text-slate-900 dark:text-white">
+              1. Fórmulas de liquidación horaria y sobretasas legales
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
+              <div className="space-y-1.5 p-3 bg-white dark:bg-slate-950 rounded-xl border border-slate-200 dark:border-slate-800">
+                <span className="font-bold text-emerald-800 dark:text-emerald-400 block">• Primeras 2 horas del día (+25%):</span>
+                <p className="text-slate-600 dark:text-slate-300">
+                  Cada una de las primeras 2 horas extraordinarias diarias se abona con un recargo del 25% sobre la hora ordinaria.
+                </p>
+                <div className="font-mono text-[11px] text-slate-800 dark:text-slate-200 pt-1">
+                  Valor Hora 25% = (Sueldo Mensual ÷ 240) × 1.25
+                </div>
+              </div>
+
+              <div className="space-y-1.5 p-3 bg-white dark:bg-slate-950 rounded-xl border border-slate-200 dark:border-slate-800">
+                <span className="font-bold text-sky-800 dark:text-sky-400 block">• De la 3ra hora en adelante (+35%):</span>
+                <p className="text-slate-600 dark:text-slate-300">
+                  Por el mayor desgaste físico y mental, a partir de la tercera hora consecutiva la sobretasa aumenta al 35%.
+                </p>
+                <div className="font-mono text-[11px] text-slate-800 dark:text-slate-200 pt-1">
+                  Valor Hora 35% = (Sueldo Mensual ÷ 240) × 1.35
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="space-y-3">
+            <h3 className="font-bold text-sm text-slate-900 dark:text-white">
+              2. Caso práctico con liquidación mensual en boleta
+            </h3>
+            <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+              Un empleado con sueldo básico de <strong>S/ 2,400.00</strong> mensuales realiza 10 horas extras al 25% y 4 horas extras al 35% durante el mes de trabajo:
+            </p>
+            <div className="overflow-x-auto">
+              <table className="w-full text-xs text-left border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden">
+                <thead className="bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white">
+                  <tr>
+                    <th className="p-2.5">Tramo de Sobretiempo</th>
+                    <th className="p-2.5">Valor Unitario por Hora</th>
+                    <th className="p-2.5">Horas Efectivas</th>
+                    <th className="p-2.5">Subtotal a Percibir</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                  <tr>
+                    <td className="p-2.5 font-semibold">Valor Hora Ordinaria (Base)</td>
+                    <td className="p-2.5 font-mono">S/ 2,400 ÷ 240 = S/ 10.00</td>
+                    <td className="p-2.5 text-slate-400">-</td>
+                    <td className="p-2.5 font-mono">S/ 10.00 / hora</td>
+                  </tr>
+                  <tr>
+                    <td className="p-2.5 font-semibold">Tramo 1: Horas con Sobretasa del 25%</td>
+                    <td className="p-2.5 font-mono">S/ 10.00 × 1.25 = S/ 12.50</td>
+                    <td className="p-2.5 font-semibold">10 horas</td>
+                    <td className="p-2.5 font-mono text-emerald-700 dark:text-emerald-400">+ S/ 125.00</td>
+                  </tr>
+                  <tr>
+                    <td className="p-2.5 font-semibold">Tramo 2: Horas con Sobretasa del 35%</td>
+                    <td className="p-2.5 font-mono">S/ 10.00 × 1.35 = S/ 13.50</td>
+                    <td className="p-2.5 font-semibold">4 horas</td>
+                    <td className="p-2.5 font-mono text-emerald-700 dark:text-emerald-400">+ S/ 54.00</td>
+                  </tr>
+                  <tr className="bg-emerald-50 dark:bg-emerald-950 font-bold text-slate-900 dark:text-white">
+                    <td className="p-2.5 text-emerald-800 dark:text-emerald-300">Total Adicional de Horas Extras en Boleta</td>
+                    <td className="p-2.5 text-slate-500 font-normal">S/ 125.00 + S/ 54.00</td>
+                    <td className="p-2.5 font-semibold">14 horas</td>
+                    <td className="p-2.5 font-mono text-emerald-800 dark:text-emerald-300 text-sm">+ S/ 179.00</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div className="rounded-2xl border border-slate-200 dark:border-slate-800 p-4 space-y-2 text-xs text-slate-500 dark:text-slate-400 bg-slate-50/50 dark:bg-slate-900/30">
+            <span className="font-bold text-slate-700 dark:text-slate-300 block">Marco legal y jurisprudencia laboral peruana:</span>
+            <p>
+              • <strong>Decreto Supremo N° 007-2002-TR:</strong> Texto Único Ordenado de la Ley de Jornada de Trabajo, Horario y Trabajo en Sobretiempo.<br />
+              • <strong>Decreto Supremo N° 008-2002-TR:</strong> Reglamento de la Ley de Jornada de Trabajo y Horas Extras.<br />
+              • <strong>Decreto Legislativo N° 713:</strong> Régimen de descansos remunerados en feriados y fines de semana.
+            </p>
+          </div>
         </div>
       }
     >

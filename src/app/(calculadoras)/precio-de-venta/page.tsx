@@ -30,16 +30,24 @@ IGV (18%): ${formatCurrency(result.igvAmount)}`;
 
   const faqs = [
     {
-      question: '¿Por qué no debo sumar simplemente el porcentaje al costo?',
-      answer: 'Si un producto cuesta S/ 100 y le sumas el 30% (S/ 130), al venderlo por S/ 130 tu margen real sobre la venta será solo del 23.07%, no del 30%. La fórmula comercial profesional divide el costo entre (1 - Margen%), garantizando que tu utilidad sobre el precio final sea exactamente la deseada.',
+      question: '¿Por qué multiplicar el costo por 1.30 NO te da un 30% de ganancia real?',
+      answer: 'Es el error financiero más común en emprendimientos y MYPES peruanas. Si un producto te cuesta S/ 70.00 y lo multiplicas por 1.30 para venderlo a S/ 91.00, tu ganancia es de S/ 21.00. Sin embargo, al calcular S/ 21.00 sobre el precio cobrado de S/ 91.00, tu margen real sobre la venta es solo del 23.08%, no del 30%. Si luego ofreces un descuento promocional del 25%, estarás perdiendo dinero sin saberlo. La fórmula comercial profesional divide el costo entre (1 - Margen Deseado), asegurando que tu utilidad sobre el precio final sea matemáticamente exacta.',
     },
     {
-      question: '¿Cómo afecta el IGV (18%) al precio de venta al público en Perú?',
-      answer: 'En Perú, las ventas al consumidor final (boleta) deben mostrar obligatoriamente el precio con IGV incluido. El 18% no es ganancia para ti, sino un impuesto retenido que se declara mensualmente a la SUNAT.',
+      question: '¿Cuál es la diferencia exacta entre Mark-up y Margen de Utilidad (Profit Margin)?',
+      answer: 'El Mark-up es el sobreprecio porcentual que aplicas directamente por encima del costo de compra (Fórmula: Utilidad ÷ Costo). El Margen de Utilidad, en cambio, mide qué porcentaje del dinero ingresado en caja queda como ganancia neta para tu bolsillo (Fórmula: Utilidad ÷ Precio de Venta). Los reportes de contabilidad, estados de resultados y análisis de rentabilidad empresarial siempre se calculan en base al Margen de Utilidad.',
     },
     {
-      question: '¿Qué comisión debo ingresar si cobro por Yape, Plin o POS?',
-      answer: 'Las pasarelas y POS físicos como Niubiz, Izipay o Mercado Pago cobran entre 3.2% y 3.99% + IGV por transacción. Yape para empresas cobra una pequeña comisión si superas los límites mensuales. Puedes ingresar ese porcentaje en el campo opcional para que la calculadora lo cubra sin tocar tu margen de ganancia.',
+      question: '¿Cómo debe incluirse el IGV (18%) en el precio al consumidor final en el Perú?',
+      answer: 'Por mandato del Código de Protección y Defensa del Consumidor (Ley 29571) y la SUNAT, todo precio exhibido en tiendas físicas, catálogos digitales o redes sociales dirigido al consumidor final debe incluir el 18% de IGV. El IGV nunca debe considerarse ingreso de la empresa ni margen de ganancia; es un impuesto retenido que se entrega mensualmente al fisco.',
+    },
+    {
+      question: '¿Cómo cubrir las comisiones de POS (Niubiz, Izipay, Yape Empresas o Mercado Pago)?',
+      answer: 'Las pasarelas de pago y terminales POS en el Perú cobran una comisión transaccional promedio que oscila entre el 3.25% y el 4.10% + IGV por cada cobro con tarjeta de débito o crédito. Para no sacrificar tu margen de utilidad, debes incorporar esta tasa como un costo financiero variable dentro del divisor de tu precio de venta.',
+    },
+    {
+      question: '¿Qué costos ocultos deben sumarse al costo directo antes de fijar el precio?',
+      answer: 'Muchos emprendedores solo consideran el costo de compra al proveedor y olvidan los costos operativos directos por unidad: empaque (cajas, bolsas de despacho, etiquetas adhesivas, papel seda), flete o costo de transporte por unidad, mermas o roturas estimadas (~2%), y costos de almacenamiento temporal.',
     },
   ];
 
@@ -48,17 +56,98 @@ IGV (18%): ${formatCurrency(result.igvAmount)}`;
       meta={meta}
       faqs={faqs}
       educationalContent={
-        <div className="space-y-3">
-          <p>
-            Fijar un precio de venta incorrecto es una de las principales causas de quiebra en las MYPES peruanas.
-            Al calcular tu precio ideal debes contemplar 4 elementos indispensables:
-          </p>
-          <ul className="list-disc pl-5 space-y-1.5">
-            <li><strong>Costo directo del producto</strong>: Lo que pagas a tu proveedor o lo que te cuesta fabricarlo.</li>
-            <li><strong>Costos operativos adicionales</strong>: Empaque, etiquetas, bolsa ecológica, packaging y delivery.</li>
-            <li><strong>Comisión por cobrar</strong>: Si aceptas pagos digitales (Yape, Plin, tarjeta), debes cubrir el ~3.5%.</li>
-            <li><strong>IGV 18% (SUNAT)</strong>: Si emites boleta o factura, este monto se añade al precio final.</li>
-          </ul>
+        <div className="space-y-6">
+          <div>
+            <h2 className="text-lg font-bold text-slate-900 dark:text-white mb-2">
+              Estrategia Comercial: ¿Cómo calcular el Precio de Venta y Margen de Ganancia para MYPES?
+            </h2>
+            <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+              Fijar un precio de venta de manera empírica o mediante sobreprecios directos es la causa número uno de falta de liquidez y quiebra en micro y pequeñas empresas peruanas. Para construir un negocio sostenible es imperativo dominar la <strong>fórmula de margen sobre ventas</strong> y considerar todos los costos directos, tributarios y financieros de cada unidad.
+            </p>
+          </div>
+
+          <div className="rounded-2xl bg-slate-50 dark:bg-slate-900 p-5 border border-slate-200 dark:border-slate-800 space-y-3 text-xs leading-relaxed">
+            <h3 className="font-bold text-sm text-slate-900 dark:text-white">
+              1. Fórmulas comerciales profesionales de fijación de precios
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
+              <div className="space-y-1.5 p-3 bg-white dark:bg-slate-950 rounded-xl border border-slate-200 dark:border-slate-800">
+                <span className="font-bold text-emerald-800 dark:text-emerald-400 block">• Precio de Venta Neto (Sin IGV):</span>
+                <p className="text-slate-600 dark:text-slate-300">
+                  Garantiza que tras pagar el costo unitario, el porcentaje de utilidad neta en caja sea exactamente el que planificaste.
+                </p>
+                <div className="font-mono text-[11px] text-slate-800 dark:text-slate-200 pt-1">
+                  Precio Neto = Costo Unitario ÷ (1 - Margen Deseado%)
+                </div>
+              </div>
+
+              <div className="space-y-1.5 p-3 bg-white dark:bg-slate-950 rounded-xl border border-slate-200 dark:border-slate-800">
+                <span className="font-bold text-sky-800 dark:text-sky-400 block">• Precio al Público (Con IGV 18%):</span>
+                <p className="text-slate-600 dark:text-slate-300">
+                  Precio obligatorio para exhibir en boleta o tienda física en el Perú, sumando el 18% del tributo fiscal.
+                </p>
+                <div className="font-mono text-[11px] text-slate-800 dark:text-slate-200 pt-1">
+                  Precio Final = Precio Neto × 1.18
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="space-y-3">
+            <h3 className="font-bold text-sm text-slate-900 dark:text-white">
+              2. Caso práctico real (Emprendimiento retail / ecommerce en Lima)
+            </h3>
+            <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+              Un negocio de calzado adquiere un par de zapatillas a su proveedor en Trujillo por <strong>S/ 80.00</strong>, invierte <strong>S/ 5.00</strong> en caja y bolsa de despacho, asume <strong>S/ 5.00</strong> de flete prorrateado (Costo Total: S/ 90.00) y desea ganar un <strong>35% de margen neto</strong>:
+            </p>
+            <div className="overflow-x-auto">
+              <table className="w-full text-xs text-left border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden">
+                <thead className="bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white">
+                  <tr>
+                    <th className="p-2.5">Etapa del Cálculo</th>
+                    <th className="p-2.5">Fórmula Aplicada</th>
+                    <th className="p-2.5">Monto Unitario (PEN)</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                  <tr>
+                    <td className="p-2.5 font-semibold">Costo Total Integral Unitario</td>
+                    <td className="p-2.5 text-slate-500">Producto (80) + Empaque (5) + Flete (5)</td>
+                    <td className="p-2.5 font-mono">S/ 90.00</td>
+                  </tr>
+                  <tr>
+                    <td className="p-2.5 font-semibold">Precio de Venta Sugerido (Sin IGV)</td>
+                    <td className="p-2.5 text-slate-500">S/ 90.00 ÷ (1 - 0.35) = S/ 90 ÷ 0.65</td>
+                    <td className="p-2.5 font-mono font-semibold text-slate-900 dark:text-white">S/ 138.46</td>
+                  </tr>
+                  <tr>
+                    <td className="p-2.5 font-semibold">Ganancia Neta en Soles por Par Vendido</td>
+                    <td className="p-2.5 text-slate-500">Precio Neto (138.46) - Costo (90.00)</td>
+                    <td className="p-2.5 font-mono text-emerald-700 dark:text-emerald-400 font-bold">+ S/ 48.46 (35%)</td>
+                  </tr>
+                  <tr>
+                    <td className="p-2.5 font-semibold">Impuesto General a las Ventas (18%)</td>
+                    <td className="p-2.5 text-slate-500">18% de S/ 138.46 (SUNAT)</td>
+                    <td className="p-2.5 font-mono text-slate-500">+ S/ 24.92</td>
+                  </tr>
+                  <tr className="bg-emerald-50 dark:bg-emerald-950 font-bold text-slate-900 dark:text-white">
+                    <td className="p-2.5 text-emerald-800 dark:text-emerald-300">Precio de Venta al Público (PVP en Boleta)</td>
+                    <td className="p-2.5 text-slate-500 font-normal">S/ 138.46 × 1.18</td>
+                    <td className="p-2.5 font-mono text-emerald-800 dark:text-emerald-300 text-sm">S/ 163.38</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div className="rounded-2xl border border-slate-200 dark:border-slate-800 p-4 space-y-2 text-xs text-slate-500 dark:text-slate-400 bg-slate-50/50 dark:bg-slate-900/30">
+            <span className="font-bold text-slate-700 dark:text-slate-300 block">Normas peruanas de protección al consumidor y tributarias:</span>
+            <p>
+              • <strong>Ley N° 29571:</strong> Código de Protección y Defensa del Consumidor (Publicidad de precios con tributos incluidos).<br />
+              • <strong>Decreto Legislativo N° 716:</strong> Normas sobre protección al consumidor y transparencia en precios.<br />
+              • <strong>Decreto Supremo N° 055-99-EF:</strong> Aplicación del IGV en operaciones comerciales.
+            </p>
+          </div>
         </div>
       }
     >

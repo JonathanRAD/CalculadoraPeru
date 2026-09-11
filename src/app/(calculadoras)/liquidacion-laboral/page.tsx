@@ -76,16 +76,24 @@ ${isDismissal ? `Indemnización por Despido: ${formatCurrency(result.arbitraryDi
 
   const faqs = [
     {
-      question: '¿Qué conceptos integran la liquidación de beneficios sociales en Perú?',
-      answer: 'La liquidación incluye: 1) CTS trunca acumulada desde el último depósito, 2) Gratificación trunca del semestre en curso más su 9% de bonificación EsSalud, 3) Vacaciones truncas y no gozadas, y 4) Remuneraciones o días pendientes de pago.',
+      question: '¿Qué conceptos integran legalmente la liquidación de beneficios sociales en el Perú?',
+      answer: 'Al cesar una relación laboral por renuncia, mutuo disenso, vencimiento de contrato o despido, la liquidación debe integrar obligatoriamente: 1) CTS trunca (fracción de meses y días transcurridos desde el último depósito semestral de mayo o noviembre); 2) Gratificación trunca del semestre en curso (enero-junio o julio-diciembre) más la bonificación extraordinaria de EsSalud (9%) o EPS (6.75%); 3) Vacaciones truncas proporcionales a los meses laborados y vacaciones vencidas no gozadas si las hubiere; 4) Días laborados en el mes pendientes de remuneración; y 5) En caso de despido arbitrario injustificado, la indemnización legal correspondiente.',
     },
     {
-      question: '¿En cuánto tiempo la empresa debe pagar la liquidación?',
-      answer: 'El empleador tiene un plazo legal máximo de 48 horas posteriores al cese o término del vínculo laboral para efectuar el pago y entregar la constancia de liquidación y certificado de trabajo.',
+      question: '¿Cuál es el plazo legal que tiene la empresa para pagar la liquidación?',
+      answer: 'El artículo 56 del Reglamento de la Ley de Fomento del Empleo establece que el empleador cuenta con un plazo máximo perentorio de 48 horas posteriores al cese de la relación laboral para abonar el íntegro de la liquidación de beneficios sociales y entregar la constancia de cese para la liberación de la CTS en el banco. Si la empresa excede las 48 horas, se generan automáticamente intereses legales laborales fijados por la SBS y el trabajador puede formular una denuncia formal ante la SUNAFIL.',
     },
     {
-      question: '¿Cuánto corresponde por despido arbitrario (sin causa justa)?',
-      answer: 'En contratos a plazo indeterminado del Régimen General, corresponde 1.5 sueldos por cada año completo laborado (más dozavos por meses), con un tope máximo legal de 12 sueldos.',
+      question: '¿Cómo se calcula la indemnización por despido arbitrario en el Régimen General?',
+      answer: 'Conforme al artículo 38 del D.L. N° 728: 1) En contratos a plazo indeterminado, la indemnización equivale a una remuneración y media ordinaria mensual (1.5 sueldos) por cada año completo de servicios, abonándose las fracciones de año por dozavos y treintavos, con un tope legal máximo absoluto de 12 remuneraciones; 2) En contratos sujetos a modalidad (plazo fijo), equivale a una remuneración y media mensual por cada mes que falte para el vencimiento del contrato, también con tope de 12 sueldos.',
+    },
+    {
+      question: '¿Qué descuentos se aplican sobre el monto total de la liquidación?',
+      answer: 'La CTS trunca y las gratificaciones truncas con su bonificación extraordinaria están 100% inafectas de descuentos para AFP u ONP. Sin embargo, las vacaciones truncas y los días laborados pendientes sí están sujetos a los descuentos de ley para pensiones (13% ONP o ~12% AFP) y a la retención de Impuesto a la Renta de 5ta Categoría si los ingresos anuales superan las 7 UIT. La indemnización por despido arbitrario es un concepto reparatorio 100% inafecto de tributos y descuentos previsionales.',
+    },
+    {
+      question: '¿Los trabajadores de Pequeñas Empresas o Microempresas reciben indemnización por despido?',
+      answer: 'Sí, pero con escalas especiales: En la Pequeña Empresa formal inscrita en el REMYPE, la indemnización por despido arbitrario equivale a 20 días de remuneración por cada año laborado con un tope de 120 días (4 sueldos). En la Microempresa acreditada, equivale a 10 días de sueldo por año laborado con un tope máximo de 90 días (3 sueldos).',
     },
   ];
 
@@ -94,10 +102,99 @@ ${isDismissal ? `Indemnización por Despido: ${formatCurrency(result.arbitraryDi
       meta={meta}
       faqs={faqs}
       educationalContent={
-        <div className="space-y-3">
-          <p>
-            Te permite conocer el monto exacto de tu liquidación ante una renuncia voluntaria, fin de contrato o despido intempestivo, desglosando cada derecho según el régimen laboral y la ley del MTPE.
-          </p>
+        <div className="space-y-6">
+          <div>
+            <h2 className="text-lg font-bold text-slate-900 dark:text-white mb-2">
+              Guía de Derechos Laborales: ¿Cómo se calcula la Liquidación en el Perú (D.L. 728)?
+            </h2>
+            <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+              La <strong>Liquidación de Beneficios Sociales</strong> es el documento legal y económico mediante el cual el empleador salda todas las deudas laborales acumuladas con el colaborador al finalizar el vínculo contractual, ya sea por renuncia voluntaria con preaviso, mutuo disenso, no renovación de contrato o despido intempestivo (Decreto Supremo N° 003-97-TR).
+            </p>
+          </div>
+
+          <div className="rounded-2xl bg-slate-50 dark:bg-slate-900 p-5 border border-slate-200 dark:border-slate-800 space-y-3 text-xs leading-relaxed">
+            <h3 className="font-bold text-sm text-slate-900 dark:text-white">
+              1. Componentes esenciales de la liquidación por renuncia o despido
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-1">
+              <div className="p-3 bg-white dark:bg-slate-950 rounded-xl border border-slate-200 dark:border-slate-800 space-y-1">
+                <span className="font-bold text-emerald-800 dark:text-emerald-400 block">• 1. CTS Trunca:</span>
+                <p className="text-slate-600 dark:text-slate-300">
+                  Meses y días computables desde el último depósito (mayo o noviembre). Base = Sueldo + Asig. Fam. + (Grati ÷ 6).
+                </p>
+              </div>
+
+              <div className="p-3 bg-white dark:bg-slate-950 rounded-xl border border-slate-200 dark:border-slate-800 space-y-1">
+                <span className="font-bold text-sky-800 dark:text-sky-400 block">• 2. Gratificación Trunca:</span>
+                <p className="text-slate-600 dark:text-slate-300">
+                  Un sexto por cada mes calendario completo laborado en el semestre, más la bonificación del 9% de EsSalud (inafecto a AFP).
+                </p>
+              </div>
+
+              <div className="p-3 bg-white dark:bg-slate-950 rounded-xl border border-slate-200 dark:border-slate-800 space-y-1">
+                <span className="font-bold text-purple-800 dark:text-purple-400 block">• 3. Vacaciones Truncas:</span>
+                <p className="text-slate-600 dark:text-slate-300">
+                  Fracción de días por el récord vacacional en curso que no llegó a gozarse. Sujeto a aportes de pensión (AFP/ONP).
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="space-y-3">
+            <h3 className="font-bold text-sm text-slate-900 dark:text-white">
+              2. Caso práctico numérico (Renuncia voluntaria en Régimen General)
+            </h3>
+            <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+              Trabajador que renuncia tras 4 meses del último depósito de CTS (noviembre a febrero), con 4 meses transcurridos del periodo de gratificación, 8 meses de récord vacacional pendiente y sueldo ordinario mensual de <strong>S/ 3,000.00</strong>:
+            </p>
+            <div className="overflow-x-auto">
+              <table className="w-full text-xs text-left border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden">
+                <thead className="bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white">
+                  <tr>
+                    <th className="p-2.5">Beneficio Social Trunco</th>
+                    <th className="p-2.5">Fórmula de Fracción</th>
+                    <th className="p-2.5">Monto Líquido (PEN)</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                  <tr>
+                    <td className="p-2.5 font-semibold">CTS Trunca Acumulada</td>
+                    <td className="p-2.5 text-slate-500">(S/ 3,500 base ÷ 12) × 4 meses</td>
+                    <td className="p-2.5 font-mono text-emerald-700 dark:text-emerald-400">S/ 1,166.67</td>
+                  </tr>
+                  <tr>
+                    <td className="p-2.5 font-semibold">Gratificación Trunca Legal</td>
+                    <td className="p-2.5 text-slate-500">(S/ 3,000 ÷ 6) × 4 meses</td>
+                    <td className="p-2.5 font-mono text-emerald-700 dark:text-emerald-400">S/ 2,000.00</td>
+                  </tr>
+                  <tr>
+                    <td className="p-2.5 font-semibold">Bonificación Extraordinaria EsSalud (9%)</td>
+                    <td className="p-2.5 text-slate-500">9% de S/ 2,000</td>
+                    <td className="p-2.5 font-mono text-emerald-700 dark:text-emerald-400">+ S/ 180.00</td>
+                  </tr>
+                  <tr>
+                    <td className="p-2.5 font-semibold">Vacaciones Truncas Pendientes</td>
+                    <td className="p-2.5 text-slate-500">(S/ 3,000 ÷ 12) × 8 meses</td>
+                    <td className="p-2.5 font-mono text-emerald-700 dark:text-emerald-400">S/ 2,000.00</td>
+                  </tr>
+                  <tr className="bg-emerald-50 dark:bg-emerald-950 font-bold text-slate-900 dark:text-white">
+                    <td className="p-2.5 text-emerald-800 dark:text-emerald-300">Total Liquidación de Beneficios Sociales</td>
+                    <td className="p-2.5 text-slate-500 font-normal">Suma de conceptos truncos</td>
+                    <td className="p-2.5 font-mono text-emerald-800 dark:text-emerald-300 text-sm">S/ 5,346.67</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div className="rounded-2xl border border-slate-200 dark:border-slate-800 p-4 space-y-2 text-xs text-slate-500 dark:text-slate-400 bg-slate-50/50 dark:bg-slate-900/30">
+            <span className="font-bold text-slate-700 dark:text-slate-300 block">Normas laborales oficiales:</span>
+            <p>
+              • <strong>Decreto Supremo N° 003-97-TR:</strong> Texto Único Ordenado del D.L. 728, Ley de Productividad y Competitividad Laboral.<br />
+              • <strong>Decreto Supremo N° 001-96-TR:</strong> Reglamento del Texto Único Ordenado de la Ley de Fomento del Empleo (Plazo de 48 horas).<br />
+              • <strong>Decreto Legislativo N° 713:</strong> Legislación sobre descansos remunerados y vacaciones anuales pagadas.
+            </p>
+          </div>
         </div>
       }
     >

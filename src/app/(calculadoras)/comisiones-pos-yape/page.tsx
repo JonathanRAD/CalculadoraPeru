@@ -30,12 +30,24 @@ Monto Líquido en Cuenta: ${formatCurrency(result.netReceived)}`;
 
   const faqs = [
     {
-      question: '¿Por qué la comisión de las pasarelas en Perú incluye IGV?',
-      answer: 'La comisión cobrada por Niubiz, Izipay, Culqi o Mercado Pago es un servicio financiero gravado con el 18% de IGV. La pasarela emite una factura electrónica por dicha comisión, la cual puedes utilizar como crédito fiscal en tu contabilidad.',
+      question: '¿Por qué las comisiones de POS y pasarelas en Perú cobran IGV (18%) adicional?',
+      answer: 'El servicio de intermediación y procesamiento de pagos brindado por empresas como Niubiz, Izipay, Culqi o Mercado Pago está legalmente gravado con el Impuesto General a las Ventas (18%). Al finalizar el mes, la pasarela de pagos emite una Factura Electrónica por las comisiones cobradas, la cual sirve como Crédito Fiscal (gasto deducible) para tu empresa o negocio formal ante SUNAT.',
     },
     {
-      question: '¿Yape cobra comisión?',
-      answer: 'Yape para personas naturales es gratuito. Para negocios registrados en "Yape Empresa", se cobra una comisión fija del 2.95% + IGV sobre las ventas cobradas a partir del plan comercial.',
+      question: '¿Cuánto cobra Yape Empresa en comisiones a los negocios?',
+      answer: 'Yape cobra una comisión del 2.95% + IGV sobre las ventas cobradas a los negocios inscritos en "Yape Empresa". Al sumar el 18% del IGV a la tasa base, el descuento total efectivo directo en tu cuenta bancaria es de aproximadamente 3.481% del monto total de cada transacción.',
+    },
+    {
+      question: '¿Cuál es la diferencia entre cobrar tarjeta de débito y de crédito en Perú?',
+      answer: 'Las transacciones con tarjeta de débito tienen menores costos interbancarios para los procesadores de pago, por lo que suelen tener tarifas base entre 2.5% y 3.2% + IGV. Las tarjetas de crédito nacionales cobran entre 3.4% y 3.9% + IGV, mientras que las tarjetas corporativas o internacionales pueden llegar hasta 4.5% o 5% + IGV.',
+    },
+    {
+      question: '¿Cómo calcular el precio que debo cobrar para que la comisión no reduzca mi ganancia?',
+      answer: 'Si deseas recibir un monto neto exacto (por ejemplo S/ 100) y la tasa total con IGV es del 4%, no debes sumar simplemente el 4% al precio (S/ 104 cobraría el 4% sobre 104 = 4.16, recibiendo S/ 99.84). La fórmula matemática correcta es: Monto Neto / (1 - Tasa Efectiva). Para S/ 100: 100 / (1 - 0.04) = S/ 104.17.',
+    },
+    {
+      question: '¿En cuánto tiempo se deposita el dinero de las ventas con POS?',
+      answer: 'La mayoría de operadores en Perú (Niubiz, Izipay, VendeMás) abonan el dinero al siguiente día útil hábil (24 a 48 horas) si la cuenta de destino es del mismo banco recaudador. Si es transferencia interbancaria hacia otra entidad, puede tardar hasta 48 o 72 horas hábiles según el cronograma de transferencias de la CCE.',
     },
   ];
 
@@ -44,9 +56,62 @@ Monto Líquido en Cuenta: ${formatCurrency(result.netReceived)}`;
       meta={meta}
       faqs={faqs}
       educationalContent={
-        <div className="space-y-3">
+        <div className="space-y-4 text-sm leading-relaxed text-slate-700 dark:text-slate-300">
           <p>
-            Te permite conocer la comisión exacta con IGV que te retendrán al cobrar por POS físico o pasarelas digitales, o calcular el precio que debes cobrar para recibir el monto íntegro.
+            Cobrar mediante tarjetas de crédito, débito o billeteras móviles es indispensable para cualquier comercio formal o emprendedor en el Perú. Sin embargo, no calcular adecuadamente la tasa de comisión y su respectivo <strong>IGV (18%)</strong> puede consumir una parte significativa del margen de utilidad de tus productos.
+          </p>
+
+          <h3 className="text-base font-bold text-slate-900 dark:text-white pt-2">
+            Comparativa de Comisiones de Pasarelas en Perú
+          </h3>
+          <p>
+            A continuación se detallan los rangos referenciales de comisiones cobradas por los principales operadores autorizados en el mercado nacional:
+          </p>
+
+          <div className="my-4 overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-800">
+            <table className="w-full text-left text-xs sm:text-sm">
+              <thead className="bg-slate-100 dark:bg-slate-800/80 font-bold text-slate-900 dark:text-white">
+                <tr>
+                  <th className="p-3">Operador / Medio</th>
+                  <th className="p-3">Comisión Base</th>
+                  <th className="p-3">Tasa Final con IGV (18%)</th>
+                  <th className="p-3">Abono en Cuenta</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                <tr>
+                  <td className="p-3 font-semibold">Yape Empresa</td>
+                  <td className="p-3">2.95%</td>
+                  <td className="p-3 font-mono font-bold text-slate-900 dark:text-white">~3.48%</td>
+                  <td className="p-3">Inmediato / 24h</td>
+                </tr>
+                <tr>
+                  <td className="p-3 font-semibold">Niubiz / Izipay (Débito)</td>
+                  <td className="p-3">2.80% - 3.20%</td>
+                  <td className="p-3 font-mono font-bold text-slate-900 dark:text-white">~3.30% - 3.78%</td>
+                  <td className="p-3">24 a 48h hábiles</td>
+                </tr>
+                <tr>
+                  <td className="p-3 font-semibold">Niubiz / Izipay (Crédito)</td>
+                  <td className="p-3">3.45% - 3.99%</td>
+                  <td className="p-3 font-mono font-bold text-slate-900 dark:text-white">~4.07% - 4.71%</td>
+                  <td className="p-3">24 a 48h hábiles</td>
+                </tr>
+                <tr>
+                  <td className="p-3 font-semibold">Mercado Pago / Culqi</td>
+                  <td className="p-3">3.49% + S/ 1.00</td>
+                  <td className="p-3 font-mono font-bold text-slate-900 dark:text-white">Tasa + Cargo fijo + IGV</td>
+                  <td className="p-3">1 a 3 días hábiles</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3 className="text-base font-bold text-slate-900 dark:text-white pt-2">
+            El Crédito Fiscal de tus Comisiones
+          </h3>
+          <p>
+            Recuerda solicitar mensualmente tu reporte o factura electrónica a Niubiz, Izipay o Culqi. El IGV que te retienen en cada cobro constituye <strong>Crédito Fiscal</strong> que tu contador debe declarar en el formulario mensual de SUNAT para descontar el IGV que le debes al fisco por tus ventas.
           </p>
         </div>
       }

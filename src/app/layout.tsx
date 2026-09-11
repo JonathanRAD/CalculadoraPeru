@@ -9,6 +9,7 @@ import { Analytics } from '@vercel/analytics/next';
 import { PwaInstallBanner } from '@/shared/components/ui/PwaInstallBanner';
 import { PwaRegistration } from '@/shared/components/ui/PwaRegistration';
 import { GoogleAnalyticsPageViews } from '@/shared/components/analytics/GoogleAnalytics';
+import { CookieBanner } from '@/shared/components/ui/CookieBanner';
 
 const plexSans = IBM_Plex_Sans({
   variable: '--font-plex-sans',
@@ -190,6 +191,7 @@ export default function RootLayout({
           <Analytics />
           <PwaRegistration />
           <PwaInstallBanner />
+          <CookieBanner />
         </ThemeProvider>
       </body>
     </html>

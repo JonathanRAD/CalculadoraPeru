@@ -17,6 +17,7 @@ const CATEGORY_LINKS = [
 
 const LEGAL_LINKS = [
   { href: '/sobre-nosotros', label: 'Sobre nosotros' },
+  { href: '/contacto', label: 'Contacto' },
   { href: '/terminos-y-condiciones', label: 'Términos y condiciones' },
   { href: '/politica-de-privacidad', label: 'Política de privacidad' },
 ];

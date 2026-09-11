@@ -31,12 +31,24 @@ Total de Intereses a Pagar: ${formatCurrency(result.totalInterestPaid)} (TEA: ${
 
   const faqs = [
     {
-      question: '¿Qué es el Sistema Francés de amortización?',
-      answer: 'Es el método estándar utilizado por los bancos en Perú (BCP, BBVA, Interbank, Scotiabank, Cajas), donde pagas una cuota fija constante todos los meses. Al inicio se amortiza más interés y al final más capital.',
+      question: '¿Cuál es la diferencia entre la TEA y la TCEA en los bancos del Perú?',
+      answer: 'La TEA (Tasa Efectiva Anual) mide únicamente el interés cobrado por el dinero prestado. La TCEA (Tasa de Costo Efectivo Anual) es la tasa real total que pagarás, ya que incluye la TEA más todos los costos adicionales obligatorios: seguro de desgravamen, comisiones bancarias, gastos administrativos y portes. Según la SBS, siempre debes comparar créditos evaluando la TCEA.',
     },
     {
-      question: '¿Qué es el seguro de desgravamen?',
-      answer: 'Es un seguro obligatorio en créditos bancarios que cancela la deuda pendiente en caso de fallecimiento o invalidez total y permanente del titular del crédito.',
+      question: '¿Cómo funciona el Sistema Francés de amortización en el Perú?',
+      answer: 'Es el sistema bancario estándar en el Perú (utilizado por BCP, BBVA, Interbank, Scotiabank, Banco de la Nación y Cajas Municipales). Se caracteriza por mantener cuotas mensuales fijas e iguales durante todo el plazo del crédito. En las primeras cuotas la mayor parte del pago corresponde a intereses, mientras que hacia el final del plazo la mayor parte amortiza el capital.',
+    },
+    {
+      question: '¿Es obligatorio contratar el seguro de desgravamen con el mismo banco?',
+      answer: 'No. Por regulación de la Superintendencia de Banca, Seguros y AFP (SBS), tienes el derecho legal de endosar una póliza de seguro de vida independiente que ya poseas, siempre que cumpla con las coberturas mínimas exigidas por la entidad financiera, evitando pagar la prima interna del banco.',
+    },
+    {
+      question: '¿Puedo hacer pagos anticipados o prepagos sin penalidad en Perú?',
+      answer: 'Sí. La Ley de Protección al Consumidor Financiero prohíbe el cobro de penalidades, comisiones o intereses futuros por amortizaciones extraordinarias o cancelación total anticipada de un crédito. Puedes elegir entre reducir el monto de la cuota mensual o reducir el plazo restante de la deuda.',
+    },
+    {
+      question: '¿Qué es el Impuesto a las Transacciones Financieras (ITF)?',
+      answer: 'El ITF es un tributo nacional con tasa de 0.005% que se aplica a toda acreditación o débito en cuentas del sistema financiero peruano (Ley 28194). Se descuenta de forma automática al momento del desembolso del crédito y con cada abono de cuota.',
     },
   ];
 
@@ -45,9 +57,57 @@ Total de Intereses a Pagar: ${formatCurrency(result.totalInterestPaid)} (TEA: ${
       meta={meta}
       faqs={faqs}
       educationalContent={
-        <div className="space-y-3">
+        <div className="space-y-4 text-sm leading-relaxed text-slate-700 dark:text-slate-300">
           <p>
-            Simula las cuotas mensuales de préstamos personales, vehiculares o capital de trabajo para MYPES en entidades financieras del Perú.
+            Al solicitar un préstamo personal, crédito vehicular o financiamiento para capital de trabajo en el sistema financiero peruano, es fundamental comprender la estructura de las cuotas y los costos regulados por la <strong>Superintendencia de Banca, Seguros y AFP (SBS)</strong>.
+          </p>
+
+          <h3 className="text-base font-bold text-slate-900 dark:text-white pt-2">
+            Estructura de la Cuota Mensual Bancaria
+          </h3>
+          <p>
+            Bajo el sistema francés de cuota constante, cada pago mensual que realizas al banco se descompone en tres partes esenciales:
+          </p>
+          <ul className="list-disc pl-5 space-y-1.5">
+            <li><strong>Amortización de Capital:</strong> Reducción directa del saldo deudor adeudado.</li>
+            <li><strong>Interés Compensatorio:</strong> Ganancia de la entidad financiera calculada sobre el saldo pendiente (derivada de la TEA).</li>
+            <li><strong>Seguro de Desgravamen y Cargos:</strong> Cobertura ante fallecimiento e invalidez exigida para proteger el saldo pendiente.</li>
+          </ul>
+
+          <div className="my-4 overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-800">
+            <table className="w-full text-left text-xs sm:text-sm">
+              <thead className="bg-slate-100 dark:bg-slate-800/80 font-bold text-slate-900 dark:text-white">
+                <tr>
+                  <th className="p-3">Concepto Financiero</th>
+                  <th className="p-3">¿Qué incluye?</th>
+                  <th className="p-3">Impacto en el Deudor</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                <tr>
+                  <td className="p-3 font-semibold">TEA (Tasa Efectiva Anual)</td>
+                  <td className="p-3">Solo costo financiero del dinero</td>
+                  <td className="p-3">Tasa referencial pactada</td>
+                </tr>
+                <tr>
+                  <td className="p-3 font-semibold">TCEA (Costo Efectivo Anual)</td>
+                  <td className="p-3">TEA + Desgravamen + Comisiones + Gastos</td>
+                  <td className="p-3 font-bold text-blue-700 dark:text-blue-400">El costo real definitivo a pagar</td>
+                </tr>
+                <tr>
+                  <td className="p-3 font-semibold">Amortización Anticipada</td>
+                  <td className="p-3">Abono directo al capital sin penalidad (SBS)</td>
+                  <td className="p-3">Ahorro drástico de intereses futuros</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3 className="text-base font-bold text-slate-900 dark:text-white pt-2">
+            Recomendación para Solicitar Préstamos en Perú
+          </h3>
+          <p>
+            Antes de firmar un pagaré o contrato de crédito, solicita la <strong>Hoja Resumen</strong> a la entidad bancaria o caja municipal. Compara siempre la TCEA entre al menos tres entidades del mercado antes de tomar una decisión de endeudamiento.
           </p>
         </div>
       }
