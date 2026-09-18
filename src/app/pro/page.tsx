@@ -114,7 +114,7 @@ export default function ProSubscriptionPage() {
           name: subscriberName,
           email: subscriberEmail,
           motive: 'alianza',
-          message: `SOLICITUD DE SUSCRIPCIÓN PRO:\nPlan: ${selectedPlan === 'yearly' ? 'ANUAL (S/ 199)' : 'MENSUAL (S/ 29)'}\nCelular: ${subscriberPhone}\nCódigo Op: ${operationCode || 'CUPÓN'}\nCupón: ${isCouponApplied ? couponCode : 'Ninguno'}\nUsuario registrado: ${user ? `${user.email} (ID: ${user.id})` : 'No registrado aún'}`,
+          message: `SOLICITUD DE SUSCRIPCIÓN PRO:\nPlan: ${selectedPlan === 'yearly' ? 'ANUAL (S/ 149)' : 'MENSUAL (S/ 16)'}\nCelular: ${subscriberPhone}\nCódigo Op: ${operationCode || 'CUPÓN'}\nCupón: ${isCouponApplied ? couponCode : 'Ninguno'}\nUsuario registrado: ${user ? `${user.email} (ID: ${user.id})` : 'No registrado aún'}`,
         }),
       });
 
@@ -250,6 +250,37 @@ export default function ProSubscriptionPage() {
             />
           </div>
 
+        </div>
+
+        {/* ========================================================================= */}
+        {/* PRO BENEFITS GUIDE PROMO BANNER */}
+        {/* ========================================================================= */}
+        <div className="rounded-3xl bg-gradient-to-r from-emerald-50 via-teal-50 to-blue-50 dark:from-emerald-950/40 dark:via-slate-900 dark:to-blue-950/40 border-2 border-emerald-200 dark:border-emerald-800/80 p-6 sm:p-7 flex flex-col md:flex-row items-center justify-between gap-5 shadow-sm">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 rounded-2xl bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-md shadow-emerald-600/20">
+              <Sparkles className="w-6 h-6 text-amber-300 fill-amber-300" />
+            </div>
+            <div className="space-y-1 text-center sm:text-left">
+              <div className="flex items-center gap-2 justify-center sm:justify-start">
+                <h2 className="font-black text-base sm:text-lg text-slate-900 dark:text-white">
+                  ¿Quieres ver qué incluye PRO en cada calculadora específica?
+                </h2>
+                <span className="hidden sm:inline-block px-2 py-0.5 rounded-full bg-emerald-600 text-white text-[10px] font-extrabold">
+                  NUEVO
+                </span>
+              </div>
+              <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed max-w-2xl">
+                Hemos creado una <strong>Guía Maestra interactiva</strong> con el desglose exacto de beneficios por cada herramienta (CTS con Semáforo SUNAFIL, Liquidación con PDF oficial, Cotizador con WhatsApp, etc.) y redirecciones directas para que no te pierdas.
+              </p>
+            </div>
+          </div>
+          <Link
+            href="/pro/beneficios"
+            className="inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-slate-900 hover:bg-slate-800 dark:bg-white dark:hover:bg-slate-100 text-white dark:text-slate-900 font-bold text-xs sm:text-sm shrink-0 transition-all shadow-sm hover:scale-[1.02] cursor-pointer"
+          >
+            <span>Explorar Guía por Calculadora</span>
+            <ArrowRight className="w-4 h-4" />
+          </Link>
         </div>
 
         {/* ========================================================================= */}

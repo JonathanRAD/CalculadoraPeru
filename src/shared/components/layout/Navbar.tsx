@@ -141,6 +141,13 @@ export function Navbar() {
                 </div>
               );
             })}
+            <Link
+              href="/pro/beneficios"
+              className="flex items-center gap-1.5 hover:text-white transition-colors cursor-pointer py-2 text-emerald-400 hover:text-emerald-300 font-bold"
+            >
+              <Sparkles className="h-3.5 w-3.5 text-amber-300 fill-amber-300" />
+              <span>Beneficios PRO</span>
+            </Link>
           </nav>
 
           {/* Right Actions: PRO Button + Search + ThemeToggle + Mobile Toggle */}
@@ -311,6 +318,20 @@ export function Navbar() {
             <div className="flex items-center justify-between pb-3 border-b border-slate-800">
               <span className="text-xs text-slate-300 font-semibold">Tema (Día / Noche)</span>
               <ThemeToggle />
+            </div>
+
+            <div className="pb-3 border-b border-slate-800">
+              <Link
+                href="/pro/beneficios"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="flex items-center justify-between p-3 rounded-2xl bg-gradient-to-r from-emerald-950/80 to-teal-950/80 border border-emerald-500/40 text-emerald-300 text-xs font-bold shadow-xs"
+              >
+                <div className="flex items-center gap-2">
+                  <Sparkles className="h-4 w-4 text-amber-300 fill-amber-300 shrink-0" />
+                  <span>Guía Maestra de Beneficios PRO</span>
+                </div>
+                <ArrowRight className="h-3.5 w-3.5 text-emerald-400" />
+              </Link>
             </div>
 
             {navCategories.map((cat) => {
