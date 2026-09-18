@@ -11,6 +11,7 @@ import { CALCULATORS_REGISTRY, CATEGORIES, type CalculatorCategory } from '@/fea
 import { HomeSearch } from '@/features/home/components/HomeSearch';
 import { QuickSalaryCalculator } from '@/features/home/components/QuickSalaryCalculator';
 import { ResponsiveDetails } from '@/features/home/components/ResponsiveDetails';
+import { FadeIn } from '@/shared/components/ui/FadeIn';
 
 export const metadata: Metadata = {
   title: 'Calculadoras Perú 2026: sueldo, IGV, negocios y finanzas',
@@ -84,7 +85,7 @@ export default function HomePage() {
   );
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] text-slate-950 transition-colors dark:bg-[#070D1E] dark:text-slate-100">
+    <div className="min-h-screen bg-[#F8FAFC] text-slate-950 transition-colors duration-300 dark:bg-[#070D1E] dark:text-slate-100">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(homeItemListJsonLd) }} />
 
       {/* ========================================================================= */}
@@ -171,220 +172,228 @@ export default function HomePage() {
       </section>
 
       {/* ========================================================================= */}
-      {/* FEATURED CALCULATORS SECTION */}
+      {/* FEATURED CALCULATORS SECTION WITH PROGRESSIVE FADE-IN */}
       {/* ========================================================================= */}
       <section aria-labelledby="featured-title" className="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16">
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <span className="text-xs font-bold uppercase tracking-wider text-[#00875A] dark:text-emerald-400">
-              Accesos directos
-            </span>
-            <h2 id="featured-title" className="mt-1 text-2xl sm:text-3xl font-black tracking-tight text-slate-950 dark:text-white">
-              Las calculadoras más utilizadas del Perú
-            </h2>
-            <p className="mt-1 text-xs sm:text-sm text-slate-600 dark:text-slate-400">
-              Herramientas financieras y laborales actualizadas a la normativa 2026.
-            </p>
+        <FadeIn direction="up">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <span className="text-xs font-bold uppercase tracking-wider text-[#00875A] dark:text-emerald-400">
+                Accesos directos
+              </span>
+              <h2 id="featured-title" className="mt-1 text-2xl sm:text-3xl font-black tracking-tight text-slate-950 dark:text-white">
+                Las calculadoras más utilizadas del Perú
+              </h2>
+              <p className="mt-1 text-xs sm:text-sm text-slate-600 dark:text-slate-400">
+                Herramientas financieras y laborales adaptadas a la normativa 2026.
+              </p>
+            </div>
+            <Link
+              href="#todas-las-calculadoras"
+              className="group inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-[#00875A] hover:text-[#006644] dark:text-emerald-400 dark:hover:text-emerald-300"
+            >
+              <span>Ver las 25 herramientas</span>
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
+            </Link>
           </div>
-          <Link
-            href="#todas-las-calculadoras"
-            className="group inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-[#00875A] hover:text-[#006644] dark:text-emerald-400 dark:hover:text-emerald-300"
-          >
-            <span>Ver las 25 herramientas</span>
-            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
-          </Link>
-        </div>
+        </FadeIn>
 
+        {/* Staggered progressive cards reveal */}
         <div className="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           {FEATURED_CALCULATORS.map(({ calculator, label, eyebrow, image, imageAlt }, index) => (
-            <Link
-              key={calculator.id}
-              href={calculator.slug}
-              className="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xs transition-all duration-200 hover:-translate-y-1 hover:border-emerald-500/50 hover:shadow-lg hover:shadow-emerald-950/5 dark:border-slate-800 dark:bg-slate-900 flex flex-col justify-between"
-            >
-              <div className="relative aspect-[16/8.5] overflow-hidden bg-slate-100 dark:bg-slate-800">
-                <Image
-                  src={image}
-                  alt={imageAlt}
-                  fill
-                  sizes="(max-width: 767px) 100vw, (max-width: 1279px) 50vw, 33vw"
-                  className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/50 via-transparent to-transparent" aria-hidden="true" />
-                <span className="absolute bottom-3 left-3 rounded-full bg-white/95 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider text-slate-700 shadow-xs backdrop-blur-xs dark:bg-slate-950/90 dark:text-slate-200">
-                  <span className="font-mono text-[#00875A] dark:text-emerald-400">0{index + 1}</span> · {eyebrow}
-                </span>
-              </div>
-
-              <div className="p-5 flex flex-col flex-1 justify-between space-y-3">
-                <div>
-                  <h3 className="text-base sm:text-lg font-bold text-slate-950 dark:text-white group-hover:text-[#00875A] dark:group-hover:text-emerald-400 transition-colors">
-                    {label}
-                  </h3>
-                  <p className="mt-1 text-xs text-slate-600 dark:text-slate-400 line-clamp-2 leading-relaxed">
-                    {calculator.cardSummary}
-                  </p>
+            <FadeIn key={calculator.id} delay={index * 80} direction="up">
+              <Link
+                href={calculator.slug}
+                className="group h-full overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-xs transition-all duration-300 ease-out hover:-translate-y-1.5 hover:border-emerald-500/50 hover:shadow-xl hover:shadow-emerald-950/5 dark:border-slate-800 dark:bg-slate-900 flex flex-col justify-between"
+              >
+                <div className="relative aspect-[16/8.5] overflow-hidden bg-slate-100 dark:bg-slate-800">
+                  <Image
+                    src={image}
+                    alt={imageAlt}
+                    fill
+                    sizes="(max-width: 767px) 100vw, (max-width: 1279px) 50vw, 33vw"
+                    className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/50 via-transparent to-transparent" aria-hidden="true" />
+                  <span className="absolute bottom-3 left-3 rounded-full bg-white/95 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider text-slate-700 shadow-xs backdrop-blur-xs dark:bg-slate-950/90 dark:text-slate-200">
+                    <span className="font-mono text-[#00875A] dark:text-emerald-400">0{index + 1}</span> · {eyebrow}
+                  </span>
                 </div>
 
-                <div className="pt-2 flex items-center justify-between text-xs font-bold text-slate-800 dark:text-slate-200 border-t border-slate-100 dark:border-slate-800/80">
-                  <span>Abrir calculadora</span>
-                  <ArrowRight className="h-4 w-4 text-[#00875A] transition-transform group-hover:translate-x-1 dark:text-emerald-400" aria-hidden="true" />
+                <div className="p-5 flex flex-col flex-1 justify-between space-y-3">
+                  <div>
+                    <h3 className="text-base sm:text-lg font-bold text-slate-950 dark:text-white group-hover:text-[#00875A] dark:group-hover:text-emerald-400 transition-colors duration-200">
+                      {label}
+                    </h3>
+                    <p className="mt-1 text-xs text-slate-600 dark:text-slate-400 line-clamp-2 leading-relaxed font-normal">
+                      {calculator.cardSummary}
+                    </p>
+                  </div>
+
+                  <div className="pt-2 flex items-center justify-between text-xs font-bold text-slate-800 dark:text-slate-200 border-t border-slate-100 dark:border-slate-800/80">
+                    <span>Abrir calculadora</span>
+                    <ArrowRight className="h-4 w-4 text-[#00875A] transition-transform duration-200 group-hover:translate-x-1.5 dark:text-emerald-400" aria-hidden="true" />
+                  </div>
                 </div>
-              </div>
-            </Link>
+              </Link>
+            </FadeIn>
           ))}
         </div>
       </section>
 
       {/* ========================================================================= */}
-      {/* HIGH-CONVERTING SAAS PRO BANNER */}
+      {/* NATURAL, LIGHT/DARK HARMONIOUS CALCULAPERÚ PRO SHOWCASE */}
       {/* ========================================================================= */}
-      <section className="mx-auto max-w-7xl px-4 py-6 sm:px-6">
-        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#06241a] via-[#0b1b36] to-[#041226] border border-emerald-500/30 p-8 sm:p-10 shadow-2xl text-white">
-          {/* Subtle background glow effect */}
-          <div className="absolute -top-24 -right-24 w-96 h-96 bg-emerald-500/15 rounded-full blur-3xl pointer-events-none" />
-          
-          <div className="relative grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            
-            {/* Left Column: Pro Value Proposition */}
-            <div className="lg:col-span-7 space-y-5">
-              <div className="inline-flex items-center gap-2 rounded-full bg-emerald-500/20 border border-emerald-500/40 px-3 py-1 text-xs font-bold text-emerald-300">
-                <Sparkles className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
-                <span>NUEVA SUITE PROFESIONAL PARA EMPRESAS Y CONTADORES</span>
-              </div>
+      <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6">
+        <FadeIn direction="up">
+          <div className="relative overflow-hidden rounded-3xl border border-emerald-200/80 bg-gradient-to-br from-emerald-50/70 via-white to-slate-50 p-8 sm:p-10 shadow-lg shadow-emerald-950/5 transition-colors duration-300 dark:border-emerald-500/25 dark:from-[#09152b] dark:via-[#0c1833] dark:to-[#081224] dark:shadow-2xl">
+            {/* Subtle organic light accent */}
+            <div className="pointer-events-none absolute -top-24 -right-24 h-96 w-96 rounded-full bg-emerald-500/10 blur-3xl dark:bg-emerald-500/15" />
 
-              <h2 className="text-2xl sm:text-4xl font-black tracking-tight leading-tight">
-                Emite boletas de pago y liquidaciones con{' '}
-                <span className="bg-gradient-to-r from-emerald-400 via-teal-300 to-amber-300 bg-clip-text text-transparent">
-                  CalculaPerú PRO
-                </span>
-              </h2>
-
-              <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-normal">
-                Evita multas de SUNAFIL de hasta S/ 8,250. Genera boletas de pago membretadas con tu propio Logo y RUC, liquidaciones bajo el D.L. 728 con huella digital y archivos listos para importar al PDT PLAME de SUNAT.
-              </p>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1 text-xs">
-                <div className="flex items-center gap-2 text-slate-200">
-                  <Check className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span>Boletas formales D.S. N° 001-98-TR</span>
+            <div className="relative grid grid-cols-1 items-center gap-8 lg:grid-cols-12">
+              
+              {/* Left Column: Pro Value Proposition */}
+              <div className="space-y-5 lg:col-span-7">
+                <div className="inline-flex items-center gap-2 rounded-full border border-emerald-300/80 bg-emerald-100/70 px-3.5 py-1.5 text-xs font-bold text-emerald-900 dark:border-emerald-500/30 dark:bg-emerald-500/15 dark:text-emerald-300">
+                  <Sparkles className="h-3.5 w-3.5 text-amber-500 fill-amber-500" />
+                  <span>SUITE PROFESIONAL PARA EMPRESAS Y CONTADORES</span>
                 </div>
-                <div className="flex items-center gap-2 text-slate-200">
-                  <Check className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span>Tu RUC, Razón Social y Logotipo</span>
-                </div>
-                <div className="flex items-center gap-2 text-slate-200">
-                  <Check className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span>Liquidaciones ilimitadas D.L. 728</span>
-                </div>
-                <div className="flex items-center gap-2 text-slate-200">
-                  <Check className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span>Multi-dispositivo y 0% Publicidad</span>
-                </div>
-              </div>
 
-              <div className="pt-2 flex flex-wrap items-center gap-4">
-                <Link
-                  href="/pro"
-                  className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-[#00875A] hover:bg-[#00704A] text-white font-bold text-xs sm:text-sm transition-all shadow-lg shadow-emerald-950/40 hover:scale-[1.02]"
-                >
-                  <Sparkles className="w-4 h-4 text-amber-300 fill-amber-300" />
-                  <span>Conocer Planes CalculaPerú PRO</span>
-                  <ArrowRight className="w-4 h-4" />
-                </Link>
-
-                <Link
-                  href="/pro"
-                  className="inline-flex items-center gap-1.5 text-xs text-slate-300 hover:text-white font-semibold underline underline-offset-4 transition-colors"
-                >
-                  <span>Desde S/ 16.50 al mes (Plan Anual)</span>
-                </Link>
-              </div>
-            </div>
-
-            {/* Right Column: Visual Mock Preview Badge */}
-            <div className="lg:col-span-5 flex justify-center">
-              <div className="w-full max-w-sm rounded-2xl bg-slate-900/90 border border-slate-700/80 p-5 shadow-2xl space-y-4 text-xs font-mono">
-                <div className="flex items-center justify-between border-b border-slate-800 pb-3 font-sans">
-                  <div className="flex items-center gap-2">
-                    <div className="w-6 h-6 rounded-md bg-[#00875A] flex items-center justify-center text-white font-bold text-[10px]">
-                      CP
-                    </div>
-                    <span className="font-bold text-white text-xs">Boleta Oficial SUNAFIL</span>
-                  </div>
-                  <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 text-[10px] font-bold">
-                    VÁLIDO 2026
+                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight leading-tight text-slate-950 dark:text-white">
+                  Emite boletas de pago y liquidaciones con{' '}
+                  <span className="bg-gradient-to-r from-[#00875A] via-emerald-600 to-teal-500 bg-clip-text text-transparent">
+                    CalculaPerú PRO
                   </span>
-                </div>
+                </h2>
 
-                <div className="space-y-2 text-[11px] text-slate-300">
-                  <div className="flex justify-between">
-                    <span className="text-slate-400">EMPRESA:</span>
-                    <span className="text-white font-bold font-sans">TU LOGO Y RUC</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-slate-400">TRABAJADOR:</span>
-                    <span className="text-slate-200 font-sans">Planilla General</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-slate-400">RÉGIMEN:</span>
-                    <span className="text-emerald-400">D.L. 728 / SUNAT</span>
-                  </div>
-                </div>
+                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
+                  Evita multas de SUNAFIL de hasta S/ 8,250. Genera boletas de pago membretadas con tu propio Logo y RUC, liquidaciones oficiales bajo el D.L. 728 con firmas y huella digital, y exportaciones estructuradas para el PDT PLAME de SUNAT.
+                </p>
 
-                <div className="p-3 rounded-xl bg-slate-950 border border-slate-800/80 space-y-1">
-                  <div className="flex justify-between text-slate-400 text-[10px]">
-                    <span>TOTAL HABERES:</span>
-                    <span className="text-white font-bold">S/ 3,500.00</span>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1 text-xs">
+                  <div className="flex items-center gap-2 text-slate-700 dark:text-slate-200 font-medium">
+                    <Check className="w-4 h-4 text-[#00875A] dark:text-emerald-400 shrink-0 font-bold" />
+                    <span>Boletas formales D.S. N° 001-98-TR</span>
                   </div>
-                  <div className="flex justify-between text-slate-400 text-[10px]">
-                    <span>DESCUENTOS LEY:</span>
-                    <span className="text-red-400 font-bold">- S/ 416.50</span>
+                  <div className="flex items-center gap-2 text-slate-700 dark:text-slate-200 font-medium">
+                    <Check className="w-4 h-4 text-[#00875A] dark:text-emerald-400 shrink-0 font-bold" />
+                    <span>Tu RUC, Razón Social y Logotipo</span>
                   </div>
-                  <div className="flex justify-between text-emerald-400 font-bold text-xs pt-1 border-t border-slate-800">
-                    <span>NETO A PAGAR:</span>
-                    <span>S/ 3,083.50</span>
+                  <div className="flex items-center gap-2 text-slate-700 dark:text-slate-200 font-medium">
+                    <Check className="w-4 h-4 text-[#00875A] dark:text-emerald-400 shrink-0 font-bold" />
+                    <span>Liquidaciones ilimitadas D.L. 728</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-slate-700 dark:text-slate-200 font-medium">
+                    <Check className="w-4 h-4 text-[#00875A] dark:text-emerald-400 shrink-0 font-bold" />
+                    <span>Multi-dispositivo y 0% Publicidad</span>
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between text-[10px] text-slate-400 font-sans pt-1">
-                  <span>✓ Con firma y huella de ley</span>
-                  <span className="text-[#00875A] font-bold">Sin marca de agua</span>
+                <div className="flex flex-wrap items-center gap-4 pt-2">
+                  <Link
+                    href="/pro"
+                    className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-[#00875A] hover:bg-[#00704A] text-white font-bold text-xs sm:text-sm transition-all shadow-md shadow-emerald-700/20 hover:scale-[1.02] active:scale-[0.98]"
+                  >
+                    <Sparkles className="w-4 h-4 text-amber-300 fill-amber-300" />
+                    <span>Ver Planes CalculaPerú PRO</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </Link>
+
+                  <Link
+                    href="/pro"
+                    className="inline-flex items-center gap-1.5 text-xs text-[#00875A] hover:text-[#006644] dark:text-emerald-400 dark:hover:text-emerald-300 font-semibold underline underline-offset-4 transition-colors"
+                  >
+                    <span>Desde S/ 16.50 al mes (Plan Anual)</span>
+                  </Link>
                 </div>
               </div>
-            </div>
 
+              {/* Right Column: Natural Ticket Preview Card */}
+              <div className="flex justify-center lg:col-span-5">
+                <div className="w-full max-w-sm rounded-2xl border border-slate-200/90 bg-white p-5 shadow-lg shadow-slate-200/50 dark:border-slate-800 dark:bg-slate-950/80 dark:shadow-none space-y-4 text-xs font-mono transition-colors">
+                  <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3 font-sans">
+                    <div className="flex items-center gap-2">
+                      <div className="w-7 h-7 rounded-lg bg-[#00875A] flex items-center justify-center text-white font-bold text-xs">
+                        CP
+                      </div>
+                      <span className="font-bold text-slate-900 dark:text-white text-xs">Boleta Oficial SUNAFIL</span>
+                    </div>
+                    <span className="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-500/20 dark:text-emerald-300 text-[10px] font-bold">
+                      VÁLIDO 2026
+                    </span>
+                  </div>
+
+                  <div className="space-y-2 text-[11px]">
+                    <div className="flex justify-between">
+                      <span className="text-slate-500 dark:text-slate-400">EMPRESA:</span>
+                      <span className="font-bold font-sans text-slate-900 dark:text-white">TU LOGO Y RUC</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-slate-500 dark:text-slate-400">TRABAJADOR:</span>
+                      <span className="text-slate-800 dark:text-slate-200 font-sans">Planilla General</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-slate-500 dark:text-slate-400">RÉGIMEN:</span>
+                      <span className="text-[#00875A] dark:text-emerald-400 font-bold">D.L. 728 / SUNAT</span>
+                    </div>
+                  </div>
+
+                  <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200/80 dark:bg-slate-900/90 dark:border-slate-800 space-y-1.5">
+                    <div className="flex justify-between text-slate-600 dark:text-slate-400 text-[11px]">
+                      <span>TOTAL HABERES:</span>
+                      <span className="font-bold text-slate-900 dark:text-white">S/ 3,500.00</span>
+                    </div>
+                    <div className="flex justify-between text-slate-600 dark:text-slate-400 text-[11px]">
+                      <span>DESCUENTOS LEY:</span>
+                      <span className="text-red-500 dark:text-red-400 font-bold">- S/ 416.50</span>
+                    </div>
+                    <div className="flex justify-between text-[#00875A] dark:text-emerald-400 font-bold text-xs pt-1.5 border-t border-slate-200 dark:border-slate-800">
+                      <span>NETO A PAGAR:</span>
+                      <span>S/ 3,083.50</span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400 font-sans pt-1">
+                    <span>✓ Con firma y huella de ley</span>
+                    <span className="text-[#00875A] dark:text-emerald-400 font-bold">Sin marca de agua</span>
+                  </div>
+                </div>
+              </div>
+
+            </div>
           </div>
-        </div>
+        </FadeIn>
       </section>
 
       {/* ========================================================================= */}
       {/* OFFICIAL PARAMETERS AND TRUST BAR */}
       {/* ========================================================================= */}
-      <section aria-label="Confianza y parámetros oficiales" className="border-y border-slate-200 bg-white dark:border-slate-800 dark:bg-[#0c1630]">
+      <section aria-label="Confianza y parámetros oficiales" className="border-y border-slate-200 bg-white dark:border-slate-800 dark:bg-[#0c1630] transition-colors">
         <div className="mx-auto grid max-w-7xl gap-px bg-slate-200 px-4 sm:grid-cols-2 sm:px-6 lg:grid-cols-4 dark:bg-slate-800">
           {[
             { label: 'IGV vigente', value: '18%', detail: 'Tasa general SUNAT', icon: Percent },
             { label: 'UIT oficial 2026', value: 'S/ 5,500', detail: 'D.S. N° 309-2025-EF', icon: Banknote },
             { label: 'Calculadoras', value: '25 Libres', detail: 'Acceso gratuito ilimitado', icon: Calculator },
             { label: 'Normativa Legal', value: 'Oficial', detail: 'SUNAT, MTPE, SBS y BCRP', icon: Building2 },
-          ].map(({ label, value, detail, icon: Icon }) => (
-            <div key={label} className="flex items-center gap-4 bg-white px-4 py-6 dark:bg-[#0c1630] sm:px-6">
-              <div className="w-11 h-11 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 flex items-center justify-center text-[#00875A] dark:text-emerald-400 shrink-0 border border-emerald-200/60 dark:border-emerald-800/60">
-                <Icon className="h-5 w-5" aria-hidden="true" />
+          ].map(({ label, value, detail, icon: Icon }, idx) => (
+            <FadeIn key={label} delay={idx * 60} direction="up">
+              <div className="flex items-center gap-4 bg-white px-4 py-6 dark:bg-[#0c1630] sm:px-6 h-full transition-colors">
+                <div className="w-11 h-11 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 flex items-center justify-center text-[#00875A] dark:text-emerald-400 shrink-0 border border-emerald-200/60 dark:border-emerald-800/60">
+                  <Icon className="h-5 w-5" aria-hidden="true" />
+                </div>
+                <div>
+                  <p className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                    {label}
+                  </p>
+                  <p className="mt-0.5 font-mono text-xl font-black text-slate-950 dark:text-white">
+                    {value}
+                  </p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">
+                    {detail}
+                  </p>
+                </div>
               </div>
-              <div>
-                <p className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                  {label}
-                </p>
-                <p className="mt-0.5 font-mono text-xl font-black text-slate-950 dark:text-white">
-                  {value}
-                </p>
-                <p className="text-xs text-slate-500 dark:text-slate-400">
-                  {detail}
-                </p>
-              </div>
-            </div>
+            </FadeIn>
           ))}
         </div>
       </section>
@@ -393,60 +402,63 @@ export default function HomePage() {
       {/* FULL DIRECTORY OF 25 CALCULATORS */}
       {/* ========================================================================= */}
       <section id="todas-las-calculadoras" aria-labelledby="directory-title" className="scroll-mt-24 mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16">
-        <div className="max-w-2xl">
-          <span className="text-xs font-bold uppercase tracking-wider text-[#00875A] dark:text-emerald-400">
-            Directorio completo
-          </span>
-          <h2 id="directory-title" className="mt-1 text-2xl sm:text-3xl font-black tracking-tight text-slate-950 dark:text-white">
-            Encuentra la herramienta según tu necesidad
-          </h2>
-          <p className="mt-1 text-xs sm:text-sm text-slate-600 dark:text-slate-400">
-            Organizamos las 25 calculadoras en cuatro áreas para que llegues al resultado de inmediato.
-          </p>
-        </div>
+        <FadeIn direction="up">
+          <div className="max-w-2xl">
+            <span className="text-xs font-bold uppercase tracking-wider text-[#00875A] dark:text-emerald-400">
+              Directorio completo
+            </span>
+            <h2 id="directory-title" className="mt-1 text-2xl sm:text-3xl font-black tracking-tight text-slate-950 dark:text-white">
+              Encuentra la herramienta según tu necesidad
+            </h2>
+            <p className="mt-1 text-xs sm:text-sm text-slate-600 dark:text-slate-400">
+              Organizamos las 25 calculadoras en cuatro áreas para que llegues al resultado de inmediato.
+            </p>
+          </div>
+        </FadeIn>
 
         <div className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
           {categories.map((category, index) => {
             const calculators = CALCULATORS_REGISTRY.filter((calculator) => calculator.category === category.id);
             const Icon = CATEGORY_ICONS[category.id];
             return (
-              <ResponsiveDetails
-                id={category.id}
-                key={category.id}
-                defaultMobileOpen={index === 0}
-                className="directory-details group scroll-mt-24 rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900 shadow-xs"
-              >
-                <summary className="flex min-h-12 cursor-pointer list-none items-start justify-between gap-4 marker:content-none focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-emerald-600">
-                  <span className="flex min-w-0 items-start gap-3">
-                    <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-[#00875A] dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200/50 dark:border-emerald-800/50">
-                      <Icon className="h-4.5 w-4.5" aria-hidden="true" />
-                    </span>
-                    <span>
-                      <span className="block text-sm font-bold text-slate-950 dark:text-white">
-                        {category.label}
+              <FadeIn key={category.id} delay={index * 80} direction="up">
+                <ResponsiveDetails
+                  id={category.id}
+                  defaultMobileOpen={index === 0}
+                  className="directory-details group scroll-mt-24 rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900 shadow-xs h-full transition-all duration-300 hover:border-emerald-500/40 hover:shadow-md"
+                >
+                  <summary className="flex min-h-12 cursor-pointer list-none items-start justify-between gap-4 marker:content-none focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-emerald-600">
+                    <span className="flex min-w-0 items-start gap-3">
+                      <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-[#00875A] dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200/50 dark:border-emerald-800/50">
+                        <Icon className="h-4.5 w-4.5" aria-hidden="true" />
                       </span>
-                      <span className="mt-0.5 block text-xs text-slate-500 dark:text-slate-400">
-                        {calculators.length} herramientas
+                      <span>
+                        <span className="block text-sm font-bold text-slate-950 dark:text-white">
+                          {category.label}
+                        </span>
+                        <span className="mt-0.5 block text-xs text-slate-500 dark:text-slate-400">
+                          {calculators.length} herramientas
+                        </span>
                       </span>
                     </span>
-                  </span>
-                  <ChevronDown className="mt-2 h-4 w-4 shrink-0 text-slate-500 transition-transform group-open:rotate-180 md:hidden" aria-hidden="true" />
-                </summary>
+                    <ChevronDown className="mt-2 h-4 w-4 shrink-0 text-slate-500 transition-transform group-open:rotate-180 md:hidden" aria-hidden="true" />
+                  </summary>
 
-                <ul className="mt-4 space-y-1 border-t border-slate-100 pt-3 dark:border-slate-800">
-                  {calculators.map((calculator) => (
-                    <li key={calculator.id}>
-                      <Link
-                        href={calculator.slug}
-                        className="group/link flex min-h-10 items-center justify-between gap-3 rounded-lg px-2 text-xs sm:text-sm font-medium text-slate-700 transition-colors hover:bg-emerald-50 hover:text-emerald-900 focus-visible:outline-2 focus-visible:outline-emerald-600 dark:text-slate-300 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300"
-                      >
-                        <span>{calculator.shortTitle}</span>
-                        <ArrowRight className="h-3.5 w-3.5 shrink-0 text-slate-400 transition-transform group-hover/link:translate-x-0.5 group-hover/link:text-emerald-700 dark:group-hover/link:text-emerald-400" aria-hidden="true" />
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </ResponsiveDetails>
+                  <ul className="mt-4 space-y-1 border-t border-slate-100 pt-3 dark:border-slate-800">
+                    {calculators.map((calculator) => (
+                      <li key={calculator.id}>
+                        <Link
+                          href={calculator.slug}
+                          className="group/link flex min-h-10 items-center justify-between gap-3 rounded-lg px-2 text-xs sm:text-sm font-medium text-slate-700 transition-colors hover:bg-emerald-50 hover:text-emerald-900 focus-visible:outline-2 focus-visible:outline-emerald-600 dark:text-slate-300 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300"
+                        >
+                          <span>{calculator.shortTitle}</span>
+                          <ArrowRight className="h-3.5 w-3.5 shrink-0 text-slate-400 transition-transform group-hover/link:translate-x-0.5 group-hover/link:text-emerald-700 dark:group-hover/link:text-emerald-400" aria-hidden="true" />
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </ResponsiveDetails>
+              </FadeIn>
             );
           })}
         </div>
@@ -455,7 +467,7 @@ export default function HomePage() {
       {/* ========================================================================= */}
       {/* METHODOLOGY & FAQS */}
       {/* ========================================================================= */}
-      <section aria-labelledby="method-title" className="border-t border-slate-200 bg-[#edf2f1] dark:border-slate-800 dark:bg-[#09122a]">
+      <section aria-labelledby="method-title" className="border-t border-slate-200 bg-[#edf2f1] dark:border-slate-800 dark:bg-[#09122a] transition-colors">
         <div className="mx-auto grid max-w-7xl gap-10 px-4 py-12 sm:px-6 sm:py-16 lg:grid-cols-12 lg:gap-16">
           <div className="lg:col-span-4 space-y-3">
             <span className="text-xs font-bold uppercase tracking-wider text-[#00875A] dark:text-emerald-400">
