@@ -1,3 +1,5 @@
+import fs from 'fs';
+import path from 'path';
 import { getSupabaseAdmin, isSupabaseConfigured } from '../config/supabase';
 
 export interface AnalyticsEvent {
@@ -68,9 +70,36 @@ const CALCULATOR_NAME_MAP: Record<string, string> = {
   '/ventas-necesarias': 'Ventas Necesarias para Meta',
 };
 
-export class AnalyticsRepository {
-  private localEvents: AnalyticsEvent[] = [];
+const DATA_DIR = path.join(process.cwd(), '.data');
+const ANALYTICS_FILE = path.join(DATA_DIR, 'analytics.json');
 
+function ensureDataDir() {
+  if (!fs.existsSync(DATA_DIR)) {
+    try {
+      fs.mkdirSync(DATA_DIR, { recursive: true });
+    } catch {}
+  }
+}
+
+function loadLocalEvents(): AnalyticsEvent[] {
+  try {
+    ensureDataDir();
+    if (fs.existsSync(ANALYTICS_FILE)) {
+      const raw = fs.readFileSync(ANALYTICS_FILE, 'utf-8');
+      return JSON.parse(raw);
+    }
+  } catch {}
+  return [];
+}
+
+function saveLocalEvents(events: AnalyticsEvent[]) {
+  try {
+    ensureDataDir();
+    fs.writeFileSync(ANALYTICS_FILE, JSON.stringify(events.slice(0, 5000), null, 2));
+  } catch {}
+}
+
+export class AnalyticsRepository {
   async recordEvent(event: AnalyticsEvent): Promise<void> {
     const entry: AnalyticsEvent = {
       ...event,
@@ -81,7 +110,7 @@ export class AnalyticsRepository {
     if (isSupabaseConfigured) {
       const supabase = getSupabaseAdmin();
       if (supabase) {
-        await supabase.from('analytics_events').insert({
+        const { error } = await supabase.from('analytics_events').insert({
           event_type: entry.eventType,
           path: entry.path,
           query: entry.query || null,
@@ -90,15 +119,14 @@ export class AnalyticsRepository {
           session_id: entry.sessionId || null,
           created_at: entry.createdAt,
         });
-        return;
+        if (!error) return;
       }
     }
 
-    // Local fallback store (keep up to 5000 recent events)
-    this.localEvents.unshift(entry);
-    if (this.localEvents.length > 5000) {
-      this.localEvents.pop();
-    }
+    // Local fallback store (persisted to .data/analytics.json)
+    const local = loadLocalEvents();
+    local.unshift(entry);
+    saveLocalEvents(local);
   }
 
   async getAnalyticsSummary(days = 14): Promise<AnalyticsSummary> {
@@ -117,7 +145,7 @@ export class AnalyticsRepository {
           .gte('created_at', cutoffDate.toISOString())
           .order('created_at', { ascending: false });
 
-        if (!error && data) {
+        if (!error && data && data.length > 0) {
           events = data.map(r => ({
             id: r.id,
             eventType: r.event_type,
@@ -130,11 +158,15 @@ export class AnalyticsRepository {
           }));
         }
       }
-    } else {
-      events = this.localEvents.filter(e => e.createdAt && new Date(e.createdAt) >= cutoffDate);
     }
 
-    // 1. Live Active Visitors (last 15 minutes)
+    // If Supabase didn't yield events or is not configured, check local file storage
+    if (events.length === 0) {
+      const local = loadLocalEvents();
+      events = local.filter(e => e.createdAt && new Date(e.createdAt) >= cutoffDate);
+    }
+
+    // 1. Live Active Visitors (last 15 minutes) - purely real
     const liveSessions = new Set<string>();
     let livePageViews = 0;
     events.forEach(e => {
@@ -143,7 +175,7 @@ export class AnalyticsRepository {
         if (e.sessionId) liveSessions.add(e.sessionId);
       }
     });
-    const liveActiveVisitors = Math.max(liveSessions.size, Math.min(livePageViews, 42));
+    const liveActiveVisitors = liveSessions.size > 0 ? liveSessions.size : (livePageViews > 0 ? 1 : 0);
 
     // 2. Traffic History for the last N days
     const daysMap = new Map<string, { visits: number; sessions: Set<string>; dayName: string }>();

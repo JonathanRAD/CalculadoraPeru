@@ -374,7 +374,7 @@ export default function AdminPage() {
     const estimatedIncome = redeemedLicenses * 199; // Base estimation
 
     return {
-      totalVisits: totalVisits || 48290,
+      totalVisits,
       totalUsers: users.length,
       proCount,
       activeLicenses,
@@ -718,7 +718,11 @@ export default function AdminPage() {
                       En vivo
                     </span>
                   </div>
-                  <p className="text-[11px] text-slate-400">Páginas y herramientas consultadas</p>
+                  <p className="text-[11px] text-slate-400">
+                    {stats.totalVisits > 0
+                      ? `Promedio de ~${Math.max(1, Math.round(stats.totalVisits / 14))} visitas al día`
+                      : 'Contando visitas reales en tiempo real'}
+                  </p>
                 </div>
 
                 <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs space-y-2">
@@ -780,7 +784,7 @@ export default function AdminPage() {
                       <span>Tráfico y Visitas Diarias (Últimos 14 Días)</span>
                     </h3>
                     <p className="text-xs text-slate-500">
-                      Muestra visitas reales y picos de cálculo en quincenas (15) y cierres de mes (30/31)
+                      Conteo real de visitas registradas en el portal en los últimos 14 días
                     </p>
                   </div>
                   {hoveredPoint && (
@@ -794,10 +798,9 @@ export default function AdminPage() {
                 <div className="relative h-48 w-full pt-4">
                   {trafficHistory.length > 0 ? (
                     <div className="h-full flex items-end gap-1.5 sm:gap-2">
-                      {trafficHistory.map((pt, i) => {
+                      {trafficHistory.map((pt) => {
                         const maxVal = Math.max(...trafficHistory.map(p => p.visits), 1);
-                        const heightPct = Math.round((pt.visits / maxVal) * 100);
-                        const isPayday = pt.date.startsWith('15/') || pt.date.startsWith('30/') || pt.date.startsWith('31/');
+                        const heightPct = pt.visits > 0 ? Math.round((pt.visits / maxVal) * 100) : 0;
 
                         return (
                           <div
@@ -808,11 +811,11 @@ export default function AdminPage() {
                           >
                             {/* Bar Column */}
                             <div
-                              style={{ height: `${heightPct}%` }}
+                              style={{ height: `${Math.max(heightPct, 4)}%` }}
                               className={`w-full rounded-t-lg transition-all duration-200 ${
-                                isPayday
+                                pt.visits > 0
                                   ? 'bg-gradient-to-t from-[#00875A] to-emerald-400 shadow-md shadow-emerald-700/20 group-hover:brightness-110'
-                                  : 'bg-slate-200 dark:bg-slate-800 group-hover:bg-emerald-500/50'
+                                  : 'bg-slate-200 dark:bg-slate-800 opacity-40 group-hover:opacity-80'
                               }`}
                             />
                             {/* Date Label */}
@@ -860,12 +863,12 @@ export default function AdminPage() {
                               <ExternalLink className="w-3 h-3 text-slate-400 shrink-0" />
                             </Link>
                             <span className="font-mono text-slate-500 shrink-0">
-                              {c.visits.toLocaleString()} ({c.share}%)
+                              {c.visits.toLocaleString()} {c.visits === 1 ? 'visita' : 'visitas'} ({c.share}%)
                             </span>
                           </div>
                           <div className="w-full h-2 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
                             <div
-                              style={{ width: `${Math.min(c.share * 2.5, 100)}%` }}
+                              style={{ width: `${Math.max(c.share, 4)}%` }}
                               className="h-full bg-[#00875A] rounded-full transition-all duration-500"
                             />
                           </div>
