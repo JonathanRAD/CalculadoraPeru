@@ -12,6 +12,7 @@ import { HomeSearch } from '@/features/home/components/HomeSearch';
 import { QuickSalaryCalculator } from '@/features/home/components/QuickSalaryCalculator';
 import { ResponsiveDetails } from '@/features/home/components/ResponsiveDetails';
 import { FadeIn } from '@/shared/components/ui/FadeIn';
+import { SmoothScrollLink } from '@/shared/components/ui/SmoothScrollLink';
 
 export const metadata: Metadata = {
   title: 'Calculadoras Perú 2026: sueldo, IGV, negocios y finanzas',
@@ -188,13 +189,13 @@ export default function HomePage() {
                 Herramientas financieras y laborales adaptadas a la normativa 2026.
               </p>
             </div>
-            <Link
-              href="#todas-las-calculadoras"
-              className="group inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-[#00875A] hover:text-[#006644] dark:text-emerald-400 dark:hover:text-emerald-300"
+            <SmoothScrollLink
+              targetId="todas-las-calculadoras"
+              className="group inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-[#00875A] hover:text-[#006644] dark:text-emerald-400 dark:hover:text-emerald-300 cursor-pointer"
             >
               <span>Ver las 25 herramientas</span>
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
-            </Link>
+            </SmoothScrollLink>
           </div>
         </FadeIn>
 

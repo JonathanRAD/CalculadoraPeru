@@ -133,7 +133,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es-PE" className={`${plexSans.variable} ${jetbrainsMono.variable}`} suppressHydrationWarning>
+    <html lang="es-PE" className={`${plexSans.variable} ${jetbrainsMono.variable} scroll-smooth`} suppressHydrationWarning>
       <head>
         <Script
           id="theme-initializer"
