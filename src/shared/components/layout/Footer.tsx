@@ -1,4 +1,7 @@
+'use client';
+
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { ArrowUpRight, Calculator, LockKeyhole, ShieldCheck } from 'lucide-react';
 
 const POPULAR_LINKS = [
@@ -23,6 +26,12 @@ const LEGAL_LINKS = [
 ];
 
 export function Footer() {
+  const pathname = usePathname();
+
+  if (pathname?.startsWith('/admin')) {
+    return null;
+  }
+
   return (
     <footer className="border-t border-slate-800 bg-[#060b1d] text-slate-300">
       <div className="mx-auto max-w-7xl px-4 py-11 sm:px-6 sm:py-12">

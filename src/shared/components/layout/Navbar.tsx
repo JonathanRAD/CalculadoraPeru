@@ -2,12 +2,14 @@
 
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { Search, ChevronDown, Receipt, ArrowRight, Menu, X, Sparkles, KeyRound, User } from 'lucide-react';
 import { CALCULATORS_REGISTRY, CATEGORIES, CalculatorCategory } from '@/features/calculators/registry';
 import { ThemeToggle } from '@/shared/components/ui/ThemeToggle';
 import { usePro } from '@/features/premium/context/ProContext';
 
 export function Navbar() {
+  const pathname = usePathname();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -20,6 +22,10 @@ export function Navbar() {
     setIsSearchOpen(false);
     setSearchQuery('');
   }, []);
+
+  if (pathname?.startsWith('/admin')) {
+    return null;
+  }
 
   // Close dropdown on outside click
   useEffect(() => {
