@@ -1,72 +1,59 @@
 import { NextRequest, NextResponse } from 'next/server';
-import {
-  findLicenseByCode,
-  redeemLicense,
-  verifyToken,
-  findUserById,
-  toSafeUser,
-} from '@/features/auth/server/storage';
+import { licenseService } from '@/server/services/license.service';
+import { authService } from '@/server/services/auth.service';
+import { validateRedeemLicenseInput } from '@/server/validators/license.validator';
+import { licenseRepository } from '@/server/repositories/license.repository';
 
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json();
-    const rawCode = (body.code || '').trim().toUpperCase();
+    const rawBody = await req.json();
+    const validation = validateRedeemLicenseInput(rawBody);
 
-    if (!rawCode) {
+    if (!validation.isValid || !validation.data) {
       return NextResponse.json(
-        { success: false, message: 'Por favor, ingresa un código de activación.' },
+        { success: false, message: validation.error || 'Por favor ingresa un código válido.' },
         { status: 400 }
       );
     }
 
-    const token = req.cookies.get('calculaperu_auth_token')?.value;
-    const authPayload = token ? verifyToken(token) : null;
+    const { code } = validation.data;
+    const currentUser = await authService.authenticateRequest(req);
 
-    // CASE 1: USER IS LOGGED IN -> Bind and burn the license permanently to their account
-    if (authPayload) {
-      const user = findUserById(authPayload.userId);
-      if (user) {
-        const result = redeemLicense(rawCode, user.id);
-        if (!result.success) {
-          return NextResponse.json(
-            { success: false, message: result.message },
-            { status: 400 }
-          );
-        }
-
-        const response = NextResponse.json({
-          success: true,
-          message: result.message,
-          user: result.user,
-          session: {
-            isPro: true,
-            plan: result.user?.plan,
-            subscriberName: result.user?.name,
-            code: rawCode,
-            expiresAt: result.user?.proExpiresAt,
-          },
-        });
-
-        // Set quick helper cookie
-        response.cookies.set('calculaperu_pro_active', 'true', {
-          path: '/',
-          maxAge: 60 * 60 * 24 * 365,
-          sameSite: 'lax',
-        });
-
-        return response;
+    // CASE 1: USER IS LOGGED IN -> Bind and redeem license to their account
+    if (currentUser) {
+      const result = await licenseService.redeemLicense(code, currentUser.id, currentUser.email);
+      if (!result.success) {
+        return NextResponse.json({ success: false, message: result.message }, { status: 400 });
       }
+
+      const response = NextResponse.json({
+        success: true,
+        message: result.message,
+        user: currentUser,
+        session: {
+          isPro: true,
+          plan: result.license?.plan,
+          subscriberName: currentUser.name,
+          code,
+          expiresAt: result.license ? new Date(Date.now() + result.license.durationDays * 86400000).toISOString() : null,
+        },
+      });
+
+      response.cookies.set('calculaperu_pro_active', 'true', {
+        path: '/',
+        maxAge: 60 * 60 * 24 * 365,
+        sameSite: 'lax',
+      });
+
+      return response;
     }
 
-    // CASE 2: USER IS ANONYMOUS (Not logged in)
-    const license = findLicenseByCode(rawCode);
+    // CASE 2: ANONYMOUS BROWSER SESSION
+    const license = await licenseRepository.findByCode(code);
 
     if (!license) {
       return NextResponse.json(
-        {
-          success: false,
-          message: 'Código de activación no válido o no encontrado en el sistema.',
-        },
+        { success: false, message: 'Código de activación no válido o no encontrado en el sistema.' },
         { status: 404 }
       );
     }
@@ -75,7 +62,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          message: `Este código de licencia ya fue canjeado previamente. Si eres el dueño de esta cuenta, inicia sesión para acceder desde cualquier dispositivo.`,
+          message: 'Este código ya fue canjeado previamente. Si eres el dueño de esta cuenta, inicia sesión para acceder desde cualquier dispositivo.',
         },
         { status: 409 }
       );
@@ -83,12 +70,11 @@ export async function POST(req: NextRequest) {
 
     if (license.status === 'revoked') {
       return NextResponse.json(
-        { success: false, message: 'Este código de licencia ha sido revocado.' },
+        { success: false, message: 'Este código de licencia ha sido revocado por administración.' },
         { status: 403 }
       );
     }
 
-    // Fallback anonymous session
     const expirationDate = new Date();
     expirationDate.setDate(expirationDate.getDate() + license.durationDays);
 
@@ -104,7 +90,7 @@ export async function POST(req: NextRequest) {
 
     const response = NextResponse.json({
       success: true,
-      message: `¡Código validado! Tu plan ${license.plan === 'yearly' ? 'Anual' : 'Mensual'} está activo en este navegador. Te recomendamos registrarte o iniciar sesión para no perder tu acceso y usarlo en otros dispositivos.`,
+      message: `¡Código validado! Tu plan ${license.plan === 'yearly' ? 'Anual' : 'Mensual'} está activo en este navegador. Te recomendamos registrarte o iniciar sesión para sincronizarlo en otros dispositivos.`,
       session: sessionData,
     });
 

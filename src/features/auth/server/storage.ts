@@ -342,3 +342,24 @@ export function activateUserProDirectly(
   writeDatabase(db);
   return toSafeUser(user);
 }
+
+export function updateLicense(code: string, updates: Partial<LicenseCode>): LicenseCode | null {
+  const db = readDatabase();
+  const normalized = code.trim().toUpperCase();
+  const lic = db.licenses[normalized];
+  if (!lic) return null;
+
+  Object.assign(lic, updates);
+  db.licenses[normalized] = lic;
+  writeDatabase(db);
+  return lic;
+}
+
+export function deleteLicense(code: string): boolean {
+  const db = readDatabase();
+  const normalized = code.trim().toUpperCase();
+  if (!db.licenses[normalized]) return false;
+  delete db.licenses[normalized];
+  writeDatabase(db);
+  return true;
+}

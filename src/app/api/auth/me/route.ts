@@ -1,20 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { verifyToken, findUserById, updateUser, toSafeUser } from '@/features/auth/server/storage';
+import { authService } from '@/server/services/auth.service';
+import { userRepository } from '@/server/repositories/user.repository';
+import { validateCompanyProfileInput } from '@/server/validators/auth.validator';
 
 export async function GET(req: NextRequest) {
   try {
-    const token = req.cookies.get('calculaperu_auth_token')?.value;
-
-    if (!token) {
-      return NextResponse.json({ authenticated: false, user: null });
-    }
-
-    const payload = verifyToken(token);
-    if (!payload) {
-      return NextResponse.json({ authenticated: false, user: null });
-    }
-
-    const user = findUserById(payload.userId);
+    const user = await authService.authenticateRequest(req);
     if (!user) {
       return NextResponse.json({ authenticated: false, user: null });
     }
@@ -22,12 +13,12 @@ export async function GET(req: NextRequest) {
     // Auto-check expiration
     if (user.isPro && user.proExpiresAt) {
       if (new Date(user.proExpiresAt) < new Date()) {
-        const expiredUser = updateUser(user.id, { isPro: false });
+        const expiredUser = await userRepository.update(user.id, { isPro: false, plan: null });
         return NextResponse.json({ authenticated: true, user: expiredUser });
       }
     }
 
-    return NextResponse.json({ authenticated: true, user: toSafeUser(user) });
+    return NextResponse.json({ authenticated: true, user });
   } catch (err) {
     console.error('Error en auth me:', err);
     return NextResponse.json({ authenticated: false, user: null }, { status: 500 });
@@ -36,36 +27,25 @@ export async function GET(req: NextRequest) {
 
 export async function PATCH(req: NextRequest) {
   try {
-    const token = req.cookies.get('calculaperu_auth_token')?.value;
-    if (!token) {
-      return NextResponse.json({ success: false, message: 'No autenticado.' }, { status: 401 });
+    const user = await authService.authenticateRequest(req);
+    if (!user) {
+      return NextResponse.json({ success: false, message: 'No autenticado o sesión expirada.' }, { status: 401 });
     }
 
-    const payload = verifyToken(token);
-    if (!payload) {
-      return NextResponse.json({ success: false, message: 'Sesión inválida o expirada.' }, { status: 401 });
+    const rawBody = await req.json();
+    const validation = validateCompanyProfileInput(rawBody);
+
+    if (!validation.isValid || !validation.data) {
+      return NextResponse.json({ success: false, message: validation.error || 'Datos inválidos.' }, { status: 400 });
     }
 
-    const body = await req.json();
-    const allowedUpdates: Record<string, any> = {};
-
-    if (typeof body.name === 'string' && body.name.trim()) {
-      allowedUpdates.name = body.name.trim();
-    }
-    if (typeof body.companyName === 'string') {
-      allowedUpdates.companyName = body.companyName.trim();
-    }
-    if (typeof body.companyRuc === 'string') {
-      allowedUpdates.companyRuc = body.companyRuc.trim();
-    }
-    if (typeof body.companyAddress === 'string') {
-      allowedUpdates.companyAddress = body.companyAddress.trim();
-    }
-    if (body.companyLogoBase64 !== undefined) {
-      allowedUpdates.companyLogoBase64 = body.companyLogoBase64;
-    }
-
-    const updated = updateUser(payload.userId, allowedUpdates);
+    const updated = await userRepository.update(user.id, {
+      name: typeof rawBody.name === 'string' && rawBody.name.trim() ? rawBody.name.trim() : user.name,
+      companyName: validation.data.companyName,
+      companyRuc: validation.data.companyRuc,
+      companyAddress: validation.data.companyAddress,
+      companyLogoBase64: validation.data.companyLogoBase64,
+    });
 
     return NextResponse.json({
       success: true,

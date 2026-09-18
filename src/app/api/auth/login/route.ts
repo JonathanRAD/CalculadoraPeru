@@ -1,52 +1,35 @@
 import { NextResponse } from 'next/server';
-import { findUserByEmail, verifyPassword, signToken, updateUser, toSafeUser } from '@/features/auth/server/storage';
+import { authService } from '@/server/services/auth.service';
+import { validateLoginInput } from '@/server/validators/auth.validator';
 
 export async function POST(req: Request) {
   try {
-    const body = await req.json();
-    const email = (body.email || '').trim().toLowerCase();
-    const password = (body.password || '').trim();
+    const rawBody = await req.json();
+    const validation = validateLoginInput(rawBody);
 
-    if (!email || !password) {
+    if (!validation.isValid || !validation.data) {
       return NextResponse.json(
-        { success: false, message: 'Por favor, ingresa tu correo y contraseña.' },
+        { success: false, message: validation.error || 'Por favor ingresa tus credenciales.' },
         { status: 400 }
       );
     }
 
-    const user = findUserByEmail(email);
-    if (!user) {
-      return NextResponse.json(
-        { success: false, message: 'No existe ninguna cuenta registrada con este correo.' },
-        { status: 404 }
-      );
-    }
+    const result = await authService.login(validation.data);
 
-    const isValid = verifyPassword(password, user.passwordHash, user.salt);
-    if (!isValid) {
+    if (!result.success || !result.user || !result.token) {
       return NextResponse.json(
-        { success: false, message: 'Contraseña incorrecta. Verifica tus datos.' },
+        { success: false, message: result.message },
         { status: 401 }
       );
     }
 
-    // Update last login
-    updateUser(user.id, { lastLoginAt: new Date().toISOString() });
-
-    const safeUser = toSafeUser(user);
-    const token = signToken({
-      userId: safeUser.id,
-      email: safeUser.email,
-      role: safeUser.role,
-    });
-
     const response = NextResponse.json({
       success: true,
-      message: `¡Bienvenido de nuevo, ${safeUser.name}!`,
-      user: safeUser,
+      message: `¡Bienvenido de nuevo, ${result.user.name}!`,
+      user: result.user,
     });
 
-    response.cookies.set('calculaperu_auth_token', token, {
+    response.cookies.set('calculaperu_auth_token', result.token, {
       path: '/',
       httpOnly: true,
       sameSite: 'lax',

@@ -1,55 +1,35 @@
 import { NextResponse } from 'next/server';
-import { createUser, signToken } from '@/features/auth/server/storage';
+import { authService } from '@/server/services/auth.service';
+import { validateRegisterInput } from '@/server/validators/auth.validator';
 
 export async function POST(req: Request) {
   try {
-    const body = await req.json();
-    const name = (body.name || '').trim();
-    const email = (body.email || '').trim().toLowerCase();
-    const password = (body.password || '').trim();
+    const rawBody = await req.json();
+    const validation = validateRegisterInput(rawBody);
 
-    if (!name || name.length < 2) {
+    if (!validation.isValid || !validation.data) {
       return NextResponse.json(
-        { success: false, message: 'Por favor ingresa tu nombre completo o de empresa.' },
+        { success: false, message: validation.error || 'Datos de registro inválidos.' },
         { status: 400 }
       );
     }
 
-    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    const result = await authService.register(validation.data);
+
+    if (!result.success || !result.user || !result.token) {
       return NextResponse.json(
-        { success: false, message: 'Por favor ingresa un correo electrónico válido.' },
+        { success: false, message: result.message },
         { status: 400 }
       );
     }
-
-    if (!password || password.length < 6) {
-      return NextResponse.json(
-        { success: false, message: 'La contraseña debe tener al menos 6 caracteres.' },
-        { status: 400 }
-      );
-    }
-
-    const newUser = createUser({
-      name,
-      email,
-      password,
-      role: 'user',
-    });
-
-    const token = signToken({
-      userId: newUser.id,
-      email: newUser.email,
-      role: newUser.role,
-    });
 
     const response = NextResponse.json({
       success: true,
       message: 'Cuenta creada con éxito. ¡Bienvenido a CalculaPerú!',
-      user: newUser,
+      user: result.user,
     });
 
-    // 30 days session cookie
-    response.cookies.set('calculaperu_auth_token', token, {
+    response.cookies.set('calculaperu_auth_token', result.token, {
       path: '/',
       httpOnly: true,
       sameSite: 'lax',
