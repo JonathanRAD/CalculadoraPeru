@@ -15,9 +15,11 @@ import { SwitchToggle } from '@/shared/components/ui/SwitchToggle';
 import { ResultMetricCard } from '@/shared/components/ui/ResultMetricCard';
 import { ShareButtons } from '@/shared/components/ui/ShareButtons';
 import { ExportPdfButton } from '@/shared/components/ui/ExportPdfButton';
-import { Briefcase, AlertCircle } from 'lucide-react';
+import { Briefcase, AlertCircle, FileCheck } from 'lucide-react';
+import { SettlementReportModal } from '@/features/premium/components/SettlementReportModal';
 
 export default function LiquidacionLaboralPage() {
+  const [isPremiumModalOpen, setIsPremiumModalOpen] = useState(false);
   const meta = CALCULATORS_REGISTRY.find((c) => c.id === 'liquidacion-laboral') || {
     id: 'liquidacion-laboral',
     slug: '/liquidacion-laboral',
@@ -445,9 +447,38 @@ ${isDismissal ? `Indemnización por Despido: ${formatCurrency(result.arbitraryDi
               )}
             </div>
 
+            {/* Premium Document CTA Banner */}
+            <div className="rounded-2xl border-2 border-emerald-500/80 bg-linear-to-br from-emerald-50 to-teal-50 dark:from-emerald-950/50 dark:to-teal-950/30 p-4 shadow-sm space-y-2.5">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#00875A] text-white text-xs font-bold shadow-xs">
+                    ⭐
+                  </span>
+                  <span className="font-bold text-xs text-emerald-950 dark:text-emerald-200 uppercase tracking-wider">
+                    Documento Legal Certificado
+                  </span>
+                </div>
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-emerald-200/70 dark:bg-emerald-900/80 text-emerald-900 dark:text-emerald-200">
+                  Formato MTPE / SUNAFIL
+                </span>
+              </div>
+              <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed font-normal">
+                Genera tu <strong>Liquidación Oficial en PDF</strong> con membrete, desglose legal de CTS, Grati y Vacaciones, cita de leyes y recuadros de firma formal.
+              </p>
+              <button
+                type="button"
+                onClick={() => setIsPremiumModalOpen(true)}
+                className="w-full py-3 rounded-xl bg-[#00875A] hover:bg-[#00704A] text-white font-bold text-xs flex items-center justify-center gap-2 transition-all cursor-pointer shadow-md shadow-emerald-950/10"
+              >
+                <FileCheck className="w-4 h-4" />
+                <span>Generar Liquidación Oficial Certificada</span>
+              </button>
+            </div>
+
             <div className="flex flex-col sm:flex-row gap-2.5">
               <ExportPdfButton
                 className="flex-1"
+                label="Descarga Rápida Simple (Resumen)"
                 getReportOptions={() => ({
                   title: 'Hoja de Liquidación de Beneficios Sociales',
                   subtitle: `Liquidación integral laboral calculada bajo normativa MTPE Perú`,
@@ -477,13 +508,36 @@ ${isDismissal ? `Indemnización por Despido: ${formatCurrency(result.arbitraryDi
               />
             </div>
 
-            <div className="mt-3">
+            <div className="mt-1">
               <ShareButtons title="Liquidación Laboral Perú Todo en 1" shareText={shareSummary} />
             </div>
           </div>
         </div>
 
       </div>
+
+      <SettlementReportModal
+        isOpen={isPremiumModalOpen}
+        onClose={() => setIsPremiumModalOpen(false)}
+        calculationData={{
+          baseSalary,
+          familyAllowance: hasFamilyAllowance ? 113 : 0,
+          laborRegime: laborRegime === 'general' ? 'Régimen General (D.L. 728)' : laborRegime === 'pequena_empresa' ? 'Pequeña Empresa (REMYPE)' : 'Microempresa (REMYPE)',
+          separationReason: separationReason === 'despido_arbitrario' ? 'Despido Arbitrario / Injustificado' : separationReason === 'renuncia' ? 'Renuncia Voluntaria' : separationReason === 'mutuo_disenso' ? 'Mutuo Disenso' : 'Vencimiento de Contrato',
+          employmentStartDate: employmentStartDate || undefined,
+          terminationDate: terminationDate || undefined,
+          ctsTrunca: result.truncatedCts,
+          ctsMonths: monthsInLastSemesterCts,
+          gratiTrunca: result.truncatedGrati,
+          gratiMonths: effectiveGratiMonths,
+          bonoEsSalud: result.essaludBonus,
+          isEps: hasEps,
+          vacacionesTruncas: result.truncatedVacations,
+          vacacionesMonths: monthsInLastYearVacations,
+          despidoIndemnizacion: isDismissal ? result.arbitraryDismissalIndemnity : undefined,
+          totalSettlement: result.totalSettlement,
+        }}
+      />
     </CalculatorShell>
   );
 }

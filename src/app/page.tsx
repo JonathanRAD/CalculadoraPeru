@@ -4,7 +4,7 @@ import Link from 'next/link';
 import {
   ArrowRight, BadgeCheck, Banknote, BookOpenCheck, BriefcaseBusiness,
   Building2, Calculator, ChevronDown, Clock3, Percent, ReceiptText,
-  ShieldCheck, Store, TrendingUp,
+  ShieldCheck, Store, TrendingUp, Sparkles, Check,
 } from 'lucide-react';
 import { CALCULATORS_REGISTRY, CATEGORIES, type CalculatorCategory } from '@/features/calculators/registry';
 import { HomeSearch } from '@/features/home/components/HomeSearch';
@@ -123,6 +123,8 @@ export default function HomePage() {
           <div className="home-hero-calculator lg:col-span-5"><QuickSalaryCalculator /></div>
         </div>
       </section>
+
+
 
       <section aria-labelledby="featured-title" className="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">

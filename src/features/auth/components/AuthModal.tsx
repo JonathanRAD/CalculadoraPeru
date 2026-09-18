@@ -1,0 +1,246 @@
+'use client';
+
+import React, { useState } from 'react';
+import { X, Lock, Mail, User, Sparkles, ArrowRight, ShieldCheck } from 'lucide-react';
+import { usePro } from '@/features/premium/context/ProContext';
+
+export function AuthModal() {
+  const { isAuthModalOpen, closeAuthModal, authModalTab, openAuthModal, login, register } = usePro();
+
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+
+  if (!isAuthModalOpen) return null;
+
+  const isLogin = authModalTab === 'login';
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setErrorMessage('');
+    setSuccessMessage('');
+    setIsLoading(true);
+
+    try {
+      if (isLogin) {
+        const res = await login(email, password);
+        if (res.success) {
+          setSuccessMessage(res.message);
+          setTimeout(() => {
+            closeAuthModal();
+          }, 600);
+        } else {
+          setErrorMessage(res.message);
+        }
+      } else {
+        const res = await register(name, email, password);
+        if (res.success) {
+          setSuccessMessage(res.message);
+          setTimeout(() => {
+            closeAuthModal();
+          }, 600);
+        } else {
+          setErrorMessage(res.message);
+        }
+      }
+    } catch {
+      setErrorMessage('Error de conexión con el servidor.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/75 backdrop-blur-xs animate-in fade-in duration-200">
+      <div className="relative w-full max-w-md bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl p-6 sm:p-8 space-y-5 text-xs">
+        
+        {/* Close Button */}
+        <button
+          type="button"
+          onClick={closeAuthModal}
+          className="absolute top-5 right-5 w-8 h-8 rounded-full flex items-center justify-center text-slate-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+        >
+          <X className="w-4 h-4" />
+        </button>
+
+        {/* Header with Icon */}
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-[#00875A] to-emerald-400 flex items-center justify-center text-white shadow-md shadow-emerald-500/20">
+            <ShieldCheck className="w-5 h-5" />
+          </div>
+          <div>
+            <h3 className="font-bold text-base text-slate-900 dark:text-white">
+              {isLogin ? 'Iniciar Sesión' : 'Crear Cuenta Gratis'}
+            </h3>
+            <p className="text-[11px] text-slate-500">
+              Accede a tus beneficios PRO desde cualquier dispositivo
+            </p>
+          </div>
+        </div>
+
+        {/* Tabs */}
+        <div className="flex p-1 bg-slate-100 dark:bg-slate-800 rounded-xl">
+          <button
+            type="button"
+            onClick={() => {
+              setErrorMessage('');
+              openAuthModal('login');
+            }}
+            className={`flex-1 py-2 rounded-lg font-bold text-xs transition-all ${
+              isLogin
+                ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-xs'
+                : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
+            }`}
+          >
+            Iniciar Sesión
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setErrorMessage('');
+              openAuthModal('register');
+            }}
+            className={`flex-1 py-2 rounded-lg font-bold text-xs transition-all ${
+              !isLogin
+                ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-xs'
+                : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
+            }`}
+          >
+            Crear Cuenta
+          </button>
+        </div>
+
+        {/* PRO benefit reminder */}
+        <div className="p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60 text-emerald-800 dark:text-emerald-300 text-[11px] flex items-center gap-2">
+          <Sparkles className="w-4 h-4 text-amber-500 shrink-0 fill-amber-500" />
+          <span>
+            {isLogin
+              ? 'Inicia sesión para sincronizar tus boletas con membrete y suscripción.'
+              : 'Crea tu cuenta para vincular tus licencias PRO y guardar tus datos de empresa.'}
+          </span>
+        </div>
+
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="space-y-3.5">
+          {!isLogin && (
+            <div>
+              <label className="block text-slate-600 dark:text-slate-400 font-semibold mb-1">
+                Nombre o Razón Social
+              </label>
+              <div className="relative">
+                <User className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+                <input
+                  type="text"
+                  required
+                  placeholder="Ej. Juan Pérez / Estudio Contable"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl pl-9 pr-3 py-2 text-slate-900 dark:text-white outline-none focus:border-[#00875A]"
+                />
+              </div>
+            </div>
+          )}
+
+          <div>
+            <label className="block text-slate-600 dark:text-slate-400 font-semibold mb-1">
+              Correo Electrónico
+            </label>
+            <div className="relative">
+              <Mail className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+              <input
+                type="email"
+                required
+                placeholder="tu@correo.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl pl-9 pr-3 py-2 text-slate-900 dark:text-white outline-none focus:border-[#00875A]"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-slate-600 dark:text-slate-400 font-semibold mb-1">
+              Contraseña
+            </label>
+            <div className="relative">
+              <Lock className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+              <input
+                type="password"
+                required
+                minLength={6}
+                placeholder="Mínimo 6 caracteres"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl pl-9 pr-3 py-2 text-slate-900 dark:text-white outline-none focus:border-[#00875A]"
+              />
+            </div>
+          </div>
+
+          {errorMessage && (
+            <div className="p-2.5 rounded-xl bg-red-50 dark:bg-red-950/50 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 text-xs">
+              {errorMessage}
+            </div>
+          )}
+
+          {successMessage && (
+            <div className="p-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300 text-xs">
+              {successMessage}
+            </div>
+          )}
+
+          <button
+            type="submit"
+            disabled={isLoading}
+            className="w-full py-3 bg-[#00875A] hover:bg-[#00704A] text-white font-bold rounded-xl text-xs flex items-center justify-center gap-2 shadow-md shadow-emerald-950/20 transition-all cursor-pointer disabled:opacity-50"
+          >
+            {isLoading ? (
+              <span>Procesando...</span>
+            ) : (
+              <>
+                <span>{isLogin ? 'Entrar a mi Cuenta' : 'Registrarme y Continuar'}</span>
+                <ArrowRight className="w-4 h-4" />
+              </>
+            )}
+          </button>
+        </form>
+
+        {/* Footer switch */}
+        <div className="text-center pt-2 text-slate-500 border-t border-slate-100 dark:border-slate-800">
+          {isLogin ? (
+            <span>
+              ¿Aún no tienes cuenta?{' '}
+              <button
+                type="button"
+                onClick={() => {
+                  setErrorMessage('');
+                  openAuthModal('register');
+                }}
+                className="font-bold text-[#00875A] dark:text-[#00C853] hover:underline"
+              >
+                Regístrate gratis
+              </button>
+            </span>
+          ) : (
+            <span>
+              ¿Ya tienes cuenta?{' '}
+              <button
+                type="button"
+                onClick={() => {
+                  setErrorMessage('');
+                  openAuthModal('login');
+                }}
+                className="font-bold text-[#00875A] dark:text-[#00C853] hover:underline"
+              >
+                Inicia sesión
+              </button>
+            </span>
+          )}
+        </div>
+
+      </div>
+    </div>
+  );
+}

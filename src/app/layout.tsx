@@ -10,6 +10,10 @@ import { PwaInstallBanner } from '@/shared/components/ui/PwaInstallBanner';
 import { PwaRegistration } from '@/shared/components/ui/PwaRegistration';
 import { GoogleAnalyticsPageViews } from '@/shared/components/analytics/GoogleAnalytics';
 import { CookieBanner } from '@/shared/components/ui/CookieBanner';
+import { ProProvider } from '@/features/premium/context/ProContext';
+import ProActivationModal from '@/features/premium/components/ProActivationModal';
+import { AuthModal } from '@/features/auth/components/AuthModal';
+import { ProfileModal } from '@/features/auth/components/ProfileModal';
 
 const plexSans = IBM_Plex_Sans({
   variable: '--font-plex-sans',
@@ -182,16 +186,21 @@ export default function RootLayout({
       </head>
       <body className="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans antialiased transition-colors duration-200" suppressHydrationWarning>
         <ThemeProvider>
-          <Navbar />
-          <main id="main-content" className="flex-1">
-            {children}
-          </main>
-          <Footer />
-          <GoogleAnalyticsPageViews />
-          <Analytics />
-          <PwaRegistration />
-          <PwaInstallBanner />
-          <CookieBanner />
+          <ProProvider>
+            <Navbar />
+            <main id="main-content" className="flex-1">
+              {children}
+            </main>
+            <Footer />
+            <ProActivationModal />
+            <AuthModal />
+            <ProfileModal />
+            <GoogleAnalyticsPageViews />
+            <Analytics />
+            <PwaRegistration />
+            <PwaInstallBanner />
+            <CookieBanner />
+          </ProProvider>
         </ThemeProvider>
       </body>
     </html>

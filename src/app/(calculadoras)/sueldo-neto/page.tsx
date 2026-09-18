@@ -15,9 +15,11 @@ import { SwitchToggle } from '@/shared/components/ui/SwitchToggle';
 import { ResultMetricCard } from '@/shared/components/ui/ResultMetricCard';
 import { ShareButtons } from '@/shared/components/ui/ShareButtons';
 import { ExportPdfButton } from '@/shared/components/ui/ExportPdfButton';
-import { Briefcase, ChevronDown, Settings2 } from 'lucide-react';
+import { Briefcase, ChevronDown, Settings2, FileText } from 'lucide-react';
+import { PayrollSlipModal } from '@/features/premium/components/PayrollSlipModal';
 
 export default function SueldoNetoPage() {
+  const [isSlipModalOpen, setIsSlipModalOpen] = useState(false);
   const meta = CALCULATORS_REGISTRY.find((c) => c.id === 'sueldo-neto')!;
 
   const [grossSalary, setGrossSalary] = useState<number>(2500);
@@ -445,10 +447,38 @@ Sueldo Neto en Cuenta: ${formatCurrency(result.netSalary)}`;
               </div>
             </div>
 
+            {/* Official Payroll Slip CTA Banner */}
+            <div className="rounded-2xl border-2 border-blue-500/80 bg-linear-to-br from-blue-50 to-indigo-50 dark:from-blue-950/50 dark:to-indigo-950/30 p-4 shadow-sm space-y-2.5 mb-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <span className="flex h-6 w-6 items-center justify-center rounded-full bg-blue-600 text-white text-xs font-bold shadow-xs">
+                    ⭐
+                  </span>
+                  <span className="font-bold text-xs text-blue-950 dark:text-blue-200 uppercase tracking-wider">
+                    Formato Oficial MTPE
+                  </span>
+                </div>
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-blue-200/70 dark:bg-blue-900/80 text-blue-900 dark:text-blue-200">
+                  D.S. N° 001-98-TR
+                </span>
+              </div>
+              <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed font-normal">
+                Emite la <strong>Boleta de Pago Oficial en PDF</strong> con tu RUC, Razón Social, 3 columnas oficiales de haberes, descuentos AFP/ONP y aportes EsSalud, o expórtala a Excel.
+              </p>
+              <button
+                type="button"
+                onClick={() => setIsSlipModalOpen(true)}
+                className="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex items-center justify-center gap-2 transition-all cursor-pointer shadow-md shadow-blue-950/10"
+              >
+                <FileText className="w-4 h-4" />
+                <span>Emitir Boleta Oficial (PDF / Excel)</span>
+              </button>
+            </div>
+
             <div className="mb-4">
               <ExportPdfButton
                 className="w-full"
-                label="Descargar estimación en PDF"
+                label="Descargar estimación rápida en PDF"
                 getReportOptions={() => ({
                   title: 'Resumen Estimado de Sueldo Neto',
                   subtitle: `Desglose de remuneración y aportes según legislación laboral de Perú`,
@@ -483,6 +513,35 @@ Sueldo Neto en Cuenta: ${formatCurrency(result.netSalary)}`;
         </div>
 
       </div>
+
+      <PayrollSlipModal
+        isOpen={isSlipModalOpen}
+        onClose={() => setIsSlipModalOpen(false)}
+        calculationData={{
+          baseSalary: grossSalary,
+          familyAllowance: result.familyAllowance,
+          variableIncome: result.variableRemuneration,
+          nonRemunerativeIncome: result.nonRemunerativeIncome,
+          totalGross: result.totalGrossIncome,
+          pensionDeduction: result.pensionDeduction,
+          pensionRatePercent: formatPercent(result.pensionRate),
+          fifthCategoryTax: result.fifthCategoryTaxMonthly,
+          otherDeductions: result.otherDeductions,
+          totalDeductions: result.totalDeductions,
+          essaludContribution: result.essaludContributionEmployer,
+          netSalary: result.netSalary,
+          pensionSystemName:
+            pensionSystem === 'onp'
+              ? 'ONP (Sistema Nacional de Pensiones 13%)'
+              : pensionSystem === 'afp_integra'
+                ? 'AFP Integra'
+                : pensionSystem === 'afp_prima'
+                  ? 'AFP Prima'
+                  : pensionSystem === 'afp_profuturo'
+                    ? 'AFP Profuturo'
+                    : 'AFP Habitat',
+        }}
+      />
     </CalculatorShell>
   );
 }
