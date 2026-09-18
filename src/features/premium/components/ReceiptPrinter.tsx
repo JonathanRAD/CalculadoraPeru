@@ -151,14 +151,14 @@ export default function ReceiptPrinter({
           </div>
         </div>
 
-        {/* Info Row: "Pro plan / Annual subscription" + "Total / S/ 199.00" */}
+        {/* Info Row: "CalculaPerú PRO" + plan details + total */}
         <div className="flex items-start justify-between pt-2 pb-3">
           <div>
             <h3 className="text-base font-bold text-white tracking-tight leading-tight">
-              Pro plan
+              CalculaPerú PRO
             </h3>
             <p className="text-xs text-neutral-400 mt-0.5 font-normal">
-              {plan === 'yearly' ? 'Annual subscription' : 'Monthly subscription'}
+              {plan === 'yearly' ? 'Plan Anual · 12 meses (S/ 16.58/mes)' : 'Plan Mensual · 30 días (S/ 29.00/mes)'}
             </p>
           </div>
 
@@ -235,11 +235,11 @@ export default function ReceiptPrinter({
           {/* Line Item: PRO PLAN */}
           <div className="space-y-0.5">
             <div className="flex justify-between items-baseline font-bold tracking-wider text-neutral-900 text-xs">
-              <span>PRO PLAN</span>
+              <span>CALCULAPERÚ PRO</span>
               <span>S/ {subtotal.toFixed(2)}</span>
             </div>
-            <div className="text-[10px] text-neutral-600 capitalize">
-              {plan === 'yearly' ? 'Annual subscription' : 'Monthly subscription'}
+            <div className="text-[10px] text-neutral-600">
+              {plan === 'yearly' ? 'Plan Anual (12 meses · S/ 16.58/mes)' : 'Plan Mensual (30 días · S/ 29.00/mes)'}
             </div>
           </div>
 
@@ -351,7 +351,11 @@ export default function ReceiptPrinter({
             onClick={() => onCheckoutClick && onCheckoutClick(plan)}
             className="w-full py-2.5 px-4 bg-[#00875A] hover:bg-[#00704A] text-white rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 shadow-lg shadow-emerald-950/20 transition-all hover:scale-[1.01] cursor-pointer animate-in fade-in duration-200"
           >
-            <span>Activar con Yape (S/ {totalAmount.toFixed(0)})</span>
+            <span>
+              {plan === 'yearly'
+                ? 'Activar Plan Anual (S/ 199 · S/ 16.58/mes)'
+                : 'Activar Plan Mensual (S/ 29 / mes)'}
+            </span>
             <ArrowRight className="w-3.5 h-3.5" />
           </button>
         )}

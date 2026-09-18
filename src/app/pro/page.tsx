@@ -50,6 +50,10 @@ const FAQ_LIST: FaqItem[] = [
     a: 'Sí. Al tener cuenta PRO, puedes guardar tus datos corporativos (Razón Social, RUC, Dirección y Logotipo) en tu perfil. Al generar boletas de pago o informes en cualquier momento, el sistema los carga automáticamente para que no tengas que escribirlos cada vez.',
   },
   {
+    q: '¿Cuál es la diferencia de precio entre el Plan Mensual (S/ 29) y el Plan Anual (S/ 199)?',
+    a: 'El Plan Mensual cuesta S/ 29.00 al mes y te brinda acceso completo mes a mes sin permanencia forzosa. El Plan Anual cuesta S/ 199.00 en un solo pago por 12 meses completos, lo que equivale a solo S/ 16.58 al mes. Al elegir el Plan Anual obtienes un 40% de descuento y ahorras S/ 149.00 frente a pagar 12 mensualidades.',
+  },
+  {
     q: '¿Existe algún contrato de permanencia forzosa?',
     a: 'Ninguno. No hay permanencia obligatoria ni renovaciones automáticas sorpresivas. Tú decides si deseas renovar al vencer tu periodo (mensual o anual) sin ninguna penalidad.',
   },
@@ -169,29 +173,33 @@ export default function ProSubscriptionPage() {
             </div>
 
             {/* Billing Switcher */}
-            <div className="pt-2 flex items-center justify-center lg:justify-start gap-3">
-              <span className={`text-xs font-bold transition-colors ${billingCycle === 'monthly' ? 'text-slate-900 dark:text-white' : 'text-slate-500'}`}>
-                Mensual
-              </span>
-              <button
-                type="button"
-                onClick={() => setBillingCycle(billingCycle === 'monthly' ? 'yearly' : 'monthly')}
-                className="relative w-14 h-7 bg-slate-200 dark:bg-slate-800 rounded-full p-1 transition-colors cursor-pointer border border-slate-300 dark:border-slate-700"
-                aria-label="Alternar facturación mensual y anual"
-              >
-                <div
-                  className={`w-5 h-5 bg-[#00875A] rounded-full transition-transform ${
-                    billingCycle === 'yearly' ? 'translate-x-7' : 'translate-x-0'
+            <div className="pt-2 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-2">
+              <div className="inline-flex p-1.5 rounded-2xl bg-slate-100 dark:bg-slate-850 border border-slate-200 dark:border-slate-800 shadow-xs">
+                <button
+                  type="button"
+                  onClick={() => setBillingCycle('monthly')}
+                  className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                    billingCycle === 'monthly'
+                      ? 'bg-white dark:bg-slate-900 text-slate-950 dark:text-white shadow-xs'
+                      : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                   }`}
-                />
-              </button>
-              <div className="flex items-center gap-1.5">
-                <span className={`text-xs font-bold transition-colors ${billingCycle === 'yearly' ? 'text-slate-900 dark:text-white' : 'text-slate-500'}`}>
-                  Anual
-                </span>
-                <span className="px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950 text-[#00875A] dark:text-[#00C853] text-[10px] font-black tracking-wider">
-                  AHORRA 40% (S/ 149)
-                </span>
+                >
+                  Plan Mensual · S/ 29 / mes
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setBillingCycle('yearly')}
+                  className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+                    billingCycle === 'yearly'
+                      ? 'bg-white dark:bg-slate-900 text-[#00875A] dark:text-[#00C853] shadow-xs'
+                      : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                  }`}
+                >
+                  <span>Plan Anual · S/ 199 / año</span>
+                  <span className="px-1.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950 text-[#00875A] dark:text-[#00C853] text-[10px] font-black tracking-wider">
+                    S/ 16.58/mes (-40%)
+                  </span>
+                </button>
               </div>
             </div>
 
@@ -316,19 +324,37 @@ export default function ProSubscriptionPage() {
                 </div>
               </div>
 
-              <div className="pt-2">
-                <div className="flex items-baseline gap-1">
+              <div className="pt-2 space-y-2">
+                <div className="flex items-baseline gap-2">
                   <span className="text-4xl sm:text-5xl font-black font-mono text-[#00875A] dark:text-[#00C853]">
                     {billingCycle === 'yearly' ? 'S/ 199' : 'S/ 29'}
                   </span>
-                  <span className="text-xs text-slate-500">
-                    {billingCycle === 'yearly' ? '/ año (S/ 16.50/mes)' : '/ mes'}
+                  <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
+                    {billingCycle === 'yearly' ? '/ año completo' : '/ mes'}
                   </span>
                 </div>
-                {billingCycle === 'yearly' && (
-                  <p className="text-[11px] text-emerald-700 dark:text-emerald-400 font-semibold mt-1">
-                    🎉 Pago único anual. Ahorras S/ 149 al año.
-                  </p>
+
+                {billingCycle === 'yearly' ? (
+                  <div className="space-y-1.5">
+                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-100/90 dark:bg-emerald-950/70 text-emerald-800 dark:text-emerald-300 text-xs font-bold">
+                      <span>✨ Equivale a S/ 16.58 al mes</span>
+                      <span className="text-[10px] bg-emerald-200 dark:bg-emerald-900 px-1.5 py-0.5 rounded font-black">
+                        Ahorras 40% (S/ 149)
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">
+                      Pago único anual de S/ 199 por 12 meses ilimitados. Frente al plan mensual (S/ 29/mes = S/ 348/año), te ahorras S/ 149.
+                    </p>
+                  </div>
+                ) : (
+                  <div className="space-y-1.5">
+                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-bold">
+                      <span>Facturación mensual flexible · Cancela cuando quieras</span>
+                    </div>
+                    <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">
+                      Pagas S/ 29 cada mes sin contratos forzosos. ¿Quieres ahorrar? El <strong>Plan Anual cuesta S/ 199/año</strong> (equivale a solo <strong>S/ 16.58/mes</strong>).
+                    </p>
+                  </div>
                 )}
               </div>
 
@@ -366,7 +392,11 @@ export default function ProSubscriptionPage() {
               className="w-full py-3.5 rounded-xl bg-[#00875A] hover:bg-[#00704A] text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all cursor-pointer shadow-lg shadow-emerald-950/15 hover:scale-[1.01]"
             >
               <Sparkles className="w-4 h-4 text-amber-300 fill-amber-300" />
-              <span>Suscribirme a CalculaPerú PRO con Yape / Plin</span>
+              <span>
+                {billingCycle === 'yearly'
+                  ? 'Activar Plan Anual (S/ 199 · S/ 16.58/mes)'
+                  : 'Activar Plan Mensual (S/ 29 / mes)'}
+              </span>
             </button>
           </div>
 

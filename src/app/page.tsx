@@ -299,12 +299,14 @@ export default function HomePage() {
                     <ArrowRight className="w-4 h-4" />
                   </Link>
 
-                  <Link
-                    href="/pro"
-                    className="inline-flex items-center gap-1.5 text-xs text-[#00875A] hover:text-[#006644] dark:text-emerald-400 dark:hover:text-emerald-300 font-semibold underline underline-offset-4 transition-colors"
-                  >
-                    <span>Desde S/ 16.50 al mes (Plan Anual)</span>
-                  </Link>
+                  <div className="text-xs text-slate-600 dark:text-slate-300 flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
+                    <span className="font-semibold text-slate-500 dark:text-slate-400">Precios transparentes:</span>
+                    <span className="font-bold text-slate-900 dark:text-white">Plan Mensual: S/ 29 / mes</span>
+                    <span className="hidden sm:inline text-slate-300 dark:text-slate-700">·</span>
+                    <span className="font-bold text-slate-900 dark:text-white">
+                      Plan Anual: S/ 199 / año <span className="text-[#00875A] dark:text-emerald-400 font-bold">(equivale a S/ 16.58/mes · Ahorras 40%)</span>
+                    </span>
+                  </div>
                 </div>
               </div>
 
