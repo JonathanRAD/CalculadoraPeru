@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowRight, Search, X } from 'lucide-react';
 import type { CalculatorMeta } from '@/features/calculators/registry';
+import { trackSearchQuery } from '@/shared/components/analytics/NativeAnalyticsTracker';
 
 interface HomeSearchProps {
   calculators: CalculatorMeta[];
@@ -59,6 +60,15 @@ export function HomeSearch({ calculators }: HomeSearchProps) {
     return () => document.removeEventListener('pointerdown', closeOnOutsideClick);
   }, []);
 
+  // Telemetry: Debounce-track user search intent after typing stops
+  useEffect(() => {
+    if (!query || query.trim().length < 2) return;
+    const timer = setTimeout(() => {
+      trackSearchQuery(query);
+    }, 800);
+    return () => clearTimeout(timer);
+  }, [query]);
+
   const showResults = isOpen && query.trim().length > 0;
 
   function clearSearch() {
@@ -90,6 +100,7 @@ export function HomeSearch({ calculators }: HomeSearchProps) {
 
     if (event.key === 'Enter' && activeIndex >= 0) {
       event.preventDefault();
+      trackSearchQuery(query);
       router.push(results[activeIndex].slug);
     }
   }
@@ -149,7 +160,10 @@ export function HomeSearch({ calculators }: HomeSearchProps) {
                 role="option"
                 aria-selected={activeIndex === index}
                 onMouseEnter={() => setActiveIndex(index)}
-                onClick={clearSearch}
+                onClick={() => {
+                  trackSearchQuery(query);
+                  clearSearch();
+                }}
                 className={`group flex min-h-14 items-center justify-between gap-4 rounded-xl px-3 py-2.5 transition-colors ${
                   activeIndex === index
                     ? 'bg-emerald-50 text-emerald-950 dark:bg-emerald-950/50 dark:text-white'

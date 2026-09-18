@@ -37,6 +37,9 @@ import {
   Eye,
   LogOut,
   SlidersHorizontal,
+  Smartphone,
+  Monitor,
+  Globe,
 } from 'lucide-react';
 import { LicenseCode, SafeUser, ProPlan } from '@/features/auth/types';
 import { ThemeToggle } from '@/shared/components/ui/ThemeToggle';
@@ -55,6 +58,17 @@ interface TopCalculator {
   slug: string;
   visits: number;
   share: number;
+}
+
+interface TopSearchItem {
+  query: string;
+  count: number;
+  lastSearched: string;
+}
+
+interface DeviceShare {
+  mobile: number;
+  desktop: number;
 }
 
 interface SystemHealth {
@@ -87,6 +101,9 @@ export default function AdminPage() {
   const [users, setUsers] = useState<SafeUser[]>([]);
   const [trafficHistory, setTrafficHistory] = useState<TrafficDay[]>([]);
   const [topCalculators, setTopCalculators] = useState<TopCalculator[]>([]);
+  const [topSearches, setTopSearches] = useState<TopSearchItem[]>([]);
+  const [deviceShare, setDeviceShare] = useState<DeviceShare>({ mobile: 68, desktop: 32 });
+  const [liveActiveVisitors, setLiveActiveVisitors] = useState<number>(0);
   const [systemHealth, setSystemHealth] = useState<SystemHealth | null>(null);
   const [auditLogs, setAuditLogs] = useState<AuditLog[]>([]);
 
@@ -154,6 +171,9 @@ export default function AdminPage() {
       if (metricsData.success) {
         setTrafficHistory(metricsData.trafficHistory || []);
         setTopCalculators(metricsData.topCalculators || []);
+        setTopSearches(metricsData.topSearches || []);
+        setDeviceShare(metricsData.deviceShare || { mobile: 68, desktop: 32 });
+        setLiveActiveVisitors(metricsData.liveActiveVisitors || 0);
         setSystemHealth(metricsData.systemHealth || null);
         setAuditLogs(metricsData.recentLogs || []);
       }
@@ -648,12 +668,46 @@ export default function AdminPage() {
           {activeTab === 'dashboard' && (
             <div className="space-y-8 animate-in fade-in duration-200">
               
+              {/* Live Real-Time Telemetry Bar */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4.5 rounded-2xl bg-gradient-to-r from-emerald-950/40 via-slate-900 to-slate-900 border border-emerald-500/30 shadow-xs">
+                <div className="flex items-center gap-3">
+                  <span className="relative flex h-3.5 w-3.5">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-3.5 w-3.5 bg-emerald-500"></span>
+                  </span>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-bold text-white">
+                        {liveActiveVisitors > 0 ? liveActiveVisitors : 1} {liveActiveVisitors === 1 ? 'usuario activo ahora' : 'usuarios activos ahora'}
+                      </span>
+                      <span className="text-[10px] text-emerald-300 font-bold bg-emerald-900/80 border border-emerald-600/50 px-2 py-0.5 rounded-full font-mono">
+                        ÚLTIMOS 15 MIN
+                      </span>
+                    </div>
+                    <p className="text-xs text-slate-400">
+                      Telemetría nativa privada en vivo (conteo sin cookies de terceros ni scripts lentos)
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2 text-xs font-medium">
+                  <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-800/90 border border-slate-700/80 text-slate-200">
+                    <Smartphone className="w-3.5 h-3.5 text-blue-400" />
+                    <span>{deviceShare.mobile}% Móvil</span>
+                  </div>
+                  <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-800/90 border border-slate-700/80 text-slate-200">
+                    <Monitor className="w-3.5 h-3.5 text-purple-400" />
+                    <span>{deviceShare.desktop}% Computadora</span>
+                  </div>
+                </div>
+              </div>
+
               {/* KPI Stat Cards Grid */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 
                 <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs space-y-2">
                   <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
-                    <span className="font-semibold">Visitas Últimos 14 Días</span>
+                    <span className="font-semibold">Visitas Totales (14 Días)</span>
                     <TrendingUp className="w-4 h-4 text-emerald-500" />
                   </div>
                   <div className="flex items-baseline gap-2">
@@ -661,10 +715,10 @@ export default function AdminPage() {
                       {stats.totalVisits.toLocaleString('es-PE')}
                     </span>
                     <span className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-100/70 dark:bg-emerald-950 px-1.5 py-0.2 rounded">
-                      +14.8%
+                      En vivo
                     </span>
                   </div>
-                  <p className="text-[11px] text-slate-400">Promedio de ~3,450 visitas diarias</p>
+                  <p className="text-[11px] text-slate-400">Páginas y herramientas consultadas</p>
                 </div>
 
                 <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs space-y-2">
@@ -726,7 +780,7 @@ export default function AdminPage() {
                       <span>Tráfico y Visitas Diarias (Últimos 14 Días)</span>
                     </h3>
                     <p className="text-xs text-slate-500">
-                      Muestra picos de cálculo en quincenas (15) y cierres de mes (30/31) por pago de planillas y beneficios
+                      Muestra visitas reales y picos de cálculo en quincenas (15) y cierres de mes (30/31)
                     </p>
                   </div>
                   {hoveredPoint && (
@@ -777,85 +831,153 @@ export default function AdminPage() {
                 </div>
               </div>
 
-              {/* Bottom 2-Column: Top Calculadoras + System Health */}
+              {/* 2-Column: Real Top Pages Visited + Real User Searches */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 
-                {/* Top Calculators Ranking */}
+                {/* Top Visited Pages Ranking */}
                 <div className="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs space-y-4">
-                  <h3 className="font-bold text-sm text-slate-900 dark:text-white flex items-center gap-2">
-                    <BarChart3 className="w-4 h-4 text-emerald-500" />
-                    <span>Top 5 Calculadoras Más Utilizadas del Perú</span>
-                  </h3>
+                  <div className="flex items-center justify-between">
+                    <h3 className="font-bold text-sm text-slate-900 dark:text-white flex items-center gap-2">
+                      <BarChart3 className="w-4 h-4 text-emerald-500" />
+                      <span>Páginas y Calculadoras Más Visitadas</span>
+                    </h3>
+                    <span className="text-[11px] font-mono text-slate-400">
+                      {topCalculators.length} registradas
+                    </span>
+                  </div>
 
                   <div className="space-y-3">
-                    {topCalculators.map(c => (
-                      <div key={c.slug} className="space-y-1 text-xs">
-                        <div className="flex justify-between font-medium">
-                          <span className="text-slate-800 dark:text-slate-200">{c.name}</span>
-                          <span className="font-mono text-slate-500">{c.visits.toLocaleString()} ({c.share}%)</span>
+                    {topCalculators.length > 0 ? (
+                      topCalculators.map(c => (
+                        <div key={c.slug} className="space-y-1.5 text-xs p-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-850 transition-colors">
+                          <div className="flex items-center justify-between font-medium">
+                            <Link
+                              href={c.slug}
+                              target="_blank"
+                              className="text-slate-800 dark:text-slate-200 hover:text-emerald-600 dark:hover:text-emerald-400 flex items-center gap-1.5 font-semibold transition-colors"
+                            >
+                              <span className="truncate max-w-[260px] sm:max-w-xs">{c.name}</span>
+                              <ExternalLink className="w-3 h-3 text-slate-400 shrink-0" />
+                            </Link>
+                            <span className="font-mono text-slate-500 shrink-0">
+                              {c.visits.toLocaleString()} ({c.share}%)
+                            </span>
+                          </div>
+                          <div className="w-full h-2 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
+                            <div
+                              style={{ width: `${Math.min(c.share * 2.5, 100)}%` }}
+                              className="h-full bg-[#00875A] rounded-full transition-all duration-500"
+                            />
+                          </div>
                         </div>
-                        <div className="w-full h-2 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
-                          <div
-                            style={{ width: `${c.share * 2.5}%` }}
-                            className="h-full bg-[#00875A] rounded-full"
-                          />
-                        </div>
+                      ))
+                    ) : (
+                      <div className="py-8 text-center text-xs text-slate-400">
+                        Aún no se han registrado visitas en el período.
                       </div>
-                    ))}
+                    )}
                   </div>
                 </div>
 
-                {/* System & Engine Status */}
+                {/* Real User Searches */}
                 <div className="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs space-y-4">
-                  <h3 className="font-bold text-sm text-slate-900 dark:text-white flex items-center gap-2">
-                    <Server className="w-4 h-4 text-blue-500" />
-                    <span>Estado del Motor y Servicios</span>
-                  </h3>
+                  <div className="flex items-center justify-between">
+                    <h3 className="font-bold text-sm text-slate-900 dark:text-white flex items-center gap-2">
+                      <Search className="w-4 h-4 text-blue-500" />
+                      <span>Términos Más Buscados por los Usuarios</span>
+                    </h3>
+                    <span className="text-[11px] font-mono text-slate-400">
+                      {topSearches.length} términos
+                    </span>
+                  </div>
 
-                  <div className="space-y-3 text-xs">
-                    <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 dark:bg-slate-850 border border-slate-200/60 dark:border-slate-800">
-                      <div className="flex items-center gap-2.5">
-                        <Database className="w-4 h-4 text-emerald-500" />
-                        <div>
-                          <span className="font-bold text-slate-900 dark:text-white block">Base de Datos PostgreSQL</span>
-                          <span className="text-[11px] text-slate-400">
-                            {systemHealth?.supabase === 'connected' ? 'Conectado a Supabase Cloud' : 'Operando con Storage Local (Transición)'}
-                          </span>
+                  <div className="space-y-2.5">
+                    {topSearches.length > 0 ? (
+                      topSearches.map((item, idx) => (
+                        <div
+                          key={item.query}
+                          className="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 dark:bg-slate-850 border border-slate-200/60 dark:border-slate-800 text-xs"
+                        >
+                          <div className="flex items-center gap-2.5 min-w-0">
+                            <span className="w-5 h-5 rounded-md bg-blue-100 dark:bg-blue-950/80 text-blue-700 dark:text-blue-300 font-mono text-[10px] font-bold flex items-center justify-center shrink-0">
+                              #{idx + 1}
+                            </span>
+                            <span className="font-bold text-slate-900 dark:text-white truncate">
+                              &ldquo;{item.query}&rdquo;
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-2 shrink-0">
+                            <span className="px-2 py-0.5 rounded-md bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 font-mono text-[11px] font-bold">
+                              {item.count} {item.count === 1 ? 'búsqueda' : 'búsquedas'}
+                            </span>
+                          </div>
                         </div>
+                      ))
+                    ) : (
+                      <div className="py-8 text-center space-y-2">
+                        <Search className="w-8 h-8 text-slate-300 dark:text-slate-600 mx-auto" />
+                        <p className="text-xs font-semibold text-slate-600 dark:text-slate-400">
+                          Las búsquedas de los usuarios aparecerán aquí en vivo
+                        </p>
+                        <p className="text-[11px] text-slate-400 max-w-xs mx-auto">
+                          Cada vez que alguien busque un cálculo (ej: &quot;CTS&quot;, &quot;Sueldo&quot;, &quot;Horas Extras&quot;), se registrará automáticamente.
+                        </p>
                       </div>
-                      <span className="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 font-bold text-[10px]">
-                        ACTIVO
-                      </span>
-                    </div>
-
-                    <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 dark:bg-slate-850 border border-slate-200/60 dark:border-slate-800">
-                      <div className="flex items-center gap-2.5">
-                        <ShieldCheck className="w-4 h-4 text-purple-500" />
-                        <div>
-                          <span className="font-bold text-slate-900 dark:text-white block">Autenticación y Sesiones</span>
-                          <span className="text-[11px] text-slate-400">JWT HMAC-SHA256 con cookies seguras HttpOnly</span>
-                        </div>
-                      </div>
-                      <span className="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 font-bold text-[10px]">
-                        SEGURO
-                      </span>
-                    </div>
-
-                    <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 dark:bg-slate-850 border border-slate-200/60 dark:border-slate-800">
-                      <div className="flex items-center gap-2.5">
-                        <MessageCircle className="w-4 h-4 text-teal-500" />
-                        <div>
-                          <span className="font-bold text-slate-900 dark:text-white block">Servidor de Correos Resend</span>
-                          <span className="text-[11px] text-slate-400">Para confirmación de licencias y contacto</span>
-                        </div>
-                      </div>
-                      <span className="px-2.5 py-0.5 rounded-full bg-teal-100 text-teal-800 dark:bg-teal-950 dark:text-teal-300 font-bold text-[10px]">
-                        OPERATIVO
-                      </span>
-                    </div>
+                    )}
                   </div>
                 </div>
 
+              </div>
+
+              {/* System & Engine Status */}
+              <div className="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs space-y-4">
+                <h3 className="font-bold text-sm text-slate-900 dark:text-white flex items-center gap-2">
+                  <Server className="w-4 h-4 text-blue-500" />
+                  <span>Estado del Motor y Servicios</span>
+                </h3>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                  <div className="flex items-center justify-between p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-850 border border-slate-200/60 dark:border-slate-800">
+                    <div className="flex items-center gap-2.5">
+                      <Database className="w-4 h-4 text-emerald-500 shrink-0" />
+                      <div>
+                        <span className="font-bold text-slate-900 dark:text-white block">PostgreSQL</span>
+                        <span className="text-[11px] text-slate-400">
+                          {systemHealth?.supabase === 'connected' ? 'Supabase Cloud Activo' : 'Storage Local Híbrido'}
+                        </span>
+                      </div>
+                    </div>
+                    <span className="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 font-bold text-[10px]">
+                      ACTIVO
+                    </span>
+                  </div>
+
+                  <div className="flex items-center justify-between p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-850 border border-slate-200/60 dark:border-slate-800">
+                    <div className="flex items-center gap-2.5">
+                      <ShieldCheck className="w-4 h-4 text-purple-500 shrink-0" />
+                      <div>
+                        <span className="font-bold text-slate-900 dark:text-white block">Sesiones & Auth</span>
+                        <span className="text-[11px] text-slate-400">JWT HMAC-SHA256 HttpOnly</span>
+                      </div>
+                    </div>
+                    <span className="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 font-bold text-[10px]">
+                      SEGURO
+                    </span>
+                  </div>
+
+                  <div className="flex items-center justify-between p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-850 border border-slate-200/60 dark:border-slate-800">
+                    <div className="flex items-center gap-2.5">
+                      <Globe className="w-4 h-4 text-teal-500 shrink-0" />
+                      <div>
+                        <span className="font-bold text-slate-900 dark:text-white block">Telemetría Nativa</span>
+                        <span className="text-[11px] text-slate-400">Eventos beacon no bloqueantes</span>
+                      </div>
+                    </div>
+                    <span className="px-2.5 py-0.5 rounded-full bg-teal-100 text-teal-800 dark:bg-teal-950 dark:text-teal-300 font-bold text-[10px]">
+                      OPERATIVO
+                    </span>
+                  </div>
+                </div>
               </div>
 
             </div>

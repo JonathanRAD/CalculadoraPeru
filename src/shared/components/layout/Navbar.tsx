@@ -7,6 +7,7 @@ import { Search, ChevronDown, Receipt, ArrowRight, Menu, X, Sparkles, KeyRound, 
 import { CALCULATORS_REGISTRY, CATEGORIES, CalculatorCategory } from '@/features/calculators/registry';
 import { ThemeToggle } from '@/shared/components/ui/ThemeToggle';
 import { usePro } from '@/features/premium/context/ProContext';
+import { trackSearchQuery } from '@/shared/components/analytics/NativeAnalyticsTracker';
 
 export function Navbar() {
   const pathname = usePathname();
@@ -48,6 +49,15 @@ export function Navbar() {
     document.addEventListener('keydown', handleEscape);
     return () => document.removeEventListener('keydown', handleEscape);
   }, [closeSearch, isSearchOpen]);
+
+  // Telemetry: Debounce-track user search intent after typing in quick search
+  useEffect(() => {
+    if (!searchQuery || searchQuery.trim().length < 2) return;
+    const timer = setTimeout(() => {
+      trackSearchQuery(searchQuery);
+    }, 800);
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
 
   const navCategories = CATEGORIES.filter(c => c.id !== 'todas');
 
@@ -366,7 +376,10 @@ export function Navbar() {
                 <Link
                   key={calc.id}
                   href={calc.slug}
-                  onClick={closeSearch}
+                  onClick={() => {
+                    trackSearchQuery(searchQuery);
+                    closeSearch();
+                  }}
                   className="flex items-center justify-between p-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors group"
                 >
                   <div>

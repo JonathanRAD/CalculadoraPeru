@@ -63,10 +63,29 @@ create table if not exists public.audit_logs (
 
 create index if not exists idx_audit_logs_created_at on public.audit_logs(created_at desc);
 
--- 4. POLÍTICAS ROW LEVEL SECURITY (RLS)
+-- 4. TABLA: ANALYTICS_EVENTS (Métricas nativas en tiempo real: visitas, páginas y búsquedas)
+create table if not exists public.analytics_events (
+  id uuid primary key default uuid_generate_v4(),
+  event_type text not null check (event_type in ('page_view', 'search', 'calculator_use', 'pro_click')),
+  path text not null,
+  query text,
+  referrer text,
+  device text default 'desktop' check (device in ('desktop', 'mobile', 'tablet')),
+  session_id text,
+  created_at timestamptz not null default now()
+);
+
+-- Índices de alto rendimiento para analítica
+create index if not exists idx_analytics_created_at on public.analytics_events(created_at desc);
+create index if not exists idx_analytics_event_type on public.analytics_events(event_type);
+create index if not exists idx_analytics_path on public.analytics_events(path);
+create index if not exists idx_analytics_query on public.analytics_events(query);
+
+-- 5. POLÍTICAS ROW LEVEL SECURITY (RLS)
 alter table public.profiles enable row level security;
 alter table public.licenses enable row level security;
 alter table public.audit_logs enable row level security;
+alter table public.analytics_events enable row level security;
 
 -- Profiles: Los usuarios pueden leer su propio perfil
 create policy "Users can view own profile" 
@@ -86,4 +105,13 @@ create policy "Admins and service role can manage licenses"
 -- Audit Logs: Solo el servicio backend puede escribir logs
 create policy "Admins and service role can manage audit logs"
   on public.audit_logs for all
+  using (auth.jwt() ->> 'role' = 'service_role');
+
+-- Analytics: Permitir inserción anónima y lectura solo a administradores / service_role
+create policy "Anyone can insert analytics events"
+  on public.analytics_events for insert
+  with check (true);
+
+create policy "Admins and service role can view analytics"
+  on public.analytics_events for select
   using (auth.jwt() ->> 'role' = 'service_role');
