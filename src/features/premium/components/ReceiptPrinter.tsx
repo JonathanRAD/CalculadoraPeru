@@ -22,7 +22,7 @@ export default function ReceiptPrinter({
   const audioCtxRef = useRef<AudioContext | null>(null);
 
   // Financial calculations
-  const totalAmount = plan === 'yearly' ? 199.00 : 29.00;
+  const totalAmount = plan === 'yearly' ? 149.00 : 16.00;
   const subtotal = Number((totalAmount / 1.18).toFixed(2));
   const tax = Number((totalAmount - subtotal).toFixed(2));
 
@@ -158,7 +158,7 @@ export default function ReceiptPrinter({
               CalculaPerú PRO
             </h3>
             <p className="text-xs text-neutral-400 mt-0.5 font-normal">
-              {plan === 'yearly' ? 'Plan Anual · 12 meses (S/ 16.58/mes)' : 'Plan Mensual · 30 días (S/ 29.00/mes)'}
+              {plan === 'yearly' ? 'Plan Anual · 12 meses (S/ 12.42/mes)' : 'Plan Mensual · 30 días (S/ 16.00/mes)'}
             </p>
           </div>
 
@@ -239,7 +239,7 @@ export default function ReceiptPrinter({
               <span>S/ {subtotal.toFixed(2)}</span>
             </div>
             <div className="text-[10px] text-neutral-600">
-              {plan === 'yearly' ? 'Plan Anual (12 meses · S/ 16.58/mes)' : 'Plan Mensual (30 días · S/ 29.00/mes)'}
+              {plan === 'yearly' ? 'Plan Anual (12 meses · S/ 12.42/mes)' : 'Plan Mensual (30 días · S/ 16.00/mes)'}
             </div>
           </div>
 
@@ -353,8 +353,8 @@ export default function ReceiptPrinter({
           >
             <span>
               {plan === 'yearly'
-                ? 'Activar Plan Anual (S/ 199 · S/ 16.58/mes)'
-                : 'Activar Plan Mensual (S/ 29 / mes)'}
+                ? 'Activar Plan Anual (S/ 149 · S/ 12.42/mes)'
+                : 'Activar Plan Mensual (S/ 16 / mes)'}
             </span>
             <ArrowRight className="w-3.5 h-3.5" />
           </button>

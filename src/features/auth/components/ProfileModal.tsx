@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 import {
   X,
   User,
@@ -13,8 +14,24 @@ import {
   KeyRound,
   Calendar,
   Image as ImageIcon,
+  FolderOpen,
+  FileSpreadsheet,
+  ExternalLink,
+  Loader2,
+  ShieldCheck,
 } from 'lucide-react';
 import { usePro } from '@/features/premium/context/ProContext';
+import { exportTableToCsv } from '@/shared/utils/exportToExcel';
+
+interface SavedCalc {
+  id: string;
+  calculatorType: string;
+  title: string;
+  summaryText: string;
+  totalAmount?: number;
+  data: Record<string, any>;
+  createdAt: string;
+}
 
 export function ProfileModal() {
   const {
@@ -29,19 +46,29 @@ export function ProfileModal() {
     updateCompanyProfile,
   } = usePro();
 
+  const [activeTab, setActiveTab] = useState<'calcs' | 'company' | 'license'>('calcs');
+
+  // Company state
   const [companyName, setCompanyName] = useState('');
   const [companyRuc, setCompanyRuc] = useState('');
   const [companyAddress, setCompanyAddress] = useState('');
   const [companyLogoBase64, setCompanyLogoBase64] = useState<string | null>(null);
 
+  // License redemption state
   const [codeToRedeem, setCodeToRedeem] = useState('');
   const [isRedeeming, setIsRedeeming] = useState(false);
   const [redeemFeedback, setRedeemFeedback] = useState<{ success?: boolean; message?: string }>({});
 
+  // Profile save state
   const [isSavingProfile, setIsSavingProfile] = useState(false);
   const [saveFeedback, setSaveFeedback] = useState<string | null>(null);
 
-  // Sync state when user changes
+  // Saved calculations state
+  const [savedCalcs, setSavedCalcs] = useState<SavedCalc[]>([]);
+  const [isLoadingCalcs, setIsLoadingCalcs] = useState(false);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+
+  // Sync company data when user changes
   useEffect(() => {
     if (user) {
       setCompanyName(user.companyName || '');
@@ -50,6 +77,59 @@ export function ProfileModal() {
       setCompanyLogoBase64(user.companyLogoBase64 || null);
     }
   }, [user]);
+
+  // Load calculations
+  useEffect(() => {
+    if (isProfileModalOpen && user) {
+      loadCalculations();
+    }
+  }, [isProfileModalOpen, user]);
+
+  const loadCalculations = async () => {
+    setIsLoadingCalcs(true);
+    try {
+      const res = await fetch('/api/calculations');
+      const json = await res.json();
+      if (json.success && Array.isArray(json.data)) {
+        setSavedCalcs(json.data);
+      }
+    } catch {
+      // Fallback silent
+    } finally {
+      setIsLoadingCalcs(false);
+    }
+  };
+
+  const handleDeleteCalc = async (id: string) => {
+    if (!confirm('¿Deseas eliminar este cálculo guardado?')) return;
+    setDeletingId(id);
+    try {
+      const res = await fetch(`/api/calculations/${id}`, { method: 'DELETE' });
+      if (res.ok) {
+        setSavedCalcs((prev) => prev.filter((c) => c.id !== id));
+      }
+    } catch {
+      alert('No se pudo eliminar el cálculo.');
+    } finally {
+      setDeletingId(null);
+    }
+  };
+
+  const handleExportCalcCsv = (calc: SavedCalc) => {
+    const flatRows = Object.entries(calc.data || {}).map(([key, val]) => ({
+      parametro: key,
+      valor: typeof val === 'object' ? JSON.stringify(val) : String(val),
+    }));
+
+    exportTableToCsv(
+      `Calculo_${calc.calculatorType}_${calc.title.replace(/\s+/g, '_')}`,
+      [
+        { key: 'parametro', header: 'Parámetro / Concepto' },
+        { key: 'valor', header: 'Detalle Registrado' },
+      ],
+      flatRows
+    );
+  };
 
   if (!isProfileModalOpen || !user) return null;
 
@@ -106,9 +186,27 @@ export function ProfileModal() {
     }
   };
 
+  const getCalcBadgeColor = (type: string) => {
+    switch (type.toLowerCase()) {
+      case 'cts':
+        return 'bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-300';
+      case 'liquidacion':
+      case 'liquidacion-laboral':
+        return 'bg-purple-100 text-purple-800 dark:bg-purple-950 dark:text-purple-300';
+      case 'boleta':
+      case 'boleta-pago':
+        return 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300';
+      case 'renta':
+      case 'renta-5ta':
+        return 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300';
+      default:
+        return 'bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-300';
+    }
+  };
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/75 backdrop-blur-xs animate-in fade-in duration-200">
-      <div className="relative w-full max-w-lg bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl p-6 sm:p-8 space-y-6 text-xs max-h-[92vh] overflow-y-auto">
+      <div className="relative w-full max-w-2xl bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl p-6 sm:p-8 space-y-5 text-xs max-h-[92vh] overflow-y-auto">
         
         {/* Close Button */}
         <button
@@ -120,7 +218,7 @@ export function ProfileModal() {
         </button>
 
         {/* User Profile Header */}
-        <div className="flex items-center gap-3.5 border-b border-slate-100 dark:border-slate-800 pb-5">
+        <div className="flex items-center gap-3.5 border-b border-slate-100 dark:border-slate-800 pb-4">
           <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-[#00875A] to-emerald-400 flex items-center justify-center text-white font-bold text-lg shadow-md shadow-emerald-500/20">
             {user.name.charAt(0).toUpperCase()}
           </div>
@@ -144,163 +242,357 @@ export function ProfileModal() {
           </div>
         </div>
 
-        {/* PRO Status Box */}
-        {isPro ? (
-          <div className="p-4 rounded-2xl bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-950/40 dark:to-teal-950/40 border border-emerald-200 dark:border-emerald-800/80 space-y-1.5">
-            <div className="flex items-center justify-between text-xs font-bold text-emerald-900 dark:text-emerald-200">
-              <span className="flex items-center gap-1.5">
-                <Sparkles className="w-4 h-4 text-amber-500 fill-amber-500" />
-                <span>Membresía PRO Activa</span>
-              </span>
-              <span className="text-[11px] bg-emerald-200 dark:bg-emerald-900 px-2 py-0.5 rounded-md">
-                Acceso Ilimitado
-              </span>
-            </div>
-            <p className="text-slate-600 dark:text-slate-300 text-[11px]">
-              {expiresAt ? (
-                <span className="flex items-center gap-1">
-                  <Calendar className="w-3.5 h-3.5 text-emerald-600" />
-                  <span>Vigencia hasta el: <strong>{new Date(expiresAt).toLocaleDateString('es-PE', { day: 'numeric', month: 'long', year: 'numeric' })}</strong></span>
-                </span>
-              ) : (
-                'Licencia sin fecha límite'
-              )}
-            </p>
-          </div>
-        ) : (
-          <div className="p-4 rounded-2xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/60 space-y-2">
-            <div className="flex items-center gap-2 font-bold text-amber-900 dark:text-amber-200">
-              <Sparkles className="w-4 h-4 text-amber-500 fill-amber-500" />
-              <span>¿Tienes un Código de Suscripción PRO?</span>
-            </div>
-            <p className="text-slate-600 dark:text-slate-300 text-[11px]">
-              Canjea el código que te entregamos al adquirir tu plan para activar todas las funciones oficiales y vincularlas a tu cuenta.
-            </p>
-            <form onSubmit={handleRedeem} className="flex gap-2 pt-1">
-              <input
-                type="text"
-                placeholder="Ej. PRO-2026-A8K2-9M4Q"
-                value={codeToRedeem}
-                onChange={(e) => setCodeToRedeem(e.target.value)}
-                className="flex-1 uppercase font-mono bg-white dark:bg-slate-900 border border-amber-300 dark:border-amber-700 rounded-xl px-3 py-2 text-slate-900 dark:text-white outline-none focus:border-amber-500"
-              />
+        {/* Tab Navigation */}
+        <div className="flex rounded-2xl bg-slate-100 dark:bg-slate-800 p-1 gap-1">
+          <button
+            type="button"
+            onClick={() => setActiveTab('calcs')}
+            className={`flex-1 py-2 px-3 rounded-xl font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+              activeTab === 'calcs'
+                ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-xs'
+                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+            }`}
+          >
+            <FolderOpen className="w-3.5 h-3.5 text-blue-600" />
+            <span>Mis Cálculos ({savedCalcs.length})</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setActiveTab('company')}
+            className={`flex-1 py-2 px-3 rounded-xl font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+              activeTab === 'company'
+                ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-xs'
+                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+            }`}
+          >
+            <Building2 className="w-3.5 h-3.5 text-emerald-600" />
+            <span>Mi Empresa</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setActiveTab('license')}
+            className={`flex-1 py-2 px-3 rounded-xl font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+              activeTab === 'license'
+                ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-xs'
+                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+            }`}
+          >
+            <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+            <span>Membresía PRO</span>
+          </button>
+        </div>
+
+        {/* TAB 1: Mis Cálculos Guardados */}
+        {activeTab === 'calcs' && (
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <h4 className="font-bold text-slate-900 dark:text-white text-sm">
+                  Historial y Cálculos Guardados en la Nube
+                </h4>
+                <p className="text-slate-500 text-[11px]">
+                  Accede a tus liquidaciones, cálculos de CTS, boletas y cotizaciones desde cualquier dispositivo.
+                </p>
+              </div>
               <button
-                type="submit"
-                disabled={isRedeeming}
-                className="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-xl text-xs transition-colors cursor-pointer"
+                type="button"
+                onClick={loadCalculations}
+                disabled={isLoadingCalcs}
+                className="text-[11px] font-semibold text-emerald-600 hover:underline cursor-pointer"
               >
-                {isRedeeming ? 'Canjeando...' : 'Canjear'}
+                Actualizar
               </button>
-            </form>
-            {redeemFeedback.message && (
-              <p className={`text-[11px] font-semibold ${redeemFeedback.success ? 'text-emerald-700 dark:text-emerald-300' : 'text-red-600 dark:text-red-400'}`}>
-                {redeemFeedback.message}
-              </p>
+            </div>
+
+            {isLoadingCalcs ? (
+              <div className="flex items-center justify-center py-12 text-slate-400">
+                <Loader2 className="w-6 h-6 animate-spin mr-2" />
+                <span>Cargando tus cálculos guardados...</span>
+              </div>
+            ) : savedCalcs.length === 0 ? (
+              <div className="rounded-2xl border-2 border-dashed border-slate-200 dark:border-slate-800 p-8 text-center space-y-2">
+                <FolderOpen className="w-10 h-10 text-slate-300 dark:text-slate-700 mx-auto" />
+                <p className="font-bold text-slate-700 dark:text-slate-300">
+                  Aún no tienes cálculos guardados
+                </p>
+                <p className="text-slate-500 text-[11px] max-w-sm mx-auto">
+                  Al usar cualquier calculadora (CTS, Liquidación, Boleta de Pago, etc.), haz clic en el botón <strong>"Guardar en Mis Cálculos"</strong> para sincronizarlo aquí.
+                </p>
+                <div className="pt-2">
+                  <Link
+                    href="/#todas-las-calculadoras"
+                    onClick={closeProfileModal}
+                    className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold text-xs hover:opacity-90"
+                  >
+                    Ir a Calculadoras
+                  </Link>
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-2.5 max-h-[50vh] overflow-y-auto pr-1">
+                {savedCalcs.map((calc) => (
+                  <div
+                    key={calc.id}
+                    className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 hover:border-emerald-500/40 transition-colors"
+                  >
+                    <div className="space-y-1 flex-1">
+                      <div className="flex items-center gap-2">
+                        <span className={`px-2 py-0.5 rounded-md font-extrabold text-[10px] uppercase ${getCalcBadgeColor(calc.calculatorType)}`}>
+                          {calc.calculatorType}
+                        </span>
+                        <span className="font-bold text-slate-900 dark:text-white text-xs">
+                          {calc.title}
+                        </span>
+                      </div>
+                      <p className="text-slate-500 dark:text-slate-400 text-[11px] line-clamp-1">
+                        {calc.summaryText}
+                      </p>
+                      <div className="flex items-center gap-3 text-[10px] text-slate-400">
+                        <span>{new Date(calc.createdAt).toLocaleDateString('es-PE', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
+                        {calc.totalAmount !== undefined && (
+                          <span className="font-mono font-bold text-emerald-700 dark:text-emerald-400">
+                            Total: S/ {Number(calc.totalAmount).toLocaleString('es-PE', { minimumFractionDigits: 2 })}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-2 self-end sm:self-center">
+                      <button
+                        type="button"
+                        onClick={() => handleExportCalcCsv(calc)}
+                        title="Exportar a Excel / CSV"
+                        className="p-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:text-emerald-600 hover:border-emerald-500 transition-colors cursor-pointer flex items-center gap-1 text-[11px] font-semibold"
+                      >
+                        <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-600" />
+                        <span className="hidden sm:inline">Excel</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => handleDeleteCalc(calc.id)}
+                        disabled={deletingId === calc.id}
+                        title="Eliminar cálculo"
+                        className="p-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-red-500 hover:bg-red-50 dark:hover:bg-red-950/40 hover:border-red-300 transition-colors cursor-pointer"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
             )}
           </div>
         )}
 
-        {/* Company Profile Saved Data */}
-        <div className="space-y-3 pt-2">
-          <div className="flex items-center justify-between">
-            <span className="font-bold text-slate-900 dark:text-white flex items-center gap-1.5 text-xs uppercase tracking-wider">
-              <Building2 className="w-3.5 h-3.5 text-blue-600" />
-              <span>Datos Predeterminados de Tu Empresa</span>
-            </span>
-            <span className="text-[10px] text-slate-400">
-              Se sincronizan en todos tus dispositivos
-            </span>
-          </div>
+        {/* TAB 2: Mi Empresa */}
+        {activeTab === 'company' && (
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <h4 className="font-bold text-slate-900 dark:text-white text-sm">
+                  Datos Predeterminados de Tu Empresa
+                </h4>
+                <p className="text-slate-500 text-[11px]">
+                  Se rellenan automáticamente en tus boletas de pago, liquidaciones y cotizaciones.
+                </p>
+              </div>
+            </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label className="block text-slate-600 dark:text-slate-400 font-semibold mb-1">
+                  Razón Social / Empresa
+                </label>
+                <input
+                  type="text"
+                  placeholder="Ej. Corporación Perú S.A.C."
+                  value={companyName}
+                  onChange={(e) => setCompanyName(e.target.value)}
+                  className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-slate-900 dark:text-white outline-none focus:border-[#00875A]"
+                />
+              </div>
+              <div>
+                <label className="block text-slate-600 dark:text-slate-400 font-semibold mb-1">
+                  RUC de la Empresa (11 dígitos)
+                </label>
+                <input
+                  type="text"
+                  maxLength={11}
+                  placeholder="Ej. 20601928371"
+                  value={companyRuc}
+                  onChange={(e) => setCompanyRuc(e.target.value)}
+                  className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-slate-900 dark:text-white outline-none focus:border-[#00875A]"
+                />
+              </div>
+            </div>
+
             <div>
               <label className="block text-slate-600 dark:text-slate-400 font-semibold mb-1">
-                Razón Social / Empresa
+                Dirección Fiscal
               </label>
               <input
                 type="text"
-                placeholder="Ej. Corporación Perú S.A.C."
-                value={companyName}
-                onChange={(e) => setCompanyName(e.target.value)}
+                placeholder="Ej. Av. Javier Prado Este 1420, San Isidro, Lima"
+                value={companyAddress}
+                onChange={(e) => setCompanyAddress(e.target.value)}
                 className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-slate-900 dark:text-white outline-none focus:border-[#00875A]"
               />
             </div>
-            <div>
-              <label className="block text-slate-600 dark:text-slate-400 font-semibold mb-1">
-                RUC de la Empresa (11 dígitos)
+
+            {/* Logo uploader */}
+            <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-2">
+              <label className="text-xs font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
+                <ImageIcon className="w-3.5 h-3.5 text-emerald-600" />
+                <span>Logotipo Corporativo Guardado en Cuenta</span>
               </label>
-              <input
-                type="text"
-                maxLength={11}
-                placeholder="Ej. 20601928371"
-                value={companyRuc}
-                onChange={(e) => setCompanyRuc(e.target.value)}
-                className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-slate-900 dark:text-white outline-none focus:border-[#00875A]"
-              />
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-slate-600 dark:text-slate-400 font-semibold mb-1">
-              Dirección Fiscal
-            </label>
-            <input
-              type="text"
-              placeholder="Ej. Av. Javier Prado Este 1420, San Isidro, Lima"
-              value={companyAddress}
-              onChange={(e) => setCompanyAddress(e.target.value)}
-              className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-slate-900 dark:text-white outline-none focus:border-[#00875A]"
-            />
-          </div>
-
-          {/* Logo uploader */}
-          <div className="p-3 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-2">
-            <label className="text-xs font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
-              <ImageIcon className="w-3.5 h-3.5 text-emerald-600" />
-              <span>Logotipo Corporativo Guardado en Cuenta</span>
-            </label>
-            {companyLogoBase64 ? (
-              <div className="flex items-center gap-3 p-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700">
-                <img src={companyLogoBase64} alt="Logo" className="w-14 h-10 object-contain rounded bg-white p-0.5 border border-slate-100" />
-                <div className="flex-1 text-xs">
-                  <span className="font-bold text-emerald-700 dark:text-emerald-400 block">Logotipo guardado en tu cuenta</span>
-                  <span className="text-[10px] text-slate-400">Aparecerá en tus boletas en cualquier computadora</span>
+              {companyLogoBase64 ? (
+                <div className="flex items-center gap-3 p-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700">
+                  <img src={companyLogoBase64} alt="Logo" className="w-14 h-10 object-contain rounded bg-white p-0.5 border border-slate-100" />
+                  <div className="flex-1 text-xs">
+                    <span className="font-bold text-emerald-700 dark:text-emerald-400 block">Logotipo guardado en tu cuenta</span>
+                    <span className="text-[10px] text-slate-400">Aparecerá en tus documentos oficiales en cualquier dispositivo</span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setCompanyLogoBase64(null)}
+                    className="p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-950/40 rounded-lg transition-colors cursor-pointer"
+                    title="Eliminar logo"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => setCompanyLogoBase64(null)}
-                  className="p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-950/40 rounded-lg transition-colors cursor-pointer"
-                  title="Eliminar logo"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </button>
+              ) : (
+                <label className="flex items-center justify-center gap-2 p-3 rounded-xl border-2 border-dashed border-slate-300 dark:border-slate-700 hover:border-emerald-500 bg-white dark:bg-slate-900 cursor-pointer transition-colors text-xs font-semibold text-slate-600 dark:text-slate-300">
+                  <Upload className="w-4 h-4 text-emerald-600" />
+                  <span>Cargar Logotipo de la Empresa (PNG/JPG máx 2MB)</span>
+                  <input type="file" accept="image/png, image/jpeg, image/webp" onChange={handleLogoUpload} className="hidden" />
+                </label>
+              )}
+            </div>
+
+            <div className="flex items-center justify-between pt-1">
+              <button
+                type="button"
+                onClick={handleSaveCompanyData}
+                disabled={isSavingProfile}
+                className="py-2.5 px-4 bg-[#00875A] hover:bg-[#00704A] text-white font-bold rounded-xl text-xs flex items-center gap-2 transition-colors cursor-pointer disabled:opacity-50 shadow-sm"
+              >
+                <Check className="w-3.5 h-3.5 text-white" />
+                <span>{isSavingProfile ? 'Guardando...' : 'Guardar Datos en mi Cuenta'}</span>
+              </button>
+              {saveFeedback && (
+                <span className="text-[11px] font-semibold text-emerald-600 dark:text-emerald-400">
+                  {saveFeedback}
+                </span>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* TAB 3: Membresía PRO */}
+        {activeTab === 'license' && (
+          <div className="space-y-4">
+            {isPro ? (
+              <div className="p-4 rounded-2xl bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-950/40 dark:to-teal-950/40 border border-emerald-200 dark:border-emerald-800/80 space-y-2">
+                <div className="flex items-center justify-between text-xs font-bold text-emerald-900 dark:text-emerald-200">
+                  <span className="flex items-center gap-1.5">
+                    <Sparkles className="w-4 h-4 text-amber-500 fill-amber-500" />
+                    <span>Membresía PRO Activa</span>
+                  </span>
+                  <span className="text-[11px] bg-emerald-200 dark:bg-emerald-900 text-emerald-900 dark:text-emerald-100 px-2.5 py-0.5 rounded-full font-extrabold">
+                    {plan === 'yearly' ? 'Plan Anual' : 'Plan Mensual (S/ 16.00/mes)'}
+                  </span>
+                </div>
+                <p className="text-slate-600 dark:text-slate-300 text-[11px]">
+                  {expiresAt ? (
+                    <span className="flex items-center gap-1">
+                      <Calendar className="w-3.5 h-3.5 text-emerald-600" />
+                      <span>Vigencia hasta el: <strong>{new Date(expiresAt).toLocaleDateString('es-PE', { day: 'numeric', month: 'long', year: 'numeric' })}</strong></span>
+                    </span>
+                  ) : (
+                    'Licencia sin fecha límite'
+                  )}
+                </p>
+                <div className="pt-2 border-t border-emerald-200/60 dark:border-emerald-800/40 grid grid-cols-2 gap-2 text-[11px] text-emerald-900 dark:text-emerald-200">
+                  <div className="flex items-center gap-1.5">
+                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+                    <span>Exportación Excel ilimitada</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+                    <span>Cálculos guardados en nube</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+                    <span>Semáforo SUNAFIL 2026</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+                    <span>PDF oficial con membrete</span>
+                  </div>
+                </div>
               </div>
             ) : (
-              <label className="flex items-center justify-center gap-2 p-3 rounded-xl border-2 border-dashed border-slate-300 dark:border-slate-700 hover:border-emerald-500 bg-white dark:bg-slate-900 cursor-pointer transition-colors text-xs font-semibold text-slate-600 dark:text-slate-300">
-                <Upload className="w-4 h-4 text-emerald-600" />
-                <span>Cargar Logotipo de la Empresa (PNG/JPG)</span>
-                <input type="file" accept="image/png, image/jpeg, image/webp" onChange={handleLogoUpload} className="hidden" />
-              </label>
-            )}
-          </div>
+              <div className="space-y-4">
+                <div className="p-4 rounded-2xl bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-950/30 dark:to-teal-950/30 border border-emerald-200 dark:border-emerald-800/60 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-slate-900 dark:text-white text-sm">
+                      Pásate a PRO por solo S/ 16.00 / mes
+                    </span>
+                    <span className="px-2 py-0.5 rounded-full bg-emerald-600 text-white font-extrabold text-[10px]">
+                      AHORRA TIEMPO
+                    </span>
+                  </div>
+                  <p className="text-slate-600 dark:text-slate-300 text-[11px] leading-relaxed">
+                    Desbloquea guardado en nube, exportación directa a Excel con fórmulas, semáforo de contingencias SUNAFIL 2026 y membretes personalizados.
+                  </p>
+                  <Link
+                    href="/pro"
+                    onClick={closeProfileModal}
+                    className="inline-flex items-center gap-2 py-2 px-4 rounded-xl bg-[#00875A] hover:bg-[#00704A] text-white font-bold text-xs transition-colors cursor-pointer shadow-sm"
+                  >
+                    <span>Ver Planes y Beneficios PRO</span>
+                    <ExternalLink className="w-3 h-3" />
+                  </Link>
+                </div>
 
-          <div className="flex items-center justify-between pt-1">
-            <button
-              type="button"
-              onClick={handleSaveCompanyData}
-              disabled={isSavingProfile}
-              className="py-2 px-4 bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold rounded-xl text-xs flex items-center gap-2 hover:bg-slate-800 transition-colors cursor-pointer disabled:opacity-50"
-            >
-              <Check className="w-3.5 h-3.5 text-emerald-500" />
-              <span>{isSavingProfile ? 'Guardando...' : 'Guardar Datos en mi Cuenta'}</span>
-            </button>
-            {saveFeedback && (
-              <span className="text-[11px] font-semibold text-emerald-600 dark:text-emerald-400">
-                {saveFeedback}
-              </span>
+                <div className="p-4 rounded-2xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/60 space-y-2">
+                  <div className="flex items-center gap-2 font-bold text-amber-900 dark:text-amber-200">
+                    <Sparkles className="w-4 h-4 text-amber-500 fill-amber-500" />
+                    <span>¿Ya compraste tu suscripción? Canjea tu Código</span>
+                  </div>
+                  <p className="text-slate-600 dark:text-slate-300 text-[11px]">
+                    Ingresa el código que te enviamos al pagar por Yape o Plin para activar tu cuenta al instante.
+                  </p>
+                  <form onSubmit={handleRedeem} className="flex gap-2 pt-1">
+                    <input
+                      type="text"
+                      placeholder="Ej. PRO-2026-A8K2-9M4Q"
+                      value={codeToRedeem}
+                      onChange={(e) => setCodeToRedeem(e.target.value)}
+                      className="flex-1 uppercase font-mono bg-white dark:bg-slate-900 border border-amber-300 dark:border-amber-700 rounded-xl px-3 py-2 text-slate-900 dark:text-white outline-none focus:border-amber-500"
+                    />
+                    <button
+                      type="submit"
+                      disabled={isRedeeming}
+                      className="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-xl text-xs transition-colors cursor-pointer"
+                    >
+                      {isRedeeming ? 'Canjeando...' : 'Canjear'}
+                    </button>
+                  </form>
+                  {redeemFeedback.message && (
+                    <p className={`text-[11px] font-semibold ${redeemFeedback.success ? 'text-emerald-700 dark:text-emerald-300' : 'text-red-600 dark:text-red-400'}`}>
+                      {redeemFeedback.message}
+                    </p>
+                  )}
+                </div>
+              </div>
             )}
           </div>
-        </div>
+        )}
 
         {/* Logout Footer */}
         <div className="border-t border-slate-100 dark:border-slate-800 pt-4 flex items-center justify-between">

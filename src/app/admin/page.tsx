@@ -371,7 +371,7 @@ export default function AdminPage() {
     const proCount = users.filter(u => u.isPro).length;
     const activeLicenses = licenses.filter(l => l.status === 'available').length;
     const redeemedLicenses = licenses.filter(l => l.status === 'redeemed').length;
-    const estimatedIncome = redeemedLicenses * 199; // Base estimation
+    const estimatedIncome = redeemedLicenses * 149; // Updated annual baseline
 
     return {
       totalVisits,

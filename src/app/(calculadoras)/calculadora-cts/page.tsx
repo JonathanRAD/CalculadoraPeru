@@ -11,6 +11,8 @@ import { SwitchToggle } from '@/shared/components/ui/SwitchToggle';
 import { ResultMetricCard } from '@/shared/components/ui/ResultMetricCard';
 import { ShareButtons } from '@/shared/components/ui/ShareButtons';
 import { PiggyBank } from 'lucide-react';
+import { CalculationActionToolbar } from '@/features/premium/components/CalculationActionToolbar';
+import { SunafilFinesCard } from '@/features/premium/components/SunafilFinesCard';
 
 export default function CalculadoraCtsPage() {
   const meta = CALCULATORS_REGISTRY.find((c) => c.id === 'calculadora-cts')!;
@@ -256,6 +258,45 @@ Periodo: ${monthsWorkedInSemester} meses laborados`;
 
             <ShareButtons title="Cálculo de CTS Perú" shareText={shareSummary} />
           </div>
+
+          {/* PRO Actions Toolbar */}
+          <CalculationActionToolbar
+            calculatorType="cts"
+            title={`Cálculo CTS (${companyRegime === 'general' ? 'Régimen General' : companyRegime === 'pequena_empresa' ? 'Pequeña Empresa' : 'Microempresa'})`}
+            summaryText={`Depósito: ${formatCurrency(result.ctsAmountToDeposit)} | Base: ${formatCurrency(result.totalComputableBasis)} | ${monthsWorkedInSemester} meses`}
+            totalAmount={result.ctsAmountToDeposit}
+            data={{
+              baseSalary,
+              hasFamilyAllowance,
+              monthsWorkedInSemester,
+              companyRegime,
+              ctsToDeposit: result.ctsAmountToDeposit,
+              computableBasis: result.totalComputableBasis,
+              oneSixthGrati: result.oneSixthGratification,
+            }}
+            csvFilename={`CTS_${monthsWorkedInSemester}meses_${new Date().toISOString().slice(0, 10)}`}
+            csvColumns={[
+              { key: 'concepto', header: 'Concepto' },
+              { key: 'monto', header: 'Monto (PEN)' },
+            ]}
+            csvRows={[
+              { concepto: 'Sueldo Básico Mensual', monto: baseSalary },
+              { concepto: 'Asignación Familiar (+10%)', monto: hasFamilyAllowance ? 113 : 0 },
+              { concepto: 'Sexto (1/6) de Gratificación', monto: result.oneSixthGratification },
+              { concepto: 'Base Computable Total', monto: result.totalComputableBasis },
+              { concepto: 'Meses Laborados en Semestre', monto: monthsWorkedInSemester },
+              { concepto: 'MONTO DE CTS A DEPOSITAR', monto: result.ctsAmountToDeposit },
+            ]}
+            whatsappText={`*CÁLCULO DE CTS PERÚ (D.L. 650)*\n` +
+              `• Sueldo Básico: ${formatCurrency(baseSalary)}\n` +
+              `• Base Computable: ${formatCurrency(result.totalComputableBasis)}\n` +
+              `• Meses computados: ${monthsWorkedInSemester} meses\n` +
+              `*TOTAL CTS A DEPOSITAR: ${formatCurrency(result.ctsAmountToDeposit)}*\n` +
+              `_Generado en CalculaPerú (calculaperu.pe)_`}
+          />
+
+          {/* SUNAFIL Fines Risk Matrix */}
+          <SunafilFinesCard obligationType="cts" />
         </div>
 
       </div>

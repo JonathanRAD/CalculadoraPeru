@@ -15,9 +15,15 @@ import {
   Check,
   XCircle,
   Gift,
+  MessageCircle,
+  Bookmark,
+  BookmarkCheck,
+  FileSpreadsheet,
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { CALCULATORS_REGISTRY } from '@/features/calculators/registry';
+import { usePro } from '@/features/premium/context/ProContext';
+import { exportTableToCsv } from '@/shared/utils/exportToExcel';
 
 const FORMSPREE_ENDPOINT = 'https://formspree.io/f/mqpkkwno';
 
@@ -43,6 +49,11 @@ export default function CotizadorLandingPage() {
 
   const [bottomEmail, setBottomEmail] = useState('');
   const [bottomStatus, setBottomStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+
+  // PRO integration
+  const { user, isPro, openAuthModal, openActivationModal } = usePro();
+  const [isSavingQuote, setIsSavingQuote] = useState(false);
+  const [isQuoteSaved, setIsQuoteSaved] = useState(false);
 
   // Interactive Live Ticket Simulation State
   const [ticketItems, setTicketItems] = useState<SampleItem[]>([
@@ -77,16 +88,93 @@ export default function CotizadorLandingPage() {
     setTicketItems(ticketItems.filter((i) => i.id !== id));
   };
 
-  const handleCopyWhatsApp = () => {
-    const text = `*COTIZACIÓN CONFECCIONES TEXTIL LIMA*\n` +
+  const getWhatsAppMessage = () => {
+    return (
+      `*COTIZACIÓN COMERCIAL - CALCULAPERÚ*\n` +
       ticketItems.map((i) => `• ${i.qty}x ${i.name} - S/ ${(i.qty * i.price).toFixed(2)}`).join('\n') +
       `\n\nSubtotal: S/ ${subtotal.toFixed(2)}` +
-      (includeIgv ? `\nIGV (18%): S/ ${igv.toFixed(2)}` : '') +
-      `\n*TOTAL: S/ ${total.toFixed(2)}*`;
+      (includeIgv ? `\nIGV (18% SUNAT): S/ ${igv.toFixed(2)}` : '') +
+      `\n*TOTAL A PAGAR: S/ ${total.toFixed(2)}*\n\n` +
+      `_Cotizado formalmente vía CalculaPerú PRO (calculaperu.pe)_`
+    );
+  };
 
-    navigator.clipboard.writeText(text);
+  const handleCopyWhatsApp = () => {
+    navigator.clipboard.writeText(getWhatsAppMessage());
     setCopiedLink(true);
     setTimeout(() => setCopiedLink(false), 2500);
+  };
+
+  const handleOpenWhatsApp = () => {
+    window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(getWhatsAppMessage())}`, '_blank');
+  };
+
+  const handleSaveQuote = async () => {
+    if (!user) {
+      openAuthModal();
+      return;
+    }
+    if (!isPro) {
+      openActivationModal();
+      return;
+    }
+    setIsSavingQuote(true);
+    try {
+      const res = await fetch('/api/calculations', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          calculatorType: 'cotizacion',
+          title: `Cotización (${ticketItems.length} ítems) - S/ ${total.toFixed(2)}`,
+          summaryText: ticketItems.map((i) => `${i.qty}x ${i.name}`).join(', '),
+          totalAmount: total,
+          data: {
+            ticketItems,
+            subtotal,
+            includeIgv,
+            igv,
+            total,
+          },
+        }),
+      });
+      if (res.ok) {
+        setIsQuoteSaved(true);
+        setTimeout(() => setIsQuoteSaved(false), 3500);
+      }
+    } catch {
+      // silent
+    } finally {
+      setIsSavingQuote(false);
+    }
+  };
+
+  const handleExportQuoteCsv = () => {
+    if (!isPro) {
+      openActivationModal();
+      return;
+    }
+    const rows = [
+      ...ticketItems.map((i) => ({
+        item: i.name,
+        cantidad: i.qty,
+        precio_unitario: i.price.toFixed(2),
+        subtotal: (i.qty * i.price).toFixed(2),
+      })),
+      { item: 'SUBTOTAL', cantidad: '', precio_unitario: '', subtotal: subtotal.toFixed(2) },
+      ...(includeIgv ? [{ item: 'IGV (18%)', cantidad: '', precio_unitario: '', subtotal: igv.toFixed(2) }] : []),
+      { item: 'TOTAL', cantidad: '', precio_unitario: '', subtotal: total.toFixed(2) },
+    ];
+
+    exportTableToCsv(
+      `Cotizacion_${new Date().toISOString().slice(0, 10)}`,
+      [
+        { key: 'item', header: 'Descripción' },
+        { key: 'cantidad', header: 'Cantidad' },
+        { key: 'precio_unitario', header: 'Precio Unitario (PEN)' },
+        { key: 'subtotal', header: 'Total (PEN)' },
+      ],
+      rows
+    );
   };
 
   const handleSubmit = async (
@@ -348,58 +436,99 @@ export default function CotizadorLandingPage() {
                   </div>
 
                   {/* Quick Action Preview */}
-                  <div className="mt-3 pt-2.5 border-t-2 border-dashed border-slate-300 flex flex-col sm:flex-row items-center justify-between text-[11px] font-sans gap-2">
-                    <button
-                      type="button"
-                      onClick={handleCopyWhatsApp}
-                      className="w-full sm:flex-1 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-2 px-2 text-center text-xs flex items-center justify-center gap-1.5 cursor-pointer shadow-xs"
-                    >
-                      {copiedLink ? (
-                        <>
-                          <Check className="h-3.5 w-3.5" />
-                          <span>¡Copiado para WhatsApp!</span>
-                        </>
-                      ) : (
-                        <>
-                          <Share2 className="h-3.5 w-3.5" />
-                          <span>Copiar a WhatsApp</span>
-                        </>
-                      )}
-                    </button>
+                  <div className="mt-3 pt-2.5 border-t-2 border-dashed border-slate-300 space-y-2 text-[11px] font-sans">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                      <button
+                        type="button"
+                        onClick={handleOpenWhatsApp}
+                        className="rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-2 px-2.5 text-center text-xs flex items-center justify-center gap-1.5 cursor-pointer shadow-xs transition-colors"
+                      >
+                        <MessageCircle className="h-3.5 w-3.5" />
+                        <span>Abrir en WhatsApp</span>
+                      </button>
 
-                    <button
-                      type="button"
-                      onClick={() => {
-                        import('@/shared/utils/pdfGenerator').then(({ generateOfficialPdf }) => {
-                          generateOfficialPdf({
-                            title: 'PROFORMA / COTIZACIÓN COMERCIAL',
-                            subtitle: 'Documento generado formalmente vía CalculaPerú Cotizador',
-                            businessName: 'CONFECCIONES TEXTIL LIMA S.A.C.',
-                            businessRuc: '20601984712',
-                            businessPhone: '+51 987 654 321',
-                            items: [
-                              ...ticketItems.map((i) => ({
-                                label: `${i.qty}x ${i.name}`,
-                                value: `S/ ${(i.qty * i.price).toFixed(2)}`,
-                              })),
-                              { label: 'Subtotal (Neto)', value: `S/ ${subtotal.toFixed(2)}` },
-                              ...(includeIgv ? [{ label: 'IGV (18% SUNAT)', value: `S/ ${igv.toFixed(2)}` }] : []),
-                            ],
-                            totalLabel: 'Total a Pagar',
-                            totalValue: `S/ ${total.toFixed(2)}`,
-                            notes: [
-                              'Validez de la presente cotización: 15 días calendario.',
-                              'Condiciones de pago: 50% de adelanto al confirmar y 50% contra entrega.',
-                              'Precios expresados en Soles Peruanos (PEN).',
-                            ],
+                      <button
+                        type="button"
+                        onClick={handleCopyWhatsApp}
+                        className="rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-900 border border-emerald-300 font-bold py-2 px-2.5 text-center text-xs flex items-center justify-center gap-1.5 cursor-pointer shadow-xs transition-colors"
+                      >
+                        {copiedLink ? (
+                          <>
+                            <Check className="h-3.5 w-3.5 text-emerald-700" />
+                            <span>¡Texto Copiado!</span>
+                          </>
+                        ) : (
+                          <>
+                            <Share2 className="h-3.5 w-3.5 text-emerald-700" />
+                            <span>Copiar Mensaje</span>
+                          </>
+                        )}
+                      </button>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          import('@/shared/utils/pdfGenerator').then(({ generateOfficialPdf }) => {
+                            generateOfficialPdf({
+                              title: 'PROFORMA / COTIZACIÓN COMERCIAL',
+                              subtitle: 'Documento generado formalmente vía CalculaPerú Cotizador',
+                              businessName: 'CONFECCIONES TEXTIL LIMA S.A.C.',
+                              businessRuc: '20601984712',
+                              businessPhone: '+51 987 654 321',
+                              items: [
+                                ...ticketItems.map((i) => ({
+                                  label: `${i.qty}x ${i.name}`,
+                                  value: `S/ ${(i.qty * i.price).toFixed(2)}`,
+                                })),
+                                { label: 'Subtotal (Neto)', value: `S/ ${subtotal.toFixed(2)}` },
+                                ...(includeIgv ? [{ label: 'IGV (18% SUNAT)', value: `S/ ${igv.toFixed(2)}` }] : []),
+                              ],
+                              totalLabel: 'Total a Pagar',
+                              totalValue: `S/ ${total.toFixed(2)}`,
+                              notes: [
+                                'Validez de la presente cotización: 15 días calendario.',
+                                'Condiciones de pago: 50% de adelanto al confirmar y 50% contra entrega.',
+                                'Precios expresados en Soles Peruanos (PEN).',
+                              ],
+                            });
                           });
-                        });
-                      }}
-                      className="w-full sm:flex-1 rounded-lg bg-slate-900 hover:bg-slate-800 text-amber-400 font-bold py-2 px-2 text-center text-xs flex items-center justify-center gap-1.5 cursor-pointer shadow-xs"
-                    >
-                      <Download className="h-3.5 w-3.5" />
-                      <span>Descargar PDF</span>
-                    </button>
+                        }}
+                        className="rounded-lg bg-slate-900 hover:bg-slate-800 text-amber-400 font-bold py-2 px-2 text-center text-xs flex items-center justify-center gap-1.5 cursor-pointer shadow-xs transition-colors"
+                      >
+                        <Download className="h-3.5 w-3.5" />
+                        <span>PDF Pro</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={handleExportQuoteCsv}
+                        className="rounded-lg bg-white hover:bg-slate-100 text-slate-800 border border-slate-300 font-bold py-2 px-2 text-center text-xs flex items-center justify-center gap-1.5 cursor-pointer shadow-xs transition-colors"
+                      >
+                        <FileSpreadsheet className="h-3.5 w-3.5 text-emerald-700" />
+                        <span>Excel</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={handleSaveQuote}
+                        disabled={isSavingQuote}
+                        className="rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-900 border border-blue-200 font-bold py-2 px-2 text-center text-xs flex items-center justify-center gap-1.5 cursor-pointer shadow-xs transition-colors"
+                      >
+                        {isQuoteSaved ? (
+                          <>
+                            <BookmarkCheck className="h-3.5 w-3.5 text-blue-700" />
+                            <span>¡Guardado!</span>
+                          </>
+                        ) : (
+                          <>
+                            <Bookmark className="h-3.5 w-3.5 text-blue-700" />
+                            <span>{isSavingQuote ? 'Guardando...' : 'Nube'}</span>
+                          </>
+                        )}
+                      </button>
+                    </div>
                   </div>
 
                 </div>

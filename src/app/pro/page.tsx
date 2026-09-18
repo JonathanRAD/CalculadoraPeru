@@ -50,8 +50,8 @@ const FAQ_LIST: FaqItem[] = [
     a: 'Sí. Al tener cuenta PRO, puedes guardar tus datos corporativos (Razón Social, RUC, Dirección y Logotipo) en tu perfil. Al generar boletas de pago o informes en cualquier momento, el sistema los carga automáticamente para que no tengas que escribirlos cada vez.',
   },
   {
-    q: '¿Cuál es la diferencia de precio entre el Plan Mensual (S/ 29) y el Plan Anual (S/ 199)?',
-    a: 'El Plan Mensual cuesta S/ 29.00 al mes y te brinda acceso completo mes a mes sin permanencia forzosa. El Plan Anual cuesta S/ 199.00 en un solo pago por 12 meses completos, lo que equivale a solo S/ 16.58 al mes. Al elegir el Plan Anual obtienes un 40% de descuento y ahorras S/ 149.00 frente a pagar 12 mensualidades.',
+    q: '¿Cuál es la diferencia de precio entre el Plan Mensual (S/ 16) y el Plan Anual (S/ 149)?',
+    a: 'El Plan Mensual cuesta S/ 16.00 al mes y te brinda acceso completo mes a mes sin permanencia forzosa. El Plan Anual cuesta S/ 149.00 en un solo pago por 12 meses completos, lo que equivale a solo S/ 12.42 al mes. Al elegir el Plan Anual ahorras S/ 43.00 frente a pagar 12 mensualidades.',
   },
   {
     q: '¿Existe algún contrato de permanencia forzosa?',
@@ -184,7 +184,7 @@ export default function ProSubscriptionPage() {
                       : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                   }`}
                 >
-                  Plan Mensual · S/ 29 / mes
+                  Plan Mensual · S/ 16 / mes
                 </button>
                 <button
                   type="button"
@@ -195,9 +195,9 @@ export default function ProSubscriptionPage() {
                       : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                   }`}
                 >
-                  <span>Plan Anual · S/ 199 / año</span>
+                  <span>Plan Anual · S/ 149 / año</span>
                   <span className="px-1.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950 text-[#00875A] dark:text-[#00C853] text-[10px] font-black tracking-wider">
-                    S/ 16.58/mes (-40%)
+                    S/ 12.42/mes (-22%)
                   </span>
                 </button>
               </div>
@@ -327,7 +327,7 @@ export default function ProSubscriptionPage() {
               <div className="pt-2 space-y-2">
                 <div className="flex items-baseline gap-2">
                   <span className="text-4xl sm:text-5xl font-black font-mono text-[#00875A] dark:text-[#00C853]">
-                    {billingCycle === 'yearly' ? 'S/ 199' : 'S/ 29'}
+                    {billingCycle === 'yearly' ? 'S/ 149' : 'S/ 16'}
                   </span>
                   <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
                     {billingCycle === 'yearly' ? '/ año completo' : '/ mes'}
@@ -337,22 +337,22 @@ export default function ProSubscriptionPage() {
                 {billingCycle === 'yearly' ? (
                   <div className="space-y-1.5">
                     <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-100/90 dark:bg-emerald-950/70 text-emerald-800 dark:text-emerald-300 text-xs font-bold">
-                      <span>✨ Equivale a S/ 16.58 al mes</span>
+                      <span>✨ Equivale a solo S/ 12.42 al mes</span>
                       <span className="text-[10px] bg-emerald-200 dark:bg-emerald-900 px-1.5 py-0.5 rounded font-black">
-                        Ahorras 40% (S/ 149)
+                        Ahorras S/ 43 al año
                       </span>
                     </div>
                     <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">
-                      Pago único anual de S/ 199 por 12 meses ilimitados. Frente al plan mensual (S/ 29/mes = S/ 348/año), te ahorras S/ 149.
+                      Pago único anual de S/ 149 por 12 meses ilimitados de todas las herramientas PRO.
                     </p>
                   </div>
                 ) : (
                   <div className="space-y-1.5">
                     <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-bold">
-                      <span>Facturación mensual flexible · Cancela cuando quieras</span>
+                      <span>Facturación mensual de S/ 16 · Sin contratos ni permanencia</span>
                     </div>
                     <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">
-                      Pagas S/ 29 cada mes sin contratos forzosos. ¿Quieres ahorrar? El <strong>Plan Anual cuesta S/ 199/año</strong> (equivale a solo <strong>S/ 16.58/mes</strong>).
+                      Pagas S/ 16 cada mes y cancelas cuando quieras. ¿Quieres ahorrar más? El <strong>Plan Anual cuesta S/ 149/año</strong> (equivale a solo <strong>S/ 12.42/mes</strong>).
                     </p>
                   </div>
                 )}
@@ -361,23 +361,27 @@ export default function ProSubscriptionPage() {
               <div className="space-y-3 pt-4 border-t border-slate-100 dark:border-slate-800 text-xs">
                 <div className="flex items-start gap-2.5 text-slate-800 dark:text-slate-200 font-medium">
                   <Check className="w-4 h-4 text-[#00875A] shrink-0 mt-0.5 font-bold" />
-                  <span><strong>Liquidaciones Oficiales Ilimitadas:</strong> Formato formal certificado conforme a SUNAFIL y D.L. 728.</span>
+                  <span><strong>Liquidaciones y Boletas Oficiales:</strong> Conforme al D.S. 001-98-TR y D.L. 728 con tu Logo y RUC.</span>
                 </div>
                 <div className="flex items-start gap-2.5 text-slate-800 dark:text-slate-200 font-medium">
                   <Check className="w-4 h-4 text-[#00875A] shrink-0 mt-0.5 font-bold" />
-                  <span><strong>Boletas de Pago para tus Trabajadores:</strong> Con tu Logo, RUC y detalle de aportes de ley.</span>
+                  <span><strong>Historial en la Nube ("Mis Cálculos"):</strong> Guarda y consulta tus liquidaciones y cotizaciones desde cualquier PC o celular.</span>
                 </div>
                 <div className="flex items-start gap-2.5 text-slate-800 dark:text-slate-200 font-medium">
                   <Check className="w-4 h-4 text-[#00875A] shrink-0 mt-0.5 font-bold" />
-                  <span><strong>Cotizador Comercial Profesional:</strong> Emite presupuestos membretados para enviar a tus clientes.</span>
+                  <span><strong>Exportación a Excel / CSV:</strong> Tablas y cronogramas descargables listos para hojas de cálculo.</span>
                 </div>
                 <div className="flex items-start gap-2.5 text-slate-800 dark:text-slate-200 font-medium">
                   <Check className="w-4 h-4 text-[#00875A] shrink-0 mt-0.5 font-bold" />
-                  <span><strong>Exportación a Excel / SUNAT:</strong> Tablas estructuradas para importar al PDT PLAME sin errores.</span>
+                  <span><strong>Semáforo de Multas SUNAFIL 2026:</strong> Prevención de contingencias e intereses laborales por retrasos en CTS/Gratificación.</span>
                 </div>
                 <div className="flex items-start gap-2.5 text-slate-800 dark:text-slate-200 font-medium">
                   <Check className="w-4 h-4 text-[#00875A] shrink-0 mt-0.5 font-bold" />
-                  <span><strong>100% Sin Publicidad:</strong> Experiencia ultrarrápida sin anuncios en ninguna herramienta.</span>
+                  <span><strong>Cotizador con Envío a WhatsApp:</strong> Emite presupuestos profesionales membretados y compártelos en 1 clic.</span>
+                </div>
+                <div className="flex items-start gap-2.5 text-slate-800 dark:text-slate-200 font-medium">
+                  <Check className="w-4 h-4 text-[#00875A] shrink-0 mt-0.5 font-bold" />
+                  <span><strong>100% Sin Publicidad:</strong> Navegación ultrarrápida sin banners en ninguna calculadora.</span>
                 </div>
                 <div className="flex items-start gap-2.5 text-slate-800 dark:text-slate-200 font-medium">
                   <Check className="w-4 h-4 text-[#00875A] shrink-0 mt-0.5 font-bold" />
@@ -665,7 +669,7 @@ export default function ProSubscriptionPage() {
                   ¡Solicitud Recibida con Éxito!
                 </h4>
                 <p className="text-xs text-slate-600 dark:text-slate-400 max-w-sm mx-auto leading-relaxed">
-                  Hemos registrado tu pago de <strong>{selectedPlan === 'yearly' ? 'S/ 199 (Plan Anual)' : 'S/ 29 (Plan Mensual)'}</strong>. Validaremos la operación en unos momentos y recibirás tu código de activación por WhatsApp y correo.
+                  Hemos registrado tu pago de <strong>{selectedPlan === 'yearly' ? 'S/ 149 (Plan Anual)' : 'S/ 16 (Plan Mensual)'}</strong>. Validaremos la operación en unos momentos y recibirás tu código de activación por WhatsApp y correo.
                 </p>
                 <div className="pt-2">
                   <button
@@ -691,7 +695,7 @@ export default function ProSubscriptionPage() {
                   </div>
                   <div className="text-right">
                     <span className="text-lg font-black font-mono text-[#00875A] dark:text-[#00C853]">
-                      {isCouponApplied ? 'S/ 0.00' : selectedPlan === 'yearly' ? 'S/ 199.00' : 'S/ 29.00'}
+                      {isCouponApplied ? 'S/ 0.00' : selectedPlan === 'yearly' ? 'S/ 149.00' : 'S/ 16.00'}
                     </span>
                     {isCouponApplied && (
                       <span className="text-[10px] text-emerald-600 block font-bold">100% CORTESÍA</span>

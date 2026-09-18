@@ -115,3 +115,26 @@ create policy "Anyone can insert analytics events"
 create policy "Admins and service role can view analytics"
   on public.analytics_events for select
   using (auth.jwt() ->> 'role' = 'service_role');
+
+-- ============================================================================
+-- 5. TABLA: CÁLCULOS GUARDADOS (MIS CÁLCULOS PRO)
+-- ============================================================================
+create table if not exists public.saved_calculations (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid references public.profiles(id) on delete cascade not null,
+  calculator_type text not null,
+  title text not null,
+  summary_text text,
+  total_amount numeric(12, 2),
+  data jsonb not null default '{}'::jsonb,
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null
+);
+
+create index if not exists idx_saved_calculations_user on public.saved_calculations(user_id);
+create index if not exists idx_saved_calculations_created on public.saved_calculations(created_at desc);
+
+alter table public.saved_calculations enable row level security;
+
+create policy "Users can manage own saved calculations"
+  on public.saved_calculations for all
+  using (auth.uid() = user_id or auth.jwt() ->> 'role' = 'service_role');

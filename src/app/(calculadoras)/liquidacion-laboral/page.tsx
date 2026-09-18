@@ -17,6 +17,8 @@ import { ShareButtons } from '@/shared/components/ui/ShareButtons';
 import { ExportPdfButton } from '@/shared/components/ui/ExportPdfButton';
 import { Briefcase, AlertCircle, FileCheck } from 'lucide-react';
 import { SettlementReportModal } from '@/features/premium/components/SettlementReportModal';
+import { CalculationActionToolbar } from '@/features/premium/components/CalculationActionToolbar';
+import { SunafilFinesCard } from '@/features/premium/components/SunafilFinesCard';
 
 export default function LiquidacionLaboralPage() {
   const [isPremiumModalOpen, setIsPremiumModalOpen] = useState(false);
@@ -512,6 +514,53 @@ ${isDismissal ? `Indemnización por Despido: ${formatCurrency(result.arbitraryDi
               <ShareButtons title="Liquidación Laboral Perú Todo en 1" shareText={shareSummary} />
             </div>
           </div>
+
+          {/* PRO Cloud Actions */}
+          <CalculationActionToolbar
+            calculatorType="liquidacion"
+            title={`Liquidación (${laborRegime === 'general' ? 'Régimen General' : laborRegime === 'pequena_empresa' ? 'Pequeña Empresa' : 'Microempresa'}) - ${separationReason === 'despido_arbitrario' ? 'Despido' : 'Cese'}`}
+            summaryText={`Total Liquidación: ${formatCurrency(result.totalSettlement)} | CTS: ${formatCurrency(result.truncatedCts)} | Grati: ${formatCurrency(result.truncatedGrati)} | Vacaciones: ${formatCurrency(result.truncatedVacations)}`}
+            totalAmount={result.totalSettlement}
+            data={{
+              baseSalary,
+              hasFamilyAllowance,
+              laborRegime,
+              separationReason,
+              totalSettlement: result.totalSettlement,
+              truncatedCts: result.truncatedCts,
+              truncatedGrati: result.truncatedGrati,
+              truncatedVacations: result.truncatedVacations,
+              essaludBonus: result.essaludBonus,
+              arbitraryDismissalIndemnity: result.arbitraryDismissalIndemnity,
+            }}
+            csvFilename={`Liquidacion_${new Date().toISOString().slice(0, 10)}`}
+            csvColumns={[
+              { key: 'concepto', header: 'Concepto Laboral' },
+              { key: 'base', header: 'Base Legal' },
+              { key: 'monto', header: 'Monto a Liquidar (PEN)' },
+            ]}
+            csvRows={[
+              { concepto: 'Sueldo Básico', base: 'D.L. 728', monto: baseSalary },
+              { concepto: 'Asignación Familiar', base: 'Ley 25129', monto: hasFamilyAllowance ? 113 : 0 },
+              { concepto: 'CTS Trunca', base: 'D.S. 001-97-TR', monto: result.truncatedCts },
+              { concepto: 'Gratificación Trunca', base: 'Ley 27735', monto: result.truncatedGrati },
+              { concepto: 'Bonificación Extraordinaria (EsSalud/EPS)', base: 'Ley 30334', monto: result.essaludBonus },
+              { concepto: 'Vacaciones Truncas', base: 'D.L. 713', monto: result.truncatedVacations },
+              ...(result.arbitraryDismissalIndemnity > 0 ? [{ concepto: 'Indemnización Despido Arbitrario', base: 'D.L. 728 Art. 38', monto: result.arbitraryDismissalIndemnity }] : []),
+              { concepto: 'TOTAL LIQUIDACIÓN DE BENEFICIOS SOCIALES', base: 'MTPE / SUNAFIL', monto: result.totalSettlement },
+            ]}
+            whatsappText={`*RESUMEN DE LIQUIDACIÓN LABORAL (PERÚ)*\n` +
+              `• Sueldo: ${formatCurrency(baseSalary)}\n` +
+              `• CTS Trunca: ${formatCurrency(result.truncatedCts)}\n` +
+              `• Gratificación Trunca: ${formatCurrency(result.truncatedGrati)}\n` +
+              `• Vacaciones Truncas: ${formatCurrency(result.truncatedVacations)}\n` +
+              (result.arbitraryDismissalIndemnity > 0 ? `• Indemnización Despido: ${formatCurrency(result.arbitraryDismissalIndemnity)}\n` : '') +
+              `*TOTAL LIQUIDACIÓN NETA: ${formatCurrency(result.totalSettlement)}*\n` +
+              `_Calculado con parámetros oficiales SUNAFIL en calculaperu.pe_`}
+          />
+
+          {/* SUNAFIL Fines Risk Matrix */}
+          <SunafilFinesCard obligationType="liquidacion" />
         </div>
 
       </div>
