@@ -155,12 +155,12 @@ Sueldo Neto en Cuenta: ${formatCurrency(result.netSalary)}`;
                   <tr>
                     <td className="p-2.5">Descuento Previsional AFP Integra (Flujo: 12.92%)</td>
                     <td className="p-2.5 font-mono text-red-600 dark:text-red-400">- S/ 402.20</td>
-                    <td className="p-2.5 text-slate-500">10% fondo + 1.37% seguro + 1.55% comisión</td>
+                    <td className="p-2.5 text-slate-600 dark:text-slate-400">10% fondo + 1.37% seguro + 1.55% comisión</td>
                   </tr>
                   <tr>
                     <td className="p-2.5">Retención Proyectada 5ta Categoría SUNAT (Tramo 1: 8%)</td>
                     <td className="p-2.5 font-mono text-red-600 dark:text-red-400">- S/ 33.88</td>
-                    <td className="p-2.5 text-slate-500">Proyección anual (14 sueldos) menos 7 UIT</td>
+                    <td className="p-2.5 text-slate-600 dark:text-slate-400">Proyección anual (14 sueldos) menos 7 UIT</td>
                   </tr>
                   <tr className="bg-emerald-50 dark:bg-emerald-950 font-bold text-slate-900 dark:text-white">
                     <td className="p-2.5 text-emerald-800 dark:text-emerald-300">Sueldo Neto Líquido a Depositar</td>
@@ -462,7 +462,7 @@ Sueldo Neto en Cuenta: ${formatCurrency(result.netSalary)}`;
                 <span>Total deducciones de ley:</span>
                 <span className="font-mono">−{formatCurrency(result.totalDeductions)}</span>
               </div>
-              <div className="flex justify-between font-medium text-slate-500 pt-1.5 border-t border-dashed border-slate-200 dark:border-slate-800 text-[11px]">
+              <div className="flex justify-between font-medium text-slate-600 dark:text-slate-400 pt-1.5 border-t border-dashed border-slate-200 dark:border-slate-800 text-[11px]">
                 <span>Aporte EsSalud (Asume empleador 9%):</span>
                 <span className="font-semibold font-mono text-slate-700 dark:text-slate-300">{formatCurrency(result.essaludContributionEmployer)}</span>
               </div>
