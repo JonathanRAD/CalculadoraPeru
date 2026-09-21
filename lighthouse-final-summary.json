@@ -1,0 +1,79 @@
+{
+  "mobileRuns": [
+    {
+      "performance": 79,
+      "accessibility": 100,
+      "bestPractices": 77,
+      "seo": 100,
+      "fcp": 1231.2292,
+      "fcpDisplay": "1.2 s",
+      "lcp": 3847.9167999999995,
+      "lcpDisplay": "3.8 s",
+      "tbt": 383.0000000000009,
+      "tbtDisplay": "380 ms",
+      "cls": 0,
+      "clsDisplay": "0",
+      "speedIndex": 2282.996870851598,
+      "speedIndexDisplay": "2.3 s"
+    },
+    {
+      "performance": 80,
+      "accessibility": 100,
+      "bestPractices": 77,
+      "seo": 100,
+      "fcp": 1228.3415,
+      "fcpDisplay": "1.2 s",
+      "lcp": 3804.366,
+      "lcpDisplay": "3.8 s",
+      "tbt": 363.163,
+      "tbtDisplay": "360 ms",
+      "cls": 0,
+      "clsDisplay": "0",
+      "speedIndex": 1748.4248205465265,
+      "speedIndexDisplay": "1.7 s"
+    },
+    {
+      "performance": 79,
+      "accessibility": 100,
+      "bestPractices": 77,
+      "seo": 100,
+      "fcp": 1223.4908,
+      "fcpDisplay": "1.2 s",
+      "lcp": 3789.9632,
+      "lcpDisplay": "3.8 s",
+      "tbt": 391.28435000000036,
+      "tbtDisplay": "390 ms",
+      "cls": 0,
+      "clsDisplay": "0",
+      "speedIndex": 1912.841567681415,
+      "speedIndexDisplay": "1.9 s"
+    }
+  ],
+  "medianResult": {
+    "performance": 79,
+    "accessibility": 100,
+    "bestPractices": 77,
+    "seo": 100,
+    "fcpMs": 1228.3415,
+    "lcpMs": 3804.366,
+    "tbtMs": 383.0000000000009,
+    "cls": 0,
+    "speedIndexMs": 1912.841567681415
+  },
+  "desktopRun": {
+    "performance": 99,
+    "accessibility": 96,
+    "bestPractices": 77,
+    "seo": 100,
+    "fcp": 347.54279999999994,
+    "fcpDisplay": "0.3 s",
+    "lcp": 839.0855999999998,
+    "lcpDisplay": "0.8 s",
+    "tbt": 0,
+    "tbtDisplay": "0 ms",
+    "cls": 0,
+    "clsDisplay": "0",
+    "speedIndex": 729.3920581247905,
+    "speedIndexDisplay": "0.7 s"
+  }
+}

@@ -6,14 +6,11 @@ import { Navbar } from '@/shared/components/layout/Navbar';
 import { Footer } from '@/shared/components/layout/Footer';
 import { ThemeProvider } from '@/shared/context/ThemeContext';
 import { Analytics } from '@vercel/analytics/next';
-import { PwaInstallBanner } from '@/shared/components/ui/PwaInstallBanner';
+import { ClientModalsContainer } from '@/shared/components/layout/ClientModalsContainer';
 import { PwaRegistration } from '@/shared/components/ui/PwaRegistration';
 import { GoogleAnalyticsPageViews } from '@/shared/components/analytics/GoogleAnalytics';
 import { CookieBanner } from '@/shared/components/ui/CookieBanner';
 import { ProProvider } from '@/features/premium/context/ProContext';
-import ProActivationModal from '@/features/premium/components/ProActivationModal';
-import { AuthModal } from '@/features/auth/components/AuthModal';
-import { ProfileModal } from '@/features/auth/components/ProfileModal';
 import { ModalOriginTracker } from '@/shared/components/ui/ModalOriginTracker';
 import { NativeAnalyticsTracker } from '@/shared/components/analytics/NativeAnalyticsTracker';
 
@@ -162,19 +159,20 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(rootOrganizationJsonLd) }}
         />
-        <script
-          async
+        <Script
+          id="google-adsense"
+          strategy="lazyOnload"
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1171972985538083"
           crossOrigin="anonymous"
         />
         {/* Google Analytics 4 (gtag.js) */}
         <Script
-          strategy="afterInteractive"
+          strategy="lazyOnload"
           src="https://www.googletagmanager.com/gtag/js?id=G-Q9EC3XKGJH"
         />
         <Script
           id="google-analytics"
-          strategy="afterInteractive"
+          strategy="lazyOnload"
           dangerouslySetInnerHTML={{
             __html: `
               window.dataLayer = window.dataLayer || [];
@@ -196,15 +194,12 @@ export default function RootLayout({
             </main>
             <Footer />
             <ModalOriginTracker />
-            <ProActivationModal />
-            <AuthModal />
-            <ProfileModal />
+            <ClientModalsContainer />
 
             <GoogleAnalyticsPageViews />
             <NativeAnalyticsTracker />
             {process.env.VERCEL ? <Analytics /> : null}
             <PwaRegistration />
-            <PwaInstallBanner />
             <CookieBanner />
           </ProProvider>
         </ThemeProvider>

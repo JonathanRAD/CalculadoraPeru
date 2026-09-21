@@ -201,13 +201,13 @@ export function Navbar() {
             {/* Quick Search */}
             <button
               onClick={() => setIsSearchOpen(true)}
-              aria-label="Buscar calculadora (Ctrl+K)"
-              className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg bg-slate-900/90 hover:bg-slate-800 text-slate-400 hover:text-slate-200 border border-slate-800 transition-colors text-xs cursor-pointer"
+              aria-label="Buscar (Ctrl + K)"
+              className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg bg-slate-900/90 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-800 transition-colors text-xs cursor-pointer"
               title="Buscar (Ctrl + K)"
             >
-              <Search className="w-3.5 h-3.5 text-slate-400" />
-              <span className="hidden xl:inline text-slate-400">Buscar</span>
-              <kbd className="hidden sm:inline-block text-[9px] font-mono text-slate-500 bg-slate-800 px-1.5 py-0.5 rounded border border-slate-700">
+              <Search className="w-3.5 h-3.5 text-slate-400" aria-hidden="true" />
+              <span className="hidden xl:inline text-slate-300">Buscar</span>
+              <kbd aria-hidden="true" className="hidden sm:inline-block text-[10px] font-mono text-slate-200 bg-slate-800 px-1.5 py-0.5 rounded border border-slate-600 font-semibold">
                 ⌘K
               </kbd>
             </button>
