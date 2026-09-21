@@ -14,12 +14,13 @@ export class UserRepository {
           .maybeSingle();
 
         if (!error && data) {
+          const localUser = localStorage.findUserById(id) || localStorage.findUserByEmail(data.email);
           return {
             id: data.id,
             email: data.email,
             name: data.name,
-            passwordHash: '',
-            salt: '',
+            passwordHash: (data as any).password_hash || localUser?.passwordHash || '',
+            salt: (data as any).salt || localUser?.salt || '',
             role: data.role,
             isPro: data.is_pro,
             plan: data.plan,
@@ -51,12 +52,13 @@ export class UserRepository {
           .maybeSingle();
 
         if (!error && data) {
+          const localUser = localStorage.findUserByEmail(cleanEmail) || localStorage.findUserById(data.id);
           return {
             id: data.id,
             email: data.email,
             name: data.name,
-            passwordHash: '',
-            salt: '',
+            passwordHash: (data as any).password_hash || localUser?.passwordHash || '',
+            salt: (data as any).salt || localUser?.salt || '',
             role: data.role,
             isPro: data.is_pro,
             plan: data.plan,
@@ -76,6 +78,28 @@ export class UserRepository {
   }
 
   async create(user: UserAccount): Promise<SafeUser> {
+    try {
+      const existingLocal = localStorage.findUserByEmail(user.email);
+      if (!existingLocal) {
+        localStorage.createUser({
+          email: user.email,
+          name: user.name,
+          password: 'temp-password',
+          role: user.role,
+        });
+        const createdLocal = localStorage.findUserByEmail(user.email);
+        if (createdLocal) {
+          createdLocal.id = user.id;
+          createdLocal.passwordHash = user.passwordHash;
+          createdLocal.salt = user.salt;
+          createdLocal.isPro = user.isPro;
+          createdLocal.role = user.role;
+        }
+      }
+    } catch {
+      // Continue even if local storage throws duplicate error
+    }
+
     if (isSupabaseConfigured) {
       const supabase = getSupabaseAdmin();
       if (supabase) {
@@ -95,12 +119,7 @@ export class UserRepository {
       }
     }
 
-    return localStorage.createUser({
-      email: user.email,
-      name: user.name,
-      password: 'managed-password',
-      role: user.role,
-    });
+    return localStorage.toSafeUser(user);
   }
 
   async update(id: string, updates: Partial<UserAccount>): Promise<SafeUser | null> {

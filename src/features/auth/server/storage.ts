@@ -136,7 +136,8 @@ export function findUserByEmail(email: string): UserAccount | null {
 
 export function findUserById(id: string): UserAccount | null {
   const db = readDatabase();
-  return db.users[id] || null;
+  if (db.users[id]) return db.users[id];
+  return Object.values(db.users).find(u => u.id === id) || null;
 }
 
 export function getAllUsers(): SafeUser[] {
@@ -181,18 +182,19 @@ export function createUser(data: {
 
 export function updateUser(id: string, updates: Partial<UserAccount>): SafeUser {
   const db = readDatabase();
-  const current = db.users[id];
-  if (!current) {
+  const key = db.users[id] ? id : Object.keys(db.users).find(k => db.users[k].id === id);
+  if (!key || !db.users[key]) {
     throw new Error('Usuario no encontrado.');
   }
 
+  const current = db.users[key];
   const updated: UserAccount = {
     ...current,
     ...updates,
     id: current.id, // cannot change id
   };
 
-  db.users[id] = updated;
+  db.users[key] = updated;
   writeDatabase(db);
   return toSafeUser(updated);
 }

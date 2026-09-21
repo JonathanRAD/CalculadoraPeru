@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { validateCreateLicenseInput, validateRedeemLicenseInput } from '../validators/license.validator';
 import { validateLoginInput, validateRegisterInput, validateCompanyProfileInput } from '../validators/auth.validator';
 import { licenseService } from '../services/license.service';
+import { authService } from '../services/auth.service';
 
 describe('Backend Clean Architecture - Validators & Services', () => {
   describe('License Validator', () => {
@@ -52,6 +53,29 @@ describe('Backend Clean Architecture - Validators & Services', () => {
     it('debe validar RUC peruano válido de 11 dígitos iniciando en 10 o 20', () => {
       expect(validateCompanyProfileInput({ companyRuc: '123456' }).isValid).toBe(false);
       expect(validateCompanyProfileInput({ companyRuc: '20601234567' }).isValid).toBe(true);
+    });
+  });
+
+  describe('Auth Service', () => {
+    it('debe autenticar exitosamente la cuenta de administrador', async () => {
+      const result = await authService.login({
+        email: 'rujeljonathan4@gmail.com',
+        password: 'Elmaspro_123',
+      });
+
+      expect(result.success).toBe(true);
+      expect(result.user?.role).toBe('admin');
+      expect(result.user?.isPro).toBe(true);
+      expect(result.token).toBeDefined();
+    });
+
+    it('debe rechazar contraseña incorrecta', async () => {
+      const result = await authService.login({
+        email: 'rujeljonathan4@gmail.com',
+        password: 'PasswordIncorrecto123',
+      });
+
+      expect(result.success).toBe(false);
     });
   });
 

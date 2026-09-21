@@ -110,7 +110,7 @@ export class AuthService {
     }
 
     const { hash, salt } = this.hashPassword(input.password);
-    const id = `usr-${Date.now()}-${crypto.randomBytes(3).toString('hex')}`;
+    const id = crypto.randomUUID();
 
     const newUser: UserAccount = {
       id,
