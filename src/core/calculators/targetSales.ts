@@ -10,7 +10,8 @@ export interface TargetSalesInput {
 export interface TargetSalesResult {
   unitsToSell: number; // Unidades requeridas a vender al mes
   dailyUnitsToSell: number; // Unidades diarias a vender (asumiendo 26 días laborales)
-  totalSalesRequired: number; // Facturación bruta total necesaria (S/)
+  totalSalesRequired: number; // Facturación bruta total necesaria (sin IGV) (S/)
+  totalSalesWithIgv: number; // Facturación total facturada con IGV (18%) (S/)
   contributionMarginUnit: number; // Margen de contribución unitario (S/)
   isFeasible: boolean;
 }
@@ -39,11 +40,13 @@ export function calculateTargetSales(input: TargetSalesInput): TargetSalesResult
   }
 
   const dailyUnitsToSell = Math.ceil(unitsToSell / 26);
+  const totalSalesWithIgv = totalSalesRequired * 1.18;
 
   return {
     unitsToSell,
     dailyUnitsToSell,
     totalSalesRequired: roundTo(totalSalesRequired, 2),
+    totalSalesWithIgv: roundTo(totalSalesWithIgv, 2),
     contributionMarginUnit: roundTo(contributionMarginUnit, 2),
     isFeasible,
   };

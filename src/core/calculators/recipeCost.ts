@@ -23,6 +23,10 @@ export interface RecipeCostResult {
   suggestedSalePricePerPortion: number; // Precio sugerido de venta en carta (sin IGV)
   suggestedSalePriceWithIgv: number; // Precio sugerido con IGV (18%)
   profitPerPortion: number; // Ganancia neta en Soles por cada plato vendido
+  foodCostPercentage: number; // Ratio de Food Cost sobre el precio neto sugerido
+  realMarginPercentage: number; // Margen real de utilidad bruta
+  totalIngredientsWithWaste: number; // Insumos totales ajustados por merma
+  ingredientCostPerPortion: number; // Insumo por plato
 }
 
 /**
@@ -36,9 +40,9 @@ export function calculateRecipeCost(input: RecipeCostInput): RecipeCostResult {
   const marginPct = Math.min(95, Math.max(5, input.desiredMarginPercentage || 40));
 
   // Costo con factor de merma
-  const costWithWaste = rawCost * (1 + wastePct / 100);
-  const basePortionCost = costWithWaste / portions;
-  const costPerPortion = basePortionCost + extraPerPortion;
+  const totalIngredientsWithWaste = rawCost * (1 + wastePct / 100);
+  const ingredientCostPerPortion = totalIngredientsWithWaste / portions;
+  const costPerPortion = ingredientCostPerPortion + extraPerPortion;
 
   // Precio sugerido según margen comercial: Precio = Costo / (1 - Margen%)
   const marginFactor = 1 - marginPct / 100;
@@ -46,11 +50,23 @@ export function calculateRecipeCost(input: RecipeCostInput): RecipeCostResult {
   const suggestedSalePriceWithIgv = suggestedSalePricePerPortion * 1.18;
   const profitPerPortion = suggestedSalePricePerPortion - costPerPortion;
 
+  const foodCostPercentage = suggestedSalePricePerPortion > 0
+    ? (ingredientCostPerPortion / suggestedSalePricePerPortion) * 100
+    : 0;
+
+  const realMarginPercentage = suggestedSalePricePerPortion > 0
+    ? (profitPerPortion / suggestedSalePricePerPortion) * 100
+    : marginPct;
+
   return {
-    recipeTotalCost: roundTo(costWithWaste + extraPerPortion * portions, 2),
+    recipeTotalCost: roundTo(totalIngredientsWithWaste + extraPerPortion * portions, 2),
     costPerPortion: roundTo(costPerPortion, 2),
     suggestedSalePricePerPortion: roundTo(suggestedSalePricePerPortion, 2),
     suggestedSalePriceWithIgv: roundTo(suggestedSalePriceWithIgv, 2),
     profitPerPortion: roundTo(profitPerPortion, 2),
+    foodCostPercentage: roundTo(foodCostPercentage, 1),
+    realMarginPercentage: roundTo(realMarginPercentage, 1),
+    totalIngredientsWithWaste: roundTo(totalIngredientsWithWaste, 2),
+    ingredientCostPerPortion: roundTo(ingredientCostPerPortion, 2),
   };
 }

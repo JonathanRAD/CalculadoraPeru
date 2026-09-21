@@ -143,9 +143,9 @@ Motivo: ${result.recommendedReason}`;
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         
         {/* Form Column */}
-        <div className="lg:col-span-7 rounded-3xl border-2 border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 sm:p-8 shadow-md shadow-slate-900/5 space-y-6">
+        <div className="lg:col-span-7 rounded-3xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 sm:p-8 shadow-sm space-y-6">
           <div className="flex items-center gap-2.5 border-b border-slate-100 dark:border-slate-800 pb-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300">
+            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-50 text-[#08734F] dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/60">
               <Building className="h-4.5 w-4.5" />
             </div>
             <h2 className="text-lg font-bold text-slate-900 dark:text-white">Perfil de tu Emprendimiento</h2>
@@ -181,7 +181,7 @@ Motivo: ${result.recommendedReason}`;
               <select
                 value={taxpayerType}
                 onChange={(e) => setTaxpayerType(e.target.value as TaxpayerType)}
-                className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 p-2.5 text-xs font-bold text-slate-900 dark:text-white outline-none focus:border-amber-600"
+                className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 p-2.5 text-xs font-bold text-slate-900 dark:text-white outline-none focus:border-[#08734F]"
               >
                 <option value="natural_person">Persona natural con negocio</option>
                 <option value="legal_entity">Persona jurídica / Empresa</option>
@@ -195,7 +195,7 @@ Motivo: ${result.recommendedReason}`;
               <select
                 value={clientType}
                 onChange={(e) => setClientType(e.target.value as ClientType)}
-                className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 p-2.5 text-xs font-bold text-slate-900 dark:text-white outline-none focus:border-amber-600"
+                className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 p-2.5 text-xs font-bold text-slate-900 dark:text-white outline-none focus:border-[#08734F]"
               >
                 <option value="final_consumer">Consumidor final / Personas (Boleta)</option>
                 <option value="businesses_factura">Empresas y Negocios (Factura obligatoria)</option>
@@ -210,7 +210,7 @@ Motivo: ${result.recommendedReason}`;
               <select
                 value={activityType}
                 onChange={(e) => setActivityType(e.target.value as ActivityType)}
-                className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 p-2.5 text-xs font-bold text-slate-900 dark:text-white outline-none focus:border-amber-600"
+                className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 p-2.5 text-xs font-bold text-slate-900 dark:text-white outline-none focus:border-[#08734F]"
               >
                 <option value="commerce_trade">Comercio (Venta de productos/bodega)</option>
                 <option value="services">Servicios profesionales o técnicos</option>
@@ -233,7 +233,7 @@ Motivo: ${result.recommendedReason}`;
                     key={regime.regimeId}
                     className={`rounded-2xl border p-3.5 transition-all ${
                       isRecommended
-                        ? 'border-emerald-600 bg-emerald-50/80 dark:bg-emerald-950/60 ring-2 ring-emerald-600/20'
+                        ? 'border-[#08734F] bg-emerald-50/80 dark:bg-emerald-950/60 ring-2 ring-[#08734F]/20'
                         : regime.isEligible
                         ? 'border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950'
                         : 'border-slate-200 dark:border-slate-800 bg-slate-100/60 dark:bg-slate-900/40 opacity-70'
@@ -244,7 +244,7 @@ Motivo: ${result.recommendedReason}`;
                         {regime.name.split('(')[0]}
                       </span>
                       {isRecommended && (
-                        <span className="inline-flex items-center gap-1 rounded-md bg-emerald-700 text-white px-2 py-0.2 text-[10px] font-bold shrink-0">
+                        <span className="inline-flex items-center gap-1 rounded-md bg-[#08734F] text-white px-2 py-0.2 text-[10px] font-bold shrink-0">
                           <Sparkles className="h-2.5 w-2.5 text-amber-300" />
                           Recomendado
                         </span>
@@ -259,7 +259,7 @@ Motivo: ${result.recommendedReason}`;
                     <div className="mt-2 text-[11px] text-slate-600 dark:text-slate-400 space-y-1">
                       <div className="flex items-center gap-1">
                         {regime.canIssueFactura ? (
-                          <Check className="h-3 w-3 text-emerald-600 shrink-0" />
+                          <Check className="h-3 w-3 text-[#08734F] shrink-0" />
                         ) : (
                           <X className="h-3 w-3 text-rose-500 shrink-0" />
                         )}
@@ -277,30 +277,30 @@ Motivo: ${result.recommendedReason}`;
 
         </div>
 
-        {/* Results Column */}
+        {/* Results Column — Proposal A */}
         <div className="lg:col-span-5 flex flex-col gap-4">
-          <div className="rounded-3xl border-2 border-amber-300 dark:border-amber-800/80 bg-amber-50/70 dark:bg-slate-900 p-6 sm:p-7 shadow-md shadow-amber-900/5">
+          <div className="rounded-3xl border-2 border-emerald-200/90 dark:border-emerald-800/80 bg-white dark:bg-slate-900 p-6 sm:p-7 shadow-sm">
             <div className="flex items-center justify-between mb-4">
-              <span className="text-xs font-bold uppercase tracking-wider text-amber-900 dark:text-amber-300">
+              <span className="text-xs font-bold uppercase tracking-wider text-emerald-950 dark:text-emerald-300">
                 Diagnóstico SUNAT
               </span>
-              <span className="rounded-full bg-amber-700 dark:bg-amber-600 px-3 py-0.5 text-xs font-bold text-white shadow-xs">
+              <span className="rounded-full bg-emerald-50 dark:bg-emerald-950/70 border border-emerald-200 dark:border-emerald-800 px-2.5 py-0.5 text-[11px] font-bold text-[#08734F] dark:text-emerald-300">
                 SUNAT 2026
               </span>
             </div>
 
             {/* Big Main Result Box */}
-            <div className="rounded-2xl bg-white dark:bg-slate-950 border-2 border-amber-200 dark:border-amber-800/60 p-6 shadow-sm text-center mb-5 overflow-hidden">
-              <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">
+            <div className="rounded-2xl bg-emerald-50/50 dark:bg-slate-950 border border-emerald-100 dark:border-emerald-900/60 p-5 sm:p-6 text-center mb-5 overflow-hidden">
+              <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                 Régimen Ideal Recomendado
               </span>
               <div
                 title={result.recommendedRegimeName}
-                className="text-2xl sm:text-3xl font-black text-amber-900 dark:text-amber-400 mt-1 tracking-tight break-words px-2"
+                className="text-2xl sm:text-3xl font-black text-[#08734F] dark:text-emerald-400 mt-1 tracking-tight break-words px-2"
               >
                 {result.recommendedRegimeName}
               </div>
-              <div className="mt-2 text-xs text-slate-600 dark:text-slate-300 font-medium leading-relaxed bg-amber-100/70 dark:bg-slate-900 p-3 rounded-xl">
+              <div className="mt-2 text-xs text-slate-600 dark:text-slate-300 font-medium leading-relaxed bg-white/70 dark:bg-slate-900 p-3 rounded-xl border border-emerald-100 dark:border-slate-800">
                 💡 {result.recommendedReason}
               </div>
             </div>

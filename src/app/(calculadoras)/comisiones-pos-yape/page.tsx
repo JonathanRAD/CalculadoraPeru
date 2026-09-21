@@ -210,7 +210,7 @@ Monto Líquido en Cuenta: ${formatCurrency(result.netReceived)}`;
               <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">
                 {mode === 'deduct_from_sale' ? 'Recibirás en tu Banco' : 'Cobrar al Cliente'}
               </span>
-              <div className="text-3xl sm:text-5xl font-black text-emerald-800 dark:text-emerald-400 mt-1 font-mono tracking-tight">
+              <div className="text-3xl sm:text-5xl font-black text-emerald-800 dark:text-emerald-400 mt-1 font-mono tabular-nums break-words leading-tight">
                 {formatCurrency(mode === 'deduct_from_sale' ? result.netReceived : result.chargeAmount)}
               </div>
               <div className="mt-1.5 text-xs text-slate-600 dark:text-slate-400 font-semibold">
