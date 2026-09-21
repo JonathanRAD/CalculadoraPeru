@@ -201,7 +201,7 @@ export default function ProSubscriptionPage() {
             </h1>
 
             <p className="text-base sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
-              Emite liquidaciones oficiales con formato SUNAFIL, boletas de pago para tus trabajadores con tu propio logo, cotizaciones comerciales y exportaciones a Excel para SUNAT. Todo en un solo plan ilimitado.
+              Genera documentos laborales referenciales para tus trabajadores con tu propio logo, cotizaciones comerciales y exportación CSV para hojas de cálculo. Todo en un solo plan sin complicaciones.
             </p>
 
             {/* Quick Feature Badges */}
@@ -315,7 +315,7 @@ export default function ProSubscriptionPage() {
                 </span>
               </div>
               <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed max-w-2xl">
-                Hemos creado una <strong>Guía Maestra interactiva</strong> con el desglose exacto de beneficios por cada herramienta (CTS con Semáforo SUNAFIL, Liquidación con PDF oficial, Cotizador con WhatsApp, etc.) y redirecciones directas para que no te pierdas.
+                Hemos creado una <strong>Guía Maestra interactiva</strong> con el desglose exacto de beneficios por cada herramienta (CTS con estimación de contingencias, liquidación con PDF referencial, cotizador con WhatsApp, etc.) y redirecciones directas para que no te pierdas.
               </p>
             </div>
           </div>
@@ -366,7 +366,7 @@ export default function ProSubscriptionPage() {
                 </div>
                 <div className="flex items-center gap-2.5 text-slate-400">
                   <span className="w-4 text-center font-bold text-red-400">✕</span>
-                  <span>Sin exportación de archivos estructurados para SUNAT</span>
+                  <span>Sin exportación a hojas de cálculo (CSV/Excel)</span>
                 </div>
                 <div className="flex items-center gap-2.5 text-slate-400">
                   <span className="w-4 text-center font-bold text-red-400">✕</span>
@@ -379,54 +379,67 @@ export default function ProSubscriptionPage() {
               href="/"
               className="w-full py-3 rounded-xl border border-slate-300 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 font-bold text-xs text-center text-slate-800 dark:text-slate-200 transition-colors"
             >
-              Continuar con Plan Gratuito
+              Continuar con Modo Gratuito
             </Link>
           </div>
 
-          {/* PRO Plan Card (Featured) */}
-          <div className="relative rounded-3xl border-2 border-emerald-500 bg-white dark:bg-slate-900 p-8 shadow-xl shadow-emerald-950/10 flex flex-col justify-between space-y-6">
-            <div className="absolute -top-3.5 right-6 bg-gradient-to-r from-[#00875A] to-teal-500 text-white text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-full shadow-md">
-              MÁS RECOMENDADO POR MYPES
-            </div>
-
+          {/* PRO Plan Card */}
+          <div className="rounded-3xl border-2 border-[#00875A] dark:border-emerald-500 bg-white dark:bg-slate-900 p-8 shadow-xl relative flex flex-col justify-between space-y-6">
             <div className="space-y-4">
               <div className="flex justify-between items-start">
                 <div>
-                  <h3 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                  <h3 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
                     <span>CalculaPerú PRO</span>
-                    <Sparkles className="w-4 h-4 text-amber-500 fill-amber-500" />
+                    <Sparkles className="w-4 h-4 text-emerald-500 fill-emerald-500" />
                   </h3>
-                  <p className="text-xs text-slate-500 mt-1">Suite ilimitada para negocios, contadores y profesionales</p>
+                  <p className="text-xs text-slate-500 mt-1">Para contadores, pymes y profesionales independientes</p>
                 </div>
+                <span className="text-xs font-black px-2.5 py-1 rounded-full bg-emerald-600 text-white shadow-xs">
+                  {billingCycle === 'yearly' ? 'MÁS POPULAR' : 'FLEXIBLE'}
+                </span>
               </div>
 
-              <div className="pt-2 space-y-2">
-                <div className="flex items-baseline gap-2">
-                  <span className="text-4xl sm:text-5xl font-black font-mono text-[#00875A] dark:text-[#00C853]">
-                    {billingCycle === 'yearly' ? 'S/ 149' : 'S/ 16'}
-                  </span>
-                  <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
-                    {billingCycle === 'yearly' ? '/ año completo' : '/ mes'}
-                  </span>
-                </div>
-
+              {/* Pricing Display */}
+              <div className="pt-2">
                 {billingCycle === 'yearly' ? (
-                  <div className="space-y-1.5">
-                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-100/90 dark:bg-emerald-950/70 text-emerald-800 dark:text-emerald-300 text-xs font-bold">
-                      <span>✨ Equivale a solo S/ 12.42 al mes</span>
-                      <span className="text-[10px] bg-emerald-200 dark:bg-emerald-900 px-1.5 py-0.5 rounded font-black">
-                        Ahorras S/ 43 al año
-                      </span>
+                  <div>
+                    <div className="flex items-baseline gap-1">
+                      <span className="text-4xl font-black font-mono text-[#00875A] dark:text-emerald-400">S/ 149</span>
+                      <span className="text-xs text-slate-500 font-medium">/ al año</span>
                     </div>
-                    <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">
-                      Pago único anual de S/ 149 por 12 meses ilimitados de todas las herramientas PRO.
+                    <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">
+                      Equivale a solo <strong className="text-emerald-600 dark:text-emerald-400">S/ 12.42 al mes</strong>. Ahorras S/ 43 frente al pago mensual.
                     </p>
                   </div>
                 ) : (
-                  <div className="space-y-1.5">
-                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-bold">
-                      <span>Facturación mensual de S/ 16 · Sin contratos ni permanencia</span>
+                  <div>
+                    <div className="flex items-baseline gap-1">
+                      <span className="text-4xl font-black font-mono text-[#00875A] dark:text-emerald-400">S/ 16</span>
+                      <span className="text-xs text-slate-500 font-medium">/ al mes</span>
                     </div>
+                    <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">
+                      Facturación mensual flexible. Cancela cuando desees.
+                    </p>
+                  </div>
+                )}
+              </div>
+
+              {/* Billing Toggle Explainer */}
+              <div className="p-3 rounded-2xl bg-emerald-50/60 dark:bg-emerald-950/20 border border-emerald-100 dark:border-emerald-900/40">
+                {billingCycle === 'yearly' ? (
+                  <div className="space-y-1">
+                    <p className="text-xs font-bold text-emerald-900 dark:text-emerald-300">
+                      ✓ Pago único anual de S/ 149 (Ahorro del 23%)
+                    </p>
+                    <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">
+                      Pagas una sola vez por 12 meses completos (equivale a <strong>S/ 12.42/mes</strong>). Sin renovación obligatoria ni cargos automáticos.
+                    </p>
+                  </div>
+                ) : (
+                  <div className="space-y-1">
+                    <p className="text-xs font-bold text-emerald-900 dark:text-emerald-300">
+                      ✓ Pago mensual de S/ 16 sin permanencia
+                    </p>
                     <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">
                       Pagas S/ 16 cada mes y cancelas cuando quieras. ¿Quieres ahorrar más? El <strong>Plan Anual cuesta S/ 149/año</strong> (equivale a solo <strong>S/ 12.42/mes</strong>).
                     </p>
@@ -437,7 +450,7 @@ export default function ProSubscriptionPage() {
               <div className="space-y-3 pt-4 border-t border-slate-100 dark:border-slate-800 text-xs">
                 <div className="flex items-start gap-2.5 text-slate-800 dark:text-slate-200 font-medium">
                   <Check className="w-4 h-4 text-[#00875A] shrink-0 mt-0.5 font-bold" />
-                  <span><strong>Liquidaciones y Boletas Oficiales:</strong> Conforme al D.S. 001-98-TR y D.L. 728 con tu Logo y RUC.</span>
+                  <span><strong>Documentos Laborales Referenciales:</strong> Boletas y liquidaciones estructuradas bajo el D.S. 001-98-TR y D.L. 728 con tu Logo y RUC.</span>
                 </div>
                 <div className="flex items-start gap-2.5 text-slate-800 dark:text-slate-200 font-medium">
                   <Check className="w-4 h-4 text-[#00875A] shrink-0 mt-0.5 font-bold" />
@@ -449,7 +462,7 @@ export default function ProSubscriptionPage() {
                 </div>
                 <div className="flex items-start gap-2.5 text-slate-800 dark:text-slate-200 font-medium">
                   <Check className="w-4 h-4 text-[#00875A] shrink-0 mt-0.5 font-bold" />
-                  <span><strong>Semáforo de Multas SUNAFIL 2026:</strong> Prevención de contingencias e intereses laborales por retrasos en CTS/Gratificación.</span>
+                  <span><strong>Estimador de Contingencias Laborales:</strong> Referencia de posibles sanciones e intereses por retrasos en depósitos de CTS o Gratificación.</span>
                 </div>
                 <div className="flex items-start gap-2.5 text-slate-800 dark:text-slate-200 font-medium">
                   <Check className="w-4 h-4 text-[#00875A] shrink-0 mt-0.5 font-bold" />
@@ -528,10 +541,10 @@ export default function ProSubscriptionPage() {
                     </td>
                   </tr>
                   <tr>
-                    <td className="p-3.5 pl-4 font-medium">Formato Legal SUNAFIL (D.S. N° 001-98-TR) con Firmas y Huella</td>
+                    <td className="p-3.5 pl-4 font-medium">Estructura Laboral Referencial (D.S. N° 001-98-TR) con Firmas y Huella</td>
                     <td className="p-3.5 text-center text-slate-400">Parcial</td>
                     <td className="p-3.5 text-center font-bold text-[#00875A] dark:text-emerald-400 bg-emerald-50/30 dark:bg-emerald-950/20">
-                      ✓ Conforme a Ley
+                      ✓ Formato base
                     </td>
                   </tr>
                   <tr>
@@ -598,9 +611,9 @@ export default function ProSubscriptionPage() {
               <div className="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-950 flex items-center justify-center text-[#00875A] dark:text-[#00C853]">
                 <FileText className="w-5 h-5" />
               </div>
-              <h3 className="font-bold text-slate-900 dark:text-white text-sm">Documentos Laborales Formales</h3>
+              <h3 className="font-bold text-slate-900 dark:text-white text-sm">Documentos Laborales Estructurados</h3>
               <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                Liquidaciones laborales bajo el D.L. 728, boletas de pago y constancias de cese con cláusulas de 48 horas de ley para prevenir contingencias ante SUNAFIL.
+                Liquidaciones laborales bajo el D.L. 728, boletas de pago y constancias de cese referenciales para la gestión administrativa de tu personal.
               </p>
             </div>
 

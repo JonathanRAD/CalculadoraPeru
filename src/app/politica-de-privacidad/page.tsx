@@ -36,7 +36,7 @@ export default function PoliticaPrivacidadPage() {
             Política de Privacidad
           </h1>
           <p className="text-xs text-slate-500 dark:text-slate-400 mt-2 font-medium">
-            Última actualización: 28 de agosto de 2026
+            Última actualización: 21 de septiembre de 2026
           </p>
         </div>
 
@@ -66,7 +66,7 @@ export default function PoliticaPrivacidadPage() {
                 <strong>Enlaces y navegación web:</strong> La dirección web de las calculadoras y los enlaces copiados al portapapeles mediante el botón &ldquo;Copiar Enlace&rdquo; no contienen parámetros con tus montos, sueldos ni resultados (son URLs limpias como <code>/sueldo-neto</code>). La única ocasión en que un texto incorpora cifras calculadas es cuando el usuario presiona voluntariamente &ldquo;Compartir en WhatsApp&rdquo;, acción que genera un texto preformateado en la aplicación de mensajería con el resumen del cálculo para que el propio usuario decida si lo envía o no a sus contactos.
               </li>
               <li>
-                <strong>Herramientas de analítica web:</strong> Google Analytics 4 y la telemetría interna del portal registran únicamente la ruta de página visitada (page_path) y términos consultados en el buscador general. En ningún caso transmiten ni procesan cifras remunerativas, importes monetarios ni datos ingresados en los formularios de cálculo.
+                <strong>Herramientas de analítica web:</strong> Empleamos Google Analytics 4 para registrar métricas de uso y rendimiento web (como rutas de página consultadas, títulos, términos del buscador interno, tipo de dispositivo, navegador y procedencia aproximada). Esta telemetría técnica no se asocia con los campos de cálculo ni transmite salarios, montos remunerativos ni datos financieros ingresados por el usuario en las herramientas.
               </li>
               <li>
                 <strong>Cuentas CalculaPerú PRO:</strong> Si dispones de una cuenta PRO activa, la información de un cálculo o cotización únicamente se almacena en nuestra base de datos protegida (PostgreSQL alojado en Supabase con cifrado en tránsito y en reposo) cuando pulsas voluntariamente el botón <em>&ldquo;Guardar en Mis Cálculos&rdquo;</em>. <strong>No existe guardado automático</strong> en segundo plano.
@@ -138,15 +138,23 @@ export default function PoliticaPrivacidadPage() {
             <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
               Conforme a la Ley N° 29733 (Ley de Protección de Datos Personales de Perú) y su reglamento, tienes derecho a acceder, rectificar, cancelar u oponerte al tratamiento de tus datos personales:
             </p>
-            <ul className="list-disc pl-5 space-y-1.5 text-xs text-slate-600 dark:text-slate-400">
+            <ul className="list-disc pl-5 space-y-2 text-xs text-slate-600 dark:text-slate-400">
               <li>
-                <strong>Usuarios de la versión gratuita:</strong> Al no registrarse cuentas ni almacenarse cálculos en servidores, no existe información personal retenida susceptible de supresión.
+                <strong>Usuarios de la versión gratuita:</strong> Las operaciones y cifras monetarias ingresadas en las calculadoras públicas se procesan localmente en tu navegador y no se guardan en nuestros servidores. No obstante, si como usuario libre interactúas voluntariamente mediante nuestro formulario de contacto (<Link href="/contacto" className="text-emerald-700 dark:text-emerald-400 underline">/contacto</Link>), la lista informativa de novedades (<Link href="/cotizador" className="text-emerald-700 dark:text-emerald-400 underline">/cotizador</Link>) o canales de soporte, los datos personales remitidos (como nombre, correo o mensaje) se conservan temporalmente con la finalidad exclusiva de responder y gestionar tu comunicación conforme a la sección 4, pudiendo solicitar su rectificación o supresión en cualquier momento.
               </li>
               <li>
                 <strong>Eliminación de cálculos guardados (Autogestión PRO):</strong> Puedes eliminar individualmente cualquiera de tus cálculos guardados en cualquier momento desde el panel de perfil de tu cuenta PRO, haciendo clic en el icono de papelera. La eliminación en base de datos es inmediata a través del servicio de cálculos.
               </li>
               <li>
-                <strong>Eliminación completa de cuenta y datos asociados:</strong> Si deseas dar de baja definitiva tu cuenta de usuario PRO, puedes solicitarlo enviando un mensaje a través de nuestro <Link href="/contacto" className="text-emerald-700 dark:text-emerald-400 underline">formulario de contacto</Link> o vía WhatsApp de soporte indicando tu correo registrado. Al eliminar el perfil de usuario en el servidor, la base de datos ejecuta el borrado en cascada (ON DELETE CASCADE) de la totalidad de sus cálculos guardados, desvinculando de forma irreversible cualquier información personal.
+                <strong>Eliminación de cuenta PRO y conservación de registros:</strong> Si solicitas la baja definitiva de tu cuenta de usuario PRO a través de nuestro <Link href="/contacto" className="text-emerald-700 dark:text-emerald-400 underline">formulario de contacto</Link> o canal de WhatsApp indicando tu correo registrado:
+                <ul className="list-[circle] pl-5 mt-1.5 space-y-1 text-slate-500 dark:text-slate-400">
+                  <li>
+                    <em>Datos eliminados inmediatamente:</em> Se suprime el perfil de usuario en la base de datos (<code>profiles</code>), destruyendo de forma inmediata tus credenciales de acceso (correo, contraseña protegida y sal criptográfica) y ejecutando el borrado en cascada (<code>ON DELETE CASCADE</code>) de todos los cálculos guardados que tenías en la nube.
+                  </li>
+                  <li>
+                    <em>Registros conservados y finalidad:</em> Si registraste solicitudes de suscripción PRO o reportes de pago (Yape/Plin/transferencia), la relación directa con el perfil se disocia (<code>user_id = NULL</code>), pero los registros históricos de la transacción (código de operación, monto, fecha, plan y datos de contacto consignados en la solicitud) se conservan con fines de verificación contable, acreditación fiscal de operaciones, atención de posibles reclamos y prevención de fraude, manteniéndose durante el tiempo que exijan las normas tributarias y de auditoría contable aplicables, sin un proceso de purga automática programado.
+                  </li>
+                </ul>
               </li>
             </ul>
           </section>

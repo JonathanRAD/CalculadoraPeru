@@ -190,7 +190,7 @@ export function generateOfficialPayrollSlipPdf(options: PayrollSlipOptions) {
   doc.setFontSize(7.5);
   if (isPro) {
     doc.setTextColor(0, 135, 90);
-    doc.text('CONFORME D.S. N° 001-98-TR / SUNAFIL', pageWidth - mx, currentY + 4, { align: 'right' });
+    doc.text('ESTRUCTURA REFERENCIAL D.S. N° 001-98-TR', pageWidth - mx, currentY + 4, { align: 'right' });
   } else {
     doc.setTextColor(217, 119, 6);
     doc.text('MODO PRUEBA (SIN VALIDEZ LEGAL)', pageWidth - mx, currentY + 4, { align: 'right' });

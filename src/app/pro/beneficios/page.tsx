@@ -158,7 +158,7 @@ const CALCULATORS_GUIDE: CalculatorGuideItem[] = [
     proBenefits: [
       'Cálculo de la Indemnización por Vacaciones No Gozadas ("Triple Vacacional" según D.L. 713 Art. 24).',
       'Hoja de cómputo vacacional lista para adjuntar al legajo del personal.',
-      'Exportación a Excel y respaldo en nube para auditorías de SUNAFIL.',
+      'Exportación a Excel (CSV) y respaldo en nube para control interno de tu negocio.',
     ],
     howToUse: [
       'Indica si las vacaciones fueron gozadas oportunamente o si se incurrió en falta de descanso.',
@@ -198,7 +198,7 @@ const CALCULATORS_GUIDE: CalculatorGuideItem[] = [
     proBenefits: [
       'Calculadora inversa: Determina el monto bruto que debes cobrar para recibir un monto neto exacto en tu cuenta bancaria.',
       'Verificador de Suspensión de Retenciones de 4ta Categoría (límite anual SUNAT).',
-      'Exportación de recibos emitidos a Excel para tu declaración mensual en SUNAT Operaciones en Línea.',
+      'Exportación de recibos emitidos a Excel (CSV) para control contable en hojas de cálculo.',
     ],
     howToUse: [
       'Selecciona si deseas calcular desde el importe pactado o desde el dinero líquido en mano.',
@@ -404,7 +404,7 @@ export default function BeneficiosProPage() {
               5. Membrete Corporativo
             </h2>
             <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-snug">
-              Guarda el logo, RUC y Razón Social de tu empresa para tus boletas oficiales.
+              Guarda el logo, RUC y Razón Social de tu empresa para tus boletas de pago referenciales.
             </p>
           </div>
 
@@ -610,7 +610,7 @@ export default function BeneficiosProPage() {
               </thead>
               <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                 <tr>
-                  <td className="p-3.5 font-medium">Cálculos matemáticos con fórmulas oficiales 2026</td>
+                  <td className="p-3.5 font-medium">Cálculos matemáticos con fórmulas de la normativa vigente 2026</td>
                   <td className="p-3.5 text-center text-slate-600 dark:text-slate-400 font-semibold">Ilimitado</td>
                   <td className="p-3.5 text-center font-bold text-emerald-700 dark:text-emerald-400 bg-emerald-50/40 dark:bg-emerald-950/20 border-x border-emerald-200 dark:border-emerald-900">
                     Ilimitado
@@ -641,14 +641,14 @@ export default function BeneficiosProPage() {
                   <td className="p-3.5 font-medium">Boletas de pago formales en PDF (Formato D.S. 001-98-TR)</td>
                   <td className="p-3.5 text-center text-slate-400">✗ No disponible</td>
                   <td className="p-3.5 text-center font-bold text-emerald-700 dark:text-emerald-400 bg-emerald-50/40 dark:bg-emerald-950/20 border-x border-emerald-200 dark:border-emerald-900">
-                    ✓ Formato legal listo para firmar
+                    ✓ Estructura legal lista para firmar
                   </td>
                 </tr>
                 <tr>
                   <td className="p-3.5 font-medium">Liquidaciones con indemnización por despido arbitrario</td>
                   <td className="p-3.5 text-center text-slate-400">✗ No disponible</td>
                   <td className="p-3.5 text-center font-bold text-emerald-700 dark:text-emerald-400 bg-emerald-50/40 dark:bg-emerald-950/20 border-x border-emerald-200 dark:border-emerald-900">
-                    ✓ PDF formal con cláusula de 48h SUNAFIL
+                    ✓ PDF formal con cláusula de plazo legal
                   </td>
                 </tr>
                 <tr>
@@ -678,7 +678,7 @@ export default function BeneficiosProPage() {
           </div>
 
           <h2 className="text-2xl sm:text-4xl font-black tracking-tight max-w-2xl mx-auto">
-            Ahorra tiempo contable y mantén a tu empresa en regla con SUNAFIL
+            Ahorra tiempo contable y mantén en orden los cálculos laborales de tu negocio
           </h2>
 
           <p className="text-slate-300 text-xs sm:text-sm max-w-xl mx-auto leading-relaxed">
