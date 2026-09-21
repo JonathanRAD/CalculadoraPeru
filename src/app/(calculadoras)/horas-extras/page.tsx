@@ -176,9 +176,9 @@ Total Horas Extras a Cobrar: ${formatCurrency(result.totalOvertimePay)}`;
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         
         {/* Form Column */}
-        <div className="lg:col-span-7 rounded-3xl border-2 border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 sm:p-8 shadow-md shadow-slate-900/5 space-y-6">
+        <div className="lg:col-span-7 rounded-3xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 sm:p-8 shadow-sm space-y-6">
           <div className="flex items-center gap-2.5 border-b border-slate-100 dark:border-slate-800 pb-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-300">
+            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-50 text-[#08734F] dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/60">
               <Clock className="h-4.5 w-4.5" />
             </div>
             <h2 className="text-lg font-bold text-slate-900 dark:text-white">Datos de tu Jornada</h2>
@@ -194,7 +194,7 @@ Total Horas Extras a Cobrar: ${formatCurrency(result.totalOvertimePay)}`;
                 onClick={() => setScheduleType('regular')}
                 className={`rounded-lg px-3 py-2 text-xs font-bold transition-colors ${
                   scheduleType === 'regular'
-                    ? 'bg-white text-blue-800 shadow-sm dark:bg-slate-800 dark:text-blue-300'
+                    ? 'bg-white text-emerald-900 shadow-sm dark:bg-slate-800 dark:text-emerald-300'
                     : 'text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200'
                 }`}
               >
@@ -205,7 +205,7 @@ Total Horas Extras a Cobrar: ${formatCurrency(result.totalOvertimePay)}`;
                 onClick={() => setScheduleType('atypical')}
                 className={`rounded-lg px-3 py-2 text-xs font-bold transition-colors ${
                   scheduleType === 'atypical'
-                    ? 'bg-white text-blue-800 shadow-sm dark:bg-slate-800 dark:text-blue-300'
+                    ? 'bg-white text-emerald-900 shadow-sm dark:bg-slate-800 dark:text-emerald-300'
                     : 'text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200'
                 }`}
               >
@@ -215,9 +215,9 @@ Total Horas Extras a Cobrar: ${formatCurrency(result.totalOvertimePay)}`;
           </fieldset>
 
           {scheduleType === 'atypical' && (
-            <div className="space-y-4 rounded-2xl border border-blue-200 bg-blue-50/70 p-4 dark:border-blue-900 dark:bg-blue-950/30">
+            <div className="space-y-4 rounded-2xl border border-emerald-200 bg-emerald-50/50 p-4 dark:border-emerald-900 dark:bg-emerald-950/20">
               <div className="flex items-start gap-2">
-                <CalendarDays className="mt-0.5 h-4 w-4 shrink-0 text-blue-700 dark:text-blue-400" />
+                <CalendarDays className="mt-0.5 h-4 w-4 shrink-0 text-[#08734F] dark:text-emerald-400" />
                 <div>
                   <h3 className="text-sm font-bold text-slate-900 dark:text-white">Configura el ciclo completo</h3>
                   <p className="mt-0.5 text-xs leading-5 text-slate-600 dark:text-slate-400">
@@ -239,8 +239,8 @@ Total Horas Extras a Cobrar: ${formatCurrency(result.totalOvertimePay)}`;
                       }}
                       className={`rounded-full border px-3 py-1.5 text-xs font-bold transition-colors ${
                         isActive
-                          ? 'border-blue-700 bg-blue-700 text-white dark:border-blue-500 dark:bg-blue-600'
-                          : 'border-blue-200 bg-white text-blue-800 hover:border-blue-400 dark:border-slate-700 dark:bg-slate-900 dark:text-blue-300'
+                          ? 'border-[#08734F] bg-[#08734F] text-white'
+                          : 'border-slate-200 bg-white text-slate-700 hover:border-emerald-400 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300'
                       }`}
                     >
                       {preset.label}
@@ -342,7 +342,7 @@ Total Horas Extras a Cobrar: ${formatCurrency(result.totalOvertimePay)}`;
           />
         </div>
 
-        {/* Results Column */}
+        {/* Results Column — Proposal A */}
         <div className="lg:col-span-5 flex flex-col gap-4">
           {scheduleType === 'atypical' && (
             <div
@@ -412,32 +412,31 @@ Total Horas Extras a Cobrar: ${formatCurrency(result.totalOvertimePay)}`;
             </div>
           )}
 
-          <div className="rounded-3xl border-2 border-blue-300 dark:border-blue-800/80 bg-blue-50/70 dark:bg-slate-900 p-6 sm:p-7 shadow-md shadow-blue-900/5">
+          <div className="rounded-3xl border-2 border-emerald-200/90 dark:border-emerald-800/80 bg-white dark:bg-slate-900 p-6 sm:p-7 shadow-sm">
             <div className="flex items-center justify-between mb-4">
-              <span className="text-xs font-bold uppercase tracking-wider text-blue-900 dark:text-blue-300">
+              <span className="text-xs font-bold uppercase tracking-wider text-emerald-950 dark:text-emerald-300">
                 Pago Total de Horas Extras
               </span>
-              <span className="rounded-full bg-blue-700 dark:bg-blue-600 px-3 py-0.5 text-xs font-bold text-white shadow-xs">
+              <span className="rounded-full bg-emerald-50 dark:bg-emerald-950/70 border border-emerald-200 dark:border-emerald-800 px-2.5 py-0.5 text-[11px] font-bold text-[#08734F] dark:text-emerald-300">
                 🇵🇪 En Soles
               </span>
             </div>
 
-            {/* Big Main Result Box */}
-            <div className="rounded-2xl bg-white dark:bg-slate-950 border-2 border-blue-200 dark:border-blue-800/60 p-6 shadow-sm text-center mb-5 overflow-hidden">
-              <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">
+            {/* Big Main Result Box (Non-truncated tabular numerals) */}
+            <div className="rounded-2xl bg-emerald-50/50 dark:bg-slate-950 border border-emerald-100 dark:border-emerald-900/60 p-5 sm:p-6 text-center mb-5">
+              <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                 Total Adicional a Cobrar
               </span>
               <div
                 title={formatCurrency(result.totalOvertimePay)}
-                className="text-3xl sm:text-4xl lg:text-5xl font-black text-blue-900 dark:text-blue-400 mt-1 font-mono tracking-tight truncate max-w-full px-2"
+                className="text-3xl sm:text-4xl lg:text-[2.6rem] font-black text-[#08734F] dark:text-emerald-400 mt-1.5 font-mono tracking-tight tabular-nums break-words leading-tight"
               >
                 {formatCurrency(result.totalOvertimePay)}
               </div>
-              <div className="mt-1.5 text-xs text-slate-600 dark:text-slate-400 font-semibold truncate">
+              <div className="mt-1.5 text-xs text-slate-600 dark:text-slate-400 font-semibold">
                 Por {hoursFirstTwo + hoursAfterTwo + holidayHours} horas adicionales ingresadas
               </div>
             </div>
-
             {/* Sub-Metrics Grid */}
             <div className="grid grid-cols-2 gap-3 mb-5">
               <ResultMetricCard

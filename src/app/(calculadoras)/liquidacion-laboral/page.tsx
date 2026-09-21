@@ -163,7 +163,7 @@ ${isDismissal ? `Indemnización por Despido: ${formatCurrency(result.arbitraryDi
                 <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                   <tr>
                     <td className="p-2.5 font-semibold">CTS Trunca Acumulada</td>
-                    <td className="p-2.5 text-slate-500">(S/ 3,500 base ÷ 12) × 4 meses</td>
+                    <td className="p-2.5 text-slate-500">(S/ 3,000 + 1/6 Grati S/ 500 = S/ 3,500 base ÷ 12) × 4 meses</td>
                     <td className="p-2.5 font-mono text-emerald-700 dark:text-emerald-400">S/ 1,166.67</td>
                   </tr>
                   <tr>
@@ -205,9 +205,9 @@ ${isDismissal ? `Indemnización por Despido: ${formatCurrency(result.arbitraryDi
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         
         {/* Form Column */}
-        <div className="lg:col-span-7 rounded-3xl border-2 border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 sm:p-8 shadow-md shadow-slate-900/5 space-y-6">
+        <div className="lg:col-span-7 rounded-3xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 sm:p-8 shadow-sm space-y-6">
           <div className="flex items-center gap-2.5 border-b border-slate-100 dark:border-slate-800 pb-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-indigo-100 text-indigo-800 dark:bg-indigo-950 dark:text-indigo-300">
+            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-50 text-[#08734F] dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/60">
               <Briefcase className="h-4.5 w-4.5" />
             </div>
             <h2 className="text-lg font-bold text-slate-900 dark:text-white">Datos Laborales del Trabajador</h2>
@@ -231,7 +231,7 @@ ${isDismissal ? `Indemnización por Despido: ${formatCurrency(result.arbitraryDi
               <select
                 value={laborRegime}
                 onChange={(e) => setLaborRegime(e.target.value as LaborRegime)}
-                className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 p-2.5 text-xs font-bold text-slate-900 dark:text-white outline-none focus:border-indigo-600"
+                className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 p-2.5 text-xs font-bold text-slate-900 dark:text-white outline-none focus:border-[#08734F]"
               >
                 <option value="general">Régimen General (100% beneficios)</option>
                 <option value="pequena_empresa">Pequeña Empresa MYPE (50% beneficios)</option>
@@ -247,7 +247,7 @@ ${isDismissal ? `Indemnización por Despido: ${formatCurrency(result.arbitraryDi
             <select
               value={separationReason}
               onChange={(e) => setSeparationReason(e.target.value as SeparationReason)}
-              className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 p-2.5 text-xs font-bold text-slate-900 dark:text-white outline-none focus:border-indigo-600"
+              className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 p-2.5 text-xs font-bold text-slate-900 dark:text-white outline-none focus:border-[#08734F]"
             >
               <option value="renuncia">Renuncia Voluntaria (Carta de renuncia)</option>
               <option value="fin_contrato">Término / No renovación de Contrato</option>
@@ -292,7 +292,7 @@ ${isDismissal ? `Indemnización por Despido: ${formatCurrency(result.arbitraryDi
               Meses laborados pendientes de liquidar:
             </h3>
 
-            <div className="rounded-2xl border border-indigo-200 bg-indigo-50/60 p-4 dark:border-indigo-900 dark:bg-indigo-950/30">
+            <div className="rounded-2xl border border-emerald-200 bg-emerald-50/40 p-4 dark:border-emerald-900 dark:bg-emerald-950/20">
               <div className="mb-3">
                 <p className="text-sm font-bold text-slate-900 dark:text-white">Calcular gratificación desde fechas</p>
                 <p className="mt-1 text-xs leading-5 text-slate-600 dark:text-slate-400">Ingresa el inicio laboral y el cese; se contarán únicamente los meses calendario completos del semestre.</p>
@@ -306,7 +306,7 @@ ${isDismissal ? `Indemnización por Despido: ${formatCurrency(result.arbitraryDi
                     max={terminationDate || undefined}
                     onInput={(event) => setEmploymentStartDate(event.currentTarget.value)}
                     onChange={(event) => setEmploymentStartDate(event.target.value)}
-                    className="rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 font-semibold text-slate-900 outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600/15 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
+                    className="rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 font-semibold text-slate-900 outline-none focus:border-[#08734F] focus:ring-2 focus:ring-[#08734F]/15 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
                   />
                 </label>
                 <label className="flex flex-col gap-1.5 text-xs font-bold text-slate-900 dark:text-slate-200 sm:text-sm">
@@ -317,7 +317,7 @@ ${isDismissal ? `Indemnización por Despido: ${formatCurrency(result.arbitraryDi
                     min={employmentStartDate || undefined}
                     onInput={(event) => setTerminationDate(event.currentTarget.value)}
                     onChange={(event) => setTerminationDate(event.target.value)}
-                    className="rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 font-semibold text-slate-900 outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600/15 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
+                    className="rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 font-semibold text-slate-900 outline-none focus:border-[#08734F] focus:ring-2 focus:ring-[#08734F]/15 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
                   />
                 </label>
               </div>
@@ -325,7 +325,7 @@ ${isDismissal ? `Indemnización por Despido: ${formatCurrency(result.arbitraryDi
                 <p className="mt-3 text-xs font-semibold text-rose-700 dark:text-rose-300">La fecha de cese debe ser igual o posterior al inicio laboral.</p>
               )}
               {automaticGratiMonths !== null && (
-                <p className="mt-3 text-xs font-semibold text-indigo-800 dark:text-indigo-300">
+                <p className="mt-3 text-xs font-semibold text-[#08734F] dark:text-emerald-300">
                   Gratificación trunca: {automaticGratiMonths} {automaticGratiMonths === 1 ? 'mes calendario completo' : 'meses calendario completos'} en el semestre del cese.
                 </p>
               )}
@@ -384,30 +384,30 @@ ${isDismissal ? `Indemnización por Despido: ${formatCurrency(result.arbitraryDi
           </div>
         </div>
 
-        {/* Results Column */}
+        {/* Results Column — Proposal A */}
         <div className="lg:col-span-5 flex flex-col gap-4">
-          <div className="rounded-3xl border-2 border-indigo-300 dark:border-indigo-800/80 bg-indigo-50/70 dark:bg-slate-900 p-6 sm:p-7 shadow-md shadow-indigo-900/5">
+          <div className="rounded-3xl border-2 border-emerald-200/90 dark:border-emerald-800/80 bg-white dark:bg-slate-900 p-6 sm:p-7 shadow-sm">
             <div className="flex items-center justify-between mb-4">
-              <span className="text-xs font-bold uppercase tracking-wider text-indigo-900 dark:text-indigo-300">
+              <span className="text-xs font-bold uppercase tracking-wider text-emerald-950 dark:text-emerald-300">
                 Liquidación Final
               </span>
-              <span className="rounded-full bg-indigo-700 dark:bg-indigo-600 px-3 py-0.5 text-xs font-bold text-white shadow-xs">
+              <span className="rounded-full bg-emerald-50 dark:bg-emerald-950/70 border border-emerald-200 dark:border-emerald-800 px-2.5 py-0.5 text-[11px] font-bold text-[#08734F] dark:text-emerald-300">
                 Plazo 48h MTPE
               </span>
             </div>
 
-            {/* Big Main Result Box */}
-            <div className="rounded-2xl bg-white dark:bg-slate-950 border-2 border-indigo-200 dark:border-indigo-800/60 p-6 shadow-sm text-center mb-5 overflow-hidden">
-              <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">
+            {/* Big Main Result Box (Non-truncated tabular numerals) */}
+            <div className="rounded-2xl bg-emerald-50/50 dark:bg-slate-950 border border-emerald-100 dark:border-emerald-900/60 p-5 sm:p-6 text-center mb-5">
+              <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                 Total Neto a Liquidar
               </span>
               <div
                 title={formatCurrency(result.totalSettlement)}
-                className="text-3xl sm:text-4xl lg:text-5xl font-black text-indigo-900 dark:text-indigo-400 mt-1 font-mono tracking-tight break-words px-2"
+                className="text-3xl sm:text-4xl lg:text-[2.6rem] font-black text-[#08734F] dark:text-emerald-400 mt-1.5 font-mono tracking-tight tabular-nums break-words leading-tight"
               >
                 {formatCurrency(result.totalSettlement)}
               </div>
-              <div className="mt-1.5 text-xs text-slate-600 dark:text-slate-400 font-semibold truncate">
+              <div className="mt-1.5 text-xs text-slate-600 dark:text-slate-400 font-semibold">
                 {isDismissal ? 'Incluye indemnización legal por despido' : 'Beneficios sociales truncos de ley'}
               </div>
             </div>

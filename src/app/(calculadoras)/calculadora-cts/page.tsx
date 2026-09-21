@@ -100,10 +100,10 @@ Periodo: ${monthsWorkedInSemester} meses laborados`;
 
           <div className="space-y-3">
             <h3 className="font-bold text-sm text-slate-900 dark:text-white">
-              2. Caso práctico con liquidación de depósito real
+              2. Caso práctico con liquidación de depósito real (Normativa 2026)
             </h3>
             <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-              Tomemos como referencia a un colaborador del régimen general privado con sueldo básico de <strong>S/ 2,400.00</strong>, Asignación Familiar de <strong>S/ 102.50</strong>, que laboró el semestre completo (6 meses) y cuya última gratificación fue de <strong>S/ 2,502.50</strong>:
+              Tomemos como referencia a un colaborador del régimen general privado con sueldo básico de <strong>S/ 2,400.00</strong>, Asignación Familiar de <strong>S/ 113.00</strong> (10% de la RMV S/ 1,130), que laboró el semestre completo (6 meses) y cuya última gratificación percibida fue de <strong>S/ 2,513.00</strong>:
             </p>
             <div className="overflow-x-auto">
               <table className="w-full text-xs text-left border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden">
@@ -117,28 +117,28 @@ Periodo: ${monthsWorkedInSemester} meses laborados`;
                 <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                   <tr>
                     <td className="p-2.5 font-semibold">Remuneración Ordinaria Mensual</td>
-                    <td className="p-2.5 text-slate-500">Sueldo en contrato</td>
+                    <td className="p-2.5 text-slate-500">Sueldo contratado computable</td>
                     <td className="p-2.5 font-mono">S/ 2,400.00</td>
                   </tr>
                   <tr>
                     <td className="p-2.5 font-semibold">Asignación Familiar (Ley 25129)</td>
                     <td className="p-2.5 text-slate-500">10% de la RMV vigente</td>
-                    <td className="p-2.5 font-mono">+ S/ 102.50</td>
+                    <td className="p-2.5 font-mono">+ S/ 113.00</td>
                   </tr>
                   <tr>
                     <td className="p-2.5 font-semibold">Sexto de Gratificación (1/6)</td>
-                    <td className="p-2.5 text-slate-500">S/ 2,502.50 ÷ 6</td>
-                    <td className="p-2.5 font-mono text-emerald-700 dark:text-emerald-400">+ S/ 417.08</td>
+                    <td className="p-2.5 text-slate-500">S/ 2,513.00 ÷ 6</td>
+                    <td className="p-2.5 font-mono text-emerald-700 dark:text-emerald-400">+ S/ 418.83</td>
                   </tr>
                   <tr className="bg-slate-50/60 dark:bg-slate-900/60 font-bold">
-                    <td className="p-2.5">Total Base Computable</td>
-                    <td className="p-2.5 text-slate-500 font-normal">Suma de conceptos</td>
-                    <td className="p-2.5 font-mono">S/ 2,919.58</td>
+                    <td className="p-2.5">Total Base Computable Semestral</td>
+                    <td className="p-2.5 text-slate-500 font-normal">Suma de conceptos afectos</td>
+                    <td className="p-2.5 font-mono">S/ 2,931.83</td>
                   </tr>
                   <tr className="bg-emerald-50 dark:bg-emerald-950 font-bold text-slate-900 dark:text-white">
                     <td className="p-2.5 text-emerald-800 dark:text-emerald-300">Depósito Semestral de CTS (Mayo / Noviembre)</td>
-                    <td className="p-2.5 text-slate-500 font-normal">(S/ 2,919.58 ÷ 12) × 6 meses</td>
-                    <td className="p-2.5 font-mono text-emerald-800 dark:text-emerald-300 text-sm">S/ 1,459.79</td>
+                    <td className="p-2.5 text-slate-500 font-normal">(S/ 2,931.83 ÷ 12) × 6 meses</td>
+                    <td className="p-2.5 font-mono text-emerald-800 dark:text-emerald-300 text-sm">S/ 1,465.92</td>
                   </tr>
                 </tbody>
               </table>
@@ -159,9 +159,9 @@ Periodo: ${monthsWorkedInSemester} meses laborados`;
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         
         {/* Form Column */}
-        <div className="lg:col-span-7 rounded-3xl border-2 border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 sm:p-8 shadow-md shadow-slate-900/5 space-y-6">
+        <div className="lg:col-span-7 rounded-3xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 sm:p-8 shadow-sm space-y-6">
           <div className="flex items-center gap-2.5 border-b border-slate-100 dark:border-slate-800 pb-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-300">
+            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-50 text-[#08734F] dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/60">
               <PiggyBank className="h-4.5 w-4.5" />
             </div>
             <h2 className="text-lg font-bold text-slate-900 dark:text-white">Datos para el Depósito de CTS</h2>
@@ -185,7 +185,7 @@ Periodo: ${monthsWorkedInSemester} meses laborados`;
               <select
                 value={companyRegime}
                 onChange={(e) => setCompanyRegime(e.target.value as CompanyRegime)}
-                className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 p-2.5 text-xs font-bold text-slate-900 dark:text-white outline-none"
+                className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 p-2.5 text-xs font-bold text-slate-900 dark:text-white outline-none focus:border-[#08734F]"
               >
                 <option value="general">Régimen General (CTS Completa)</option>
                 <option value="pequena_empresa">Pequeña Empresa MYPE (50% de CTS)</option>
@@ -215,24 +215,24 @@ Periodo: ${monthsWorkedInSemester} meses laborados`;
           />
         </div>
 
-        {/* Results Column */}
+        {/* Results Column — Proposal A */}
         <div className="lg:col-span-5 flex flex-col gap-4">
-          <div className="rounded-3xl border-2 border-blue-300 dark:border-blue-800/80 bg-blue-50/70 dark:bg-slate-900 p-6 sm:p-7 shadow-md shadow-blue-900/5">
+          <div className="rounded-3xl border-2 border-emerald-200/90 dark:border-emerald-800/80 bg-white dark:bg-slate-900 p-6 sm:p-7 shadow-sm">
             <div className="flex items-center justify-between mb-4">
-              <span className="text-xs font-bold uppercase tracking-wider text-blue-900 dark:text-blue-300">
+              <span className="text-xs font-bold uppercase tracking-wider text-emerald-950 dark:text-emerald-300">
                 Depósito Bancario de CTS
               </span>
-              <span className="rounded-full bg-blue-700 dark:bg-blue-600 px-3 py-0.5 text-xs font-bold text-white shadow-xs">
+              <span className="rounded-full bg-emerald-50 dark:bg-emerald-950/70 border border-emerald-200 dark:border-emerald-800 px-2.5 py-0.5 text-[11px] font-bold text-[#08734F] dark:text-emerald-300">
                 Mayo / Noviembre
               </span>
             </div>
 
-            {/* Big Main Result Box */}
-            <div className="rounded-2xl bg-white dark:bg-slate-950 border-2 border-blue-200 dark:border-blue-800/60 p-6 shadow-sm text-center mb-5">
-              <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">
+            {/* Big Main Result Box (Non-truncated tabular numerals) */}
+            <div className="rounded-2xl bg-emerald-50/50 dark:bg-slate-950 border border-emerald-100 dark:border-emerald-900/60 p-5 sm:p-6 text-center mb-5">
+              <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                 Monto de CTS a Depositar
               </span>
-              <div className="text-3xl sm:text-5xl font-black text-blue-900 dark:text-blue-400 mt-1 font-mono tracking-tight">
+              <div className="text-3xl sm:text-4xl lg:text-[2.6rem] font-black text-[#08734F] dark:text-emerald-400 mt-1.5 font-mono tracking-tight tabular-nums break-words leading-tight">
                 {formatCurrency(result.ctsAmountToDeposit)}
               </div>
               <div className="mt-1.5 text-xs text-slate-600 dark:text-slate-400 font-semibold">
@@ -252,7 +252,7 @@ Periodo: ${monthsWorkedInSemester} meses laborados`;
                 label="1/6 de Gratificación"
                 value={formatCurrency(result.oneSixthGratification)}
                 type="success"
-                subValue="Componente legal"
+                subValue="Componente de ley"
               />
             </div>
 

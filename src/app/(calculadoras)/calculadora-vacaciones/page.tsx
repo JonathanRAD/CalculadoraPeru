@@ -58,7 +58,7 @@ Total a Percibir: ${formatCurrency(result.totalPay)}`;
     },
     {
       question: '¿La asignación familiar ingresa en el cálculo de vacaciones?',
-      answer: 'Sí. La asignación familiar (S/ 102.50, equivalente al 10% de la Remuneración Mínima Vital) tiene naturaleza remunerativa ordinaria y computable para todos los beneficios sociales, incluyendo vacaciones gozadas, venta de vacaciones y vacaciones truncas.',
+      answer: 'Sí. La asignación familiar (S/ 113.00, equivalente al 10% de la Remuneración Mínima Vital de S/ 1,130) tiene naturaleza remunerativa ordinaria y computable para todos los beneficios sociales, incluyendo vacaciones gozadas, venta de vacaciones y vacaciones truncas.',
     },
   ];
 
@@ -129,9 +129,9 @@ Total a Percibir: ${formatCurrency(result.totalPay)}`;
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         
         {/* Form Column */}
-        <div className="lg:col-span-7 rounded-3xl border-2 border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 sm:p-8 shadow-md shadow-slate-900/5 space-y-6">
+        <div className="lg:col-span-7 rounded-3xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 sm:p-8 shadow-sm space-y-6">
           <div className="flex items-center gap-2.5 border-b border-slate-100 dark:border-slate-800 pb-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-300">
+            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-50 text-[#08734F] dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/60">
               <Palmtree className="h-4.5 w-4.5" />
             </div>
             <h2 className="text-lg font-bold text-slate-900 dark:text-white">Datos de tus Vacaciones</h2>
@@ -155,7 +155,7 @@ Total a Percibir: ${formatCurrency(result.totalPay)}`;
               <select
                 value={companyRegime}
                 onChange={(e) => setCompanyRegime(e.target.value as VacationRegime)}
-                className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 p-2.5 text-xs font-bold text-slate-900 dark:text-white outline-none focus:border-blue-600"
+                className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 p-2.5 text-xs font-bold text-slate-900 dark:text-white outline-none focus:border-[#08734F]"
               >
                 <option value="general">Régimen General (30 días/año)</option>
                 <option value="especial_20">Régimen Especial / Agrario (20 días/año)</option>
@@ -261,30 +261,30 @@ Total a Percibir: ${formatCurrency(result.totalPay)}`;
           />
         </div>
 
-        {/* Results Column */}
+        {/* Results Column — Proposal A */}
         <div className="lg:col-span-5 flex flex-col gap-4">
-          <div className="rounded-3xl border-2 border-blue-300 dark:border-blue-800/80 bg-blue-50/70 dark:bg-slate-900 p-6 sm:p-7 shadow-md shadow-blue-900/5">
+          <div className="rounded-3xl border-2 border-emerald-200/90 dark:border-emerald-800/80 bg-white dark:bg-slate-900 p-6 sm:p-7 shadow-sm">
             <div className="flex items-center justify-between mb-4">
-              <span className="text-xs font-bold uppercase tracking-wider text-blue-900 dark:text-blue-300">
+              <span className="text-xs font-bold uppercase tracking-wider text-emerald-950 dark:text-emerald-300">
                 Liquidación de Vacaciones
               </span>
-              <span className="rounded-full bg-blue-700 dark:bg-blue-600 px-3 py-0.5 text-xs font-bold text-white shadow-xs">
+              <span className="rounded-full bg-emerald-50 dark:bg-emerald-950/70 border border-emerald-200 dark:border-emerald-800 px-2.5 py-0.5 text-[11px] font-bold text-[#08734F] dark:text-emerald-300">
                 {result.annualVacationDays} días/año
               </span>
             </div>
 
-            {/* Big Main Result Box */}
-            <div className="rounded-2xl bg-white dark:bg-slate-950 border-2 border-blue-200 dark:border-blue-800/60 p-6 shadow-sm text-center mb-5 overflow-hidden">
-              <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">
+            {/* Big Main Result Box (Non-truncated tabular numerals) */}
+            <div className="rounded-2xl bg-emerald-50/50 dark:bg-slate-950 border border-emerald-100 dark:border-emerald-900/60 p-5 sm:p-6 text-center mb-5">
+              <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                 Total Pago de Vacaciones
               </span>
               <div
                 title={formatCurrency(result.totalPay)}
-                className="text-3xl sm:text-4xl lg:text-5xl font-black text-blue-900 dark:text-blue-400 mt-1 font-mono tracking-tight break-words px-2"
+                className="text-3xl sm:text-4xl lg:text-[2.6rem] font-black text-[#08734F] dark:text-emerald-400 mt-1.5 font-mono tracking-tight tabular-nums break-words leading-tight"
               >
                 {formatCurrency(result.totalPay)}
               </div>
-              <div className="mt-1.5 text-xs text-slate-600 dark:text-slate-400 font-semibold truncate">
+              <div className="mt-1.5 text-xs text-slate-600 dark:text-slate-400 font-semibold">
                 Por {monthsWorked} meses laborados ({result.annualVacationDays} días anuales)
               </div>
             </div>

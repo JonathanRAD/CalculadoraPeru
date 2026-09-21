@@ -144,9 +144,11 @@ Total Facturado: ${formatCurrency(result.totalAmount)}`;
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         
         {/* Form Column */}
-        <div className="lg:col-span-7 rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 sm:p-8 shadow-xs space-y-6">
-          <div className="flex items-center gap-2 border-b border-slate-100 dark:border-slate-800 pb-3">
-            <Receipt className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+        <div className="lg:col-span-7 rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 sm:p-8 shadow-sm space-y-6">
+          <div className="flex items-center gap-2.5 border-b border-slate-100 dark:border-slate-800 pb-3">
+            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-50 text-[#08734F] dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/60">
+              <Receipt className="h-4.5 w-4.5" />
+            </div>
             <h2 className="text-lg font-bold text-slate-900 dark:text-white">Selecciona la operación de IGV</h2>
           </div>
 
@@ -157,7 +159,7 @@ Total Facturado: ${formatCurrency(result.totalAmount)}`;
               onClick={() => setMode('add_igv')}
               className={`rounded-xl py-3 text-xs sm:text-sm font-bold transition-all cursor-pointer ${
                 mode === 'add_igv'
-                  ? 'bg-white dark:bg-slate-800 text-emerald-800 dark:text-emerald-300 shadow-xs'
+                  ? 'bg-white dark:bg-slate-800 text-[#08734F] dark:text-emerald-300 shadow-xs'
                   : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
@@ -168,7 +170,7 @@ Total Facturado: ${formatCurrency(result.totalAmount)}`;
               onClick={() => setMode('extract_igv')}
               className={`rounded-xl py-3 text-xs sm:text-sm font-bold transition-all cursor-pointer ${
                 mode === 'extract_igv'
-                  ? 'bg-white dark:bg-slate-800 text-emerald-800 dark:text-emerald-300 shadow-xs'
+                  ? 'bg-white dark:bg-slate-800 text-[#08734F] dark:text-emerald-300 shadow-xs'
                   : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
@@ -189,7 +191,7 @@ Total Facturado: ${formatCurrency(result.totalAmount)}`;
 
           <div className="rounded-2xl bg-emerald-50/60 dark:bg-emerald-950/40 p-4 border border-emerald-200/80 dark:border-emerald-800 text-xs text-emerald-950 dark:text-emerald-200 space-y-1">
             <div className="font-bold flex items-center gap-1.5">
-              <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+              <CheckCircle2 className="h-4 w-4 text-[#08734F] dark:text-emerald-400" />
               <span>Desglose Legal Tributario Perú:</span>
             </div>
             <p className="text-[11px] text-emerald-800 dark:text-emerald-300">
@@ -198,30 +200,30 @@ Total Facturado: ${formatCurrency(result.totalAmount)}`;
           </div>
         </div>
 
-        {/* Results Column */}
+        {/* Results Column — Proposal A */}
         <div className="lg:col-span-5 flex flex-col gap-4">
-          <div className="rounded-3xl border border-emerald-200/80 dark:border-slate-800 bg-gradient-to-b from-emerald-50/70 via-white to-white dark:from-slate-900 dark:via-slate-900 dark:to-slate-900 p-6 sm:p-7 shadow-xs">
+          <div className="rounded-3xl border-2 border-emerald-200/90 dark:border-emerald-800/80 bg-white dark:bg-slate-900 p-6 sm:p-7 shadow-sm">
             <div className="flex items-center justify-between mb-4">
-              <span className="text-xs font-bold uppercase tracking-wider text-emerald-800 dark:text-emerald-400">
+              <span className="text-xs font-bold uppercase tracking-wider text-emerald-950 dark:text-emerald-300">
                 Liquidación Tributaria
               </span>
-              <span className="rounded-full bg-emerald-700 dark:bg-emerald-600 px-2.5 py-0.5 text-xs font-bold text-white">
+              <span className="rounded-full bg-emerald-50 dark:bg-emerald-950/70 border border-emerald-200 dark:border-emerald-800 px-2.5 py-0.5 text-[11px] font-bold text-[#08734F] dark:text-emerald-300">
                 SUNAT 18%
               </span>
             </div>
 
-            {/* Big Main Result Box */}
-            <div className="rounded-2xl bg-white dark:bg-slate-950 border-2 border-amber-200 dark:border-amber-800/60 p-6 shadow-sm text-center mb-5 overflow-hidden">
-              <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">
+            {/* Big Main Result Box (Non-truncated tabular numerals) */}
+            <div className="rounded-2xl bg-emerald-50/50 dark:bg-slate-950 border border-emerald-100 dark:border-emerald-900/60 p-5 sm:p-6 text-center mb-5">
+              <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                 {mode === 'add_igv' ? 'Monto Total Facturado (con IGV)' : 'Base Imponible Neta'}
               </span>
               <div
                 title={formatCurrency(mode === 'add_igv' ? result.totalAmount : result.baseAmount)}
-                className="text-3xl sm:text-4xl lg:text-5xl font-black text-amber-900 dark:text-amber-400 mt-1 font-mono tracking-tight truncate max-w-full px-2"
+                className="text-3xl sm:text-4xl lg:text-[2.6rem] font-black text-[#08734F] dark:text-emerald-400 mt-1.5 font-mono tracking-tight tabular-nums break-words leading-tight"
               >
                 {formatCurrency(mode === 'add_igv' ? result.totalAmount : result.baseAmount)}
               </div>
-              <div className="mt-1.5 text-xs text-slate-600 dark:text-slate-400 font-semibold truncate">
+              <div className="mt-1.5 text-xs text-slate-600 dark:text-slate-400 font-semibold">
                 {mode === 'add_igv'
                   ? `Incluye ${formatCurrency(result.igvAmount)} de IGV (18%)`
                   : `IGV extraído: ${formatCurrency(result.igvAmount)}`}
