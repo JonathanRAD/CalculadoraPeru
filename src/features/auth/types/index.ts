@@ -41,3 +41,23 @@ export interface LicenseCode {
   createdAt: string;
   createdBy?: string;
 }
+
+export type SubscriptionStatus = 'pending' | 'approved' | 'rejected';
+
+export interface SubscriptionRequest {
+  id: string;
+  customerName: string;
+  customerEmail: string;
+  customerPhone: string;
+  plan: ProPlan;
+  amount: number;
+  operationCode: string;
+  couponCode?: string;
+  userId?: string;
+  status: SubscriptionStatus;
+  generatedLicenseCode?: string;
+  notes?: string;
+  createdAt: string;
+  reviewedAt?: string;
+  reviewedBy?: string;
+}

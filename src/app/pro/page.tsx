@@ -107,16 +107,40 @@ export default function ProSubscriptionPage() {
     setIsSubmitting(true);
 
     try {
-      await fetch('/api/contacto', {
+      const amount = isCouponApplied ? 0 : (selectedPlan === 'yearly' ? 149 : 16);
+
+      const res = await fetch('/api/pro/subscriptions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          customerName: subscriberName,
+          customerEmail: subscriberEmail,
+          customerPhone: subscriberPhone,
+          plan: selectedPlan,
+          amount,
+          operationCode: operationCode || (isCouponApplied ? `CUPON-${couponCode}` : 'PENDIENTE'),
+          couponCode: isCouponApplied ? couponCode : undefined,
+          userId: user?.id,
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        alert(data.message || 'Ocurrió un error al registrar la solicitud.');
+        return;
+      }
+
+      // Non-blocking fallback notification to /api/contacto
+      fetch('/api/contacto', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name: subscriberName,
           email: subscriberEmail,
           motive: 'alianza',
-          message: `SOLICITUD DE SUSCRIPCIÓN PRO:\nPlan: ${selectedPlan === 'yearly' ? 'ANUAL (S/ 149)' : 'MENSUAL (S/ 16)'}\nCelular: ${subscriberPhone}\nCódigo Op: ${operationCode || 'CUPÓN'}\nCupón: ${isCouponApplied ? couponCode : 'Ninguno'}\nUsuario registrado: ${user ? `${user.email} (ID: ${user.id})` : 'No registrado aún'}`,
+          message: `NUEVA SOLICITUD PRO REGISTRADA (#${data.subscription?.id || 'OK'}):\nPlan: ${selectedPlan === 'yearly' ? 'ANUAL (S/ 149)' : 'MENSUAL (S/ 16)'}\nCelular: ${subscriberPhone}\nCódigo Op: ${operationCode}\nCupón: ${isCouponApplied ? couponCode : 'Ninguno'}`,
         }),
-      });
+      }).catch(() => {});
 
       confetti({
         particleCount: 100,
@@ -127,6 +151,7 @@ export default function ProSubscriptionPage() {
       setIsSuccess(true);
     } catch (err) {
       console.error('Error al suscribir:', err);
+      alert('Error de conexión al enviar la solicitud. Por favor intenta de nuevo.');
     } finally {
       setIsSubmitting(false);
     }

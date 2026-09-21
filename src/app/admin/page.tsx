@@ -40,11 +40,14 @@ import {
   Smartphone,
   Monitor,
   Globe,
+  CreditCard,
+  Send,
+  CheckCircle,
 } from 'lucide-react';
-import { LicenseCode, SafeUser, ProPlan } from '@/features/auth/types';
+import { LicenseCode, SafeUser, ProPlan, SubscriptionRequest, SubscriptionStatus } from '@/features/auth/types';
 import { ThemeToggle } from '@/shared/components/ui/ThemeToggle';
 
-type AdminTab = 'dashboard' | 'licenses' | 'users' | 'audit' | 'system';
+type AdminTab = 'dashboard' | 'subscriptions' | 'licenses' | 'users' | 'audit' | 'system';
 
 interface TrafficDay {
   date: string;
@@ -107,6 +110,20 @@ export default function AdminPage() {
   const [systemHealth, setSystemHealth] = useState<SystemHealth | null>(null);
   const [auditLogs, setAuditLogs] = useState<AuditLog[]>([]);
 
+  // Subscriptions & Payment Requests Store
+  const [subscriptions, setSubscriptions] = useState<SubscriptionRequest[]>([]);
+  const [subscriptionFilter, setSubscriptionFilter] = useState<'all' | 'pending' | 'approved' | 'rejected'>('all');
+  const [subscriptionSearch, setSubscriptionSearch] = useState('');
+  const [approvingSubId, setApprovingSubId] = useState<string | null>(null);
+  const [approvedResultModal, setApprovedResultModal] = useState<{
+    subscription: SubscriptionRequest;
+    licenseCode: string;
+    whatsappUrl: string;
+  } | null>(null);
+  const [rejectingSub, setRejectingSub] = useState<SubscriptionRequest | null>(null);
+  const [rejectReason, setRejectReason] = useState('');
+  const [isRejecting, setIsRejecting] = useState(false);
+
   // Search & Filters
   const [licenseSearch, setLicenseSearch] = useState('');
   const [licenseStatusFilter, setLicenseStatusFilter] = useState<'all' | 'available' | 'redeemed' | 'revoked'>('all');
@@ -146,13 +163,14 @@ export default function AdminPage() {
     setIsLoading(true);
     setAuthError('');
     try {
-      const [licRes, userRes, metricsRes] = await Promise.all([
+      const [licRes, userRes, metricsRes, subRes] = await Promise.all([
         fetch('/api/admin/licenses', { headers: { 'x-admin-secret': secret } }),
         fetch('/api/admin/users', { headers: { 'x-admin-secret': secret } }),
         fetch('/api/admin/metrics', { headers: { 'x-admin-secret': secret } }),
+        fetch('/api/admin/subscriptions', { headers: { 'x-admin-secret': secret } }),
       ]);
 
-      if (licRes.status === 401 || userRes.status === 401 || metricsRes.status === 401) {
+      if (licRes.status === 401 || userRes.status === 401 || metricsRes.status === 401 || subRes.status === 401) {
         setAuthError('Clave de administrador incorrecta o sesión caducada.');
         setIsAuthenticated(false);
         sessionStorage.removeItem('calculaperu_admin_secret');
@@ -160,14 +178,16 @@ export default function AdminPage() {
         return;
       }
 
-      const [licData, userData, metricsData] = await Promise.all([
+      const [licData, userData, metricsData, subData] = await Promise.all([
         licRes.json(),
         userRes.json(),
         metricsRes.json(),
+        subRes.json(),
       ]);
 
       if (licData.success) setLicenses(licData.licenses || []);
       if (userData.success) setUsers(userData.users || []);
+      if (subData.success) setSubscriptions(subData.subscriptions || []);
       if (metricsData.success) {
         setTrafficHistory(metricsData.trafficHistory || []);
         setTopCalculators(metricsData.topCalculators || []);
@@ -325,6 +345,103 @@ export default function AdminPage() {
       setIsGranting(false);
     }
   };
+
+  // Approve Subscription Handler
+  const handleApproveSubscription = async (sub: SubscriptionRequest) => {
+    setApprovingSubId(sub.id);
+    try {
+      const res = await fetch(`/api/admin/subscriptions/${sub.id}/approve`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-admin-secret': adminSecret,
+        },
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        setSubscriptions(prev =>
+          prev.map(s =>
+            s.id === sub.id
+              ? { ...s, status: 'approved', generatedLicenseCode: data.licenseCode }
+              : s
+          )
+        );
+        // Refresh licenses & users to reflect changes immediately
+        fetchAllData(adminSecret);
+
+        setApprovedResultModal({
+          subscription: sub,
+          licenseCode: data.licenseCode || '',
+          whatsappUrl: data.whatsappUrl || '',
+        });
+      } else {
+        alert(data.message || 'Error al aprobar la solicitud.');
+      }
+    } catch {
+      alert('Error de conexión al aprobar la solicitud.');
+    } finally {
+      setApprovingSubId(null);
+    }
+  };
+
+  // Reject Subscription Handler
+  const handleConfirmRejectSubscription = async () => {
+    if (!rejectingSub) return;
+    setIsRejecting(true);
+    try {
+      const res = await fetch(`/api/admin/subscriptions/${rejectingSub.id}/reject`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-admin-secret': adminSecret,
+        },
+        body: JSON.stringify({ notes: rejectReason }),
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        setSubscriptions(prev =>
+          prev.map(s =>
+            s.id === rejectingSub.id
+              ? { ...s, status: 'rejected', notes: rejectReason }
+              : s
+          )
+        );
+        setRejectingSub(null);
+        setRejectReason('');
+      } else {
+        alert(data.message || 'Error al rechazar la solicitud.');
+      }
+    } catch {
+      alert('Error de conexión al rechazar la solicitud.');
+    } finally {
+      setIsRejecting(false);
+    }
+  };
+
+  // Filtered Subscriptions
+  const pendingSubscriptionsCount = useMemo(
+    () => subscriptions.filter(s => s.status === 'pending').length,
+    [subscriptions]
+  );
+
+  const filteredSubscriptions = useMemo(() => {
+    return subscriptions.filter(sub => {
+      const matchesSearch =
+        subscriptionSearch === '' ||
+        sub.customerName.toLowerCase().includes(subscriptionSearch.toLowerCase()) ||
+        sub.customerEmail.toLowerCase().includes(subscriptionSearch.toLowerCase()) ||
+        sub.customerPhone.includes(subscriptionSearch) ||
+        sub.operationCode.toLowerCase().includes(subscriptionSearch.toLowerCase()) ||
+        (sub.generatedLicenseCode && sub.generatedLicenseCode.toLowerCase().includes(subscriptionSearch.toLowerCase()));
+
+      const matchesStatus =
+        subscriptionFilter === 'all' || sub.status === subscriptionFilter;
+
+      return matchesSearch && matchesStatus;
+    });
+  }, [subscriptions, subscriptionSearch, subscriptionFilter]);
 
   // Filtered Licenses
   const filteredLicenses = useMemo(() => {
@@ -511,6 +628,30 @@ export default function AdminPage() {
 
             <button
               type="button"
+              onClick={() => setActiveTab('subscriptions')}
+              className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl transition-all cursor-pointer ${
+                activeTab === 'subscriptions'
+                  ? 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 font-bold shadow-xs'
+                  : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/60 hover:text-slate-900 dark:hover:text-white'
+              }`}
+            >
+              <div className="flex items-center gap-3">
+                <CreditCard className="w-4 h-4" />
+                <span>Solicitudes PRO</span>
+              </div>
+              {pendingSubscriptionsCount > 0 ? (
+                <span className="px-2 py-0.5 rounded-full bg-amber-500 text-slate-950 text-[10px] font-black animate-pulse shadow-xs">
+                  {pendingSubscriptionsCount} pend.
+                </span>
+              ) : (
+                <span className="px-1.5 py-0.5 rounded-md bg-slate-200 dark:bg-slate-800 text-[10px] font-mono">
+                  {subscriptions.length}
+                </span>
+              )}
+            </button>
+
+            <button
+              type="button"
               onClick={() => setActiveTab('licenses')}
               className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl transition-all cursor-pointer ${
                 activeTab === 'licenses'
@@ -608,7 +749,7 @@ export default function AdminPage() {
           <div className="flex items-center gap-3">
             {/* Mobile Tab Switcher */}
             <div className="flex md:hidden items-center gap-1 overflow-x-auto text-xs font-bold">
-              {(['dashboard', 'licenses', 'users', 'audit'] as AdminTab[]).map(t => (
+              {(['dashboard', 'subscriptions', 'licenses', 'users', 'audit'] as AdminTab[]).map(t => (
                 <button
                   key={t}
                   type="button"
@@ -668,6 +809,41 @@ export default function AdminPage() {
           {activeTab === 'dashboard' && (
             <div className="space-y-8 animate-in fade-in duration-200">
               
+              {/* Alert: Pending Subscriptions */}
+              {pendingSubscriptionsCount > 0 && (
+                <div className="p-4.5 rounded-2xl bg-gradient-to-r from-amber-500/15 via-amber-500/10 to-transparent border border-amber-500/30 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-xs">
+                  <div className="flex items-center gap-3.5">
+                    <div className="w-10 h-10 rounded-2xl bg-amber-500 text-slate-950 flex items-center justify-center font-black shrink-0 shadow-sm">
+                      <CreditCard className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-bold text-amber-950 dark:text-amber-300 flex items-center gap-2">
+                        <span>
+                          {pendingSubscriptionsCount === 1
+                            ? '1 Solicitud de Pago Yape/Plin pendiente de validación'
+                            : `${pendingSubscriptionsCount} Solicitudes de Pago Yape/Plin pendientes de validación`}
+                        </span>
+                        <span className="w-2 h-2 rounded-full bg-amber-500 animate-ping" />
+                      </h4>
+                      <p className="text-xs text-amber-900/80 dark:text-amber-400/80 mt-0.5">
+                        Hay clientes esperando que apruebes su pago para emitir su código de activación PRO.
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSubscriptionFilter('pending');
+                      setActiveTab('subscriptions');
+                    }}
+                    className="px-4 py-2.5 bg-amber-500 hover:bg-amber-400 active:bg-amber-600 text-slate-950 font-bold text-xs rounded-xl shadow-xs transition-all cursor-pointer whitespace-nowrap self-start sm:self-auto flex items-center gap-1.5"
+                  >
+                    <span>Revisar Solicitudes</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              )}
+
               {/* Live Real-Time Telemetry Bar */}
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4.5 rounded-2xl bg-gradient-to-r from-emerald-950/40 via-slate-900 to-slate-900 border border-emerald-500/30 shadow-xs">
                 <div className="flex items-center gap-3">
@@ -987,6 +1163,308 @@ export default function AdminPage() {
           )}
 
           {/* ================================================================= */}
+          {/* TAB: SOLICITUDES DE PAGO PRO (YAPE / PLIN)                        */}
+          {/* ================================================================= */}
+          {activeTab === 'subscriptions' && (
+            <div className="space-y-6 animate-in fade-in duration-200">
+              
+              {/* Header & Overview */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                  <h2 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <CreditCard className="w-5 h-5 text-[#00875A] dark:text-[#00C853]" />
+                    <span>Solicitudes de Pago PRO (Yape / Plin)</span>
+                  </h2>
+                  <p className="text-xs text-slate-500">
+                    Valida las operaciones de pago de clientes y aprueba su suscripción con emisión de licencia y envío por WhatsApp
+                  </p>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => fetchAllData(adminSecret)}
+                    disabled={isLoading}
+                    className="px-3.5 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-bold text-xs flex items-center gap-1.5 transition-colors cursor-pointer"
+                  >
+                    <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin' : ''}`} />
+                    <span>Actualizar</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Subscriptions Metrics Cards */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs space-y-1">
+                  <span className="text-xs text-slate-500 font-semibold">Total Solicitudes</span>
+                  <div className="text-2xl font-black font-mono text-slate-900 dark:text-white">
+                    {subscriptions.length}
+                  </div>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-amber-50/50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900/50 shadow-xs space-y-1">
+                  <span className="text-xs text-amber-700 dark:text-amber-400 font-semibold">Pendientes de Validación</span>
+                  <div className="text-2xl font-black font-mono text-amber-600 dark:text-amber-400">
+                    {pendingSubscriptionsCount}
+                  </div>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900/50 shadow-xs space-y-1">
+                  <span className="text-xs text-emerald-700 dark:text-emerald-400 font-semibold">Aprobadas y Activas</span>
+                  <div className="text-2xl font-black font-mono text-emerald-600 dark:text-emerald-400">
+                    {subscriptions.filter(s => s.status === 'approved').length}
+                  </div>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs space-y-1">
+                  <span className="text-xs text-slate-500 font-semibold">Ingresos Validados</span>
+                  <div className="text-2xl font-black font-mono text-[#00875A] dark:text-[#00C853]">
+                    S/ {subscriptions
+                      .filter(s => s.status === 'approved')
+                      .reduce((sum, s) => sum + s.amount, 0)
+                      .toLocaleString('es-PE', { minimumFractionDigits: 2 })}
+                  </div>
+                </div>
+              </div>
+
+              {/* Filters Toolbar */}
+              <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs flex flex-wrap items-center justify-between gap-3 text-xs">
+                {/* Search */}
+                <div className="relative flex-1 min-w-[220px]">
+                  <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                  <input
+                    type="text"
+                    value={subscriptionSearch}
+                    onChange={e => setSubscriptionSearch(e.target.value)}
+                    placeholder="Buscar por cliente, correo, teléfono o código op..."
+                    className="w-full pl-9 pr-4 py-2 bg-slate-50 dark:bg-slate-850 border border-slate-200 dark:border-slate-750 rounded-xl text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-emerald-500 transition-colors"
+                  />
+                </div>
+
+                {/* Status Tabs */}
+                <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-800 p-1 rounded-xl">
+                  {(['all', 'pending', 'approved', 'rejected'] as const).map(st => (
+                    <button
+                      key={st}
+                      type="button"
+                      onClick={() => setSubscriptionFilter(st)}
+                      className={`px-3 py-1.5 rounded-lg font-bold text-xs capitalize transition-all cursor-pointer ${
+                        subscriptionFilter === st
+                          ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-xs'
+                          : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
+                      }`}
+                    >
+                      {st === 'all'
+                        ? `Todas (${subscriptions.length})`
+                        : st === 'pending'
+                        ? `Pendientes (${pendingSubscriptionsCount})`
+                        : st === 'approved'
+                        ? `Aprobadas (${subscriptions.filter(s => s.status === 'approved').length})`
+                        : `Rechazadas (${subscriptions.filter(s => s.status === 'rejected').length})`}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Subscriptions List */}
+              {filteredSubscriptions.length === 0 ? (
+                <div className="p-12 text-center rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-500 space-y-3">
+                  <CreditCard className="w-10 h-10 mx-auto text-slate-400 stroke-[1.5]" />
+                  <p className="text-sm font-semibold">No se encontraron solicitudes con los filtros aplicados.</p>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {filteredSubscriptions.map(sub => {
+                    const cleanPhone = sub.customerPhone.replace(/\D/g, '');
+                    const phoneWithCountry = cleanPhone.startsWith('51') ? cleanPhone : `51${cleanPhone}`;
+                    const waDirectUrl = `https://wa.me/${phoneWithCountry}?text=${encodeURIComponent(
+                      `Hola ${sub.customerName}, te escribimos de CalculaPerú referente a tu solicitud de suscripción PRO (Op: ${sub.operationCode}).`
+                    )}`;
+
+                    return (
+                      <div
+                        key={sub.id}
+                        className={`p-5 rounded-2xl bg-white dark:bg-slate-900 border transition-all shadow-xs space-y-4 ${
+                          sub.status === 'pending'
+                            ? 'border-amber-400/80 dark:border-amber-500/50 bg-amber-50/20 dark:bg-amber-950/10'
+                            : sub.status === 'approved'
+                            ? 'border-emerald-200 dark:border-emerald-800/60'
+                            : 'border-slate-200 dark:border-slate-800 opacity-75'
+                        }`}
+                      >
+                        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                          
+                          {/* Left: Customer & Plan Details */}
+                          <div className="space-y-1.5 flex-1">
+                            <div className="flex flex-wrap items-center gap-2">
+                              <span className="font-bold text-base text-slate-900 dark:text-white">
+                                {sub.customerName}
+                              </span>
+
+                              {/* Status Badge */}
+                              {sub.status === 'pending' && (
+                                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300 border border-amber-300 dark:border-amber-800 animate-pulse">
+                                  <Clock className="w-3 h-3" />
+                                  <span>Pendiente de Validación</span>
+                                </span>
+                              )}
+                              {sub.status === 'approved' && (
+                                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800">
+                                  <CheckCircle2 className="w-3 h-3" />
+                                  <span>Aprobada y Activada</span>
+                                </span>
+                              )}
+                              {sub.status === 'rejected' && (
+                                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-red-100 text-red-800 dark:bg-red-950 dark:text-red-300 border border-red-300 dark:border-red-800">
+                                  <X className="w-3 h-3" />
+                                  <span>Rechazada</span>
+                                </span>
+                              )}
+
+                              <span className="text-[11px] text-slate-400">
+                                · {new Date(sub.createdAt).toLocaleDateString('es-PE', {
+                                  day: '2-digit',
+                                  month: 'short',
+                                  year: 'numeric',
+                                  hour: '2-digit',
+                                  minute: '2-digit',
+                                })}
+                              </span>
+                            </div>
+
+                            {/* Contact Links */}
+                            <div className="flex flex-wrap items-center gap-3 text-xs text-slate-600 dark:text-slate-400">
+                              <span>📧 <a href={`mailto:${sub.customerEmail}`} className="underline hover:text-emerald-600">{sub.customerEmail}</a></span>
+                              <span>📱 Tel: <strong>{sub.customerPhone}</strong></span>
+                              <a
+                                href={waDirectUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-1 text-emerald-600 dark:text-emerald-400 font-semibold hover:underline"
+                              >
+                                <MessageCircle className="w-3.5 h-3.5" />
+                                <span>Chatear en WhatsApp</span>
+                              </a>
+                            </div>
+                          </div>
+
+                          {/* Center: Operation Code & Plan Amount */}
+                          <div className="flex flex-wrap items-center gap-4 bg-slate-50 dark:bg-slate-850 p-3 rounded-xl border border-slate-200 dark:border-slate-750">
+                            <div>
+                              <span className="text-[10px] text-slate-400 uppercase font-bold block">
+                                Plan Adquirido
+                              </span>
+                              <span className="font-bold text-xs text-slate-900 dark:text-white">
+                                {sub.plan === 'yearly' ? 'Plan Anual (365 d)' : 'Plan Mensual (30 d)'}
+                              </span>
+                              <span className="text-emerald-600 dark:text-emerald-400 font-mono font-bold block text-sm">
+                                S/ {sub.amount.toFixed(2)}
+                              </span>
+                            </div>
+
+                            <div className="border-l border-slate-200 dark:border-slate-700 pl-3">
+                              <span className="text-[10px] text-slate-400 uppercase font-bold block">
+                                Cód. Op. Yape/Plin
+                              </span>
+                              <div className="flex items-center gap-1.5 mt-0.5">
+                                <span className="font-mono font-bold text-sm text-slate-900 dark:text-white bg-white dark:bg-slate-900 px-2 py-0.5 rounded border border-slate-200 dark:border-slate-750">
+                                  {sub.operationCode}
+                                </span>
+                                <button
+                                  type="button"
+                                  onClick={() => handleCopy(sub.operationCode, 'Código de operación copiado')}
+                                  title="Copiar código de operación"
+                                  className="p-1 text-slate-500 hover:text-slate-900 dark:hover:text-white rounded hover:bg-slate-200 dark:hover:bg-slate-700 cursor-pointer"
+                                >
+                                  <Copy className="w-3.5 h-3.5" />
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Right: Actions */}
+                          <div className="flex flex-wrap items-center gap-2">
+                            {sub.status === 'pending' && (
+                              <>
+                                <button
+                                  type="button"
+                                  onClick={() => handleApproveSubscription(sub)}
+                                  disabled={approvingSubId === sub.id}
+                                  className="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-md flex items-center gap-1.5 transition-all cursor-pointer disabled:opacity-50"
+                                >
+                                  {approvingSubId === sub.id ? (
+                                    <>
+                                      <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                                      <span>Emitiendo...</span>
+                                    </>
+                                  ) : (
+                                    <>
+                                      <Check className="w-3.5 h-3.5 stroke-[3]" />
+                                      <span>Aprobar y Emitir Licencia</span>
+                                    </>
+                                  )}
+                                </button>
+
+                                <button
+                                  type="button"
+                                  onClick={() => setRejectingSub(sub)}
+                                  className="px-3 py-2.5 text-red-600 hover:bg-red-50 dark:hover:bg-red-950/40 rounded-xl font-bold text-xs transition-colors cursor-pointer"
+                                >
+                                  Rechazar
+                                </button>
+                              </>
+                            )}
+
+                            {sub.status === 'approved' && sub.generatedLicenseCode && (
+                              <div className="flex items-center gap-2">
+                                <div className="text-right">
+                                  <span className="text-[10px] text-slate-400 uppercase font-bold block">
+                                    Licencia Generada
+                                  </span>
+                                  <span className="font-mono font-bold text-xs text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-500/30">
+                                    {sub.generatedLicenseCode}
+                                  </span>
+                                </div>
+                                <button
+                                  type="button"
+                                  onClick={() => handleCopy(sub.generatedLicenseCode || '', 'Código de licencia copiado')}
+                                  className="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 cursor-pointer"
+                                  title="Copiar código"
+                                >
+                                  <Copy className="w-3.5 h-3.5" />
+                                </button>
+                                <a
+                                  href={`https://wa.me/${phoneWithCountry}?text=${encodeURIComponent(
+                                    `¡Hola ${sub.customerName}! Tu acceso PRO en CalculaPerú ha sido activado con éxito. Tu código de activación oficial es: ${sub.generatedLicenseCode}. ¡Gracias por tu preferencia!`
+                                  )}`}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="px-3 py-2 rounded-xl bg-emerald-100 hover:bg-emerald-200 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 font-bold text-xs flex items-center gap-1 cursor-pointer transition-colors"
+                                >
+                                  <MessageCircle className="w-3.5 h-3.5" />
+                                  <span>WhatsApp</span>
+                                </a>
+                              </div>
+                            )}
+
+                            {sub.status === 'rejected' && sub.notes && (
+                              <span className="text-xs text-red-500 italic max-w-xs">
+                                Motivo: {sub.notes}
+                              </span>
+                            )}
+                          </div>
+
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+
+            </div>
+          )}
+
+          {/* ================================================================= */}
           {/* TAB 2: LICENSES MANAGEMENT                                        */}
           {/* ================================================================= */}
           {activeTab === 'licenses' && (
@@ -1056,8 +1534,8 @@ export default function AdminPage() {
                     className="px-3 py-2 bg-slate-50 dark:bg-slate-850 border border-slate-200 dark:border-slate-750 rounded-xl text-slate-700 dark:text-slate-300 font-semibold focus:outline-none"
                   >
                     <option value="all">Todos los planes</option>
-                    <option value="yearly">Plan Anual (S/ 199)</option>
-                    <option value="monthly">Plan Mensual (S/ 29)</option>
+                    <option value="yearly">Plan Anual (S/ 149)</option>
+                    <option value="monthly">Plan Mensual (S/ 16)</option>
                   </select>
                 </div>
               </div>
@@ -1768,6 +2246,133 @@ export default function AdminPage() {
                   : grantingUser.isPro
                   ? 'Confirmar Desactivación PRO'
                   : 'Confirmar Activación Directa'}
+              </button>
+            </div>
+
+          </div>
+        </div>
+      )}
+
+      {/* ===================================================================== */}
+      {/* MODAL: SOLICITUD APROBADA - CÓDIGO GENERADO Y ENVIAR POR WHATSAPP     */}
+      {/* ===================================================================== */}
+      {approvedResultModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/75 backdrop-blur-xs animate-in fade-in duration-200">
+          <div className="relative w-full max-w-md bg-white dark:bg-slate-900 rounded-3xl border border-emerald-500/40 shadow-2xl p-6 sm:p-8 space-y-6 text-xs text-center">
+            
+            <div className="w-16 h-16 rounded-full bg-emerald-100 dark:bg-emerald-950/80 border border-emerald-500/40 text-[#00875A] dark:text-[#00C853] flex items-center justify-center mx-auto shadow-sm">
+              <CheckCircle2 className="w-8 h-8" />
+            </div>
+
+            <div className="space-y-1.5">
+              <h3 className="font-bold text-lg text-slate-900 dark:text-white">
+                ¡Solicitud Aprobada con Éxito!
+              </h3>
+              <p className="text-xs text-slate-500">
+                Se ha generado y emitido la licencia PRO para{' '}
+                <strong className="text-slate-900 dark:text-white">{approvedResultModal.subscription.customerName}</strong>
+              </p>
+            </div>
+
+            {/* License Code Display Card */}
+            <div className="p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/80 space-y-2">
+              <span className="text-[10px] uppercase font-bold text-emerald-700 dark:text-emerald-400 tracking-wider block">
+                CÓDIGO OFICIAL EMITIDO:
+              </span>
+              <div className="flex items-center justify-center gap-2">
+                <span className="text-xl font-black font-mono tracking-wider text-slate-900 dark:text-white select-all">
+                  {approvedResultModal.licenseCode}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => handleCopy(approvedResultModal.licenseCode, 'Código copiado al portapapeles')}
+                  className="p-1.5 rounded-lg bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer shadow-xs"
+                >
+                  <Copy className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+
+            <div className="space-y-2.5">
+              <a
+                href={approvedResultModal.whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full py-3 px-4 bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-sm rounded-xl shadow-lg flex items-center justify-center gap-2 cursor-pointer transition-all"
+              >
+                <MessageCircle className="w-4 h-4" />
+                <span>Enviar Código por WhatsApp al Cliente</span>
+              </a>
+
+              <button
+                type="button"
+                onClick={() => setApprovedResultModal(null)}
+                className="w-full py-2.5 text-slate-500 hover:text-slate-900 dark:hover:text-white font-semibold cursor-pointer"
+              >
+                Cerrar y volver a la bandeja
+              </button>
+            </div>
+
+          </div>
+        </div>
+      )}
+
+      {/* ===================================================================== */}
+      {/* MODAL: RECHAZAR SOLICITUD DE PAGO                                     */}
+      {/* ===================================================================== */}
+      {rejectingSub && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/75 backdrop-blur-xs animate-in fade-in duration-200">
+          <div className="relative w-full max-w-md bg-white dark:bg-slate-900 rounded-3xl border border-red-500/30 shadow-2xl p-6 sm:p-8 space-y-5 text-xs">
+            
+            <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+              <div className="flex items-center gap-2 text-red-600">
+                <AlertTriangle className="w-5 h-5" />
+                <h3 className="font-bold text-base text-slate-900 dark:text-white">
+                  Rechazar Solicitud de Pago
+                </h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setRejectingSub(null)}
+                className="text-slate-400 hover:text-slate-700 dark:hover:text-white"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
+              ¿Deseas rechazar la operación <strong className="font-mono text-slate-900 dark:text-white">{rejectingSub.operationCode}</strong> enviada por{' '}
+              <strong>{rejectingSub.customerName}</strong> ({rejectingSub.customerEmail})?
+            </p>
+
+            <div className="space-y-1.5">
+              <label className="font-semibold text-slate-700 dark:text-slate-300">
+                Motivo del rechazo (opcional):
+              </label>
+              <input
+                type="text"
+                value={rejectReason}
+                onChange={e => setRejectReason(e.target.value)}
+                placeholder="Ej. Operación no figura en cuenta, monto incompleto..."
+                className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-850 border border-slate-200 dark:border-slate-750 rounded-xl text-slate-900 dark:text-white outline-none focus:border-red-500"
+              />
+            </div>
+
+            <div className="flex flex-col gap-2 pt-2">
+              <button
+                type="button"
+                onClick={handleConfirmRejectSubscription}
+                disabled={isRejecting}
+                className="w-full py-2.5 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl shadow-md cursor-pointer transition-all disabled:opacity-50"
+              >
+                {isRejecting ? 'Rechazando...' : 'Confirmar Rechazo'}
+              </button>
+              <button
+                type="button"
+                onClick={() => setRejectingSub(null)}
+                className="w-full py-2 text-slate-500 hover:text-slate-900 dark:hover:text-white font-semibold cursor-pointer"
+              >
+                Cancelar
               </button>
             </div>
 

@@ -138,3 +138,41 @@ alter table public.saved_calculations enable row level security;
 create policy "Users can manage own saved calculations"
   on public.saved_calculations for all
   using (auth.uid() = user_id or auth.jwt() ->> 'role' = 'service_role');
+
+-- ============================================================================
+-- 6. TABLA: SOLICITUDES DE SUSCRIPCIÓN PRO (PAGOS YAPE / PLIN EN REVISIÓN)
+-- ============================================================================
+create table if not exists public.subscription_requests (
+  id uuid primary key default uuid_generate_v4(),
+  customer_name text not null,
+  customer_email text not null,
+  customer_phone text not null,
+  plan text not null check (plan in ('monthly', 'yearly')),
+  amount numeric(10, 2) not null,
+  operation_code text not null,
+  coupon_code text,
+  user_id uuid references public.profiles(id) on delete set null,
+  status text not null default 'pending' check (status in ('pending', 'approved', 'rejected')),
+  generated_license_code text,
+  notes text,
+  created_at timestamptz not null default now(),
+  reviewed_at timestamptz,
+  reviewed_by text
+);
+
+create index if not exists idx_subscription_requests_status on public.subscription_requests(status);
+create index if not exists idx_subscription_requests_created_at on public.subscription_requests(created_at desc);
+create index if not exists idx_subscription_requests_email on public.subscription_requests(customer_email);
+create index if not exists idx_subscription_requests_op_code on public.subscription_requests(operation_code);
+
+alter table public.subscription_requests enable row level security;
+
+-- Cualquier usuario puede crear una solicitud de suscripción
+create policy "Anyone can insert subscription requests"
+  on public.subscription_requests for insert
+  with check (true);
+
+-- Solo administradores y service_role pueden ver y gestionar solicitudes
+create policy "Admins and service role can manage subscription requests"
+  on public.subscription_requests for all
+  using (auth.jwt() ->> 'role' = 'service_role');
