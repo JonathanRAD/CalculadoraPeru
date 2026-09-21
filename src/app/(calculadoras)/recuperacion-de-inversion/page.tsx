@@ -144,6 +144,24 @@ export default function RecuperacionDeInversionPage() {
                 </tbody>
               </table>
             </div>
+
+            <div className="rounded-2xl border border-slate-200 dark:border-slate-800 p-4 space-y-2 text-xs text-slate-500 dark:text-slate-400 bg-slate-50/50 dark:bg-slate-900/30">
+              <span className="font-bold text-slate-700 dark:text-slate-300 block">Supuestos y límites financieros del modelo:</span>
+              <ul className="space-y-1 list-disc pl-4">
+                <li>
+                  <strong>Flujos constantes:</strong> El cálculo asume que el flujo neto mensual se mantiene invariable mes a mes, sin considerar estacionalidad ni caídas imprevistas de demanda.
+                </li>
+                <li>
+                  <strong>Sin valor temporal del dinero:</strong> Esta simulación simple no descuenta los flujos futuros mediante tasa de descuento o inflación. Para proyectos de gran envergadura o financiamiento bancario se debe evaluar el Valor Actual Neto (VAN) y la Tasa Interna de Retorno (TIR).
+                </li>
+                <li>
+                  <strong>Sin valor residual del activo:</strong> No computa el valor de rescate, liquidación o reventa que pueda conservar el activo o equipo al finalizar su vida útil.
+                </li>
+                <li>
+                  <strong>Alcance:</strong> Es una guía de orientación rápida para amortización de capital, no una medida universal o concluyente para decisiones de inversión corporativa.
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       }

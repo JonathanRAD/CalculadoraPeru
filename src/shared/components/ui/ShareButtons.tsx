@@ -11,9 +11,14 @@ interface ShareButtonsProps {
 export function ShareButtons({ title, shareText }: ShareButtonsProps) {
   const [copied, setCopied] = useState(false);
 
+  const getCleanUrl = () => {
+    if (typeof window === 'undefined') return '';
+    return `${window.location.origin}${window.location.pathname}`;
+  };
+
   const handleCopy = async () => {
     try {
-      await navigator.clipboard.writeText(window.location.href);
+      await navigator.clipboard.writeText(getCleanUrl());
       setCopied(true);
       setTimeout(() => setCopied(false), 2500);
     } catch {
@@ -23,7 +28,7 @@ export function ShareButtons({ title, shareText }: ShareButtonsProps) {
 
   const handleWhatsApp = () => {
     const text = encodeURIComponent(
-      `📊 *${title} - CalculaPerú*\n\n${shareText}\n\n👉 Realiza o ajusta tu cálculo aquí:\n${window.location.href}`
+      `📊 *${title} - CalculaPerú*\n\n${shareText}\n\n👉 Realiza o ajusta tu cálculo aquí:\n${getCleanUrl()}`
     );
     window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
   };
