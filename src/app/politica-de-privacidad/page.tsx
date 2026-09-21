@@ -63,10 +63,10 @@ export default function PoliticaPrivacidadPage() {
             </p>
             <ul className="list-disc pl-5 space-y-1.5 text-xs text-slate-600 dark:text-slate-400">
               <li>
-                <strong>Enlaces compartidos:</strong> Los botones para compartir herramientas en redes sociales o WhatsApp envían únicamente la dirección web de la calculadora. No incluyen tus montos, salarios ni resultados en la URL ni en parámetros de búsqueda.
+                <strong>Enlaces y navegación web:</strong> La dirección web de las calculadoras y los enlaces copiados al portapapeles mediante el botón &ldquo;Copiar Enlace&rdquo; no contienen parámetros con tus montos, sueldos ni resultados (son URLs limpias como <code>/sueldo-neto</code>). La única ocasión en que un texto incorpora cifras calculadas es cuando el usuario presiona voluntariamente &ldquo;Compartir en WhatsApp&rdquo;, acción que genera un texto preformateado en la aplicación de mensajería con el resumen del cálculo para que el propio usuario decida si lo envía o no a sus contactos.
               </li>
               <li>
-                <strong>Herramientas de analítica web:</strong> Google Analytics y nuestros registros técnicos capturan únicamente vistas de página y términos de búsqueda internos para evaluar el rendimiento técnico. No se envían importes, ingresos ni datos personales a ningún sistema de analítica.
+                <strong>Herramientas de analítica web:</strong> Google Analytics 4 y la telemetría interna del portal registran únicamente la ruta de página visitada (page_path) y términos consultados en el buscador general. En ningún caso transmiten ni procesan cifras remunerativas, importes monetarios ni datos ingresados en los formularios de cálculo.
               </li>
               <li>
                 <strong>Cuentas CalculaPerú PRO:</strong> Si dispones de una cuenta PRO activa, la información de un cálculo o cotización únicamente se almacena en nuestra base de datos protegida (PostgreSQL alojado en Supabase con cifrado en tránsito y en reposo) cuando pulsas voluntariamente el botón <em>&ldquo;Guardar en Mis Cálculos&rdquo;</em>. <strong>No existe guardado automático</strong> en segundo plano.
@@ -122,7 +122,7 @@ export default function PoliticaPrivacidadPage() {
                   <strong>Formulario de contacto (/contacto):</strong> Tu nombre, correo y mensaje son transmitidos de forma segura mediante la API transaccional de Resend para responder directamente a tus dudas operativas o reportes técnicos. No se emplean con fines publicitarios.
                 </li>
                 <li>
-                  <strong>Registro y autenticación PRO (/pro):</strong> Guardamos tu correo electrónico y tu contraseña cifrada mediante algoritmos seguros de derivación de claves (bcrypt con sal) a través de Supabase Auth.
+                  <strong>Registro y autenticación PRO (/pro):</strong> Guardamos tu correo electrónico y tu contraseña cifrada mediante algoritmos seguros de derivación de claves (PBKDF2 con sal criptográfica) para el inicio de sesión.
                 </li>
                 <li>
                   <strong>Lista informativa del Cotizador (/cotizador):</strong> Si decides dejar tu correo para recibir novedades de la herramienta MYPE, el contacto se gestiona mediante Formspree con estricta confidencialidad.
@@ -143,10 +143,10 @@ export default function PoliticaPrivacidadPage() {
                 <strong>Usuarios de la versión gratuita:</strong> Al no registrarse cuentas ni almacenarse cálculos en servidores, no existe información personal retenida susceptible de supresión.
               </li>
               <li>
-                <strong>Eliminación de cálculos guardados (Autogestión PRO):</strong> Puedes eliminar individualmente cualquiera de tus cálculos guardados en cualquier momento desde el panel de perfil de tu cuenta PRO, haciendo clic en el icono de papelera. La eliminación en base de datos es inmediata.
+                <strong>Eliminación de cálculos guardados (Autogestión PRO):</strong> Puedes eliminar individualmente cualquiera de tus cálculos guardados en cualquier momento desde el panel de perfil de tu cuenta PRO, haciendo clic en el icono de papelera. La eliminación en base de datos es inmediata a través del servicio de cálculos.
               </li>
               <li>
-                <strong>Eliminación completa de cuenta y datos:</strong> Si deseas dar de baja definitiva tu cuenta de usuario PRO y borrar todos tus registros asociados, puedes solicitarlo enviando un mensaje a través de nuestro <Link href="/contacto" className="text-emerald-700 dark:text-emerald-400 underline">formulario de contacto</Link> o vía WhatsApp de soporte. Atendemos y procesamos las solicitudes de supresión en un plazo máximo de 48 horas hábiles.
+                <strong>Eliminación completa de cuenta y datos asociados:</strong> Si deseas dar de baja definitiva tu cuenta de usuario PRO, puedes solicitarlo enviando un mensaje a través de nuestro <Link href="/contacto" className="text-emerald-700 dark:text-emerald-400 underline">formulario de contacto</Link> o vía WhatsApp de soporte indicando tu correo registrado. Al eliminar el perfil de usuario en el servidor, la base de datos ejecuta el borrado en cascada (ON DELETE CASCADE) de la totalidad de sus cálculos guardados, desvinculando de forma irreversible cualquier información personal.
               </li>
             </ul>
           </section>

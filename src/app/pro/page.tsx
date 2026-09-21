@@ -67,8 +67,8 @@ const FAQ_LIST: FaqItem[] = [
     a: 'Las 25 calculadoras de sueldo, tributos, negocios y finanzas son y seguirán siendo totalmente abiertas, gratuitas e ilimitadas para todo el público sin necesidad de registrarse. La suscripción PRO es un complemento opcional para quienes necesitan emitir boletas en PDF sin marcas de agua, cálculo de indemnizaciones por despido y guardar su historial en la nube.',
   },
   {
-    q: '¿Cómo solicito asistencia técnica o qué garantía de servicio existe?',
-    a: 'Puedes escribirnos directamente a través de nuestro formulario en /contacto o vía WhatsApp (+51 913 544 715). Si tras activar tu membresía PRO experimentas dificultades técnicas no resueltas para emitir tus documentos o acceder a tu historial durante los primeros 7 días, revisamos tu caso para asistirte de inmediato o reembolsar tu importe.',
+    q: '¿Cómo solicito asistencia técnica o soporte para mi cuenta PRO?',
+    a: 'Puedes comunicarte directamente con el equipo de soporte enviando un mensaje a través de nuestro formulario en /contacto o vía WhatsApp (+51 913 544 715) indicando tu correo registrado y código de operación para atender cualquier incidencia con tus accesos, historial o emisión de reportes.',
   },
 ];
 

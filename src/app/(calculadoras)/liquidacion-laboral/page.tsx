@@ -464,7 +464,7 @@ ${isDismissal ? `Indemnización por Despido: ${formatCurrency(result.arbitraryDi
                     ⭐
                   </span>
                   <span className="font-bold text-xs text-emerald-950 dark:text-emerald-200 uppercase tracking-wider">
-                    Liquidación Formal Conforme Ley
+                    Reporte Formal de Liquidación Laboral
                   </span>
                 </div>
                 <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-emerald-200/70 dark:bg-emerald-900/80 text-emerald-900 dark:text-emerald-200">

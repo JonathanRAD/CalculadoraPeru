@@ -30,19 +30,19 @@ export default function RecuperacionDeInversionPage() {
   const faqs = [
     {
       question: '¿Qué es el periodo de Payback o tiempo de recuperación?',
-      answer: 'Es el plazo de tiempo (medido en meses o años) necesario para que el flujo de efectivo neto generado por un proyecto o adquisición cubra exactamente el 100% del capital invertido inicialmente. A partir de ese momento, la inversión se considera amortizada y todos los ingresos futuros constituyen utilidad neta pura.',
+      answer: 'Es el plazo de tiempo (en meses o años) que tarda el flujo de caja neto generado en cubrir el 100% del capital invertido inicialmente. En nuestro ejemplo (S/ 15,000 de inversión y S/ 1,200 de flujo mensual), el payback es de 12.5 meses. Antes de ese mes, el capital aún se está amortizando; a partir del mes 13, todo flujo adicional representa utilidad neta sobre el capital.',
     },
     {
-      question: '¿Cómo se calcula el ROI (Retorno de Inversión) anualizado?',
-      answer: 'El ROI porcentual anual se calcula dividiendo la ganancia neta acumulada en 12 meses entre el monto total invertido al inicio: ROI = (Flujo Mensual × 12) ÷ Inversión Inicial × 100. Un ROI anual superior al 20% suele considerarse muy atractivo en el mercado empresarial peruano.',
+      question: '¿Por qué el ROI del Año 1 es -4.00% si el proyecto genera un flujo anual de 96.00%?',
+      answer: 'Porque miden dos conceptos financieros distintos: la Tasa de Flujo Anual (96%) compara los ingresos acumulados del año (S/ 14,400) contra la inversión (S/ 15,000), indicando que ya recuperaste el 96% de lo desembolsado. En cambio, el ROI financiero clásico mide la ganancia neta por encima del capital: ((Flujos - Inversión) / Inversión). Como en 12 meses recaudaste S/ 14,400 y tu costo fue S/ 15,000, aún tienes un saldo negativo de S/ 600 (-4.00%). El ROI pasa a terreno positivo en el mes 12.5 (payback) y alcanza rentabilidad neta acumulada en los meses posteriores.',
     },
     {
-      question: '¿Qué costos deben incluirse en la inversión inicial?',
-      answer: 'Debes sumar todos los desembolsos requeridos para poner en marcha el activo o proyecto: costo de compra de maquinarias o equipos, flete de transporte, instalación eléctrica o técnica, acondicionamiento de local, licencias municipales y el capital de trabajo inicial necesario para operar los primeros meses.',
+      question: '¿Qué conceptos deben incluirse en la inversión inicial?',
+      answer: 'Debes sumar todos los desembolsos requeridos para poner en marcha el activo o proyecto: costo de compra de maquinarias o equipos, flete de transporte, instalación técnica, acondicionamiento de local, licencias municipales y el capital de trabajo inicial necesario para operar.',
     },
     {
-      question: '¿Por qué el flujo mensual debe ser "ganancia neta" y no "ingreso bruto"?',
-      answer: 'Muchos emprendedores cometen el error de calcular el retorno usando la facturación bruta total. El retorno solo se financia con el flujo de caja líquido remanente después de haber pagado insumos, sueldos, servicios, mantenimiento y los tributos correspondientes a la SUNAT.',
+      question: '¿Por qué debe ingresarse el "flujo de caja neto" y no las ventas brutas?',
+      answer: 'El retorno de capital solo se financia con el dinero líquido que efectivamente queda libre en caja tras descontar el costo de mercaderías/insumos, salarios, alquiler, servicios operativos e impuestos a la SUNAT. Utilizar la facturación bruta distorsionaría el tiempo real de amortización.',
     },
   ];
 
@@ -54,35 +54,45 @@ export default function RecuperacionDeInversionPage() {
         <div className="space-y-6">
           <div>
             <h2 className="text-lg font-bold text-slate-900 dark:text-white mb-2">
-              ¿Cómo evaluar el Retorno de Inversión (ROI) y Payback en el Perú?
+              ¿Cómo evaluar el Retorno de Inversión (ROI) y Payback en proyectos y MYPES?
             </h2>
             <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
-              Evaluar con rigor financiero la <strong>Recuperación de Inversión</strong> (Payback) y el <strong>ROI</strong> permite a pequeños y medianos empresarios determinar si la compra de una máquina, la remodelación de un local comercial o el lanzamiento de una nueva línea de negocio es financieramente viable y en cuánto tiempo recuperarán su capital.
+              Al evaluar la compra de maquinaria, la apertura de una sucursal o una mejora operativa, es fundamental no confundir la <strong>velocidad de recuperación de la caja</strong> con el <strong>retorno neto sobre la inversión</strong>.
             </p>
           </div>
 
           <div className="rounded-2xl bg-slate-50 dark:bg-slate-900 p-5 border border-slate-200 dark:border-slate-800 space-y-3 text-xs leading-relaxed">
             <h3 className="font-bold text-sm text-slate-900 dark:text-white">
-              1. Fórmulas de Evaluación Financiera
+              1. Fórmulas Financieras y Diferenciación de Conceptos
             </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
-              <div className="space-y-1.5 p-3.5 bg-white dark:bg-slate-950 rounded-xl border border-slate-200 dark:border-slate-800">
-                <span className="font-bold text-emerald-800 dark:text-emerald-400 block">• Periodo de Recuperación (Payback):</span>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-1">
+              <div className="space-y-1.5 p-3 bg-white dark:bg-slate-950 rounded-xl border border-slate-200 dark:border-slate-800">
+                <span className="font-bold text-emerald-800 dark:text-emerald-400 block">• Periodo de Payback:</span>
                 <p className="text-slate-600 dark:text-slate-300">
-                  Meses requeridos para amortizar el capital invertido al 100%.
+                  Meses para amortizar el 100% del desembolso inicial.
                 </p>
                 <div className="font-mono text-[11px] text-slate-800 dark:text-slate-200 pt-1">
-                  Payback (meses) = Inversión Inicial ÷ Ganancia Neta Mensual
+                  Payback = Inversión ÷ Flujo Mensual
                 </div>
               </div>
 
-              <div className="space-y-1.5 p-3.5 bg-white dark:bg-slate-950 rounded-xl border border-slate-200 dark:border-slate-800">
-                <span className="font-bold text-sky-800 dark:text-sky-400 block">• Retorno de Inversión Anual (ROI):</span>
+              <div className="space-y-1.5 p-3 bg-white dark:bg-slate-950 rounded-xl border border-slate-200 dark:border-slate-800">
+                <span className="font-bold text-sky-800 dark:text-sky-400 block">• Rendimiento del Flujo Anual:</span>
                 <p className="text-slate-600 dark:text-slate-300">
-                  Rendimiento porcentual de la inversión a lo largo de un año calendario.
+                  Porcentaje del capital recuperado vía flujos en 12 meses.
                 </p>
                 <div className="font-mono text-[11px] text-slate-800 dark:text-slate-200 pt-1">
-                  ROI % = ((Ganancia Mensual × 12) ÷ Inversión Inicial) × 100
+                  Tasa Flujo = ((Flujo × 12) ÷ Inversión) × 100
+                </div>
+              </div>
+
+              <div className="space-y-1.5 p-3 bg-white dark:bg-slate-950 rounded-xl border border-slate-200 dark:border-slate-800">
+                <span className="font-bold text-amber-800 dark:text-amber-400 block">• Retorno Neto Año 1 (ROI):</span>
+                <p className="text-slate-600 dark:text-slate-300">
+                  Ganancia neta por encima de la inversión al mes 12.
+                </p>
+                <div className="font-mono text-[11px] text-slate-800 dark:text-slate-200 pt-1">
+                  ROI = ((Flujo 12m - Inversión) ÷ Inversión) × 100
                 </div>
               </div>
             </div>
@@ -90,10 +100,10 @@ export default function RecuperacionDeInversionPage() {
 
           <div className="space-y-3">
             <h3 className="font-bold text-sm text-slate-900 dark:text-white">
-              2. Caso práctico (Horno industrial para panadería en Arequipa)
+              2. Caso práctico numérico (Horno industrial para panadería en Arequipa)
             </h3>
             <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-              Una panadería invierte S/ 15,000.00 en un nuevo horno rotatorio con el cual proyecta un incremento en su ganancia neta mensual de S/ 1,200.00 (después de deducir harina, gas e impuestos):
+              Una panadería invierte <strong>S/ 15,000.00</strong> en un nuevo horno rotatorio con el cual genera un flujo de caja neto mensual de <strong>S/ 1,200.00</strong> (ingresos adicionales menos insumos, energía y tributos):
             </p>
 
             <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800">
@@ -101,35 +111,35 @@ export default function RecuperacionDeInversionPage() {
                 <thead className="bg-slate-100 dark:bg-slate-800/80 font-bold text-slate-900 dark:text-white">
                   <tr>
                     <th className="p-2.5">Métrica Financiera</th>
-                    <th className="p-2.5">Valor Proyectado</th>
-                    <th className="p-2.5">Interpretación Práctica</th>
+                    <th className="p-2.5">Valor Numérico</th>
+                    <th className="p-2.5">Interpretación Financiera</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                   <tr>
                     <td className="p-2.5 font-medium">Inversión Inicial Total</td>
                     <td className="p-2.5 font-mono font-bold text-slate-900 dark:text-white">S/ 15,000.00</td>
-                    <td className="p-2.5 text-slate-600 dark:text-slate-300">Costo del equipo e instalación</td>
+                    <td className="p-2.5 text-slate-600 dark:text-slate-300">Capital desembolsado en equipamiento e instalación</td>
                   </tr>
                   <tr>
-                    <td className="p-2.5 font-medium">Ganancia Neta Mensual</td>
+                    <td className="p-2.5 font-medium">Flujo de Caja Neto Mensual</td>
                     <td className="p-2.5 font-mono font-semibold text-emerald-700 dark:text-emerald-400">S/ 1,200.00</td>
-                    <td className="p-2.5 text-slate-600 dark:text-slate-300">Flujo de caja libre mensual adicional</td>
+                    <td className="p-2.5 text-slate-600 dark:text-slate-300">Excedente operativo mensual disponible para amortizar</td>
                   </tr>
                   <tr className="bg-emerald-50/60 dark:bg-emerald-950/30">
                     <td className="p-2.5 font-bold text-emerald-950 dark:text-emerald-300">Tiempo de Recuperación (Payback)</td>
                     <td className="p-2.5 font-mono font-bold text-emerald-800 dark:text-emerald-400">12.5 meses</td>
-                    <td className="p-2.5 font-bold text-emerald-800 dark:text-emerald-400">Recupera la inversión en ~1 año</td>
+                    <td className="p-2.5 font-bold text-emerald-800 dark:text-emerald-400">Punto de equilibrio exacto (S/ 15,000 ÷ S/ 1,200)</td>
                   </tr>
                   <tr>
                     <td className="p-2.5 font-medium">Rendimiento del Flujo Anual</td>
                     <td className="p-2.5 font-mono font-semibold text-sky-700 dark:text-sky-400">96.00% anual</td>
-                    <td className="p-2.5 text-slate-600 dark:text-slate-300">Flujo anual / Capital (S/ 14,400 / S/ 15,000)</td>
+                    <td className="p-2.5 text-slate-600 dark:text-slate-300">En 12 meses ingresan S/ 14,400 (el 96% de la inversión)</td>
                   </tr>
                   <tr>
                     <td className="p-2.5 font-medium">Retorno Neto al Año 1 (ROI)</td>
                     <td className="p-2.5 font-mono font-semibold text-amber-700 dark:text-amber-400">-4.00%</td>
-                    <td className="p-2.5 text-slate-600 dark:text-slate-300">Faltan S/ 600 (0.5 meses) para cubrir la inversión inicial</td>
+                    <td className="p-2.5 text-slate-600 dark:text-slate-300">Al mes 12 faltan S/ 600 para empatar; el ROI es positivo desde el mes 13 (+4%)</td>
                   </tr>
                 </tbody>
               </table>
@@ -162,11 +172,11 @@ export default function RecuperacionDeInversionPage() {
 
           <InputNumber
             id="monthlyNetProfit"
-            label="Ganancia neta promedio estimada al mes"
+            label="Flujo de caja neto mensual generado"
             prefix="S/"
             value={form.monthlyNetProfit}
             onChange={(monthlyNetProfit) => setForm({ ...form, monthlyNetProfit })}
-            helpText="Utilidad líquida mensual libre generada"
+            helpText="Excedente libre mensual (ingresos menos costos operativos) destinado a recuperar el capital"
             placeholder="1200.00"
             required
           />

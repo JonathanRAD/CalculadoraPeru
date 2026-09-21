@@ -164,10 +164,10 @@ export function SettlementReportModal({
             </div>
             <div>
               <h3 className="text-sm sm:text-base font-bold text-slate-900 dark:text-white">
-                Liquidación Formal Conforme Ley (PDF)
+                Reporte Formal de Liquidación Laboral (PDF)
               </h3>
               <p className="text-[11px] text-slate-500 dark:text-slate-400">
-                Estructura formal con desglose de CTS, gratificaciones, vacaciones e indemnización
+                Estructura formal con desglose referencial de CTS, gratificaciones, vacaciones e indemnización
               </p>
             </div>
           </div>

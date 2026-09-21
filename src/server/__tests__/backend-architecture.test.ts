@@ -112,4 +112,40 @@ describe('Backend Clean Architecture - Validators & Services', () => {
       expect(secondRedeem.message).toContain('ya ha sido utilizado');
     });
   });
+
+  describe('Saved Calculations Deletion (ARCO / Privacidad)', () => {
+    it('debe permitir guardar, consultar y eliminar cálculos por id y usuario propietario', async () => {
+      const { savedCalculationRepository } = await import('../repositories/saved_calculation.repository');
+      const testUserId = 'test-user-arco-1';
+
+      // 1. Guardar cálculo
+      const saved = await savedCalculationRepository.save({
+        userId: testUserId,
+        calculatorType: 'sueldo-neto',
+        title: 'Sueldo Febrero 2026',
+        totalAmount: 2676.92,
+        data: { grossSalary: 3113, netSalary: 2676.92 },
+      });
+
+      expect(saved.id).toBeDefined();
+      expect(saved.userId).toBe(testUserId);
+
+      // 2. Verificar que existe
+      const listBefore = await savedCalculationRepository.findByUserId(testUserId);
+      expect(listBefore.some((c) => c.id === saved.id)).toBe(true);
+
+      // 3. Intento de eliminación por otro usuario (no debe borrar el cálculo del dueño)
+      await savedCalculationRepository.deleteById(saved.id, 'otro-usuario-intruso');
+      const listAfterIntruder = await savedCalculationRepository.findByUserId(testUserId);
+      expect(listAfterIntruder.some((c) => c.id === saved.id)).toBe(true);
+
+      // 4. Eliminación legítima por el propio usuario
+      const deleted = await savedCalculationRepository.deleteById(saved.id, testUserId);
+      expect(deleted).toBe(true);
+
+      // 5. Verificar que el cálculo ya no existe en el repositorio
+      const listAfterDelete = await savedCalculationRepository.findByUserId(testUserId);
+      expect(listAfterDelete.some((c) => c.id === saved.id)).toBe(false);
+    });
+  });
 });
