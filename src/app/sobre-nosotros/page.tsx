@@ -52,7 +52,10 @@ export default function SobreNosotrosPage() {
               En el Perú existen más de <strong>3.5 millones de micro y pequeñas empresas (MYPES)</strong>, además de millones de trabajadores en planilla y profesionales independientes. Sin embargo, la mayoría de herramientas financieras en internet están pensadas para otros países o utilizan fórmulas desactualizadas.
             </p>
             <p>
-              <strong>CalculaPerú</strong> nació con un objetivo simple y claro: <em>democratizar el acceso a cálculos rápidos, transparentes y 100% exactos bajo la legislación peruana vigente</em> (tasas de SUNAT, UIT actualizada, tablas de AFP/ONP, normas del Ministerio de Trabajo y tarifas de Osinergmin).
+              <strong>CalculaPerú</strong> nació con un objetivo simple y claro: <em>democratizar el acceso a cálculos rápidos, transparentes y rigurosamente fundamentados en la normativa peruana vigente</em> (tasas de SUNAT, UIT actualizada, tablas de AFP/ONP publicadas por la SBS, decretos del Ministerio de Trabajo y tarifas de Osinergmin).
+            </p>
+            <p className="text-xs text-slate-500 dark:text-slate-400">
+              Desarrollado y mantenido de forma independiente por <strong>Jonathan Rujel</strong>, el portal ofrece simuladores abiertos con desgloses paso a paso para que cada usuario comprenda el origen de sus descuentos e impuestos sin depender de cajas negras. Los cálculos tienen carácter informativo y referencial, diseñados para empoderar decisiones cotidianas con parámetros oficiales verificables.
             </p>
           </div>
 

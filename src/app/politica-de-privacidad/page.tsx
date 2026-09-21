@@ -100,11 +100,24 @@ export default function PoliticaPrivacidadPage() {
 
           <section className="space-y-2">
             <h2 className="text-lg font-bold text-slate-900 dark:text-white">
-              4. Recopilación de Correos en Formularios
+              4. Formularios, Cuentas y Datos Recopilados
             </h2>
-            <p>
-              Cuando te registras voluntariamente para acceder a la lista de espera del Cotizador de MYPES, recopilamos únicamente tu dirección de correo electrónico mediante servicios seguros de terceros (como Formspree). Tu correo se utiliza exclusivamente para notificarte sobre el lanzamiento de la herramienta y nunca será vendido, cedido ni transferido a terceros para fines de spam.
-            </p>
+            <div className="space-y-2 text-xs sm:text-sm text-slate-600 dark:text-slate-400">
+              <p>
+                CalculaPerú recopila datos de carácter personal únicamente cuando el usuario decide interactuar de forma voluntaria con las siguientes funciones:
+              </p>
+              <ul className="list-disc pl-5 space-y-1">
+                <li>
+                  <strong>Formulario de contacto y sugerencias (/contacto):</strong> Recopilamos tu nombre, correo electrónico, motivo y mensaje para responder a tus consultas operativas o editoriales. La entrega se realiza mediante el servicio transaccional seguro de Resend con el único fin de atender tu comunicación.
+                </li>
+                <li>
+                  <strong>Demo y lista de novedades del Cotizador (/cotizador):</strong> Si te suscribes voluntariamente para recibir avisos sobre la versión extendida para MYPES, registramos tu correo mediante Formspree sin transferirlo a terceros para publicidad no deseada.
+                </li>
+                <li>
+                  <strong>Cuentas y licencias PRO (/pro):</strong> Al registrar una cuenta de usuario, guardamos tu correo y una clave cifrada de forma segura (mediante algoritmos criptográficos robustos de hash) para gestionar el acceso multi-dispositivo y la trazabilidad de suscripciones activadas.
+                </li>
+              </ul>
+            </div>
           </section>
 
           <section className="space-y-2">

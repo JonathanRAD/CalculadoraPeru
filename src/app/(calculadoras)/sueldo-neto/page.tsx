@@ -106,7 +106,7 @@ Sueldo Neto en Cuenta: ${formatCurrency(result.netSalary)}`;
               <div className="space-y-1.5">
                 <span className="font-bold text-red-700 dark:text-red-400 block">• Deducciones de Ley al Trabajador:</span>
                 <p className="text-slate-600 dark:text-slate-300">
-                  Descuento previsional predeterminado: 13% para ONP o ~11.39% a 12.80% en AFP (fondo obligatorio + seguro + comisión), sumado a la retención de Impuesto a la Renta de Quinta Categoría de SUNAT si supera el umbral de 7 UIT.
+                  Descuento previsional predeterminado: 13.00% para ONP o entre 11.37% (esquema mixto / saldo) y 12.84% a 13.06% en AFP bajo esquema de flujo (10% fondo obligatorio + 1.37% prima seguro + comisión de administradora), sumado a la retención de Impuesto a la Renta de Quinta Categoría de SUNAT si la proyección anual supera las 7 UIT vigentes.
                 </p>
               </div>
             </div>
@@ -117,10 +117,10 @@ Sueldo Neto en Cuenta: ${formatCurrency(result.netSalary)}`;
 
           <div className="space-y-3">
             <h3 className="font-bold text-sm text-slate-900 dark:text-white">
-              2. Caso práctico con cifras reales (Ejemplo de remuneración)
+              2. Caso práctico con cifras reales (Ejemplo de remuneración 2026)
             </h3>
             <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-              Imaginemos un trabajador contratado a tiempo completo con un sueldo bruto básico de <strong>S/ 3,000.00</strong> mensuales, con un hijo menor (recibe Asignación Familiar) y afiliado a AFP Integra:
+              Imaginemos un trabajador del régimen privado general con un sueldo bruto básico de <strong>S/ 3,000.00</strong> mensuales, con carga familiar acreditada (recibe Asignación Familiar del 10% de la RMV) y afiliado a AFP Integra bajo comisión por flujo (12.92% total):
             </p>
             <div className="overflow-x-auto">
               <table className="w-full text-xs text-left border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden">
@@ -128,43 +128,46 @@ Sueldo Neto en Cuenta: ${formatCurrency(result.netSalary)}`;
                   <tr>
                     <th className="p-2.5">Concepto en Boleta</th>
                     <th className="p-2.5">Monto (PEN)</th>
-                    <th className="p-2.5">Naturaleza</th>
+                    <th className="p-2.5">Naturaleza / Base Legal</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                   <tr>
                     <td className="p-2.5">Sueldo Básico Contratado</td>
                     <td className="p-2.5 font-mono">S/ 3,000.00</td>
-                    <td className="p-2.5 text-emerald-700 dark:text-emerald-400 font-semibold">Haber computable</td>
+                    <td className="p-2.5 text-emerald-700 dark:text-emerald-400 font-semibold">Haber computable principal</td>
                   </tr>
                   <tr>
-                    <td className="p-2.5">Asignación Familiar (Ley 25129)</td>
-                    <td className="p-2.5 font-mono">S/ 102.50</td>
-                    <td className="p-2.5 text-emerald-700 dark:text-emerald-400 font-semibold">Beneficio social de ley</td>
+                    <td className="p-2.5">Asignación Familiar (Ley 25129 - 10% RMV S/ 1,130)</td>
+                    <td className="p-2.5 font-mono">S/ 113.00</td>
+                    <td className="p-2.5 text-emerald-700 dark:text-emerald-400 font-semibold">Beneficio social remunerativo</td>
                   </tr>
                   <tr className="bg-slate-50/60 dark:bg-slate-900/60 font-bold">
                     <td className="p-2.5">Total Remuneración Bruta Afecta</td>
-                    <td className="p-2.5 font-mono">S/ 3,102.50</td>
-                    <td className="p-2.5">Base de cálculo</td>
+                    <td className="p-2.5 font-mono">S/ 3,113.00</td>
+                    <td className="p-2.5">Base imponible mensual</td>
                   </tr>
                   <tr>
-                    <td className="p-2.5">Aporte Obligatorio AFP (10%) + Prima Seguro (1.39%)</td>
-                    <td className="p-2.5 font-mono text-red-600 dark:text-red-400">- S/ 353.37</td>
-                    <td className="p-2.5 text-slate-500">Descuento previsional</td>
+                    <td className="p-2.5">Descuento Previsional AFP Integra (Flujo: 12.92%)</td>
+                    <td className="p-2.5 font-mono text-red-600 dark:text-red-400">- S/ 402.20</td>
+                    <td className="p-2.5 text-slate-500">10% fondo + 1.37% seguro + 1.55% comisión</td>
                   </tr>
                   <tr>
-                    <td className="p-2.5">Retención Proyectada 5ta Categoría SUNAT</td>
-                    <td className="p-2.5 font-mono text-red-600 dark:text-red-400">- S/ 47.50</td>
-                    <td className="p-2.5 text-slate-500">Tributo a la renta</td>
+                    <td className="p-2.5">Retención Proyectada 5ta Categoría SUNAT (Tramo 1: 8%)</td>
+                    <td className="p-2.5 font-mono text-red-600 dark:text-red-400">- S/ 33.88</td>
+                    <td className="p-2.5 text-slate-500">Proyección anual (14 sueldos) menos 7 UIT</td>
                   </tr>
                   <tr className="bg-emerald-50 dark:bg-emerald-950 font-bold text-slate-900 dark:text-white">
                     <td className="p-2.5 text-emerald-800 dark:text-emerald-300">Sueldo Neto Líquido a Depositar</td>
-                    <td className="p-2.5 font-mono text-emerald-800 dark:text-emerald-300 text-sm">S/ 2,701.63</td>
-                    <td className="p-2.5 text-emerald-800 dark:text-emerald-300">Ingreso efectivo en cuenta</td>
+                    <td className="p-2.5 font-mono text-emerald-800 dark:text-emerald-300 text-sm">S/ 2,676.92</td>
+                    <td className="p-2.5 text-emerald-800 dark:text-emerald-300">Ingreso efectivo mensual en cuenta</td>
                   </tr>
                 </tbody>
               </table>
             </div>
+            <p className="text-[11px] text-slate-500 dark:text-slate-400 italic">
+              * Nota: Si el afiliado estuviese en comisión mixta (saldo), la tasa en planilla sería 11.37% (-S/ 353.95), resultando en un neto de S/ 2,725.17. El empleador aporta adicionalmente EsSalud (9% = S/ 280.17) sin descontarlo del trabajador.
+            </p>
           </div>
 
           <div className="rounded-2xl border border-slate-200 dark:border-slate-800 p-4 space-y-2 text-xs text-slate-500 dark:text-slate-400 bg-slate-50/50 dark:bg-slate-900/30">
@@ -182,9 +185,9 @@ Sueldo Neto en Cuenta: ${formatCurrency(result.netSalary)}`;
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         
         {/* Form Column */}
-        <div className="lg:col-span-7 rounded-3xl border-2 border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 sm:p-8 shadow-md shadow-slate-900/5 space-y-6">
+        <div className="lg:col-span-7 rounded-3xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 sm:p-8 shadow-sm space-y-6">
           <div className="flex items-center gap-2.5 border-b border-slate-100 dark:border-slate-800 pb-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-300">
+            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-50 text-[#08734F] dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/60">
               <Briefcase className="h-4.5 w-4.5" />
             </div>
             <h2 className="text-lg font-bold text-slate-900 dark:text-white">Datos de tu Sueldo en Planilla</h2>
@@ -355,31 +358,32 @@ Sueldo Neto en Cuenta: ${formatCurrency(result.netSalary)}`;
           </div>
         </div>
 
-        {/* Results Column */}
+        {/* Results Column — Proposal A (Resumen de Boleta de Pago) */}
         <div className="lg:col-span-5 flex flex-col gap-4">
-          <div className="rounded-3xl border-2 border-blue-300 dark:border-blue-800/80 bg-blue-50/70 dark:bg-slate-900 p-6 sm:p-7 shadow-md shadow-blue-900/5">
+          <div className="rounded-3xl border-2 border-emerald-200/90 dark:border-emerald-800/80 bg-white dark:bg-slate-900 p-6 sm:p-7 shadow-sm">
             <div className="flex items-center justify-between mb-4">
-              <span className="text-xs font-bold uppercase tracking-wider text-blue-900 dark:text-blue-300">
-                Sueldo Neto a Recibir
+              <span className="text-xs font-bold uppercase tracking-wider text-emerald-950 dark:text-emerald-300 flex items-center gap-1.5">
+                <FileText className="h-4 w-4 text-[#08734F] dark:text-emerald-400" />
+                Resumen de Boleta de Pago
               </span>
-              <span className="rounded-full bg-blue-700 dark:bg-blue-600 px-3 py-0.5 text-xs font-bold text-white shadow-xs">
-                {showPayrollDetails ? 'Personalizado' : 'Estimación rápida'}
+              <span className="rounded-full bg-emerald-50 dark:bg-emerald-950/70 border border-emerald-200 dark:border-emerald-800 px-2.5 py-0.5 text-[11px] font-bold text-[#08734F] dark:text-emerald-300">
+                {showPayrollDetails ? 'Personalizado' : 'Estimación oficial'}
               </span>
             </div>
 
-            {/* Big Main Result Box */}
-            <div className="rounded-2xl bg-white dark:bg-slate-950 border-2 border-blue-200 dark:border-blue-800/60 p-6 shadow-sm text-center mb-5 overflow-hidden">
-              <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">
-                Sueldo Neto Mensual
+            {/* Big Main Result Box (Non-truncated tabular numerals) */}
+            <div className="rounded-2xl bg-emerald-50/50 dark:bg-slate-950 border border-emerald-100 dark:border-emerald-900/60 p-5 sm:p-6 text-center mb-5">
+              <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                Sueldo Neto Líquido en Cuenta
               </span>
               <div
                 title={formatCurrency(result.netSalary)}
-                className="text-3xl sm:text-4xl lg:text-5xl font-black text-blue-900 dark:text-blue-400 mt-1 font-mono tracking-tight truncate max-w-full px-2"
+                className="text-3xl sm:text-4xl lg:text-[2.6rem] font-black text-[#08734F] dark:text-emerald-400 mt-1.5 font-mono tracking-tight tabular-nums break-words leading-tight"
               >
                 {formatCurrency(result.netSalary)}
               </div>
-              <div className="mt-1.5 text-xs text-slate-600 dark:text-slate-400 font-semibold truncate">
-                Neto estimado luego de los conceptos ingresados
+              <div className="mt-1.5 text-xs text-slate-600 dark:text-slate-400 font-semibold">
+                Importe a percibir luego de deducciones de ley
               </div>
             </div>
 
@@ -392,7 +396,7 @@ Sueldo Neto en Cuenta: ${formatCurrency(result.netSalary)}`;
                 subValue={`Tasa: ${formatPercent(result.pensionRate)}`}
               />
               <ResultMetricCard
-                label="5ta Categoría (SUNAT)"
+                label="5ta Categoría SUNAT"
                 value={formatCurrency(result.fifthCategoryTaxMonthly)}
                 type="neutral"
                 subValue={fifthCategoryMode === 'manual'
@@ -400,75 +404,87 @@ Sueldo Neto en Cuenta: ${formatCurrency(result.netSalary)}`;
                   : fifthCategoryMode === 'none'
                     ? 'No aplicada'
                     : result.fifthCategoryTaxMonthly > 0
-                      ? 'Proyección simplificada'
+                      ? 'Proyección anual'
                       : 'Sin retención estimada'}
               />
             </div>
 
-            {/* Breakdown Detail */}
-            <div className="rounded-2xl bg-white/90 dark:bg-slate-950 p-4 text-xs text-slate-700 dark:text-slate-300 space-y-2 mb-5 border border-blue-200/80 dark:border-slate-800 shadow-2xs">
+            {/* Breakdown Detail Table */}
+            <div className="rounded-2xl bg-slate-50 dark:bg-slate-950 p-4 text-xs text-slate-700 dark:text-slate-300 space-y-2 mb-5 border border-slate-200 dark:border-slate-800">
               <div className="flex justify-between font-medium">
-                <span>Sueldo básico:</span>
-                <span className="font-bold text-slate-900 dark:text-white">{formatCurrency(grossSalary)}</span>
+                <span>Sueldo básico mensual:</span>
+                <span className="font-bold text-slate-900 dark:text-white font-mono">{formatCurrency(grossSalary)}</span>
               </div>
               {hasDependents && (
                 <div className="flex justify-between font-medium text-emerald-700 dark:text-emerald-400">
-                  <span>Asignación Familiar:</span>
-                  <span className="font-bold">+{formatCurrency(result.familyAllowance)}</span>
+                  <span>Asignación Familiar (10% RMV):</span>
+                  <span className="font-bold font-mono">+{formatCurrency(result.familyAllowance)}</span>
                 </div>
               )}
               {result.variableRemuneration > 0 && (
-                <div className="flex justify-between font-medium text-blue-700 dark:text-blue-400">
-                  <span>Ingresos variables:</span>
-                  <span className="font-bold">+{formatCurrency(result.variableRemuneration)}</span>
+                <div className="flex justify-between font-medium text-emerald-700 dark:text-emerald-400">
+                  <span>Ingresos variables (horas extra/bonos):</span>
+                  <span className="font-bold font-mono">+{formatCurrency(result.variableRemuneration)}</span>
                 </div>
               )}
               {result.nonRemunerativeIncome > 0 && (
                 <div className="flex justify-between font-medium text-emerald-700 dark:text-emerald-400">
-                  <span>Ingresos no remunerativos:</span>
-                  <span className="font-bold">+{formatCurrency(result.nonRemunerativeIncome)}</span>
+                  <span>Ingresos no remunerativos (movilidad):</span>
+                  <span className="font-bold font-mono">+{formatCurrency(result.nonRemunerativeIncome)}</span>
                 </div>
               )}
-              <div className="flex justify-between font-medium text-slate-500 dark:text-slate-400">
-                <span>Base afecta a aportes:</span>
-                <span className="font-semibold">{formatCurrency(result.pensionableIncome)}</span>
-              </div>
-              <div className="flex justify-between border-t border-slate-100 pt-2 font-medium dark:border-slate-800">
-                <span>Total antes de descuentos:</span>
-                <span className="font-bold text-slate-900 dark:text-white">{formatCurrency(result.totalGrossIncome)}</span>
+              <div className="flex justify-between font-medium text-slate-500 dark:text-slate-400 pt-1 border-t border-slate-200 dark:border-slate-800">
+                <span>Total remuneración bruta afecta:</span>
+                <span className="font-bold font-mono text-slate-900 dark:text-white">{formatCurrency(result.totalGrossIncome)}</span>
               </div>
               <div className="flex justify-between font-medium text-rose-700 dark:text-rose-400">
-                <span>Descuentos totales:</span>
-                <span className="font-bold">−{formatCurrency(result.totalDeductions)}</span>
+                <span>Descuento previsional ({pensionSystem === 'onp' ? 'ONP' : 'AFP'}):</span>
+                <span className="font-bold font-mono">−{formatCurrency(result.pensionDeduction)}</span>
               </div>
-              <div className="flex justify-between font-medium text-slate-500">
-                <span>Aporte EsSalud (Paga la empresa 9%):</span>
-                <span className="font-semibold text-slate-700 dark:text-slate-300">{formatCurrency(result.essaludContributionEmployer)}</span>
+              {result.fifthCategoryTaxMonthly > 0 && (
+                <div className="flex justify-between font-medium text-rose-700 dark:text-rose-400">
+                  <span>Retención Impuesto 5ta Categoría:</span>
+                  <span className="font-bold font-mono">−{formatCurrency(result.fifthCategoryTaxMonthly)}</span>
+                </div>
+              )}
+              {result.otherDeductions > 0 && (
+                <div className="flex justify-between font-medium text-rose-700 dark:text-rose-400">
+                  <span>Otros descuentos:</span>
+                  <span className="font-bold font-mono">−{formatCurrency(result.otherDeductions)}</span>
+                </div>
+              )}
+              <div className="flex justify-between font-bold text-rose-700 dark:text-rose-400 pt-1 border-t border-slate-200 dark:border-slate-800">
+                <span>Total deducciones de ley:</span>
+                <span className="font-mono">−{formatCurrency(result.totalDeductions)}</span>
+              </div>
+              <div className="flex justify-between font-medium text-slate-500 pt-1.5 border-t border-dashed border-slate-200 dark:border-slate-800 text-[11px]">
+                <span>Aporte EsSalud (Asume empleador 9%):</span>
+                <span className="font-semibold font-mono text-slate-700 dark:text-slate-300">{formatCurrency(result.essaludContributionEmployer)}</span>
               </div>
             </div>
 
             {/* Official Payroll Slip CTA Banner */}
-            <div className="rounded-2xl border-2 border-blue-500/80 bg-linear-to-br from-blue-50 to-indigo-50 dark:from-blue-950/50 dark:to-indigo-950/30 p-4 shadow-sm space-y-2.5 mb-3">
+            <div className="rounded-2xl border border-emerald-200 dark:border-emerald-800/80 bg-emerald-50/60 dark:bg-emerald-950/40 p-4 space-y-2.5 mb-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <span className="flex h-6 w-6 items-center justify-center rounded-full bg-blue-600 text-white text-xs font-bold shadow-xs">
-                    ⭐
+                  <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#08734F] text-white text-xs font-bold shadow-xs">
+                    ✓
                   </span>
-                  <span className="font-bold text-xs text-blue-950 dark:text-blue-200 uppercase tracking-wider">
-                    Formato Oficial MTPE
+                  <span className="font-bold text-xs text-emerald-950 dark:text-emerald-200 uppercase tracking-wider">
+                    Boleta de Pago Oficial MTPE
                   </span>
                 </div>
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-blue-200/70 dark:bg-blue-900/80 text-blue-900 dark:text-blue-200">
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-emerald-200/70 dark:bg-emerald-900/80 text-emerald-900 dark:text-emerald-200">
                   D.S. N° 001-98-TR
                 </span>
               </div>
               <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed font-normal">
-                Emite la <strong>Boleta de Pago Oficial en PDF</strong> con tu RUC, Razón Social, 3 columnas oficiales de haberes, descuentos AFP/ONP y aportes EsSalud, o expórtala a Excel.
+                Genera tu <strong>Boleta Oficial en PDF o Excel</strong> con formato formal de 3 columnas (haberes, deducciones y aportaciones patronales).
               </p>
               <button
                 type="button"
                 onClick={() => setIsSlipModalOpen(true)}
-                className="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex items-center justify-center gap-2 transition-all cursor-pointer shadow-md shadow-blue-950/10"
+                className="w-full py-3 rounded-xl bg-[#08734F] hover:bg-emerald-800 text-white font-bold text-xs flex items-center justify-center gap-2 transition-all cursor-pointer shadow-sm"
               >
                 <FileText className="w-4 h-4" />
                 <span>Emitir Boleta Oficial (PDF / Excel)</span>

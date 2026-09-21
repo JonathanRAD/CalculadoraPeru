@@ -352,16 +352,16 @@ export default function CotizadorLandingPage() {
                   {/* Ticket Header */}
                   <div className="text-center border-b-2 border-dashed border-slate-300 pb-3 mb-3">
                     <div className="inline-block rounded bg-slate-900 text-white px-2 py-0.5 text-[9px] font-sans font-black uppercase tracking-wider mb-0.5">
-                      PROFORMA N° 00142
+                      SIMULACIÓN ILUSTRATIVA N° 00142
                     </div>
                     <div className="text-sm font-black text-slate-900 uppercase tracking-tight">
-                      CONFECCIONES TEXTIL LIMA S.A.C.
+                      EJEMPLO MYPE TEXTIL S.A.C.
                     </div>
                     <div className="text-[10px] text-slate-600 font-sans">
-                      RUC: 20601984712 • Gamarra, Lima
+                      RUC: 20000000001 (Ficticio para demostración) • Lima
                     </div>
                     <div className="text-[10px] text-slate-500 mt-0.5">
-                      Cliente: Comercializadora San Juan
+                      Cliente de muestra: Comercializadora San Juan
                     </div>
                   </div>
 

@@ -1,0 +1,34 @@
+URL,Tipo,Categoria,Title,Estado_HTTP,Canonical,Robots,Indexable
+https://www.calculaperu.com.pe/,Portada,General,"Calculadoras Perú 2026: sueldo, IGV, negocios y finanzas | CalculaPerú",200 OK,https://www.calculaperu.com.pe/,index follow,Si
+https://www.calculaperu.com.pe/cotizador,Herramienta Demo,Negocios,"Cotizador Comercial para MYPES (Demo Interactiva) | CalculaPerú",200 OK,https://www.calculaperu.com.pe/cotizador,index follow,Si
+https://www.calculaperu.com.pe/pro,Suscripción PRO,General,"CalculaPerú PRO: suite para negocios y profesionales | CalculaPerú",200 OK,https://www.calculaperu.com.pe/pro,index follow,Si
+https://www.calculaperu.com.pe/pro/beneficios,Guía PRO,General,"Beneficios y Guía de Calculadoras PRO | CalculaPerú",200 OK,https://www.calculaperu.com.pe/pro/beneficios,index follow,Si
+https://www.calculaperu.com.pe/sobre-nosotros,Institucional,General,"Sobre Nosotros y Contacto | CalculaPerú",200 OK,https://www.calculaperu.com.pe/sobre-nosotros,index follow,Si
+https://www.calculaperu.com.pe/contacto,Soporte,General,"Contacto y Soporte | CalculaPerú",200 OK,https://www.calculaperu.com.pe/contacto,index follow,Si
+https://www.calculaperu.com.pe/politica-de-privacidad,Legal,General,"Política de Privacidad | CalculaPerú",200 OK,https://www.calculaperu.com.pe/politica-de-privacidad,index follow,Si
+https://www.calculaperu.com.pe/terminos-y-condiciones,Legal,General,"Términos y Condiciones | CalculaPerú",200 OK,https://www.calculaperu.com.pe/terminos-y-condiciones,index follow,Si
+https://www.calculaperu.com.pe/precio-de-venta,Calculadora,negocios,"Calculadora de Precio de Venta Sugerido | CalculaPerú",200 OK,https://www.calculaperu.com.pe/precio-de-venta,index follow,Si
+https://www.calculaperu.com.pe/margen-de-ganancia,Calculadora,negocios,"Calculadora de Margen de Ganancia y Mark-up | CalculaPerú",200 OK,https://www.calculaperu.com.pe/margen-de-ganancia,index follow,Si
+https://www.calculaperu.com.pe/descuentos-y-ofertas,Calculadora,negocios,"Calculadora de Descuentos y Rebajas Sucesivas | CalculaPerú",200 OK,https://www.calculaperu.com.pe/descuentos-y-ofertas,index follow,Si
+https://www.calculaperu.com.pe/ganancia-por-producto,Calculadora,negocios,"Calculadora de Ganancia por Producto y Lote | CalculaPerú",200 OK,https://www.calculaperu.com.pe/ganancia-por-producto,index follow,Si
+https://www.calculaperu.com.pe/comisiones-pos-yape,Calculadora,negocios,"Calculadora de Comisiones POS y Billeteras (Yape, Niubiz, Izipay) | CalculaPerú",200 OK,https://www.calculaperu.com.pe/comisiones-pos-yape,index follow,Si
+https://www.calculaperu.com.pe/costeo-recetas,Calculadora,negocios,"Calculadora de Costeo de Recetas y Platos (Gastronomía) | CalculaPerú",200 OK,https://www.calculaperu.com.pe/costeo-recetas,index follow,Si
+https://www.calculaperu.com.pe/sueldo-neto,Calculadora,laboral,"Calculadora de Sueldo Neto y Planilla Perú | CalculaPerú",200 OK,https://www.calculaperu.com.pe/sueldo-neto,index follow,Si
+https://www.calculaperu.com.pe/gratificacion,Calculadora,laboral,"Calculadora de Gratificación (Julio y Diciembre + 9% EsSalud) | CalculaPerú",200 OK,https://www.calculaperu.com.pe/gratificacion,index follow,Si
+https://www.calculaperu.com.pe/calculadora-cts,Calculadora,laboral,"Calculadora de CTS (Depósitos de Mayo y Noviembre) | CalculaPerú",200 OK,https://www.calculaperu.com.pe/calculadora-cts,index follow,Si
+https://www.calculaperu.com.pe/horas-extras,Calculadora,laboral,"Calculadora de Horas Extras Perú (25%, 35% y Feriados 100%) | CalculaPerú",200 OK,https://www.calculaperu.com.pe/horas-extras,index follow,Si
+https://www.calculaperu.com.pe/calculadora-vacaciones,Calculadora,laboral,"Calculadora de Vacaciones Truncas y Venta de Vacaciones | CalculaPerú",200 OK,https://www.calculaperu.com.pe/calculadora-vacaciones,index follow,Si
+https://www.calculaperu.com.pe/punto-de-equilibrio,Calculadora,finanzas,"Calculadora de Punto de Equilibrio (Break-Even) | CalculaPerú",200 OK,https://www.calculaperu.com.pe/punto-de-equilibrio,index follow,Si
+https://www.calculaperu.com.pe/ventas-necesarias,Calculadora,finanzas,"Calculadora de Ventas Necesarias para Ganancia Deseada | CalculaPerú",200 OK,https://www.calculaperu.com.pe/ventas-necesarias,index follow,Si
+https://www.calculaperu.com.pe/recuperacion-de-inversion,Calculadora,finanzas,"Calculadora de Recuperación de Inversión (ROI y Payback) | CalculaPerú",200 OK,https://www.calculaperu.com.pe/recuperacion-de-inversion,index follow,Si
+https://www.calculaperu.com.pe/prestamo-bancario,Calculadora,finanzas,"Simulador de Préstamos Bancarios y Cuotas (Sistema Francés) | CalculaPerú",200 OK,https://www.calculaperu.com.pe/prestamo-bancario,index follow,Si
+https://www.calculaperu.com.pe/interes-compuesto,Calculadora,finanzas,"Calculadora de Interés Compuesto y Ahorro en Cajas/Bancos | CalculaPerú",200 OK,https://www.calculaperu.com.pe/interes-compuesto,index follow,Si
+https://www.calculaperu.com.pe/porcentajes,Calculadora,finanzas,"Calculadora de Porcentajes Rápidos | CalculaPerú",200 OK,https://www.calculaperu.com.pe/porcentajes,index follow,Si
+https://www.calculaperu.com.pe/calculadora-igv,Calculadora,tributario,"Calculadora de IGV (18% SUNAT) | CalculaPerú",200 OK,https://www.calculaperu.com.pe/calculadora-igv,index follow,Si
+https://www.calculaperu.com.pe/recibo-por-honorarios,Calculadora,tributario,"Calculadora de Recibo por Honorarios (4ta Categoría - Retención 8%) | CalculaPerú",200 OK,https://www.calculaperu.com.pe/recibo-por-honorarios,index follow,Si
+https://www.calculaperu.com.pe/dividir-cuenta,Calculadora,tributario,"Calculadora para Dividir la Cuenta y Propina (Yape / Plin) | CalculaPerú",200 OK,https://www.calculaperu.com.pe/dividir-cuenta,index follow,Si
+https://www.calculaperu.com.pe/gasto-combustible,Calculadora,tributario,"Calculadora de Gasto de Combustible y Viaje en Soles | CalculaPerú",200 OK,https://www.calculaperu.com.pe/gasto-combustible,index follow,Si
+https://www.calculaperu.com.pe/liquidacion-laboral,Calculadora,laboral,"Calculadora de Liquidación Laboral Todo en 1 (Beneficios y Despido) | CalculaPerú",200 OK,https://www.calculaperu.com.pe/liquidacion-laboral,index follow,Si
+https://www.calculaperu.com.pe/tipo-de-cambio-dolar-sunat,Calculadora,tributario,"Calculadora de Tipo de Cambio Dólar / Soles Hoy | CalculaPerú",200 OK,https://www.calculaperu.com.pe/tipo-de-cambio-dolar-sunat,index follow,Si
+https://www.calculaperu.com.pe/consumo-electrico,Calculadora,tributario,"Calculadora de Consumo Eléctrico y Recibo de Luz | CalculaPerú",200 OK,https://www.calculaperu.com.pe/consumo-electrico,index follow,Si
+https://www.calculaperu.com.pe/regimenes-tributarios-sunat,Calculadora,tributario,"Simulador de Regímenes Tributarios SUNAT (RUS, RER, MYPE y General) | CalculaPerú",200 OK,https://www.calculaperu.com.pe/regimenes-tributarios-sunat,index follow,Si
