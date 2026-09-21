@@ -522,68 +522,83 @@ export default function AdminPage() {
   // =========================================================================
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen w-full flex flex-col items-center justify-center bg-slate-900 text-white p-4 font-sans select-none">
-        <div className="w-full max-w-md bg-slate-850 border border-slate-700/80 rounded-3xl p-8 shadow-2xl space-y-6">
-          <div className="flex items-center justify-between border-b border-slate-750 pb-5">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
-                <ShieldAlert className="w-5 h-5" />
-              </div>
-              <div>
-                <h1 className="text-base font-bold tracking-tight text-white">CalculaPerú Admin OS</h1>
-                <p className="text-xs text-slate-400">Panel de Control y Back-Office</p>
-              </div>
-            </div>
-            <ThemeToggle />
-          </div>
+      <div className="min-h-screen w-full flex flex-col items-center justify-center bg-[#080d14] text-white p-4 font-sans select-none">
+        {/* Subtle background grid */}
+        <div className="fixed inset-0 opacity-[0.03]" style={{backgroundImage:'linear-gradient(#fff 1px,transparent 1px),linear-gradient(90deg,#fff 1px,transparent 1px)',backgroundSize:'40px 40px'}} />
 
-          <form onSubmit={handleLogin} className="space-y-4">
-            <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-slate-300 flex items-center gap-1.5">
-                <Lock className="w-3.5 h-3.5 text-emerald-400" />
-                <span>Clave Maestra de Administrador</span>
-              </label>
-              <input
-                type="password"
-                value={adminSecret}
-                onChange={e => setAdminSecret(e.target.value)}
-                placeholder="••••••••••••"
-                autoFocus
-                className="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-xl text-white font-mono text-sm focus:outline-none focus:border-emerald-500 transition-colors"
-              />
+        <div className="relative w-full max-w-sm">
+          {/* Glow */}
+          <div className="absolute -top-16 left-1/2 -translate-x-1/2 w-48 h-48 bg-emerald-500/20 rounded-full blur-3xl pointer-events-none" />
+
+          <div className="relative bg-slate-900/90 border border-slate-700/60 rounded-2xl p-8 shadow-2xl shadow-black/60 space-y-6 backdrop-blur-sm">
+            {/* Header */}
+            <div className="flex items-center justify-between border-b border-slate-800 pb-5">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500/20 to-teal-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+                  <ShieldAlert className="w-5 h-5" />
+                </div>
+                <div>
+                  <h1 className="text-sm font-bold tracking-tight text-white">CalculaPerú Admin OS</h1>
+                  <p className="text-[11px] text-slate-500">Panel de Control y Back-Office</p>
+                </div>
+              </div>
+              <ThemeToggle />
             </div>
 
-            {authError && (
-              <div className="p-3 rounded-xl bg-red-950/40 border border-red-800/80 text-red-300 text-xs flex items-center gap-2">
-                <AlertTriangle className="w-4 h-4 shrink-0" />
-                <span>{authError}</span>
+            {/* Form */}
+            <form onSubmit={handleLogin} className="space-y-4">
+              <div className="space-y-1.5">
+                <label className="text-xs font-semibold text-slate-400 flex items-center gap-1.5">
+                  <Lock className="w-3.5 h-3.5 text-emerald-500" />
+                  <span>Clave Maestra de Administrador</span>
+                </label>
+                <input
+                  type="password"
+                  value={adminSecret}
+                  onChange={e => setAdminSecret(e.target.value)}
+                  placeholder="Ingresa tu ADMIN_SECRET_KEY"
+                  autoFocus
+                  autoComplete="current-password"
+                  className="w-full px-4 py-3 bg-slate-950 border border-slate-700 rounded-xl text-white font-mono text-sm focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/30 transition-all placeholder:text-slate-600"
+                />
+                <p className="text-[11px] text-slate-600 pl-1">
+                  Definida en <code className="text-slate-500 font-mono">ADMIN_SECRET_KEY</code> de tu entorno
+                </p>
               </div>
-            )}
 
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="w-full py-3 bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-lg shadow-emerald-950/40 transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
-            >
-              {isLoading ? (
-                <>
-                  <RefreshCw className="w-4 h-4 animate-spin" />
-                  <span>Verificando credenciales...</span>
-                </>
-              ) : (
-                <>
-                  <span>Ingresar al Sistema</span>
-                  <ArrowRight className="w-4 h-4" />
-                </>
+              {authError && (
+                <div className="p-3 rounded-xl bg-red-950/40 border border-red-800/60 text-red-300 text-xs flex items-center gap-2">
+                  <AlertTriangle className="w-4 h-4 shrink-0" />
+                  <span>{authError}</span>
+                </div>
               )}
-            </button>
-          </form>
 
-          <div className="pt-2 border-t border-slate-750 flex items-center justify-between text-xs text-slate-400">
-            <Link href="/" className="hover:text-emerald-400 transition-colors flex items-center gap-1">
-              <span>← Volver al Sitio Público</span>
-            </Link>
-            <span className="font-mono text-[11px] text-slate-400">v2.4.0-PROD</span>
+              <button
+                type="submit"
+                disabled={isLoading || !adminSecret.trim()}
+                className="w-full py-3 bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 disabled:bg-slate-700 disabled:text-slate-500 text-white font-bold text-sm rounded-xl shadow-lg shadow-emerald-950/40 transition-all flex items-center justify-center gap-2 cursor-pointer disabled:cursor-not-allowed"
+              >
+                {isLoading ? (
+                  <>
+                    <RefreshCw className="w-4 h-4 animate-spin" />
+                    <span>Verificando...</span>
+                  </>
+                ) : (
+                  <>
+                    <span>Ingresar al Sistema</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </>
+                )}
+              </button>
+            </form>
+
+            {/* Footer */}
+            <div className="pt-1 flex items-center justify-between text-[11px] text-slate-600">
+              <Link href="/" className="hover:text-emerald-500 transition-colors flex items-center gap-1">
+                <span>← Volver al Sitio Público</span>
+              </Link>
+              <span className="font-mono">v2.4.0-PROD</span>
+            </div>
           </div>
         </div>
       </div>
