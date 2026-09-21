@@ -22,10 +22,10 @@ export async function POST(
 
     const result = await subscriptionService.approveRequest(id, 'Admin Panel');
     return NextResponse.json(result, { status: result.success ? 200 : 400 });
-  } catch (err) {
+  } catch (err: any) {
     console.error('Error approving subscription:', err);
     return NextResponse.json(
-      { success: false, message: 'Error al aprobar la solicitud de suscripción.' },
+      { success: false, message: err?.message || 'Error al aprobar la solicitud de suscripción.' },
       { status: 500 }
     );
   }

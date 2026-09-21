@@ -74,23 +74,43 @@ export class LicenseRepository {
     if (isSupabaseConfigured) {
       const supabase = getSupabaseAdmin();
       if (supabase) {
-        const { error } = await supabase.from('licenses').insert({
-          id: license.id,
+        const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(license.id);
+        const insertPayload: Record<string, unknown> = {
           code: license.code,
           plan: license.plan,
           duration_days: license.durationDays,
           assigned_client_name: license.assignedClientName,
-          assigned_client_email: license.assignedClientEmail,
+          assigned_client_email: license.assignedClientEmail || null,
           status: license.status,
           created_by: license.createdBy || 'Admin Panel',
           created_at: license.createdAt,
-        });
+        };
 
-        if (!error) return license;
+        if (isUUID) {
+          insertPayload.id = license.id;
+        }
+
+        const { data, error } = await supabase
+          .from('licenses')
+          .insert(insertPayload)
+          .select()
+          .single();
+
+        if (!error && data) {
+          return {
+            ...license,
+            id: data.id,
+          };
+        }
+
+        if (error) {
+          console.error('Error insertando licencia en Supabase:', error);
+          throw new Error(`Error en base de datos al generar licencia: ${error.message}`);
+        }
       }
     }
 
-    // Local fallback
+    // Local fallback (dev only)
     return localStorage.createLicense({
       plan: license.plan,
       clientName: license.assignedClientName,

@@ -234,7 +234,7 @@ export function createLicense(data: {
   const db = readDatabase();
   const code = generateRandomLicenseCode(data.plan);
   const durationDays = data.durationDays || (data.plan === 'yearly' ? 365 : 30);
-  const id = `lic_${crypto.randomUUID().slice(0, 8)}`;
+  const id = crypto.randomUUID();
 
   const newLic: LicenseCode = {
     id,

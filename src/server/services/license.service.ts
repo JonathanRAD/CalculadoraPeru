@@ -19,7 +19,7 @@ export class LicenseService {
       : (plan === 'yearly' ? 365 : 30);
 
     const code = this.generateSecureCode();
-    const id = `lic-${Date.now()}-${crypto.randomBytes(3).toString('hex')}`;
+    const id = crypto.randomUUID();
 
     const newLicense: LicenseCode = {
       id,
