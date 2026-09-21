@@ -164,10 +164,10 @@ export function SettlementReportModal({
             </div>
             <div>
               <h3 className="text-sm sm:text-base font-bold text-slate-900 dark:text-white">
-                Liquidación Oficial Certificada (PDF)
+                Liquidación Formal Conforme Ley (PDF)
               </h3>
               <p className="text-[11px] text-slate-500 dark:text-slate-400">
-                Formato legal formal listo para presentar a RRHH o SUNAFIL
+                Estructura formal con desglose de CTS, gratificaciones, vacaciones e indemnización
               </p>
             </div>
           </div>
@@ -349,7 +349,7 @@ export function SettlementReportModal({
                     </span>
                   </div>
                   <p className="text-xs text-emerald-700 dark:text-emerald-300 leading-relaxed">
-                    Como usuario de <strong>CalculaPerú PRO</strong>, tu liquidación oficial certificada bajo D.L. 728 y la exportación a Excel están totalmente incluidas sin cobros adicionales.
+                    Como usuario de <strong>CalculaPerú PRO</strong>, la emisión de liquidaciones formales conforme al D.L. 728 y la exportación a Excel están totalmente incluidas sin cobros adicionales.
                   </p>
                 </div>
               ) : (
@@ -466,13 +466,13 @@ export function SettlementReportModal({
                   className="flex-1 py-3.5 rounded-xl bg-[#00875A] hover:bg-[#00704A] disabled:opacity-60 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all cursor-pointer shadow-md shadow-emerald-900/10"
                 >
                   {isGenerating ? (
-                    <span>Generando Liquidación Certificada...</span>
+                    <span>Generando Liquidación en PDF...</span>
                   ) : (
                     <>
                       <Download className="w-4 h-4" />
                       <span>
-                        {isCouponApplied
-                          ? 'Descargar Liquidación Oficial (PDF)'
+                        {isCouponApplied || isPro
+                          ? 'Descargar Liquidación Formal (PDF)'
                           : 'Confirmar y Descargar (PDF)'}
                       </span>
                     </>

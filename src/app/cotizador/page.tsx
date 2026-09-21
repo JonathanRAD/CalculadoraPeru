@@ -553,7 +553,7 @@ export default function CotizadorLandingPage() {
               ¿Cómo te ven tus clientes hoy vs. con CalculaPerú?
             </h2>
             <p className="text-sm text-slate-400 mt-2">
-              Una cotización limpia y ordenada cierra hasta 3 veces más ventas que un texto desordenado:
+              Una cotización ordenada y con desglose claro transmite mayor seriedad comercial y reduce dudas en tu cliente:
             </p>
           </div>
 

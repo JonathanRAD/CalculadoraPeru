@@ -139,12 +139,31 @@ Neto a Cobrar: ${formatCurrency(result.netAmountToReceive)}`;
           </div>
 
           <div className="rounded-2xl border border-slate-200 dark:border-slate-800 p-4 space-y-2 text-xs text-slate-500 dark:text-slate-400 bg-slate-50/50 dark:bg-slate-900/30">
-            <span className="font-bold text-slate-700 dark:text-slate-300 block">Base legal y resoluciones de SUNAT:</span>
-            <p>
-              • <strong>Decreto Supremo N° 179-2004-EF:</strong> Texto Único Ordenado de la Ley del Impuesto a la Renta (Artículos 33 y 74).<br />
-              • <strong>Resolución de Superintendencia N° 013-2007/SUNAT:</strong> Régimen de suspensión de retenciones y pagos a cuenta del Impuesto a la Renta sobre rentas de cuarta categoría.<br />
-              • <strong>Resolución de Superintendencia N° 182-2008/SUNAT:</strong> Implementación y emisión del Sistema de Emisión Electrónica de Recibos por Honorarios (SEE-SOL).
-            </p>
+            <span className="font-bold text-slate-700 dark:text-slate-300 block">Base legal y fuentes oficiales de consulta:</span>
+            <ul className="space-y-1 list-disc pl-4">
+              <li>
+                <strong>Rentas de 4ta Categoría y Retención del 8%:</strong> Reguladas por el D.S. N° 179-2004-EF. Consulta topes mensuales y excepciones en{' '}
+                <a
+                  href="https://orientacion.sunat.gob.pe/cuarta-categoria"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-emerald-700 dark:text-emerald-400 underline hover:text-emerald-800"
+                >
+                  SUNAT Orientación - Rentas de Cuarta Categoría
+                </a>.
+              </li>
+              <li>
+                <strong>Suspensión de Retenciones (Formulario Virtual 1609):</strong> Trámite gratuito anual para exonerar retenciones de honorarios en{' '}
+                <a
+                  href="https://www.sunat.gob.pe/sol.html"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-emerald-700 dark:text-emerald-400 underline hover:text-emerald-800"
+                >
+                  SUNAT Operaciones en Línea (SOL)
+                </a>.
+              </li>
+            </ul>
           </div>
         </div>
       }

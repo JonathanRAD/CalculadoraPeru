@@ -131,12 +131,31 @@ Total Facturado: ${formatCurrency(result.totalAmount)}`;
           </div>
 
           <div className="rounded-2xl border border-slate-200 dark:border-slate-800 p-4 space-y-2 text-xs text-slate-500 dark:text-slate-400 bg-slate-50/50 dark:bg-slate-900/30">
-            <span className="font-bold text-slate-700 dark:text-slate-300 block">Base legal y decretos supremos aplicables:</span>
-            <p>
-              • <strong>Decreto Supremo N° 055-99-EF:</strong> Texto Único Ordenado de la Ley del Impuesto General a las Ventas e Impuesto Selectivo al Consumo.<br />
-              • <strong>Decreto Supremo N° 136-96-EF:</strong> Reglamento de la Ley del Impuesto General a las Ventas.<br />
-              • <strong>Resolución de Superintendencia N° 007-99/SUNAT:</strong> Reglamento de Comprobantes de Pago físicos y electrónicos.
-            </p>
+            <span className="font-bold text-slate-700 dark:text-slate-300 block">Base legal y fuentes oficiales de consulta:</span>
+            <ul className="space-y-1 list-disc pl-4">
+              <li>
+                <strong>Tasa del IGV (18% = 16% IGV + 2% IPM):</strong> Regulada en el TUO de la Ley del IGV (D.S. N° 055-99-EF). Consulta la normativa en el{' '}
+                <a
+                  href="https://orientacion.sunat.gob.pe/impuesto-general-a-las-ventas"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-emerald-700 dark:text-emerald-400 underline hover:text-emerald-800"
+                >
+                  Portal de Orientación SUNAT - IGV
+                </a>.
+              </li>
+              <li>
+                <strong>Reglamento de Comprobantes de Pago:</strong> Resolución de Superintendencia N° 007-99/SUNAT sobre emisión de boletas y facturas electrónicas en{' '}
+                <a
+                  href="https://www.sunat.gob.pe"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-emerald-700 dark:text-emerald-400 underline hover:text-emerald-800"
+                >
+                  Superintendencia Nacional de Aduanas y de Administración Tributaria (SUNAT)
+                </a>.
+              </li>
+            </ul>
           </div>
         </div>
       }

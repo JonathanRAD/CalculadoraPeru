@@ -51,7 +51,7 @@ const CALCULATORS_GUIDE: CalculatorGuideItem[] = [
     iconName: 'PiggyBank',
     freeTier: 'Cálculo del monto de depósito semestral y cómputo de 1/6 de gratificación según sueldo.',
     proBenefits: [
-      'Semáforo de Multas SUNAFIL 2026: Simula la sanción económica exacta (hasta 26.12 UIT = S/ 139,742) si tu empresa no deposita a tiempo.',
+      'Semáforo de Multas SUNAFIL 2026: Simula la escala de sanción económica referencial (hasta 26.12 UIT = S/ 143,660 según UIT 2026 de S/ 5,500) si tu empresa no deposita a tiempo.',
       'Exportación a Excel (.CSV editable): Descarga la liquidación de depósito con base computable detallada.',
       'Guardado en la Nube: Almacena el cálculo de tus colaboradores en tu cuenta para consultar en mayo y noviembre.',
       'Envío a WhatsApp: Comparte el resumen de depósito al trabajador en formato profesional con un solo clic.',
@@ -72,7 +72,7 @@ const CALCULATORS_GUIDE: CalculatorGuideItem[] = [
     iconName: 'FileText',
     freeTier: 'Cálculo simultáneo referencial de CTS trunca, gratificación trunca y vacaciones truncas.',
     proBenefits: [
-      'Liquidación Oficial en PDF Certificada: Documento formal con base legal expresa (D.L. 728, D.S. 001-97-TR), recuadros de firma y huella digital.',
+      'Liquidación Formal en PDF: Documento estructurado con base legal expresa (D.L. 728, D.S. 001-97-TR), recuadros de firma y huella digital.',
       'Cálculo de Indemnización por Despido Arbitrario: Cálculo de 1.5 sueldos por año (máximo 12 sueldos).',
       'Membrete Corporativo Guardado: Tu Razón Social, RUC y Logotipo se cargan automáticamente.',
       'Exportación a Excel de Conceptos: Tabla organizada de conceptos lista para adjuntar a la carpeta de cese.',
@@ -81,7 +81,7 @@ const CALCULATORS_GUIDE: CalculatorGuideItem[] = [
     howToUse: [
       'Selecciona el régimen laboral (General, Pequeña Empresa o Microempresa) y motivo de cese.',
       'Ingresa sueldo, fechas de ingreso y cese.',
-      'Descarga la Liquidación Oficial en PDF o expórtala a Excel para firmar con el trabajador.',
+      'Descarga la Liquidación Formal en PDF o expórtala a Excel para firmar con el trabajador.',
     ],
     badgeBenefit: 'PDF Formal + Despido Arbitrario',
   },
@@ -94,14 +94,14 @@ const CALCULATORS_GUIDE: CalculatorGuideItem[] = [
     iconName: 'DollarSign',
     freeTier: 'Descuentos de ley (AFP Integra, Prima, Profuturo, Habitat u ONP 13%) y Renta de 5ta básica.',
     proBenefits: [
-      'Generador de Boleta de Pago Electrónica Oficial (PDF): Conforme a D.S. 001-98-TR y D.S. 009-2011-TR.',
+      'Generador de Boleta de Pago Formal (PDF): Conforme a la estructura del D.S. 001-98-TR y D.S. 009-2011-TR.',
       'Logotipo y RUC de la Empresa en Membrete: Sin necesidad de volver a subirlos cada mes.',
-      'Códigos PLAME SUNAT: Códigos normativos de ingresos y descuentos para planillas.',
-      'Exportación a Excel de la boleta mensual para control de RRHH.',
+      'Estructura de conceptos PLAME: Rubros normativos de ingresos y descuentos para planillas.',
+      'Exportación a Excel de la boleta mensual para control interno de RRHH.',
     ],
     howToUse: [
       'Digita el sueldo bruto y selecciona el sistema previsional (ONP o la AFP correspondiente).',
-      'Haz clic en "Generar Boleta de Pago Oficial (PDF)".',
+      'Haz clic en "Generar Boleta de Pago Formal (PDF)".',
       'Imprime o envía el PDF con membrete corporativo a tu colaborador.',
     ],
     badgeBenefit: 'Boleta de Pago Formal PDF (D.S. 001-98-TR)',
@@ -638,14 +638,14 @@ export default function BeneficiosProPage() {
                   </td>
                 </tr>
                 <tr>
-                  <td className="p-3.5 font-medium">Boletas de pago oficiales en PDF (D.S. 001-98-TR)</td>
+                  <td className="p-3.5 font-medium">Boletas de pago formales en PDF (Formato D.S. 001-98-TR)</td>
                   <td className="p-3.5 text-center text-slate-400">✗ No disponible</td>
                   <td className="p-3.5 text-center font-bold text-emerald-700 dark:text-emerald-400 bg-emerald-50/40 dark:bg-emerald-950/20 border-x border-emerald-200 dark:border-emerald-900">
                     ✓ Formato legal listo para firmar
                   </td>
                 </tr>
                 <tr>
-                  <td className="p-3.5 font-medium">Liquidaciones Certificadas con cálculo de despido arbitrario</td>
+                  <td className="p-3.5 font-medium">Liquidaciones con indemnización por despido arbitrario</td>
                   <td className="p-3.5 text-center text-slate-400">✗ No disponible</td>
                   <td className="p-3.5 text-center font-bold text-emerald-700 dark:text-emerald-400 bg-emerald-50/40 dark:bg-emerald-950/20 border-x border-emerald-200 dark:border-emerald-900">
                     ✓ PDF formal con cláusula de 48h SUNAFIL

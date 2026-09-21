@@ -47,8 +47,8 @@ const FAQ_LIST: FaqItem[] = [
     a: '¡Sí, totalmente! A diferencia de otros sistemas que te atan a una sola máquina, tu membresía está vinculada a tu cuenta de usuario (correo y contraseña). Puedes iniciar sesión desde tu laptop de casa, la computadora de tu oficina o tu teléfono móvil y disfrutar de todas las funciones PRO sin pagar de más.',
   },
   {
-    q: '¿Las boletas de pago y liquidaciones tienen validez legal ante SUNAFIL?',
-    a: 'Sí, 100%. Todos los cálculos y documentos se generan en estricto cumplimiento del D.S. N° 001-98-TR (norma de boletas de pago), D.S. N° 009-2011-TR (validez de boletas electrónicas), el D.L. 728 y la Ley N° 27735, incluyendo recuadros formales para firma, huella digital y códigos PLAME de SUNAT.',
+    q: '¿Qué estructura y alcance tienen las boletas de pago y liquidaciones en PDF?',
+    a: 'Los documentos se generan siguiendo la estructura formal exigida por el D.S. N° 001-98-TR (norma de boletas de pago del régimen laboral de la actividad privada), organizando haberes computables, deducciones legales y aportes patronales con recuadros para firma y constancia de entrega. Constituyen un formato de soporte administrativo para empleadores y trabajadores; la validez jurídica definitiva ante inspecciones de SUNAFIL depende de que los datos ingresados coincidan fielmente con el registro de asistencia, contratos y planillas electrónicas de la empresa.',
   },
   {
     q: '¿Quedan guardados el logotipo y la Razón Social de mi empresa?',
@@ -59,8 +59,16 @@ const FAQ_LIST: FaqItem[] = [
     a: 'El Plan Mensual cuesta S/ 16.00 al mes y te brinda acceso completo mes a mes sin permanencia forzosa. El Plan Anual cuesta S/ 149.00 en un solo pago por 12 meses completos, lo que equivale a solo S/ 12.42 al mes. Al elegir el Plan Anual ahorras S/ 43.00 frente a pagar 12 mensualidades.',
   },
   {
-    q: '¿Existe algún contrato de permanencia forzosa?',
-    a: 'Ninguno. No hay permanencia obligatoria ni renovaciones automáticas sorpresivas. Tú decides si deseas renovar al vencer tu periodo (mensual o anual) sin ninguna penalidad.',
+    q: '¿Existe algún contrato de permanencia forzosa o cobro recurrente automático?',
+    a: 'Ninguno. No hay cobros recurrentes automáticos a tus tarjetas ni permanencia forzosa. Los pagos se realizan de forma manual vía Yape, Plin o transferencia bancaria por la duración exacta contratada (30 días o 12 meses). Al vencer tu periodo, decides libremente si deseas renovar.',
+  },
+  {
+    q: '¿Qué funciones permanecen 100% gratuitas en CalculaPerú?',
+    a: 'Las 25 calculadoras de sueldo, tributos, negocios y finanzas son y seguirán siendo totalmente abiertas, gratuitas e ilimitadas para todo el público sin necesidad de registrarse. La suscripción PRO es un complemento opcional para quienes necesitan emitir boletas en PDF sin marcas de agua, cálculo de indemnizaciones por despido y guardar su historial en la nube.',
+  },
+  {
+    q: '¿Cómo solicito asistencia técnica o qué garantía de servicio existe?',
+    a: 'Puedes escribirnos directamente a través de nuestro formulario en /contacto o vía WhatsApp (+51 913 544 715). Si tras activar tu membresía PRO experimentas dificultades técnicas no resueltas para emitir tus documentos o acceder a tu historial durante los primeros 7 días, revisamos tu caso para asistirte de inmediato o reembolsar tu importe.',
   },
 ];
 
@@ -546,7 +554,7 @@ export default function ProSubscriptionPage() {
                     </td>
                   </tr>
                   <tr>
-                    <td className="p-3.5 pl-4 font-medium">Exportación a Excel (.CSV) estructurado para SUNAT / PLAME</td>
+                    <td className="p-3.5 pl-4 font-medium">Exportación a Excel (.CSV) con conceptos desglosados</td>
                     <td className="p-3.5 text-center text-red-500 font-bold">✕</td>
                     <td className="p-3.5 text-center font-bold text-[#00875A] dark:text-emerald-400 bg-emerald-50/30 dark:bg-emerald-950/20">
                       ✓ Sí, en 1 clic
@@ -581,7 +589,7 @@ export default function ProSubscriptionPage() {
               Todo lo que necesitas para tu negocio en un solo lugar
             </h2>
             <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
-              Ahorra miles de soles en softwares corporativos costosos y multas de SUNAFIL
+              Ahorra tiempo en controles manuales y contingencias ante inspecciones laborales
             </p>
           </div>
 
@@ -620,9 +628,9 @@ export default function ProSubscriptionPage() {
               <div className="w-10 h-10 rounded-xl bg-amber-100 dark:bg-amber-950 flex items-center justify-center text-amber-600 dark:text-amber-400">
                 <FileSpreadsheet className="w-5 h-5" />
               </div>
-              <h3 className="font-bold text-slate-900 dark:text-white text-sm">Compatibilidad con SUNAT</h3>
+              <h3 className="font-bold text-slate-900 dark:text-white text-sm">Exportación a Hojas de Cálculo</h3>
               <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                Exporta la estructura de sueldos y aportes lista para importar al PDT PLAME mensual, reduciendo horas de trabajo contable manual.
+                Descarga tus cálculos y resúmenes de boleta en formato CSV estructurado para abrir en Excel o Google Sheets, facilitando tu archivo y control interno.
               </p>
             </div>
 

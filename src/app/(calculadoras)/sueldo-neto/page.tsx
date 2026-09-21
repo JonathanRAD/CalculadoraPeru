@@ -176,13 +176,53 @@ Sueldo Neto en Cuenta: ${formatCurrency(result.netSalary)}`;
           </div>
 
           <div className="rounded-2xl border border-slate-200 dark:border-slate-800 p-4 space-y-2 text-xs text-slate-500 dark:text-slate-400 bg-slate-50/50 dark:bg-slate-900/30">
-            <span className="font-bold text-slate-700 dark:text-slate-300 block">Marco legal y referencias oficiales:</span>
-            <p>
-              • <strong>D.L. 728:</strong> Ley de Productividad y Competitividad Laboral.<br />
-              • <strong>D.S. N° 054-97-EF:</strong> Texto Único Ordenado de la Ley del Sistema Privado de Administración de Fondos de Pensiones.<br />
-              • <strong>D.L. 19990:</strong> Sistema Nacional de Pensiones administrado por la Oficina de Normalización Previsional (ONP).<br />
-              • <strong>D.S. N° 179-2004-EF:</strong> Texto Único Ordenado de la Ley del Impuesto a la Renta (Quinta Categoría).
-            </p>
+            <span className="font-bold text-slate-700 dark:text-slate-300 block">Marco legal y fuentes oficiales de consulta:</span>
+            <ul className="space-y-1 list-disc pl-4">
+              <li>
+                <strong>Comisiones y primas de AFP:</strong> Consulta los tarifarios mensuales oficiales en la{' '}
+                <a
+                  href="https://www.sbs.gob.pe/afiliados/informacion-del-sistema-de-pensiones/comisiones-y-primas-de-seguro"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-emerald-700 dark:text-emerald-400 underline hover:text-emerald-800"
+                >
+                  Superintendencia de Banca, Seguros y AFP (SBS)
+                </a>.
+              </li>
+              <li>
+                <strong>Sistema Nacional de Pensiones (ONP 13%):</strong> Información de aportes y jubilación regulada por el D.L. 19990 en la{' '}
+                <a
+                  href="https://www.onp.gob.pe"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-emerald-700 dark:text-emerald-400 underline hover:text-emerald-800"
+                >
+                  Oficina de Normalización Previsional (ONP)
+                </a>.
+              </li>
+              <li>
+                <strong>Impuesto a la Renta de 5ta Categoría:</strong> Tramos vigentes y deducción de 7 UIT conforme al D.S. N° 179-2004-EF en{' '}
+                <a
+                  href="https://orientacion.sunat.gob.pe/quinta-categoria"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-emerald-700 dark:text-emerald-400 underline hover:text-emerald-800"
+                >
+                  SUNAT Orientación Tributaria
+                </a>.
+              </li>
+              <li>
+                <strong>Régimen laboral de la actividad privada:</strong> Beneficios y derechos regulados bajo el D.L. 728 verificables en el{' '}
+                <a
+                  href="https://www.gob.pe/mtpe"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-emerald-700 dark:text-emerald-400 underline hover:text-emerald-800"
+                >
+                  Ministerio de Trabajo y Promoción del Empleo (MTPE)
+                </a>.
+              </li>
+            </ul>
           </div>
         </div>
       }

@@ -146,12 +146,31 @@ Periodo: ${monthsWorkedInSemester} meses laborados`;
           </div>
 
           <div className="rounded-2xl border border-slate-200 dark:border-slate-800 p-4 space-y-2 text-xs text-slate-500 dark:text-slate-400 bg-slate-50/50 dark:bg-slate-900/30">
-            <span className="font-bold text-slate-700 dark:text-slate-300 block">Normativa peruana vinculante:</span>
-            <p>
-              • <strong>Decreto Supremo N° 001-97-TR:</strong> Texto Único Ordenado de la Ley de Compensación por Tiempo de Servicios.<br />
-              • <strong>Decreto Supremo N° 004-97-TR:</strong> Reglamento del Texto Único Ordenado de la Ley de CTS.<br />
-              • <strong>Ley N° 25129:</strong> Régimen de Asignación Familiar para trabajadores de la actividad privada.
-            </p>
+            <span className="font-bold text-slate-700 dark:text-slate-300 block">Normativa peruana y fuentes oficiales:</span>
+            <ul className="space-y-1 list-disc pl-4">
+              <li>
+                <strong>Ley de Compensación por Tiempo de Servicios (D.S. N° 001-97-TR):</strong> Reglas sobre depósito semestral y cómputo de 1/6 de gratificación en el{' '}
+                <a
+                  href="https://www.gob.pe/mtpe"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-emerald-700 dark:text-emerald-400 underline hover:text-emerald-800"
+                >
+                  Ministerio de Trabajo y Promoción del Empleo (MTPE)
+                </a>.
+              </li>
+              <li>
+                <strong>Fiscalización del depósito oportuno de CTS:</strong> Verificación de plazos (máximo 15 de mayo y 15 de noviembre) en la{' '}
+                <a
+                  href="https://www.gob.pe/sunafil"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-emerald-700 dark:text-emerald-400 underline hover:text-emerald-800"
+                >
+                  Superintendencia Nacional de Fiscalización Laboral (SUNAFIL)
+                </a>.
+              </li>
+            </ul>
           </div>
         </div>
       }

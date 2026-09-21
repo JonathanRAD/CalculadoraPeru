@@ -239,12 +239,42 @@ Compra: S/ ${result.buyRate.toFixed(3)} | Venta: S/ ${result.sellRate.toFixed(3)
           </div>
 
           <div className="rounded-2xl border border-slate-200 dark:border-slate-800 p-4 space-y-2 text-xs text-slate-500 dark:text-slate-400 bg-slate-50/50 dark:bg-slate-900/30">
-            <span className="font-bold text-slate-700 dark:text-slate-300 block">Normativa de referencia:</span>
-            <p>
-              • <strong>Decreto Supremo N° 055-99-EF:</strong> Texto Único Ordenado de la Ley del IGV (Art. 50 sobre conversión de moneda extranjera).<br />
-              • <strong>Decreto Supremo N° 179-2004-EF:</strong> TUO de la Ley del Impuesto a la Renta (Art. 61 sobre diferencias de cambio).<br />
-              • <strong>Resolución SBS N° 11356-2008:</strong> Metodología de cálculo y publicación de tipos de cambio oficiales.
-            </p>
+            <span className="font-bold text-slate-700 dark:text-slate-300 block">Fuentes oficiales y consulta normativa:</span>
+            <ul className="space-y-1 list-disc pl-4">
+              <li>
+                <strong>Tipo de cambio contable oficial SBS:</strong> Consulta la cotización diaria ponderada en la{' '}
+                <a
+                  href="https://www.sbs.gob.pe/app/pp/sistip_portal/paginas/titulo.aspx"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-emerald-700 dark:text-emerald-400 underline hover:text-emerald-800"
+                >
+                  Superintendencia de Banca, Seguros y AFP (SBS)
+                </a>.
+              </li>
+              <li>
+                <strong>Tipo de cambio tributario SUNAT:</strong> Publicación oficial para fines de PDT y facturación en el{' '}
+                <a
+                  href="https://e-consulta.sunat.gob.pe/cl-at-ittipcam/tcS01Alias"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-emerald-700 dark:text-emerald-400 underline hover:text-emerald-800"
+                >
+                  Portal de Consulta de Tipo de Cambio SUNAT
+                </a>.
+              </li>
+              <li>
+                <strong>Series estadísticas de tipo de cambio BCRPData:</strong> Datos históricos y promedio de mercado en el{' '}
+                <a
+                  href="https://estadisticas.bcrp.gob.pe/estadisticas/series/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-emerald-700 dark:text-emerald-400 underline hover:text-emerald-800"
+                >
+                  Banco Central de Reserva del Perú (BCRP)
+                </a>.
+              </li>
+            </ul>
           </div>
         </div>
       }

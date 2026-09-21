@@ -223,6 +223,11 @@ export default function ReceiptPrinter({
         {/* Paper Sheet */}
         <div className="w-full bg-[#EAEAE6] text-[#282A2E] px-5 py-4 shadow-xl shadow-black/20 font-mono text-[11px] leading-relaxed space-y-3">
           
+          {/* Top Demo Badge */}
+          <div className="text-[9px] uppercase tracking-widest text-amber-900 bg-amber-200/90 border border-amber-300 rounded px-1.5 py-0.5 text-center font-bold">
+            MUESTRA ILUSTRATIVA · DEMO
+          </div>
+
           {/* Top Logo: Dark rounded square with 4-point star in negative space */}
           <div className="flex justify-center pt-1 pb-1">
             <div className="w-10 h-10 rounded-md bg-[#242629] flex items-center justify-center shadow-xs">
@@ -253,11 +258,11 @@ export default function ReceiptPrinter({
               <span>S/ {subtotal.toFixed(2)}</span>
             </div>
             <div className="flex justify-between text-neutral-700">
-              <span>Tax</span>
+              <span>IGV (18%)</span>
               <span>S/ {tax.toFixed(2)}</span>
             </div>
             <div className="flex justify-between font-bold text-neutral-950 text-xs pt-1">
-              <span>TOTAL PAID</span>
+              <span>IMPORTE PLAN</span>
               <span>S/ {totalAmount.toFixed(2)}</span>
             </div>
           </div>
@@ -268,15 +273,15 @@ export default function ReceiptPrinter({
           {/* Order, Paid with, Date */}
           <div className="space-y-0.5 text-[10px] text-neutral-700">
             <div className="flex justify-between">
-              <span>Order</span>
-              <span>083-2843</span>
+              <span>Tipo</span>
+              <span>Ejemplo Referencial</span>
             </div>
             <div className="flex justify-between">
-              <span>Paid with</span>
-              <span>Yape •••• 9715</span>
+              <span>Método</span>
+              <span>Yape / Plin / Transf.</span>
             </div>
             <div className="flex justify-between">
-              <span>Date</span>
+              <span>Fecha</span>
               <span>{formattedDate}</span>
             </div>
           </div>

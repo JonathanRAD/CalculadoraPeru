@@ -163,12 +163,31 @@ Total Horas Extras a Cobrar: ${formatCurrency(result.totalOvertimePay)}`;
           </div>
 
           <div className="rounded-2xl border border-slate-200 dark:border-slate-800 p-4 space-y-2 text-xs text-slate-500 dark:text-slate-400 bg-slate-50/50 dark:bg-slate-900/30">
-            <span className="font-bold text-slate-700 dark:text-slate-300 block">Marco legal y jurisprudencia laboral peruana:</span>
-            <p>
-              • <strong>Decreto Supremo N° 007-2002-TR:</strong> Texto Único Ordenado de la Ley de Jornada de Trabajo, Horario y Trabajo en Sobretiempo.<br />
-              • <strong>Decreto Supremo N° 008-2002-TR:</strong> Reglamento de la Ley de Jornada de Trabajo y Horas Extras.<br />
-              • <strong>Decreto Legislativo N° 713:</strong> Régimen de descansos remunerados en feriados y fines de semana.
-            </p>
+            <span className="font-bold text-slate-700 dark:text-slate-300 block">Marco legal y fuentes oficiales de consulta:</span>
+            <ul className="space-y-1 list-disc pl-4">
+              <li>
+                <strong>Ley de Jornada de Trabajo y Horas Extras (D.S. N° 007-2002-TR):</strong> Sobretasas mínimas de 25% (primeras 2 horas) y 35% (horas siguientes) fiscalizadas por el{' '}
+                <a
+                  href="https://www.gob.pe/mtpe"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-emerald-700 dark:text-emerald-400 underline hover:text-emerald-800"
+                >
+                  Ministerio de Trabajo y Promoción del Empleo (MTPE)
+                </a>.
+              </li>
+              <li>
+                <strong>Fiscalización de derechos laborales:</strong> Directivas y criterios inspectivos sobre registro y pago de sobretiempo en la{' '}
+                <a
+                  href="https://www.gob.pe/sunafil"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-emerald-700 dark:text-emerald-400 underline hover:text-emerald-800"
+                >
+                  Superintendencia Nacional de Fiscalización Laboral (SUNAFIL)
+                </a>.
+              </li>
+            </ul>
           </div>
         </div>
       }

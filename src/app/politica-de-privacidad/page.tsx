@@ -56,11 +56,22 @@ export default function PoliticaPrivacidadPage() {
           <section className="space-y-2">
             <h2 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
               <Eye className="h-4.5 w-4.5 text-emerald-700 dark:text-emerald-400" />
-              2. Cálculos Locales y Almacenamiento en Cuenta PRO
+              2. Cálculos Locales, URLs y Tratamiento de Información Financiera
             </h2>
             <p>
-              En la versión pública y gratuita, todas las operaciones matemáticas realizadas en nuestras calculadoras (Sueldo Neto, Gratificación, CTS, IGV, Precios, etc.) se procesan de forma 100% local en el navegador de tu dispositivo (client-side), sin registrar ni transmitir tus cifras a servidores externos. En caso de contar con una suscripción activa a <strong>CalculaPerú PRO</strong>, los cálculos, boletas o cotizaciones únicamente se almacenan en nuestra base de datos protegida cuando el usuario decide voluntariamente presionar la opción <em>&ldquo;Guardar en Mis Cálculos&rdquo;</em> para consultar su historial o exportar reportes.
+              En la versión pública y gratuita, todas las operaciones matemáticas realizadas en nuestras calculadoras (Sueldo Neto, Gratificación, CTS, Liquidación, IGV, Renta, etc.) se procesan de forma <strong>100% local en el navegador de tu dispositivo (client-side)</strong> mediante JavaScript. No registramos, almacenamos ni transmitimos a servidores externos las cifras monetarias ni datos remunerativos que ingresas al calcular.
             </p>
+            <ul className="list-disc pl-5 space-y-1.5 text-xs text-slate-600 dark:text-slate-400">
+              <li>
+                <strong>Enlaces compartidos:</strong> Los botones para compartir herramientas en redes sociales o WhatsApp envían únicamente la dirección web de la calculadora. No incluyen tus montos, salarios ni resultados en la URL ni en parámetros de búsqueda.
+              </li>
+              <li>
+                <strong>Herramientas de analítica web:</strong> Google Analytics y nuestros registros técnicos capturan únicamente vistas de página y términos de búsqueda internos para evaluar el rendimiento técnico. No se envían importes, ingresos ni datos personales a ningún sistema de analítica.
+              </li>
+              <li>
+                <strong>Cuentas CalculaPerú PRO:</strong> Si dispones de una cuenta PRO activa, la información de un cálculo o cotización únicamente se almacena en nuestra base de datos protegida (PostgreSQL alojado en Supabase con cifrado en tránsito y en reposo) cuando pulsas voluntariamente el botón <em>&ldquo;Guardar en Mis Cálculos&rdquo;</em>. <strong>No existe guardado automático</strong> en segundo plano.
+              </li>
+            </ul>
           </section>
 
           <section className="space-y-2">
@@ -69,14 +80,14 @@ export default function PoliticaPrivacidadPage() {
               3. Cookies y Publicidad de Terceros (Google AdSense)
             </h2>
             <p>
-              CalculaPerú utiliza cookies para almacenar información sobre las preferencias de los visitantes (como el Modo Claro u Oscuro) y para permitir que proveedores externos, incluido <strong>Google</strong>, publiquen anuncios relevantes en función de las visitas previas de los usuarios a este u otros sitios web.
+              CalculaPerú utiliza almacenamiento local y cookies técnicas para recordar tus preferencias (como el Modo Claro u Oscuro). Asimismo, proveedores externos, incluido <strong>Google</strong>, utilizan cookies para publicar anuncios cuando visitas nuestro sitio web:
             </p>
             <ul className="list-disc pl-5 space-y-1.5 text-xs text-slate-600 dark:text-slate-400">
               <li>
-                <strong>Cookies de Google:</strong> Google y sus socios utilizan cookies publicitarias (como la cookie de DART) para mostrar anuncios basados en tu navegación en internet.
+                <strong>Cookies publicitarias de Google:</strong> Google y sus socios utilizan cookies para mostrar anuncios basados en tus visitas a este y otros sitios web en internet.
               </li>
               <li>
-                <strong>Inhabilitación voluntaria:</strong> Puedes inhabilitar el uso de publicidad personalizada visitando la{' '}
+                <strong>Control del usuario:</strong> Puedes consultar y modificar la personalización de anuncios en cualquier momento visitando la{' '}
                 <a
                   href="https://www.google.com/settings/ads"
                   target="_blank"
@@ -85,7 +96,7 @@ export default function PoliticaPrivacidadPage() {
                 >
                   Configuración de anuncios de Google
                 </a>{' '}
-                o a través del portal{' '}
+                o en el portal de autorregulación{' '}
                 <a
                   href="https://www.aboutads.info"
                   target="_blank"
@@ -100,21 +111,21 @@ export default function PoliticaPrivacidadPage() {
 
           <section className="space-y-2">
             <h2 className="text-lg font-bold text-slate-900 dark:text-white">
-              4. Formularios, Cuentas y Datos Recopilados
+              4. Formularios, Cuentas y Destino de los Datos
             </h2>
             <div className="space-y-2 text-xs sm:text-sm text-slate-600 dark:text-slate-400">
               <p>
-                CalculaPerú recopila datos de carácter personal únicamente cuando el usuario decide interactuar de forma voluntaria con las siguientes funciones:
+                CalculaPerú recopila datos personales exclusivamente cuando el usuario decide interactuar de forma voluntaria:
               </p>
-              <ul className="list-disc pl-5 space-y-1">
+              <ul className="list-disc pl-5 space-y-1.5">
                 <li>
-                  <strong>Formulario de contacto y sugerencias (/contacto):</strong> Recopilamos tu nombre, correo electrónico, motivo y mensaje para responder a tus consultas operativas o editoriales. La entrega se realiza mediante el servicio transaccional seguro de Resend con el único fin de atender tu comunicación.
+                  <strong>Formulario de contacto (/contacto):</strong> Tu nombre, correo y mensaje son transmitidos de forma segura mediante la API transaccional de Resend para responder directamente a tus dudas operativas o reportes técnicos. No se emplean con fines publicitarios.
                 </li>
                 <li>
-                  <strong>Demo y lista de novedades del Cotizador (/cotizador):</strong> Si te suscribes voluntariamente para recibir avisos sobre la versión extendida para MYPES, registramos tu correo mediante Formspree sin transferirlo a terceros para publicidad no deseada.
+                  <strong>Registro y autenticación PRO (/pro):</strong> Guardamos tu correo electrónico y tu contraseña cifrada mediante algoritmos seguros de derivación de claves (bcrypt con sal) a través de Supabase Auth.
                 </li>
                 <li>
-                  <strong>Cuentas y licencias PRO (/pro):</strong> Al registrar una cuenta de usuario, guardamos tu correo y una clave cifrada de forma segura (mediante algoritmos criptográficos robustos de hash) para gestionar el acceso multi-dispositivo y la trazabilidad de suscripciones activadas.
+                  <strong>Lista informativa del Cotizador (/cotizador):</strong> Si decides dejar tu correo para recibir novedades de la herramienta MYPE, el contacto se gestiona mediante Formspree con estricta confidencialidad.
                 </li>
               </ul>
             </div>
@@ -122,19 +133,39 @@ export default function PoliticaPrivacidadPage() {
 
           <section className="space-y-2">
             <h2 className="text-lg font-bold text-slate-900 dark:text-white">
-              5. Enlaces a Sitios Externos
+              5. Derechos ARCO y Supresión de Datos
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
+              Conforme a la Ley N° 29733 (Ley de Protección de Datos Personales de Perú) y su reglamento, tienes derecho a acceder, rectificar, cancelar u oponerte al tratamiento de tus datos personales:
+            </p>
+            <ul className="list-disc pl-5 space-y-1.5 text-xs text-slate-600 dark:text-slate-400">
+              <li>
+                <strong>Usuarios de la versión gratuita:</strong> Al no registrarse cuentas ni almacenarse cálculos en servidores, no existe información personal retenida susceptible de supresión.
+              </li>
+              <li>
+                <strong>Eliminación de cálculos guardados (Autogestión PRO):</strong> Puedes eliminar individualmente cualquiera de tus cálculos guardados en cualquier momento desde el panel de perfil de tu cuenta PRO, haciendo clic en el icono de papelera. La eliminación en base de datos es inmediata.
+              </li>
+              <li>
+                <strong>Eliminación completa de cuenta y datos:</strong> Si deseas dar de baja definitiva tu cuenta de usuario PRO y borrar todos tus registros asociados, puedes solicitarlo enviando un mensaje a través de nuestro <Link href="/contacto" className="text-emerald-700 dark:text-emerald-400 underline">formulario de contacto</Link> o vía WhatsApp de soporte. Atendemos y procesamos las solicitudes de supresión en un plazo máximo de 48 horas hábiles.
+              </li>
+            </ul>
+          </section>
+
+          <section className="space-y-2">
+            <h2 className="text-lg font-bold text-slate-900 dark:text-white">
+              6. Enlaces a Sitios Externos e Institucionales
             </h2>
             <p>
-              Nuestro portal puede contener enlaces a instituciones oficiales (como SUNAT, Ministerio de Trabajo u Osinergmin). No nos hacemos responsables de las prácticas de privacidad ni del contenido de dichos sitios externos.
+              Nuestro portal contiene enlaces informativos a fuentes y entidades públicas (SUNAT, Ministerio de Trabajo, SBS, Osinergmin, Banco de la Nación). Dichos enlaces tienen finalidad didáctica y de verificación de fuentes normativas; CalculaPerú no administra ni se responsabiliza por las políticas de privacidad de los portales gubernamentales externos.
             </p>
           </section>
 
           <section className="space-y-2">
             <h2 className="text-lg font-bold text-slate-900 dark:text-white">
-              6. Contacto
+              7. Canales de Consulta y Soporte
             </h2>
             <p>
-              Si tienes preguntas sobre nuestra política de privacidad, puedes comunicarte con el equipo de desarrollo a través de nuestro correo oficial de contacto o visitando la sección de <Link href="/sobre-nosotros" className="text-emerald-700 dark:text-emerald-400 underline">Sobre Nosotros</Link>.
+              Para cualquier consulta sobre esta política, ejercicio de derechos sobre tus datos o aclaraciones técnicas, puedes contactarnos a través de nuestra página de <Link href="/contacto" className="text-emerald-700 dark:text-emerald-400 underline">Contacto</Link> o revisar la misión del proyecto en <Link href="/sobre-nosotros" className="text-emerald-700 dark:text-emerald-400 underline">Sobre Nosotros</Link>.
             </p>
           </section>
 

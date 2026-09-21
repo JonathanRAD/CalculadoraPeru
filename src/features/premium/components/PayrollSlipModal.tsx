@@ -250,10 +250,10 @@ export function PayrollSlipModal({
             </div>
             <div>
               <h3 className="font-bold text-base text-slate-900 dark:text-white">
-                Emitir Boleta de Pago Oficial (D.S. N° 001-98-TR)
+                Emitir Boleta de Pago Formal (Formato D.S. N° 001-98-TR)
               </h3>
               <p className="text-[11px] text-slate-500">
-                Formato legal del MTPE / PLAME con firmas y control de asistencia
+                Estructura conforme al D.S. 001-98-TR con firmas y constancia de entrega
               </p>
             </div>
           </div>
@@ -634,7 +634,7 @@ export function PayrollSlipModal({
                 <Download className="w-4 h-4" />
                 <span>
                   {isPro
-                    ? 'Descargar Boleta Oficial Certificada (PRO S/ 0.00)'
+                    ? 'Descargar Boleta Completa en PDF (Sin Marca de Agua)'
                     : 'Descargar Boleta de Prueba con Marca de Agua (PDF)'}
                 </span>
               </>

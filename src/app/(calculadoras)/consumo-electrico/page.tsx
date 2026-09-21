@@ -189,6 +189,26 @@ export default function ConsumoElectricoPage() {
               </table>
             </div>
           </div>
+
+          <div className="rounded-2xl border border-slate-200 dark:border-slate-800 p-4 space-y-2 text-xs text-slate-500 dark:text-slate-400 bg-slate-50/50 dark:bg-slate-900/30">
+            <span className="font-bold text-slate-700 dark:text-slate-300 block">Fuentes oficiales y alcance del cálculo:</span>
+            <ul className="space-y-1 list-disc pl-4">
+              <li>
+                <strong>Organismo Supervisor de la Inversión en Energía y Minería (Osinergmin):</strong> Supervisa las tarifas del servicio público de electricidad y pliegos tarifarios vigentes en el{' '}
+                <a
+                  href="https://www.osinergmin.gob.pe"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-emerald-700 dark:text-emerald-400 underline hover:text-emerald-800"
+                >
+                  Portal Institucional de Osinergmin
+                </a>.
+              </li>
+              <li>
+                <strong>Alcance y limitaciones:</strong> Esta herramienta calcula el <em>consumo activo directo de energía por artefactos</em>. No incluye cargos fijos de distribución, mantenimiento y reposición de conexión, alumbrado público, compensación FOSE ni tributos de facturación que emite tu distribuidora eléctrica (Pluz, Enel, Luz del Sur, Seal, Hidrandina, Electrocentro, etc.).
+              </li>
+            </ul>
+          </div>
         </div>
       }
     >

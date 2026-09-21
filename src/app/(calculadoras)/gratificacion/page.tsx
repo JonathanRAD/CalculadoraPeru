@@ -150,12 +150,31 @@ Total en Mano: ${formatCurrency(result.totalToReceive)} (100% libre de descuento
           </div>
 
           <div className="rounded-2xl border border-slate-200 dark:border-slate-800 p-4 space-y-2 text-xs text-slate-500 dark:text-slate-400 bg-slate-50/50 dark:bg-slate-900/30">
-            <span className="font-bold text-slate-700 dark:text-slate-300 block">Normas laborales de referencia:</span>
-            <p>
-              • <strong>Ley N° 27735:</strong> Ley que regula el otorgamiento de las Gratificaciones para los trabajadores del régimen de la actividad privada.<br />
-              • <strong>Decreto Supremo N° 005-2002-TR:</strong> Reglamento de la Ley de Gratificaciones.<br />
-              • <strong>Ley N° 30334:</strong> Ley que establece medidas para dinamizar la economía en materia de desgravación de gratificaciones.
-            </p>
+            <span className="font-bold text-slate-700 dark:text-slate-300 block">Normas laborales y fuentes oficiales de consulta:</span>
+            <ul className="space-y-1 list-disc pl-4">
+              <li>
+                <strong>Ley de Gratificaciones (Ley N° 27735 y D.S. N° 005-2002-TR):</strong> Plazos legales (hasta el 15 de julio y 15 de diciembre) en el{' '}
+                <a
+                  href="https://www.gob.pe/mtpe"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-emerald-700 dark:text-emerald-400 underline hover:text-emerald-800"
+                >
+                  Ministerio de Trabajo y Promoción del Empleo (MTPE)
+                </a>.
+              </li>
+              <li>
+                <strong>Inafectación previsional y bonificación extraordinaria (Ley N° 30334):</strong> Reglas sobre el 9% (EsSalud) o 6.75% (EPS) y fiscalización de pago en la{' '}
+                <a
+                  href="https://www.gob.pe/sunafil"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-emerald-700 dark:text-emerald-400 underline hover:text-emerald-800"
+                >
+                  Superintendencia Nacional de Fiscalización Laboral (SUNAFIL)
+                </a>.
+              </li>
+            </ul>
           </div>
         </div>
       }

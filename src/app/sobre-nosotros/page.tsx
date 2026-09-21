@@ -103,6 +103,15 @@ export default function SobreNosotrosPage() {
             </p>
 
             <div className="flex flex-wrap items-center gap-4 pt-2">
+              <Link
+                href="/contacto"
+                className="inline-flex items-center gap-2 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white px-4 py-2.5 text-xs font-bold transition-colors shadow-sm"
+              >
+                <Mail className="h-4 w-4" />
+                <span>Formulario de Contacto</span>
+                <span>→</span>
+              </Link>
+
               <a
                 href="https://github.com/JonathanRAD"
                 target="_blank"
@@ -116,7 +125,7 @@ export default function SobreNosotrosPage() {
 
               <Link
                 href="/cotizador"
-                className="inline-flex items-center gap-2 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white px-4 py-2.5 text-xs font-bold transition-colors"
+                className="inline-flex items-center gap-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700 px-4 py-2.5 text-xs font-bold hover:bg-slate-200 transition-colors"
               >
                 <span>Conocer el Cotizador para MYPES</span>
                 <span>→</span>
