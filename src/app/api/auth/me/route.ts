@@ -3,25 +3,33 @@ import { authService } from '@/server/services/auth.service';
 import { userRepository } from '@/server/repositories/user.repository';
 import { validateCompanyProfileInput } from '@/server/validators/auth.validator';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
+const NO_CACHE_HEADERS = {
+  'Cache-Control': 'private, no-cache, no-store, max-age=0, must-revalidate',
+  Pragma: 'no-cache',
+};
+
 export async function GET(req: NextRequest) {
   try {
     const user = await authService.authenticateRequest(req);
     if (!user) {
-      return NextResponse.json({ authenticated: false, user: null });
+      return NextResponse.json({ authenticated: false, user: null }, { headers: NO_CACHE_HEADERS });
     }
 
     // Auto-check expiration
     if (user.isPro && user.proExpiresAt) {
       if (new Date(user.proExpiresAt) < new Date()) {
         const expiredUser = await userRepository.update(user.id, { isPro: false, plan: null });
-        return NextResponse.json({ authenticated: true, user: expiredUser });
+        return NextResponse.json({ authenticated: true, user: expiredUser }, { headers: NO_CACHE_HEADERS });
       }
     }
 
-    return NextResponse.json({ authenticated: true, user });
+    return NextResponse.json({ authenticated: true, user }, { headers: NO_CACHE_HEADERS });
   } catch (err) {
     console.error('Error en auth me:', err);
-    return NextResponse.json({ authenticated: false, user: null }, { status: 500 });
+    return NextResponse.json({ authenticated: false, user: null }, { status: 500, headers: NO_CACHE_HEADERS });
   }
 }
 

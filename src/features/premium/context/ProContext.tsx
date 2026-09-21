@@ -38,9 +38,22 @@ interface ProContextType {
 const ProContext = createContext<ProContextType | undefined>(undefined);
 
 const LOCAL_STORAGE_KEY = 'calculaperu_pro_session_v1';
+const USER_STORAGE_KEY = 'calculaperu_user_account';
 
 export function ProProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<SafeUser | null>(null);
+  const [user, setUser] = useState<SafeUser | null>(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const stored = localStorage.getItem(USER_STORAGE_KEY);
+        if (stored) {
+          return JSON.parse(stored);
+        }
+      } catch {
+        // ignore
+      }
+    }
+    return null;
+  });
   const [isLoadingUser, setIsLoadingUser] = useState(true);
 
   // PRO state (derived from user OR fallback local session)
@@ -67,15 +80,28 @@ export function ProProvider({ children }: { children: React.ReactNode }) {
   // 1. Fetch current logged-in user on mount
   const checkCurrentUser = useCallback(async () => {
     try {
-      const res = await fetch('/api/auth/me');
+      const res = await fetch('/api/auth/me', {
+        credentials: 'include',
+        cache: 'no-store',
+      });
       const data = await res.json();
       if (data.authenticated && data.user) {
         setUser(data.user);
+        try {
+          localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(data.user));
+        } catch {
+          // ignore
+        }
       } else {
         setUser(null);
+        try {
+          localStorage.removeItem(USER_STORAGE_KEY);
+        } catch {
+          // ignore
+        }
       }
     } catch {
-      setUser(null);
+      // On connection issue, preserve local cached user state if exists
     } finally {
       setIsLoadingUser(false);
     }
@@ -127,11 +153,17 @@ export function ProProvider({ children }: { children: React.ReactNode }) {
       const res = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify({ email, password: pass }),
       });
       const data = await res.json();
       if (data.success && data.user) {
         setUser(data.user);
+        try {
+          localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(data.user));
+        } catch {
+          // ignore
+        }
         setIsAuthModalOpen(false);
         return { success: true, message: data.message };
       }
@@ -146,11 +178,17 @@ export function ProProvider({ children }: { children: React.ReactNode }) {
       const res = await fetch('/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify({ name, email, password: pass }),
       });
       const data = await res.json();
       if (data.success && data.user) {
         setUser(data.user);
+        try {
+          localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(data.user));
+        } catch {
+          // ignore
+        }
         setIsAuthModalOpen(false);
         return { success: true, message: data.message };
       }
@@ -162,11 +200,16 @@ export function ProProvider({ children }: { children: React.ReactNode }) {
 
   const logout = async () => {
     try {
-      await fetch('/api/auth/logout', { method: 'POST' });
+      await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' });
     } catch {
       // ignore
     }
     setUser(null);
+    try {
+      localStorage.removeItem(USER_STORAGE_KEY);
+    } catch {
+      // ignore
+    }
     logoutPro();
     setIsProfileModalOpen(false);
   };
@@ -176,11 +219,17 @@ export function ProProvider({ children }: { children: React.ReactNode }) {
       const res = await fetch('/api/auth/me', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify(data),
       });
       const resData = await res.json();
       if (resData.success && resData.user) {
         setUser(resData.user);
+        try {
+          localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(resData.user));
+        } catch {
+          // ignore
+        }
         return { success: true, message: resData.message };
       }
       return { success: false, message: resData.message || 'Error actualizando perfil.' };
@@ -195,6 +244,7 @@ export function ProProvider({ children }: { children: React.ReactNode }) {
       const res = await fetch('/api/pro/activate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify({ code }),
       });
 
@@ -203,6 +253,11 @@ export function ProProvider({ children }: { children: React.ReactNode }) {
       if (data.success) {
         if (data.user) {
           setUser(data.user);
+          try {
+            localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(data.user));
+          } catch {
+            // ignore
+          }
         }
         if (data.session) {
           setLocalProSession(data.session);

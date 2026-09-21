@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { authService } from '@/server/services/auth.service';
+import { authService, getAuthCookieOptions } from '@/server/services/auth.service';
 import { validateLoginInput } from '@/server/validators/auth.validator';
 
 export async function POST(req: Request) {
@@ -29,13 +29,7 @@ export async function POST(req: Request) {
       user: result.user,
     });
 
-    response.cookies.set('calculaperu_auth_token', result.token, {
-      path: '/',
-      httpOnly: true,
-      sameSite: 'lax',
-      maxAge: 60 * 60 * 24 * 30,
-      secure: process.env.NODE_ENV === 'production',
-    });
+    response.cookies.set('calculaperu_auth_token', result.token, getAuthCookieOptions(req));
 
     return response;
   } catch (error: any) {

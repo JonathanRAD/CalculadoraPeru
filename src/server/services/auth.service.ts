@@ -8,6 +8,21 @@ import { LoginInput, RegisterInput } from '../validators/auth.validator';
 const AUTH_SECRET = process.env.AUTH_SECRET || 'calculaperu-secret-auth-key-2026-secure-salt';
 const ADMIN_KEY = process.env.ADMIN_SECRET_KEY || 'admin2026';
 
+export function getAuthCookieOptions(req?: Request | NextRequest) {
+  const host = req?.headers.get('host') || '';
+  const isProduction = process.env.NODE_ENV === 'production';
+  const isCalculaPeru = host.includes('calculaperu.com.pe');
+
+  return {
+    path: '/',
+    httpOnly: true,
+    sameSite: 'lax' as const,
+    maxAge: 60 * 60 * 24 * 30, // 30 days
+    secure: isProduction,
+    domain: isCalculaPeru ? '.calculaperu.com.pe' : undefined,
+  };
+}
+
 export class AuthService {
   hashPassword(password: string, salt = crypto.randomBytes(16).toString('hex')) {
     const hash = crypto.pbkdf2Sync(password, salt, 1000, 64, 'sha256').toString('hex');
