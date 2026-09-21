@@ -49,8 +49,20 @@ export function validateRegisterInput(data: unknown): { isValid: boolean; data?:
     return { isValid: false, error: 'Ingresa un correo electrónico válido.' };
   }
 
-  if (!password || password.length < 6) {
-    return { isValid: false, error: 'La contraseña debe tener al menos 6 caracteres.' };
+  if (!password || password.length < 8) {
+    return { isValid: false, error: 'La contraseña debe tener al menos 8 caracteres.' };
+  }
+
+  if (!/[A-Z]/.test(password)) {
+    return { isValid: false, error: 'La contraseña debe incluir al menos una letra mayúscula.' };
+  }
+
+  if (!/[a-z]/.test(password)) {
+    return { isValid: false, error: 'La contraseña debe incluir al menos una letra minúscula.' };
+  }
+
+  if (!/[0-9]/.test(password)) {
+    return { isValid: false, error: 'La contraseña debe incluir al menos un número.' };
   }
 
   return { isValid: true, data: { email, password, name } };

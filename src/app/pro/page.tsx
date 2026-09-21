@@ -22,7 +22,10 @@ import {
   ChevronDown,
   Smartphone,
   CheckCircle2,
+  Lock,
 } from 'lucide-react';
+
+
 import confetti from 'canvas-confetti';
 import ReceiptPrinter from '@/features/premium/components/ReceiptPrinter';
 import { usePro } from '@/features/premium/context/ProContext';
@@ -81,7 +84,13 @@ export default function ProSubscriptionPage() {
   const yapeHolder = 'Jonathan Rujel';
 
   const handleOpenCheckout = (cycle: 'monthly' | 'yearly') => {
+    if (!user) {
+      openAuthModal('register');
+      return;
+    }
     setSelectedPlan(cycle);
+    setSubscriberName(user.name || '');
+    setSubscriberEmail(user.email || '');
     setIsCheckoutOpen(true);
     setIsSuccess(false);
   };
@@ -807,16 +816,29 @@ export default function ProSubscriptionPage() {
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-slate-600 dark:text-slate-400 font-semibold mb-1">
-                        Tu Correo Electrónico *
-                      </label>
+                      <div className="flex items-center justify-between mb-1">
+                        <label className="text-slate-600 dark:text-slate-400 font-semibold">
+                          Tu Correo Electrónico *
+                        </label>
+                        {user && (
+                          <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold flex items-center gap-0.5">
+                            <Lock className="w-2.5 h-2.5" />
+                            <span>Cuenta Vinculada</span>
+                          </span>
+                        )}
+                      </div>
                       <input
                         type="email"
                         required
+                        readOnly={!!user}
                         placeholder="tu@correo.com"
                         value={subscriberEmail}
                         onChange={(e) => setSubscriberEmail(e.target.value)}
-                        className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-slate-900 dark:text-white outline-none focus:border-[#00875A]"
+                        className={`w-full border rounded-xl px-3 py-2 text-slate-900 dark:text-white outline-none ${
+                          user
+                            ? 'bg-slate-100 dark:bg-slate-900/80 border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 cursor-not-allowed'
+                            : 'bg-slate-50 dark:bg-slate-950 border-slate-300 dark:border-slate-700 focus:border-[#00875A]'
+                        }`}
                       />
                     </div>
                     <div>

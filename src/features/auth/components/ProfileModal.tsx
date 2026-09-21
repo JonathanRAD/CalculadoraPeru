@@ -19,9 +19,13 @@ import {
   ExternalLink,
   Loader2,
   ShieldCheck,
+  Clock,
+  AlertTriangle,
+  MessageCircle,
 } from 'lucide-react';
 import { usePro } from '@/features/premium/context/ProContext';
 import { exportTableToCsv } from '@/shared/utils/exportToExcel';
+import { SubscriptionRequest } from '@/features/auth/types';
 
 interface SavedCalc {
   id: string;
@@ -68,6 +72,10 @@ export function ProfileModal() {
   const [isLoadingCalcs, setIsLoadingCalcs] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
+  // User payment / subscription requests traceability
+  const [mySubscriptions, setMySubscriptions] = useState<SubscriptionRequest[]>([]);
+  const [isLoadingSubscriptions, setIsLoadingSubscriptions] = useState(false);
+
   // Sync company data when user changes
   useEffect(() => {
     if (user) {
@@ -78,10 +86,11 @@ export function ProfileModal() {
     }
   }, [user]);
 
-  // Load calculations
+  // Load calculations and subscriptions
   useEffect(() => {
     if (isProfileModalOpen && user) {
       loadCalculations();
+      loadMySubscriptions();
     }
   }, [isProfileModalOpen, user]);
 
@@ -97,6 +106,21 @@ export function ProfileModal() {
       // Fallback silent
     } finally {
       setIsLoadingCalcs(false);
+    }
+  };
+
+  const loadMySubscriptions = async () => {
+    setIsLoadingSubscriptions(true);
+    try {
+      const res = await fetch('/api/pro/subscriptions/my-status');
+      const json = await res.json();
+      if (json.success && Array.isArray(json.subscriptions)) {
+        setMySubscriptions(json.subscriptions);
+      }
+    } catch {
+      // Fallback silent
+    } finally {
+      setIsLoadingSubscriptions(false);
     }
   };
 
@@ -273,7 +297,7 @@ export function ProfileModal() {
           <button
             type="button"
             onClick={() => setActiveTab('license')}
-            className={`flex-1 py-2 px-3 rounded-xl font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+            className={`flex-1 py-2 px-3 rounded-xl font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer relative ${
               activeTab === 'license'
                 ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-xs'
                 : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
@@ -281,6 +305,11 @@ export function ProfileModal() {
           >
             <Sparkles className="w-3.5 h-3.5 text-amber-500" />
             <span>Membresía PRO</span>
+            {mySubscriptions.some(s => s.status === 'rejected') ? (
+              <span className="w-2 h-2 rounded-full bg-red-500 animate-ping" />
+            ) : mySubscriptions.some(s => s.status === 'pending') ? (
+              <span className="w-2 h-2 rounded-full bg-amber-500" />
+            ) : null}
           </button>
         </div>
 
@@ -591,8 +620,118 @@ export function ProfileModal() {
                 </div>
               </div>
             )}
+
+            {/* SECCIÓN DE TRAZABILIDAD DE SOLICITUDES Y PAGOS YAPE / PLIN */}
+            {mySubscriptions.length > 0 && (
+              <div className="space-y-2.5 pt-3 border-t border-slate-200 dark:border-slate-800">
+                <div className="flex items-center justify-between">
+                  <h5 className="font-bold text-xs text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
+                    <Clock className="w-3.5 h-3.5 text-[#00875A]" />
+                    <span>Trazabilidad de tus Pagos (Yape / Plin)</span>
+                  </h5>
+                  <span className="text-[10px] text-slate-400 font-medium">
+                    {mySubscriptions.length} {mySubscriptions.length === 1 ? 'solicitud' : 'solicitudes'}
+                  </span>
+                </div>
+
+                <div className="space-y-2 max-h-60 overflow-y-auto pr-1">
+                  {mySubscriptions.map((sub) => {
+                    const isPending = sub.status === 'pending';
+                    const isRejected = sub.status === 'rejected';
+                    const isApproved = sub.status === 'approved';
+
+                    return (
+                      <div
+                        key={sub.id}
+                        className={`p-3 rounded-xl border transition-all text-xs space-y-2 ${
+                          isRejected
+                            ? 'bg-red-50/70 dark:bg-red-950/30 border-red-200 dark:border-red-900/60'
+                            : isPending
+                            ? 'bg-amber-50/70 dark:bg-amber-950/30 border-amber-200 dark:border-amber-900/60'
+                            : 'bg-emerald-50/70 dark:bg-emerald-950/30 border-emerald-200 dark:border-emerald-900/60'
+                        }`}
+                      >
+                        <div className="flex items-center justify-between gap-2">
+                          <div className="flex items-center gap-2">
+                            <span className="font-mono font-bold text-slate-900 dark:text-white">
+                              Op. {sub.operationCode}
+                            </span>
+                            <span className="text-[10px] text-slate-500">
+                              {sub.plan === 'yearly' ? 'Plan Anual (S/ 149)' : 'Plan Mensual (S/ 16)'}
+                            </span>
+                          </div>
+                          <span
+                            className={`px-2 py-0.5 rounded-full font-extrabold text-[10px] flex items-center gap-1 ${
+                              isRejected
+                                ? 'bg-red-100 dark:bg-red-900/70 text-red-700 dark:text-red-300'
+                                : isPending
+                                ? 'bg-amber-100 dark:bg-amber-900/70 text-amber-700 dark:text-amber-300'
+                                : 'bg-emerald-100 dark:bg-emerald-900/70 text-emerald-700 dark:text-emerald-300'
+                            }`}
+                          >
+                            {isRejected && <AlertTriangle className="w-3 h-3" />}
+                            {isPending && <Clock className="w-3 h-3 animate-spin" />}
+                            {isApproved && <Check className="w-3 h-3" />}
+                            {isRejected
+                              ? 'Observada'
+                              : isPending
+                              ? 'En Verificación'
+                              : 'Aprobada'}
+                          </span>
+                        </div>
+
+                        {isRejected && (
+                          <div className="space-y-2">
+                            <div className="p-2 rounded-lg bg-white dark:bg-slate-900 border border-red-100 dark:border-red-950 text-red-800 dark:text-red-300 text-[11px] leading-relaxed">
+                              <strong>Observación:</strong>{' '}
+                              {sub.notes || 'No se pudo corroborar el abono en el extracto bancario.'}
+                            </div>
+                            <div className="flex items-center justify-between gap-2 pt-0.5">
+                              <span className="text-[10px] text-slate-500">
+                                Regulariza tu comprobante:
+                              </span>
+                              <a
+                                href={`https://wa.me/51913544715?text=${encodeURIComponent(
+                                  `Hola, mi solicitud PRO (Op: ${sub.operationCode}) fue observada por el motivo: "${sub.notes || ''}". Adjunto mi comprobante de pago para validar mi suscripción.`
+                                )}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-[11px] transition-all cursor-pointer shadow-xs"
+                              >
+                                <MessageCircle className="w-3.5 h-3.5" />
+                                <span>WhatsApp Soporte</span>
+                              </a>
+                            </div>
+                          </div>
+                        )}
+
+                        {isPending && (
+                          <p className="text-[11px] text-slate-600 dark:text-slate-400">
+                            Tu transferencia está en cola de verificación contable. Se activará automáticamente en un lapso de 5 a 15 minutos.
+                          </p>
+                        )}
+
+                        {isApproved && sub.generatedLicenseCode && (
+                          <div className="flex items-center justify-between text-[11px]">
+                            <span className="text-slate-500">Código Oficial:</span>
+                            <span className="font-mono font-bold text-[#00875A] dark:text-emerald-400">
+                              {sub.generatedLicenseCode}
+                            </span>
+                          </div>
+                        )}
+
+                        <div className="text-[10px] text-slate-400 text-right">
+                          Registrado el {new Date(sub.createdAt).toLocaleString('es-PE', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
           </div>
         )}
+
 
         {/* Logout Footer */}
         <div className="border-t border-slate-100 dark:border-slate-800 pt-4 flex items-center justify-between">

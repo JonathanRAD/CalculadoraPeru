@@ -38,11 +38,23 @@ describe('Backend Clean Architecture - Validators & Services', () => {
       expect(validateLoginInput({ email: 'admin@calculaperu.pe', password: 'password123' }).isValid).toBe(true);
     });
 
+    it('debe exigir contraseñas seguras (8+ chars, mayúscula, minúscula, número) en el registro', () => {
+      // Too short
+      expect(validateRegisterInput({ name: 'Juan', email: 'juan@test.pe', password: 'Ab1' }).isValid).toBe(false);
+      // Missing uppercase
+      expect(validateRegisterInput({ name: 'Juan', email: 'juan@test.pe', password: 'password123' }).isValid).toBe(false);
+      // Missing number
+      expect(validateRegisterInput({ name: 'Juan', email: 'juan@test.pe', password: 'PasswordSegura' }).isValid).toBe(false);
+      // Valid strong password
+      expect(validateRegisterInput({ name: 'Juan', email: 'juan@test.pe', password: 'Password123' }).isValid).toBe(true);
+    });
+
     it('debe validar RUC peruano válido de 11 dígitos iniciando en 10 o 20', () => {
       expect(validateCompanyProfileInput({ companyRuc: '123456' }).isValid).toBe(false);
       expect(validateCompanyProfileInput({ companyRuc: '20601234567' }).isValid).toBe(true);
     });
   });
+
 
   describe('License Service', () => {
     it('debe emitir una licencia válida con código único y duración correcta', async () => {

@@ -123,6 +123,11 @@ export default function AdminPage() {
   const [rejectingSub, setRejectingSub] = useState<SubscriptionRequest | null>(null);
   const [rejectReason, setRejectReason] = useState('');
   const [isRejecting, setIsRejecting] = useState(false);
+  const [rejectedResultModal, setRejectedResultModal] = useState<{
+    subscription: SubscriptionRequest;
+    whatsappUrl?: string;
+    notes?: string;
+  } | null>(null);
 
   // Search & Filters
   const [licenseSearch, setLicenseSearch] = useState('');
@@ -408,8 +413,20 @@ export default function AdminPage() {
               : s
           )
         );
+        const subToNotify = rejectingSub;
+        const returnedWaUrl = data.whatsappUrl;
+        const recordedReason = rejectReason;
+
         setRejectingSub(null);
         setRejectReason('');
+
+        if (returnedWaUrl) {
+          setRejectedResultModal({
+            subscription: subToNotify,
+            whatsappUrl: returnedWaUrl,
+            notes: recordedReason,
+          });
+        }
       } else {
         alert(data.message || 'Error al rechazar la solicitud.');
       }
@@ -2380,6 +2397,69 @@ export default function AdminPage() {
         </div>
       )}
 
+      {/* ===================================================================== */}
+      {/* MODAL: SOLICITUD RECHAZADA - NOTIFICAR POR WHATSAPP                    */}
+      {/* ===================================================================== */}
+
+      {rejectedResultModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/75 backdrop-blur-xs animate-in fade-in duration-200">
+          <div className="relative w-full max-w-md bg-white dark:bg-slate-900 rounded-3xl border border-amber-500/40 shadow-2xl p-6 sm:p-8 space-y-6 text-xs text-center">
+            
+            <div className="w-16 h-16 rounded-full bg-amber-100 dark:bg-amber-950/80 border border-amber-500/40 text-amber-600 dark:text-amber-400 flex items-center justify-center mx-auto shadow-sm">
+              <AlertTriangle className="w-8 h-8" />
+            </div>
+
+            <div className="space-y-1.5">
+              <h3 className="font-bold text-lg text-slate-900 dark:text-white">
+                Solicitud Observada / Rechazada
+              </h3>
+              <p className="text-xs text-slate-500">
+                Se registró el rechazo para{' '}
+                <strong className="text-slate-900 dark:text-white">{rejectedResultModal.subscription.customerName}</strong>
+              </p>
+            </div>
+
+            {/* Observation Card */}
+            <div className="p-4 rounded-2xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800/80 text-left space-y-1.5">
+              <span className="text-[10px] uppercase font-bold text-amber-700 dark:text-amber-400 tracking-wider block">
+                MOTIVO / OBSERVACIÓN:
+              </span>
+              <p className="text-xs font-medium text-slate-800 dark:text-slate-200">
+                {rejectedResultModal.notes || 'Operación no encontrada en el extracto bancario.'}
+              </p>
+              <div className="pt-2 flex items-center justify-between text-[11px] text-slate-500 border-t border-amber-200/60 dark:border-amber-800/40">
+                <span>Operación: <strong className="font-mono text-slate-900 dark:text-white">{rejectedResultModal.subscription.operationCode}</strong></span>
+                <span>Tel: <strong className="text-slate-900 dark:text-white">{rejectedResultModal.subscription.customerPhone}</strong></span>
+              </div>
+            </div>
+
+            <div className="space-y-2.5">
+              {rejectedResultModal.whatsappUrl && (
+                <a
+                  href={rejectedResultModal.whatsappUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full py-3 px-4 bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-sm rounded-xl shadow-lg flex items-center justify-center gap-2 cursor-pointer transition-all"
+                >
+                  <MessageCircle className="w-4 h-4" />
+                  <span>Avisar al Cliente por WhatsApp</span>
+                </a>
+              )}
+
+              <button
+                type="button"
+                onClick={() => setRejectedResultModal(null)}
+                className="w-full py-2.5 text-slate-500 hover:text-slate-900 dark:hover:text-white font-semibold cursor-pointer"
+              >
+                Cerrar y volver a la bandeja
+              </button>
+            </div>
+
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }
+
