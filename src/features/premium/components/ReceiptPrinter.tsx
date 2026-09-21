@@ -114,7 +114,7 @@ export default function ReceiptPrinter({
 
   return (
     // FIXED RESERVED HEIGHT CONTAINER: Prevents any layout shift while receipt descends!
-    <div className={`relative w-full max-w-[340px] sm:max-w-[370px] h-[550px] flex flex-col items-center select-none ${className}`}>
+    <div className={`relative w-full max-w-[340px] sm:max-w-[370px] h-[630px] sm:h-[640px] flex flex-col items-center select-none ${className}`}>
       
       {/* ============================================================ */}
       {/* HARDWARE CASING (Exact Match to Video Reference) */}
@@ -216,12 +216,12 @@ export default function ReceiptPrinter({
       <div 
         className="absolute top-[175px] z-20 w-[84%] sm:w-[86%] overflow-hidden flex flex-col items-center pointer-events-auto"
         style={{
-          maxHeight: `${(progress / 100) * 315}px`,
+          maxHeight: `${(progress / 100) * 410}px`,
           transition: 'max-height 0.04s linear',
         }}
       >
         {/* Paper Sheet */}
-        <div className="w-full bg-[#EAEAE6] text-[#282A2E] px-5 py-4 shadow-xl shadow-black/20 font-mono text-[11px] leading-relaxed space-y-3">
+        <div className="w-full bg-[#EAEAE6] text-[#282A2E] px-5 pt-7 pb-4 shadow-xl shadow-black/20 font-mono text-[11px] leading-relaxed space-y-3">
           
           {/* Top Demo Badge */}
           <div className="text-[9px] uppercase tracking-widest text-amber-900 bg-amber-200/90 border border-amber-300 rounded px-1.5 py-0.5 text-center font-bold">
@@ -349,7 +349,7 @@ export default function ReceiptPrinter({
       </div>
 
       {/* Action Button: Pinned to bottom of the fixed container so it never causes layout shift */}
-      <div className="absolute bottom-2 z-30 w-[84%] sm:w-[86%]">
+      <div className="absolute bottom-3 sm:bottom-4 z-30 w-[84%] sm:w-[86%]">
         {status === 'printed' && (
           <button
             type="button"
