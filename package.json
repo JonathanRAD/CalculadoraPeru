@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "test": "vitest run --fileParallelism=false",
-    "test:watch": "vitest --fileParallelism=false"
+    "test:watch": "vitest --fileParallelism=false",
+    "test:db": "node --env-file=.env.local scripts/test_supabase.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.5",
