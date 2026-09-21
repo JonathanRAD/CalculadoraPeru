@@ -25,36 +25,61 @@ export function CalculatorShell({
 
   const appJsonLd = {
     '@context': 'https://schema.org',
-    '@type': 'SoftwareApplication',
+    '@type': 'WebApplication',
     name: meta.title,
     applicationCategory: 'BusinessApplication',
     operatingSystem: 'All',
+    browserRequirements: 'Requires JavaScript. Requires HTML5.',
     offers: {
       '@type': 'Offer',
       price: '0',
       priceCurrency: 'PEN',
     },
     description: meta.description,
+    provider: {
+      '@type': 'Organization',
+      name: 'CalculaPerú',
+      url: 'https://www.calculaperu.com.pe',
+    },
   };
 
+  const faqJsonLd = faqs && faqs.length > 0 ? {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: f.answer,
+      },
+    })),
+  } : null;
+
   return (
-    <div className="min-h-screen bg-[#F4F6F8] dark:bg-[#0B132B] text-slate-900 dark:text-slate-100 pb-20 transition-colors">
+    <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#0B132B] text-slate-900 dark:text-slate-100 pb-20 transition-colors">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(appJsonLd) }}
       />
+      {faqJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        />
+      )}
 
       {/* Header Banner */}
-      <div className="border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0E1736] pt-8 pb-10 shadow-2xs">
+      <div className="border-b border-slate-200/90 dark:border-slate-800 bg-white dark:bg-[#0E1736] pt-8 pb-10 shadow-2xs">
         <div className="mx-auto max-w-5xl px-4 sm:px-6">
 
           {/* Breadcrumb */}
           <nav aria-label="Migas de pan" className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400 mb-3 font-semibold">
-            <Link href="/" className="hover:text-[#00875A] dark:hover:text-[#00C853] transition-colors">
+            <Link href="/" className="hover:text-[#08734F] dark:hover:text-emerald-400 transition-colors">
               Inicio
             </Link>
             <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
-            <Link href="/#todas-las-calculadoras" className="hover:text-[#00875A] dark:hover:text-[#00C853] transition-colors capitalize">
+            <Link href="/#todas-las-calculadoras" className="hover:text-[#08734F] dark:hover:text-emerald-400 transition-colors capitalize">
               {meta.category}
             </Link>
             <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
@@ -65,7 +90,7 @@ export function CalculatorShell({
 
           {/* Title & Official Badge */}
           <div className="flex flex-wrap items-center gap-2 mb-2">
-            <span className="rounded-md bg-emerald-50 dark:bg-emerald-950/80 px-2.5 py-0.5 text-xs font-bold text-[#00875A] dark:text-[#00C853] border border-emerald-200 dark:border-emerald-800">
+            <span className="rounded-md bg-emerald-50 dark:bg-emerald-950/80 px-2.5 py-0.5 text-xs font-bold text-[#08734F] dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
               {meta.tag}
             </span>
             {meta.badge && (
@@ -73,7 +98,7 @@ export function CalculatorShell({
                 {meta.badge}
               </span>
             )}
-            <div className="flex items-center gap-1 text-xs text-[#00875A] dark:text-[#00C853] font-bold ml-auto">
+            <div className="flex items-center gap-1 text-xs text-[#08734F] dark:text-emerald-400 font-bold ml-auto">
               <ShieldCheck className="h-4 w-4" />
               <span>Parámetros referenciales para Perú</span>
             </div>
@@ -125,17 +150,17 @@ export function CalculatorShell({
                 <Link
                   key={calc.id}
                   href={calc.slug}
-                  className="app-card p-4 hover:border-[#00875A] transition-all flex flex-col justify-between group"
+                  className="app-card p-4 hover:border-[#08734F] transition-all flex flex-col justify-between group"
                 >
                   <div>
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#00875A] dark:text-[#00C853]">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#08734F] dark:text-emerald-400">
                       {calc.tag}
                     </span>
-                    <h3 className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white mt-1 group-hover:text-[#00875A] dark:group-hover:text-[#00C853] transition-colors">
+                    <h3 className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white mt-1 group-hover:text-[#08734F] dark:group-hover:text-emerald-400 transition-colors">
                       {calc.shortTitle}
                     </h3>
                   </div>
-                  <div className="mt-3 flex items-center gap-1 text-[11px] font-bold text-slate-500 dark:text-slate-400 group-hover:text-[#00875A] dark:group-hover:text-[#00C853]">
+                  <div className="mt-3 flex items-center gap-1 text-[11px] font-bold text-slate-500 dark:text-slate-400 group-hover:text-[#08734F] dark:group-hover:text-emerald-400">
                     <span>Calcular</span>
                     <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" />
                   </div>

@@ -156,6 +156,10 @@ Compra: S/ ${result.buyRate.toFixed(3)} | Venta: S/ ${result.sellRate.toFixed(3)
       answer: 'Para emitir comprobantes de pago y declarar impuestos en moneda extranjera, la SUNAT establece que para compras se usa el tipo de cambio venta, y para ventas se usa el tipo de cambio compra publicado por la SBS al cierre del día anterior.',
     },
     {
+      question: '¿Por qué existen diferencias entre el dólar interbancario, el dólar de la calle y el dólar SUNAT?',
+      answer: 'El dólar interbancario es la tasa mayorista a la que transan los bancos entre sí. Las casas de cambio y cambistas de calle aplican un margen comercial minorista (spread). Por su parte, la SUNAT utiliza por mandato legal la cotización de cierre del día hábil anterior publicada por la SBS en el diario oficial El Peruano, sirviendo únicamente para fines tributarios y contables.',
+    },
+    {
       question: '¿Puedo ingresar la tasa exacta que me da mi banco o cambista?',
       answer: 'Sí. Puedes activar la opción de "Ajustar Tasa Personalizada" para ingresar la cotización exacta en céntimos que te ofrece tu aplicativo bancario o casa de cambio.',
     },
@@ -166,27 +170,99 @@ Compra: S/ ${result.buyRate.toFixed(3)} | Venta: S/ ${result.sellRate.toFixed(3)
       meta={meta}
       faqs={faqs}
       educationalContent={
-        <div className="space-y-3">
-          <p>
-            Calcula equivalencias entre dólares y soles con una tasa USD/PEN actualizada automáticamente o con la última compra y venta SBS disponible. Verifica la cotización final de tu banco o cambista antes de realizar una operación.
-          </p>
+        <div className="space-y-6">
+          <div>
+            <h2 className="text-lg font-bold text-slate-900 dark:text-white mb-2">
+              Guía Cambiaria: ¿Cómo opera el Tipo de Cambio en el Perú (SUNAT vs. SBS)?
+            </h2>
+            <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+              En el Perú rige un sistema de <strong>flotación cambiaria administrada</strong> donde el precio del dólar estadounidense (USD) frente al sol peruano (PEN) fluctúa libremente por oferta y demanda, con intervenciones de compra o venta del <strong>Banco Central de Reserva del Perú (BCRP)</strong> para atenuar la volatilidad excesiva.
+            </p>
+          </div>
+
+          <div className="rounded-2xl bg-slate-50 dark:bg-slate-900 p-5 border border-slate-200 dark:border-slate-800 space-y-3 text-xs leading-relaxed">
+            <h3 className="font-bold text-sm text-slate-900 dark:text-white">
+              1. Regla oficial de SUNAT para Facturación y Declaraciones Tributarias
+            </h3>
+            <p className="text-slate-600 dark:text-slate-300">
+              De acuerdo con el artículo 50 del Reglamento del TUO de la Ley del IGV y el artículo 61 de la Ley del Impuesto a la Renta:
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
+              <div className="space-y-1.5 p-3 bg-white dark:bg-slate-950 rounded-xl border border-slate-200 dark:border-slate-800">
+                <span className="font-bold text-[#08734F] dark:text-emerald-400 block">• Para Comprobantes de Venta:</span>
+                <p className="text-slate-600 dark:text-slate-300">
+                  Se debe utilizar el tipo de cambio promedio ponderado <strong>COMPRA</strong> cotizado por la SBS al cierre del día anterior.
+                </p>
+              </div>
+
+              <div className="space-y-1.5 p-3 bg-white dark:bg-slate-950 rounded-xl border border-slate-200 dark:border-slate-800">
+                <span className="font-bold text-amber-800 dark:text-amber-400 block">• Para Registro de Compras (Gastos):</span>
+                <p className="text-slate-600 dark:text-slate-300">
+                  Se debe utilizar el tipo de cambio promedio ponderado <strong>VENTA</strong> cotizado por la SBS al cierre del día anterior.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="space-y-3">
+            <h3 className="font-bold text-sm text-slate-900 dark:text-white">
+              2. Comparativo de Cotizaciones en el Mercado Peruano
+            </h3>
+            <div className="overflow-x-auto">
+              <table className="w-full text-xs text-left border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden">
+                <thead className="bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white">
+                  <tr>
+                    <th className="p-2.5">Mercado / Ámbito</th>
+                    <th className="p-2.5">¿Dónde se aplica?</th>
+                    <th className="p-2.5">Características del Spread</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                  <tr>
+                    <td className="p-2.5 font-semibold">Mercado Bancario Comercial</td>
+                    <td className="p-2.5 text-slate-500">Ventanillas y banca móvil de bancos</td>
+                    <td className="p-2.5">Spread más amplio (entre 3 a 7 céntimos)</td>
+                  </tr>
+                  <tr>
+                    <td className="p-2.5 font-semibold">Casas de Cambio Digitales / Paralelo</td>
+                    <td className="p-2.5 text-slate-500">Plataformas fintech y cambistas autorizados</td>
+                    <td className="p-2.5">Spread más ajustado y competitivo (1 a 2 céntimos)</td>
+                  </tr>
+                  <tr className="bg-emerald-50 dark:bg-emerald-950 font-bold">
+                    <td className="p-2.5 text-slate-900 dark:text-white">Tipo de Cambio SBS / SUNAT</td>
+                    <td className="p-2.5 text-slate-500 font-normal">Contabilidad y liquidación de impuestos</td>
+                    <td className="p-2.5 text-[#08734F] dark:text-emerald-300">Oficial para libros contables y PDT</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div className="rounded-2xl border border-slate-200 dark:border-slate-800 p-4 space-y-2 text-xs text-slate-500 dark:text-slate-400 bg-slate-50/50 dark:bg-slate-900/30">
+            <span className="font-bold text-slate-700 dark:text-slate-300 block">Normativa de referencia:</span>
+            <p>
+              • <strong>Decreto Supremo N° 055-99-EF:</strong> Texto Único Ordenado de la Ley del IGV (Art. 50 sobre conversión de moneda extranjera).<br />
+              • <strong>Decreto Supremo N° 179-2004-EF:</strong> TUO de la Ley del Impuesto a la Renta (Art. 61 sobre diferencias de cambio).<br />
+              • <strong>Resolución SBS N° 11356-2008:</strong> Metodología de cálculo y publicación de tipos de cambio oficiales.
+            </p>
+          </div>
         </div>
       }
     >
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         
         {/* Form Column */}
-        <div className="lg:col-span-7 rounded-3xl border-2 border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 sm:p-8 shadow-md shadow-slate-900/5 space-y-6">
+        <div className="lg:col-span-7 rounded-3xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 sm:p-8 shadow-sm space-y-6">
           
           {/* Header with Live Pulse indicator */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3 gap-2">
             <div className="flex items-center gap-2.5">
-              <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
+              <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-50 text-[#08734F] dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/60">
                 <DollarSign className="h-4.5 w-4.5" />
               </div>
               <div>
                 <h2 className="text-lg font-bold text-slate-900 dark:text-white leading-tight">Conversión referencial</h2>
-                <div className="flex items-center gap-1.5 text-[11px] font-semibold text-emerald-700 dark:text-emerald-400">
+                <div className="flex items-center gap-1.5 text-[11px] font-semibold text-[#08734F] dark:text-emerald-400">
                   <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
                   <span>{lastUpdatedText}</span>
                 </div>
@@ -197,7 +273,7 @@ Compra: S/ ${result.buyRate.toFixed(3)} | Venta: S/ ${result.sellRate.toFixed(3)
             <button
               type="button"
               onClick={() => setConversionMode(isUsdToPen ? 'pen_to_usd' : 'usd_to_pen')}
-              className="inline-flex items-center gap-1.5 rounded-xl border border-emerald-300 dark:border-emerald-800 bg-emerald-50 dark:bg-emerald-950/60 px-3 py-1.5 text-xs font-bold text-emerald-800 dark:text-emerald-300 hover:bg-emerald-100 cursor-pointer transition-all shadow-2xs self-start sm:self-auto"
+              className="inline-flex items-center gap-1.5 rounded-xl border border-emerald-200 dark:border-emerald-800 bg-emerald-50 dark:bg-emerald-950/60 px-3 py-1.5 text-xs font-bold text-[#08734F] dark:text-emerald-300 hover:bg-emerald-100 cursor-pointer transition-all shadow-2xs self-start sm:self-auto"
             >
               <ArrowLeftRight className="h-3.5 w-3.5" />
               <span>Invertir ({isUsdToPen ? 'USD a PEN' : 'PEN a USD'})</span>
@@ -226,7 +302,7 @@ Compra: S/ ${result.buyRate.toFixed(3)} | Venta: S/ ${result.sellRate.toFixed(3)
                   setSource(nextSource);
                   setShowCustomRates(nextSource === 'custom');
                 }}
-                className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 p-2.5 text-xs font-bold text-slate-900 dark:text-white outline-none focus:border-emerald-600"
+                className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 p-2.5 text-xs font-bold text-slate-900 dark:text-white outline-none focus:border-[#08734F]"
               >
                 <option value="market" disabled={!hasValidQuote(publishedRates.market)}>
                   Mercado USD/PEN actualizado
@@ -261,7 +337,7 @@ Compra: S/ ${result.buyRate.toFixed(3)} | Venta: S/ ${result.sellRate.toFixed(3)
                   setSource('custom');
                 }
               }}
-              className="text-xs font-bold text-emerald-800 dark:text-emerald-400 hover:underline flex items-center gap-1 cursor-pointer"
+              className="text-xs font-bold text-[#08734F] dark:text-emerald-400 hover:underline flex items-center gap-1 cursor-pointer"
             >
               <Settings2 className="h-3.5 w-3.5" />
               <span>{showCustomRates ? 'Ocultar ajuste manual' : '⚙️ Editar o ingresar tasa manual'}</span>
@@ -309,26 +385,26 @@ Compra: S/ ${result.buyRate.toFixed(3)} | Venta: S/ ${result.sellRate.toFixed(3)
 
         </div>
 
-        {/* Results Column */}
+        {/* Results Column — Proposal A */}
         <div className="lg:col-span-5 flex flex-col gap-4">
-          <div className="rounded-3xl border-2 border-emerald-300 dark:border-emerald-800/80 bg-emerald-50/70 dark:bg-slate-900 p-6 sm:p-7 shadow-md shadow-emerald-900/5">
+          <div className="rounded-3xl border-2 border-emerald-200/90 dark:border-emerald-800/80 bg-white dark:bg-slate-900 p-6 sm:p-7 shadow-sm">
             <div className="flex items-center justify-between mb-4">
-              <span className="text-xs font-bold uppercase tracking-wider text-emerald-900 dark:text-emerald-300">
+              <span className="text-xs font-bold uppercase tracking-wider text-emerald-950 dark:text-emerald-300">
                 Resultado de Conversión
               </span>
-              <span className="rounded-full bg-emerald-700 dark:bg-emerald-600 px-3 py-0.5 text-xs font-bold text-white shadow-xs">
+              <span className="rounded-full bg-emerald-50 dark:bg-emerald-950/70 border border-emerald-200 dark:border-emerald-800 px-2.5 py-0.5 text-[11px] font-bold text-[#08734F] dark:text-emerald-300">
                 {result.sourceName}
               </span>
             </div>
 
-            {/* Big Main Result Box */}
-            <div className="rounded-2xl bg-white dark:bg-slate-950 border-2 border-emerald-200 dark:border-emerald-800/60 p-6 shadow-sm text-center mb-5 overflow-hidden">
-              <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">
+            {/* Big Main Result Box (Non-truncated tabular numerals) */}
+            <div className="rounded-2xl bg-emerald-50/50 dark:bg-slate-950 border border-emerald-100 dark:border-emerald-900/60 p-5 sm:p-6 text-center mb-5">
+              <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                 {isUsdToPen ? 'Monto Recibido en Soles' : 'Monto Recibido en Dólares'}
               </span>
               <div
                 title={hasCompleteRate ? (isUsdToPen ? formatCurrency(result.convertedAmount) : `$ ${formatNumber(result.convertedAmount)} USD`) : 'Esperando una cotización completa'}
-                className="text-3xl sm:text-4xl lg:text-5xl font-black text-emerald-800 dark:text-emerald-400 mt-1 font-mono tracking-tight break-words px-2"
+                className="text-3xl sm:text-4xl lg:text-[2.6rem] font-black text-[#08734F] dark:text-emerald-400 mt-1.5 font-mono tracking-tight tabular-nums break-words leading-tight"
               >
                 {hasCompleteRate
                   ? isUsdToPen
@@ -336,7 +412,7 @@ Compra: S/ ${result.buyRate.toFixed(3)} | Venta: S/ ${result.sellRate.toFixed(3)
                     : `$ ${formatNumber(result.convertedAmount)} USD`
                   : '—'}
               </div>
-              <div className="mt-1.5 text-xs text-slate-600 dark:text-slate-400 font-semibold truncate">
+              <div className="mt-1.5 text-xs text-slate-600 dark:text-slate-400 font-semibold">
                 {hasCompleteRate
                   ? `Tasa aplicada: S/ ${isUsdToPen ? result.buyRate.toFixed(3) : result.sellRate.toFixed(3)}`
                   : 'Esperando una cotización completa'}
