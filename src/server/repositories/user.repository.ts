@@ -2,6 +2,45 @@ import { UserAccount, SafeUser } from '@/features/auth/types';
 import { getSupabaseAdmin, isSupabaseConfigured } from '../config/supabase';
 import * as localStorage from '@/features/auth/server/storage';
 
+// Helper: safe local storage access (fails gracefully on Vercel's read-only FS)
+function safeLocalFindById(id: string): UserAccount | null {
+  try { return localStorage.findUserById(id); } catch { return null; }
+}
+function safeLocalFindByEmail(email: string): UserAccount | null {
+  try { return localStorage.findUserByEmail(email); } catch { return null; }
+}
+function safeLocalCreate(data: { email: string; name: string; password: string; role: 'user' | 'admin' }): void {
+  try { localStorage.createUser(data); } catch { /* ignore on Vercel */ }
+}
+function safeLocalUpdate(id: string, updates: Partial<UserAccount>): SafeUser | null {
+  try { return localStorage.updateUser(id, updates); } catch { return null; }
+}
+function safeLocalGetAll(): SafeUser[] {
+  try { return localStorage.getAllUsers(); } catch { return []; }
+}
+
+// Map a Supabase profiles row to UserAccount, enriched with local hash if available
+function mapRow(data: Record<string, unknown>, localUser?: UserAccount | null): UserAccount {
+  return {
+    id: data.id as string,
+    email: data.email as string,
+    name: data.name as string,
+    // Prefer Supabase-stored hash; fall back to local .data/db.json for dev
+    passwordHash: (data.password_hash as string) || localUser?.passwordHash || '',
+    salt: (data.salt as string) || localUser?.salt || '',
+    role: data.role as 'user' | 'admin',
+    isPro: data.is_pro as boolean,
+    plan: data.plan as 'monthly' | 'yearly' | null,
+    proExpiresAt: data.pro_expires_at as string | null,
+    activatedCode: data.activated_code as string | null,
+    companyName: data.company_name as string | undefined,
+    companyRuc: data.company_ruc as string | undefined,
+    companyAddress: data.company_address as string | undefined,
+    companyLogoBase64: data.company_logo_url as string | undefined,
+    createdAt: data.created_at as string,
+  };
+}
+
 export class UserRepository {
   async findById(id: string): Promise<UserAccount | null> {
     if (isSupabaseConfigured) {
@@ -14,29 +53,13 @@ export class UserRepository {
           .maybeSingle();
 
         if (!error && data) {
-          const localUser = localStorage.findUserById(id) || localStorage.findUserByEmail(data.email);
-          return {
-            id: data.id,
-            email: data.email,
-            name: data.name,
-            passwordHash: (data as any).password_hash || localUser?.passwordHash || '',
-            salt: (data as any).salt || localUser?.salt || '',
-            role: data.role,
-            isPro: data.is_pro,
-            plan: data.plan,
-            proExpiresAt: data.pro_expires_at,
-            activatedCode: data.activated_code,
-            companyName: data.company_name,
-            companyRuc: data.company_ruc,
-            companyAddress: data.company_address,
-            companyLogoBase64: data.company_logo_url,
-            createdAt: data.created_at,
-          };
+          const local = safeLocalFindById(id) || safeLocalFindByEmail(data.email as string);
+          return mapRow(data as Record<string, unknown>, local);
         }
       }
     }
 
-    return localStorage.findUserById(id);
+    return safeLocalFindById(id);
   }
 
   async findByEmail(email: string): Promise<UserAccount | null> {
@@ -52,54 +75,17 @@ export class UserRepository {
           .maybeSingle();
 
         if (!error && data) {
-          const localUser = localStorage.findUserByEmail(cleanEmail) || localStorage.findUserById(data.id);
-          return {
-            id: data.id,
-            email: data.email,
-            name: data.name,
-            passwordHash: (data as any).password_hash || localUser?.passwordHash || '',
-            salt: (data as any).salt || localUser?.salt || '',
-            role: data.role,
-            isPro: data.is_pro,
-            plan: data.plan,
-            proExpiresAt: data.pro_expires_at,
-            activatedCode: data.activated_code,
-            companyName: data.company_name,
-            companyRuc: data.company_ruc,
-            companyAddress: data.company_address,
-            companyLogoBase64: data.company_logo_url,
-            createdAt: data.created_at,
-          };
+          const local = safeLocalFindByEmail(cleanEmail) || safeLocalFindById(data.id as string);
+          return mapRow(data as Record<string, unknown>, local);
         }
       }
     }
 
-    return localStorage.findUserByEmail(cleanEmail);
+    return safeLocalFindByEmail(cleanEmail);
   }
 
   async create(user: UserAccount): Promise<SafeUser> {
-    try {
-      const existingLocal = localStorage.findUserByEmail(user.email);
-      if (!existingLocal) {
-        localStorage.createUser({
-          email: user.email,
-          name: user.name,
-          password: 'temp-password',
-          role: user.role,
-        });
-        const createdLocal = localStorage.findUserByEmail(user.email);
-        if (createdLocal) {
-          createdLocal.id = user.id;
-          createdLocal.passwordHash = user.passwordHash;
-          createdLocal.salt = user.salt;
-          createdLocal.isPro = user.isPro;
-          createdLocal.role = user.role;
-        }
-      }
-    } catch {
-      // Continue even if local storage throws duplicate error
-    }
-
+    // Always try to persist in Supabase first (production path)
     if (isSupabaseConfigured) {
       const supabase = getSupabaseAdmin();
       if (supabase) {
@@ -109,6 +95,8 @@ export class UserRepository {
           name: user.name,
           role: user.role,
           is_pro: user.isPro,
+          password_hash: user.passwordHash,
+          salt: user.salt,
           created_at: user.createdAt,
           updated_at: user.createdAt,
         });
@@ -117,6 +105,16 @@ export class UserRepository {
           return localStorage.toSafeUser(user);
         }
       }
+    }
+
+    // Fallback: local .data/db.json (dev only)
+    safeLocalCreate({ email: user.email, name: user.name, password: 'temp-password', role: user.role });
+    const createdLocal = safeLocalFindByEmail(user.email);
+    if (createdLocal) {
+      createdLocal.id = user.id;
+      createdLocal.passwordHash = user.passwordHash;
+      createdLocal.salt = user.salt;
+      safeLocalUpdate(createdLocal.id, { passwordHash: user.passwordHash, salt: user.salt });
     }
 
     return localStorage.toSafeUser(user);
@@ -140,6 +138,9 @@ export class UserRepository {
         if (updates.companyRuc !== undefined) dbPayload.company_ruc = updates.companyRuc;
         if (updates.companyAddress !== undefined) dbPayload.company_address = updates.companyAddress;
         if (updates.companyLogoBase64 !== undefined) dbPayload.company_logo_url = updates.companyLogoBase64;
+        // Update password hash if changed (e.g. after password reset)
+        if (updates.passwordHash !== undefined) dbPayload.password_hash = updates.passwordHash;
+        if (updates.salt !== undefined) dbPayload.salt = updates.salt;
 
         const { error } = await supabase
           .from('profiles')
@@ -153,7 +154,7 @@ export class UserRepository {
       }
     }
 
-    return localStorage.updateUser(id, updates);
+    return safeLocalUpdate(id, updates);
   }
 
   async findAll(): Promise<SafeUser[]> {
@@ -185,7 +186,7 @@ export class UserRepository {
       }
     }
 
-    return localStorage.getAllUsers();
+    return safeLocalGetAll();
   }
 }
 

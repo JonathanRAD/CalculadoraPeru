@@ -81,6 +81,7 @@ async function setupAdmin() {
 
   const finalId = existingProfile?.id || userId || crypto.randomUUID();
 
+  const { hash: adminHash, salt: adminSalt } = hashPassword(ADMIN_PASSWORD);
   const profilePayload = {
     id: finalId,
     email: ADMIN_EMAIL,
@@ -89,6 +90,8 @@ async function setupAdmin() {
     is_pro: true,
     plan: 'yearly',
     pro_expires_at: '2099-12-31T23:59:59.999Z',
+    password_hash: adminHash,
+    salt: adminSalt,
     updated_at: new Date().toISOString(),
   };
 

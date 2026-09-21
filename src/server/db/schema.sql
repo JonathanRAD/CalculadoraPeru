@@ -16,6 +16,10 @@ create table if not exists public.profiles (
   pro_expires_at timestamptz,
   activated_code text,
   
+  -- Autenticación interna (hash PBKDF2 — no se expone nunca al cliente)
+  password_hash text,
+  salt text,
+  
   -- Membrete y Personalización Corporativa
   company_name text,
   company_ruc text,
