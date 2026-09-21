@@ -29,6 +29,8 @@ import {
 import confetti from 'canvas-confetti';
 import ReceiptPrinter from '@/features/premium/components/ReceiptPrinter';
 import { usePro } from '@/features/premium/context/ProContext';
+import { useModalAnimation } from '@/shared/hooks/useModalAnimation';
+
 
 interface FaqItem {
   q: string;
@@ -67,6 +69,7 @@ export default function ProSubscriptionPage() {
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>('yearly');
   const [selectedPlan, setSelectedPlan] = useState<'monthly' | 'yearly' | null>(null);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
+  const { shouldRender: shouldRenderCheckout, backdropClass: checkoutBackdropClass, modalClass: checkoutModalClass } = useModalAnimation(isCheckoutOpen);
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
 
   // Checkout form
@@ -697,9 +700,13 @@ export default function ProSubscriptionPage() {
       {/* ========================================================================= */}
       {/* CHECKOUT MODAL (YAPE / PLIN DIRECT PAYMENT) */}
       {/* ========================================================================= */}
-      {isCheckoutOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/75 backdrop-blur-xs animate-in fade-in duration-200">
-          <div className="relative w-full max-w-lg bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl p-6 sm:p-8 space-y-6 text-xs max-h-[92vh] overflow-y-auto">
+      {shouldRenderCheckout && (
+        <div
+          onClick={(e) => { if (e.target === e.currentTarget) setIsCheckoutOpen(false); }}
+          className={`fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/75 backdrop-blur-xs ${checkoutBackdropClass}`}
+        >
+          <div className={`relative w-full max-w-lg bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl p-6 sm:p-8 space-y-6 text-xs max-h-[92vh] overflow-y-auto ${checkoutModalClass}`}>
+
             
             {/* Modal Header */}
             <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-4">

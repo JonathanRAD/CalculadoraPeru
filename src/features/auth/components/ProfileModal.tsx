@@ -26,6 +26,7 @@ import {
 import { usePro } from '@/features/premium/context/ProContext';
 import { exportTableToCsv } from '@/shared/utils/exportToExcel';
 import { SubscriptionRequest } from '@/features/auth/types';
+import { useModalAnimation } from '@/shared/hooks/useModalAnimation';
 
 interface SavedCalc {
   id: string;
@@ -49,6 +50,9 @@ export function ProfileModal() {
     activatePro,
     updateCompanyProfile,
   } = usePro();
+
+  const { shouldRender, backdropClass, modalClass } = useModalAnimation(Boolean(isProfileModalOpen && user));
+
 
   const [activeTab, setActiveTab] = useState<'calcs' | 'company' | 'license'>('calcs');
 
@@ -228,9 +232,15 @@ export function ProfileModal() {
     }
   };
 
+  if (!shouldRender || !user) return null;
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/75 backdrop-blur-xs animate-in fade-in duration-200">
-      <div className="relative w-full max-w-2xl bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl p-6 sm:p-8 space-y-5 text-xs max-h-[92vh] overflow-y-auto">
+    <div
+      onClick={(e) => { if (e.target === e.currentTarget) closeProfileModal(); }}
+      className={`fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/75 backdrop-blur-xs ${backdropClass}`}
+    >
+      <div className={`relative w-full max-w-2xl bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl p-6 sm:p-8 space-y-5 text-xs max-h-[92vh] overflow-y-auto ${modalClass}`}>
+
         
         {/* Close Button */}
         <button

@@ -3,9 +3,11 @@
 import React, { useState } from 'react';
 import { X, Lock, Mail, User, Sparkles, ArrowRight, ShieldCheck, Eye, EyeOff, Check, AlertCircle } from 'lucide-react';
 import { usePro } from '@/features/premium/context/ProContext';
+import { useModalAnimation } from '@/shared/hooks/useModalAnimation';
 
 export function AuthModal() {
   const { isAuthModalOpen, closeAuthModal, authModalTab, openAuthModal, login, register } = usePro();
+  const { shouldRender, backdropClass, modalClass } = useModalAnimation(isAuthModalOpen);
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -17,7 +19,8 @@ export function AuthModal() {
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
 
-  if (!isAuthModalOpen) return null;
+  if (!shouldRender) return null;
+
 
   const isLogin = authModalTab === 'login';
 
@@ -77,8 +80,13 @@ export function AuthModal() {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/75 backdrop-blur-xs animate-in fade-in duration-200">
-      <div className="relative w-full max-w-md bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl p-6 sm:p-8 space-y-5 text-xs max-h-[92vh] overflow-y-auto">
+    <div
+      onClick={(e) => { if (e.target === e.currentTarget) closeAuthModal(); }}
+
+      className={`fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/75 backdrop-blur-xs ${backdropClass}`}
+    >
+      <div className={`relative w-full max-w-md bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl p-6 sm:p-8 space-y-5 text-xs max-h-[92vh] overflow-y-auto ${modalClass}`}>
+
         
         {/* Close Button */}
         <button

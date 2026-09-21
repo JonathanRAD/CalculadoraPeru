@@ -1978,8 +1978,12 @@ export default function AdminPage() {
       {/* MODAL 1: EMITIR NUEVA LICENCIA PRO                                    */}
       {/* ===================================================================== */}
       {isIssueModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-xs animate-in fade-in duration-200">
-          <div className="relative w-full max-w-md bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl p-6 sm:p-8 space-y-6 text-xs max-h-[92vh] overflow-y-auto">
+        <div
+          onClick={(e) => { if (e.target === e.currentTarget) setIsIssueModalOpen(false); }}
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-xs backdrop-enter"
+        >
+          <div className="relative w-full max-w-md bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl p-6 sm:p-8 space-y-6 text-xs max-h-[92vh] overflow-y-auto modal-origin-card modal-enter">
+
             
             <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-4">
               <div className="flex items-center gap-2">
@@ -2135,8 +2139,12 @@ export default function AdminPage() {
       {/* (Regla obligatoria de seguridad de la skill admin-ui-builder)         */}
       {/* ===================================================================== */}
       {revokingLicense && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/75 backdrop-blur-xs animate-in fade-in duration-200">
-          <div className="relative w-full max-w-md bg-white dark:bg-slate-900 rounded-3xl border border-red-200 dark:border-red-900/60 shadow-2xl p-6 sm:p-8 space-y-5 text-xs">
+        <div
+          onClick={(e) => { if (e.target === e.currentTarget) setRevokingLicense(null); }}
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/75 backdrop-blur-xs backdrop-enter"
+        >
+          <div className="relative w-full max-w-md bg-white dark:bg-slate-900 rounded-3xl border border-red-200 dark:border-red-900/60 shadow-2xl p-6 sm:p-8 space-y-5 text-xs modal-origin-card modal-enter">
+
             
             <div className="w-12 h-12 rounded-full bg-red-100 dark:bg-red-950 flex items-center justify-center mx-auto text-red-600 dark:text-red-400">
               <AlertTriangle className="w-6 h-6" />
@@ -2183,8 +2191,12 @@ export default function AdminPage() {
       {/* MODAL 3: ACTIVAR / DESACTIVAR PRO DIRECTAMENTE A USUARIO              */}
       {/* ===================================================================== */}
       {grantingUser && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/75 backdrop-blur-xs animate-in fade-in duration-200">
-          <div className="relative w-full max-w-md bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl p-6 sm:p-8 space-y-5 text-xs">
+        <div
+          onClick={(e) => { if (e.target === e.currentTarget) setGrantingUser(null); }}
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/75 backdrop-blur-xs backdrop-enter"
+        >
+          <div className="relative w-full max-w-md bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl p-6 sm:p-8 space-y-5 text-xs modal-origin-card modal-enter">
+
             
             <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-4">
               <div className="flex items-center gap-2">
@@ -2274,8 +2286,12 @@ export default function AdminPage() {
       {/* MODAL: SOLICITUD APROBADA - CÓDIGO GENERADO Y ENVIAR POR WHATSAPP     */}
       {/* ===================================================================== */}
       {approvedResultModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/75 backdrop-blur-xs animate-in fade-in duration-200">
-          <div className="relative w-full max-w-md bg-white dark:bg-slate-900 rounded-3xl border border-emerald-500/40 shadow-2xl p-6 sm:p-8 space-y-6 text-xs text-center">
+        <div
+          onClick={(e) => { if (e.target === e.currentTarget) setApprovedResultModal(null); }}
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/75 backdrop-blur-xs backdrop-enter"
+        >
+          <div className="relative w-full max-w-md bg-white dark:bg-slate-900 rounded-3xl border border-emerald-500/40 shadow-2xl p-6 sm:p-8 space-y-6 text-xs text-center modal-origin-card modal-enter">
+
             
             <div className="w-16 h-16 rounded-full bg-emerald-100 dark:bg-emerald-950/80 border border-emerald-500/40 text-[#00875A] dark:text-[#00C853] flex items-center justify-center mx-auto shadow-sm">
               <CheckCircle2 className="w-8 h-8" />
@@ -2338,8 +2354,12 @@ export default function AdminPage() {
       {/* MODAL: RECHAZAR SOLICITUD DE PAGO                                     */}
       {/* ===================================================================== */}
       {rejectingSub && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/75 backdrop-blur-xs animate-in fade-in duration-200">
-          <div className="relative w-full max-w-md bg-white dark:bg-slate-900 rounded-3xl border border-red-500/30 shadow-2xl p-6 sm:p-8 space-y-5 text-xs">
+        <div
+          onClick={(e) => { if (e.target === e.currentTarget) setRejectingSub(null); }}
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/75 backdrop-blur-xs backdrop-enter"
+        >
+          <div className="relative w-full max-w-md bg-white dark:bg-slate-900 rounded-3xl border border-red-500/30 shadow-2xl p-6 sm:p-8 space-y-5 text-xs modal-origin-card modal-enter">
+
             
             <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
               <div className="flex items-center gap-2 text-red-600">
@@ -2402,8 +2422,12 @@ export default function AdminPage() {
       {/* ===================================================================== */}
 
       {rejectedResultModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/75 backdrop-blur-xs animate-in fade-in duration-200">
-          <div className="relative w-full max-w-md bg-white dark:bg-slate-900 rounded-3xl border border-amber-500/40 shadow-2xl p-6 sm:p-8 space-y-6 text-xs text-center">
+        <div
+          onClick={(e) => { if (e.target === e.currentTarget) setRejectedResultModal(null); }}
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/75 backdrop-blur-xs backdrop-enter"
+        >
+          <div className="relative w-full max-w-md bg-white dark:bg-slate-900 rounded-3xl border border-amber-500/40 shadow-2xl p-6 sm:p-8 space-y-6 text-xs text-center modal-origin-card modal-enter">
+
             
             <div className="w-16 h-16 rounded-full bg-amber-100 dark:bg-amber-950/80 border border-amber-500/40 text-amber-600 dark:text-amber-400 flex items-center justify-center mx-auto shadow-sm">
               <AlertTriangle className="w-8 h-8" />

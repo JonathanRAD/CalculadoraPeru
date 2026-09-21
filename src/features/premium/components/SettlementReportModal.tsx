@@ -24,6 +24,7 @@ import {
 import { exportToCsv } from '@/shared/utils/exportExcel';
 import { formatCurrency } from '@/core/math/formatters';
 import { usePro } from '@/features/premium/context/ProContext';
+import { useModalAnimation } from '@/shared/hooks/useModalAnimation';
 
 interface SettlementReportModalProps {
   isOpen: boolean;
@@ -39,7 +40,10 @@ export function SettlementReportModal({
   onClose,
   calculationData,
 }: SettlementReportModalProps) {
+  const { shouldRender, backdropClass, modalClass } = useModalAnimation(isOpen);
+
   // Document customization fields
+
   const [workerName, setWorkerName] = useState('');
   const [workerDni, setWorkerDni] = useState('');
   const [workerPosition, setWorkerPosition] = useState('');
@@ -136,9 +140,15 @@ export function SettlementReportModal({
     }
   };
 
+  if (!shouldRender) return null;
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/70 backdrop-blur-xs animate-in fade-in duration-200">
-      <div className="relative w-full max-w-xl max-h-[92vh] flex flex-col bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden">
+    <div
+      onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
+      className={`fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/70 backdrop-blur-xs ${backdropClass}`}
+    >
+      <div className={`relative w-full max-w-xl max-h-[92vh] flex flex-col bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden ${modalClass}`}>
+
         
         {/* Modal Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/60 shrink-0">

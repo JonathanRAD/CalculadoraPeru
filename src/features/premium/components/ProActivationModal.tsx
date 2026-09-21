@@ -3,15 +3,18 @@
 import React, { useState } from 'react';
 import { usePro } from '@/features/premium/context/ProContext';
 import { Sparkles, KeyRound, Check, X, ShieldCheck, ArrowRight, Loader2 } from 'lucide-react';
+import { useModalAnimation } from '@/shared/hooks/useModalAnimation';
 
 export default function ProActivationModal() {
   const { isActivationModalOpen, closeActivationModal, activatePro, isPro, subscriberName, plan, logoutPro } = usePro();
+  const { shouldRender, backdropClass, modalClass } = useModalAnimation(isActivationModalOpen);
+
   const [code, setCode] = useState('');
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
 
-  if (!isActivationModalOpen) return null;
+  if (!shouldRender) return null;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,8 +36,12 @@ export default function ProActivationModal() {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-xs animate-in fade-in duration-150">
-      <div className="relative w-full max-w-md bg-white dark:bg-[#111625] rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl p-6 sm:p-7 text-slate-900 dark:text-slate-100 space-y-5">
+    <div
+      onClick={(e) => { if (e.target === e.currentTarget) closeActivationModal(); }}
+      className={`fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-xs ${backdropClass}`}
+    >
+      <div className={`relative w-full max-w-md bg-white dark:bg-[#111625] rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl p-6 sm:p-7 text-slate-900 dark:text-slate-100 space-y-5 ${modalClass}`}>
+
         
         {/* Close Button */}
         <button

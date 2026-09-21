@@ -14,7 +14,9 @@ import { ProProvider } from '@/features/premium/context/ProContext';
 import ProActivationModal from '@/features/premium/components/ProActivationModal';
 import { AuthModal } from '@/features/auth/components/AuthModal';
 import { ProfileModal } from '@/features/auth/components/ProfileModal';
+import { ModalOriginTracker } from '@/shared/components/ui/ModalOriginTracker';
 import { NativeAnalyticsTracker } from '@/shared/components/analytics/NativeAnalyticsTracker';
+
 
 const plexSans = IBM_Plex_Sans({
   variable: '--font-plex-sans',
@@ -193,9 +195,11 @@ export default function RootLayout({
               {children}
             </main>
             <Footer />
+            <ModalOriginTracker />
             <ProActivationModal />
             <AuthModal />
             <ProfileModal />
+
             <GoogleAnalyticsPageViews />
             <NativeAnalyticsTracker />
             <Analytics />

@@ -25,6 +25,7 @@ import {
 import { exportToCsv } from '@/shared/utils/exportExcel';
 import { formatCurrency } from '@/core/math/formatters';
 import { usePro } from '@/features/premium/context/ProContext';
+import { useModalAnimation } from '@/shared/hooks/useModalAnimation';
 
 interface PayrollSlipModalProps {
   isOpen: boolean;
@@ -55,7 +56,10 @@ export function PayrollSlipModal({
   onClose,
   calculationData,
 }: PayrollSlipModalProps) {
+  const { shouldRender, backdropClass, modalClass } = useModalAnimation(isOpen);
+
   // Worker inputs
+
   const [workerName, setWorkerName] = useState('');
   const [workerDni, setWorkerDni] = useState('');
   const [workerPosition, setWorkerPosition] = useState('');
@@ -222,9 +226,15 @@ export function PayrollSlipModal({
     }
   };
 
+  if (!shouldRender) return null;
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/75 backdrop-blur-xs animate-in fade-in duration-200">
-      <div className="relative w-full max-w-xl bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl p-6 sm:p-8 space-y-6 text-xs max-h-[92vh] overflow-y-auto">
+    <div
+      onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
+      className={`fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/75 backdrop-blur-xs ${backdropClass}`}
+    >
+      <div className={`relative w-full max-w-xl bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl p-6 sm:p-8 space-y-6 text-xs max-h-[92vh] overflow-y-auto ${modalClass}`}>
+
         
         {/* Header */}
         <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-4">

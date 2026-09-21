@@ -21,11 +21,13 @@ import {
 import { ThemeToggle } from '@/shared/components/ui/ThemeToggle';
 import { usePro } from '@/features/premium/context/ProContext';
 import { trackSearchQuery } from '@/shared/components/analytics/NativeAnalyticsTracker';
+import { useModalAnimation } from '@/shared/hooks/useModalAnimation';
 
 export function Navbar() {
   const pathname = usePathname();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const { shouldRender: shouldRenderSearch, backdropClass: searchBackdropClass, modalClass: searchModalClass } = useModalAnimation(isSearchOpen);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<CalculatorCategory | null>(null);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -38,6 +40,7 @@ export function Navbar() {
     setIsSearchOpen(false);
     setSearchQuery('');
   }, []);
+
 
   // Listen for scroll state
   useEffect(() => {
@@ -351,7 +354,7 @@ export function Navbar() {
       </header>
 
       {/* Global Quick Search Modal */}
-      {isSearchOpen && (
+      {shouldRenderSearch && (
         <div
           role="dialog"
           aria-modal="true"
@@ -359,9 +362,10 @@ export function Navbar() {
           onMouseDown={(event) => {
             if (event.target === event.currentTarget) closeSearch();
           }}
-          className="fixed inset-0 z-50 flex items-start justify-center pt-16 sm:pt-20 bg-slate-950/70 backdrop-blur-xs p-4 animate-in fade-in duration-100"
+          className={`fixed inset-0 z-50 flex items-start justify-center pt-16 sm:pt-20 bg-slate-950/70 backdrop-blur-xs p-4 ${searchBackdropClass}`}
         >
-          <div className="w-full max-w-xl bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 rounded-2xl shadow-2xl p-4 border border-slate-200 dark:border-slate-800 space-y-3">
+          <div className={`w-full max-w-xl bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 rounded-2xl shadow-2xl p-4 border border-slate-200 dark:border-slate-800 space-y-3 ${searchModalClass}`}>
+
             
             <div className="flex items-center gap-3 border-b border-slate-100 dark:border-slate-800 pb-3">
               <Search className="h-4 w-4 text-emerald-500" />
