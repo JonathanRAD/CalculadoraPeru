@@ -106,31 +106,11 @@ export default async function HomePage({ searchParams }: HomePageProps) {
       {/* ·  Desktop (≥1024px) : columna derecha aspect-[16/11]                    */}
       {/* ========================================================================= */}
       <section className="relative overflow-hidden border-b border-slate-200/80 bg-white dark:border-slate-800/80 dark:bg-[#0B132B] transition-colors">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-12">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 lg:gap-12 items-center">
 
-        {/* ── MOBILE + TABLET BANNER (visible below lg) ─────────────────────── */}
-        {!showWithoutImage && (
-          <div className="relative h-32 sm:h-44 lg:hidden w-full overflow-hidden">
-            <Image
-              src="/machu_pichu.jpg"
-              alt="Machu Picchu — Paisaje emblemático del Perú"
-              fill
-              priority
-              sizes="100vw"
-              className="object-cover object-[center_35%]"
-            />
-            {/* Gradient: strong fade to white/dark at bottom so text is pristine */}
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-white dark:to-[#0B132B] pointer-events-none" />
-            {/* Slight side vignettes for polish */}
-            <div className="absolute inset-0 bg-gradient-to-r from-white/20 via-transparent to-white/20 dark:from-[#0B132B]/30 dark:to-[#0B132B]/30 pointer-events-none" />
-          </div>
-        )}
-
-        {/* ── CONTENT AREA ──────────────────────────────────────────────────── */}
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 sm:py-10 lg:py-12">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-
-            {/* LEFT COLUMN: Title, description, HomeSearch, quick-filter pills */}
-            <div className={`space-y-4 sm:space-y-5 text-left ${showWithoutImage ? 'lg:col-span-12 max-w-3xl' : 'lg:col-span-7 xl:col-span-7'}`}>
+            {/* CONTENT COLUMN: Appears second on mobile (after photo banner), first on desktop */}
+            <div className={`space-y-4 sm:space-y-5 text-left order-2 lg:order-1 ${showWithoutImage ? 'lg:col-span-12 max-w-3xl' : 'lg:col-span-7 xl:col-span-7'}`}>
               <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-800 dark:border-emerald-800/60 dark:bg-emerald-950/40 dark:text-emerald-300">
                 <BadgeCheck className="h-3.5 w-3.5 text-[#08734F] dark:text-[#00C853]" aria-hidden="true" />
                 <span>25 calculadoras gratuitas · Parámetros Perú 2026</span>
@@ -151,7 +131,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
 
               {/* Quick Filter Pills */}
               <div className="pt-1 flex flex-wrap items-center gap-2 text-xs">
-                <span className="font-semibold text-slate-400 dark:text-slate-500 mr-1">Directos:</span>
+                <span className="font-semibold text-slate-500 dark:text-slate-400 mr-1">Directos:</span>
                 {POPULAR_PILLS.map((pill) => (
                   <Link
                     key={pill.href}
@@ -164,29 +144,31 @@ export default async function HomePage({ searchParams }: HomePageProps) {
               </div>
             </div>
 
-            {/* RIGHT COLUMN: Desktop-only full photo (hidden below lg) */}
+            {/* UNIFIED HERO PHOTO: Appears as compact panoramic banner above title on mobile, right column on desktop */}
             {!showWithoutImage && (
-              <div className="hidden lg:block lg:col-span-5 xl:col-span-5">
-                <div className="relative rounded-3xl overflow-hidden border border-slate-200/80 dark:border-slate-800 shadow-xl shadow-slate-200/50 dark:shadow-slate-950/60 aspect-[16/11] w-full group">
+              <div className="order-1 lg:order-2 w-full lg:col-span-5 xl:col-span-5">
+                <div className="relative rounded-2xl sm:rounded-3xl overflow-hidden border border-slate-200/80 dark:border-slate-800 shadow-md lg:shadow-xl shadow-slate-200/50 dark:shadow-slate-950/60 w-full h-32 sm:h-44 lg:h-auto lg:aspect-[16/11] group">
                   <Image
                     src="/machu_pichu.jpg"
-                    alt="Paisaje emblemático del Perú — Machu Picchu"
+                    alt="Machu Picchu — Paisaje emblemático del Perú"
                     fill
                     priority
-                    sizes="(max-width: 1280px) 42vw, 560px"
+                    sizes="(max-width: 640px) 100vw, (max-width: 1023px) 90vw, (max-width: 1280px) 42vw, 560px"
                     className="object-cover object-[center_35%] transition-transform duration-700 group-hover:scale-105"
                   />
-                  {/* Soft gradient blend toward the left */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-white/30 via-transparent to-transparent dark:from-[#0B132B]/50 pointer-events-none" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-slate-950/10 to-transparent pointer-events-none" />
+                  {/* Subtle mobile vignette and bottom gradient */}
+                  <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/25 lg:hidden pointer-events-none" />
+                  {/* Desktop gradients for smooth edge blending */}
+                  <div className="hidden lg:block absolute inset-0 bg-gradient-to-r from-white/30 via-transparent to-transparent dark:from-[#0B132B]/50 pointer-events-none" />
+                  <div className="hidden lg:block absolute inset-0 bg-gradient-to-t from-slate-950/70 via-slate-950/10 to-transparent pointer-events-none" />
 
                   {/* Discreet badge overlay */}
-                  <div className="absolute bottom-3 left-4 right-4 flex items-center justify-between text-[11px] font-medium text-white/95 pointer-events-none">
-                    <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-950/60 backdrop-blur-xs px-2.5 py-1 border border-white/10">
+                  <div className="absolute bottom-2 sm:bottom-3 left-3 sm:left-4 right-3 sm:right-4 flex items-center justify-between text-[10px] sm:text-[11px] font-medium text-white/95 pointer-events-none">
+                    <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-950/60 backdrop-blur-xs px-2 sm:px-2.5 py-0.5 sm:py-1 border border-white/10">
                       <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
                       Parámetros Perú 2026
                     </span>
-                    <span className="rounded-full bg-slate-950/60 backdrop-blur-xs px-2.5 py-1 border border-white/10 text-white/80">
+                    <span className="rounded-full bg-slate-950/60 backdrop-blur-xs px-2 sm:px-2.5 py-0.5 sm:py-1 border border-white/10 text-white/80">
                       Cálculos locales
                     </span>
                   </div>
@@ -239,7 +221,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
                     <span className="rounded-md bg-emerald-50 px-2 py-0.5 text-[11px] font-bold text-[#08734F] uppercase tracking-wider dark:bg-emerald-950/60 dark:text-emerald-300">
                       {calculator.tag}
                     </span>
-                    <span className="text-[11px] font-mono text-slate-400 dark:text-slate-500">
+                    <span className="text-[11px] font-mono text-slate-500 dark:text-slate-400">
                       2026
                     </span>
                   </div>

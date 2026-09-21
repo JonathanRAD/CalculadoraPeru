@@ -87,7 +87,7 @@ export default function SobreNosotrosPage() {
               </div>
               <h3 className="font-bold text-sm text-slate-900 dark:text-white">Privacidad Total</h3>
               <p className="text-xs text-slate-500 dark:text-slate-400">
-                Tus números y sueldos se calculan localmente en tu propio dispositivo. Nunca guardamos tus montos.
+                En uso libre, tus números y sueldos se calculan localmente en tu propio dispositivo. En el Plan PRO, los cálculos se guardan únicamente si tú decides almacenarlos voluntariamente.
               </p>
             </div>
           </div>

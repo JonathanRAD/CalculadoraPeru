@@ -231,7 +231,7 @@ export function generateOfficialSettlementPdf(options: OfficialSettlementPdfOpti
   doc.setTextColor(100, 116, 139);
   const dateStr = new Date().toLocaleDateString('es-PE', { day: '2-digit', month: 'long', year: 'numeric' });
   doc.text(`Fecha de Liquidación: ${dateStr}`, pageWidth - 20, currentY - 2, { align: 'right' });
-  doc.text(`Doc. Certificado Nº LP-${Math.floor(100000 + Math.random() * 900000)}`, pageWidth - 20, currentY + 3, { align: 'right' });
+  doc.text(`Liquidación Folio Nº LP-${Math.floor(100000 + Math.random() * 900000)}`, pageWidth - 20, currentY + 3, { align: 'right' });
 
   if (options.companyRuc) {
     currentY += 5;

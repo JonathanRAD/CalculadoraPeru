@@ -202,7 +202,7 @@ export default function RootLayout({
 
             <GoogleAnalyticsPageViews />
             <NativeAnalyticsTracker />
-            <Analytics />
+            {process.env.VERCEL ? <Analytics /> : null}
             <PwaRegistration />
             <PwaInstallBanner />
             <CookieBanner />

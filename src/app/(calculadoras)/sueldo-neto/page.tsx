@@ -16,7 +16,12 @@ import { ResultMetricCard } from '@/shared/components/ui/ResultMetricCard';
 import { ShareButtons } from '@/shared/components/ui/ShareButtons';
 import { ExportPdfButton } from '@/shared/components/ui/ExportPdfButton';
 import { Briefcase, ChevronDown, Settings2, FileText } from 'lucide-react';
-import { PayrollSlipModal } from '@/features/premium/components/PayrollSlipModal';
+import dynamic from 'next/dynamic';
+
+const PayrollSlipModal = dynamic(
+  () => import('@/features/premium/components/PayrollSlipModal').then((mod) => mod.PayrollSlipModal),
+  { ssr: false }
+);
 
 export default function SueldoNetoPage() {
   const [isSlipModalOpen, setIsSlipModalOpen] = useState(false);
@@ -111,13 +116,13 @@ Sueldo Neto en Cuenta: ${formatCurrency(result.netSalary)}`;
               </div>
             </div>
             <div className="p-3 bg-white dark:bg-slate-950 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-[11px] text-slate-800 dark:text-slate-200">
-              Fórmula Oficial: Sueldo Neto = (Sueldo Básico + Asignación Familiar + Conceptos No Remunerativos) - (Descuento Previsional AFP/ONP + Retención 5ta Categoría + Otros Descuentos)
+              Fórmula: Sueldo Neto = (Sueldo Básico + Asignación Familiar + Conceptos Remunerativos) - (Descuento Previsional AFP/ONP + Retención 5ta Categoría + Otros Descuentos)
             </div>
           </div>
 
           <div className="space-y-3">
             <h3 className="font-bold text-sm text-slate-900 dark:text-white">
-              2. Caso práctico con cifras reales (Ejemplo de remuneración 2026)
+              2. Caso práctico de aplicación (Ejemplo ilustrativo 2026)
             </h3>
             <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
               Imaginemos un trabajador del régimen privado general con un sueldo bruto básico de <strong>S/ 3,000.00</strong> mensuales, con carga familiar acreditada (recibe Asignación Familiar del 10% de la RMV) y afiliado a AFP Integra bajo comisión por flujo (12.92% total):
@@ -367,7 +372,7 @@ Sueldo Neto en Cuenta: ${formatCurrency(result.netSalary)}`;
                 Resumen de Boleta de Pago
               </span>
               <span className="rounded-full bg-emerald-50 dark:bg-emerald-950/70 border border-emerald-200 dark:border-emerald-800 px-2.5 py-0.5 text-[11px] font-bold text-[#08734F] dark:text-emerald-300">
-                {showPayrollDetails ? 'Personalizado' : 'Estimación oficial'}
+                {showPayrollDetails ? 'Personalizado' : 'Estimación base'}
               </span>
             </div>
 
@@ -471,7 +476,7 @@ Sueldo Neto en Cuenta: ${formatCurrency(result.netSalary)}`;
                     ✓
                   </span>
                   <span className="font-bold text-xs text-emerald-950 dark:text-emerald-200 uppercase tracking-wider">
-                    Boleta de Pago Oficial MTPE
+                    Boleta de Pago Formato D.S. 001-98-TR
                   </span>
                 </div>
                 <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-emerald-200/70 dark:bg-emerald-900/80 text-emerald-900 dark:text-emerald-200">
@@ -479,7 +484,7 @@ Sueldo Neto en Cuenta: ${formatCurrency(result.netSalary)}`;
                 </span>
               </div>
               <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed font-normal">
-                Genera tu <strong>Boleta Oficial en PDF o Excel</strong> con formato formal de 3 columnas (haberes, deducciones y aportaciones patronales).
+                Genera tu <strong>Boleta de Pago en PDF o Excel</strong> con estructura formal de 3 columnas (haberes, deducciones y aportaciones patronales).
               </p>
               <button
                 type="button"
@@ -487,7 +492,7 @@ Sueldo Neto en Cuenta: ${formatCurrency(result.netSalary)}`;
                 className="w-full py-3 rounded-xl bg-[#08734F] hover:bg-emerald-800 text-white font-bold text-xs flex items-center justify-center gap-2 transition-all cursor-pointer shadow-sm"
               >
                 <FileText className="w-4 h-4" />
-                <span>Emitir Boleta Oficial (PDF / Excel)</span>
+                <span>Emitir Boleta de Pago (PDF / Excel)</span>
               </button>
             </div>
 

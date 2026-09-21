@@ -16,9 +16,14 @@ import { ResultMetricCard } from '@/shared/components/ui/ResultMetricCard';
 import { ShareButtons } from '@/shared/components/ui/ShareButtons';
 import { ExportPdfButton } from '@/shared/components/ui/ExportPdfButton';
 import { Briefcase, AlertCircle, FileCheck } from 'lucide-react';
-import { SettlementReportModal } from '@/features/premium/components/SettlementReportModal';
+import dynamic from 'next/dynamic';
 import { CalculationActionToolbar } from '@/features/premium/components/CalculationActionToolbar';
 import { SunafilFinesCard } from '@/features/premium/components/SunafilFinesCard';
+
+const SettlementReportModal = dynamic(
+  () => import('@/features/premium/components/SettlementReportModal').then((mod) => mod.SettlementReportModal),
+  { ssr: false }
+);
 
 export default function LiquidacionLaboralPage() {
   const [isPremiumModalOpen, setIsPremiumModalOpen] = useState(false);
@@ -163,27 +168,27 @@ ${isDismissal ? `Indemnización por Despido: ${formatCurrency(result.arbitraryDi
                 <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                   <tr>
                     <td className="p-2.5 font-semibold">CTS Trunca Acumulada</td>
-                    <td className="p-2.5 text-slate-500">(S/ 3,000 + 1/6 Grati S/ 500 = S/ 3,500 base ÷ 12) × 4 meses</td>
+                    <td className="p-2.5 text-slate-600 dark:text-slate-300">(S/ 3,000 + 1/6 Grati S/ 500 = S/ 3,500 base ÷ 12) × 4 meses</td>
                     <td className="p-2.5 font-mono text-emerald-700 dark:text-emerald-400">S/ 1,166.67</td>
                   </tr>
                   <tr>
                     <td className="p-2.5 font-semibold">Gratificación Trunca Legal</td>
-                    <td className="p-2.5 text-slate-500">(S/ 3,000 ÷ 6) × 4 meses</td>
+                    <td className="p-2.5 text-slate-600 dark:text-slate-300">(S/ 3,000 ÷ 6) × 4 meses</td>
                     <td className="p-2.5 font-mono text-emerald-700 dark:text-emerald-400">S/ 2,000.00</td>
                   </tr>
                   <tr>
                     <td className="p-2.5 font-semibold">Bonificación Extraordinaria EsSalud (9%)</td>
-                    <td className="p-2.5 text-slate-500">9% de S/ 2,000</td>
+                    <td className="p-2.5 text-slate-600 dark:text-slate-300">9% de S/ 2,000</td>
                     <td className="p-2.5 font-mono text-emerald-700 dark:text-emerald-400">+ S/ 180.00</td>
                   </tr>
                   <tr>
                     <td className="p-2.5 font-semibold">Vacaciones Truncas Pendientes</td>
-                    <td className="p-2.5 text-slate-500">(S/ 3,000 ÷ 12) × 8 meses</td>
+                    <td className="p-2.5 text-slate-600 dark:text-slate-300">(S/ 3,000 ÷ 12) × 8 meses</td>
                     <td className="p-2.5 font-mono text-emerald-700 dark:text-emerald-400">S/ 2,000.00</td>
                   </tr>
                   <tr className="bg-emerald-50 dark:bg-emerald-950 font-bold text-slate-900 dark:text-white">
                     <td className="p-2.5 text-emerald-800 dark:text-emerald-300">Total Liquidación de Beneficios Sociales</td>
-                    <td className="p-2.5 text-slate-500 font-normal">Suma de conceptos truncos</td>
+                    <td className="p-2.5 text-slate-600 dark:text-slate-300 font-normal">Suma de conceptos truncos</td>
                     <td className="p-2.5 font-mono text-emerald-800 dark:text-emerald-300 text-sm">S/ 5,346.67</td>
                   </tr>
                 </tbody>
@@ -225,10 +230,11 @@ ${isDismissal ? `Indemnización por Despido: ${formatCurrency(result.arbitraryDi
             />
 
             <div>
-              <label className="text-xs sm:text-sm font-bold text-slate-900 dark:text-slate-200 block mb-2">
+              <label htmlFor="laborRegime" className="text-xs sm:text-sm font-bold text-slate-900 dark:text-slate-200 block mb-2">
                 Régimen Laboral
               </label>
               <select
+                id="laborRegime"
                 value={laborRegime}
                 onChange={(e) => setLaborRegime(e.target.value as LaborRegime)}
                 className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 p-2.5 text-xs font-bold text-slate-900 dark:text-white outline-none focus:border-[#08734F]"
@@ -241,10 +247,11 @@ ${isDismissal ? `Indemnización por Despido: ${formatCurrency(result.arbitraryDi
           </div>
 
           <div>
-            <label className="text-xs sm:text-sm font-bold text-slate-900 dark:text-slate-200 block mb-2">
+            <label htmlFor="separationReason" className="text-xs sm:text-sm font-bold text-slate-900 dark:text-slate-200 block mb-2">
               Motivo de Término Laboral
             </label>
             <select
+              id="separationReason"
               value={separationReason}
               onChange={(e) => setSeparationReason(e.target.value as SeparationReason)}
               className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 p-2.5 text-xs font-bold text-slate-900 dark:text-white outline-none focus:border-[#08734F]"
@@ -392,7 +399,7 @@ ${isDismissal ? `Indemnización por Despido: ${formatCurrency(result.arbitraryDi
                 Liquidación Final
               </span>
               <span className="rounded-full bg-emerald-50 dark:bg-emerald-950/70 border border-emerald-200 dark:border-emerald-800 px-2.5 py-0.5 text-[11px] font-bold text-[#08734F] dark:text-emerald-300">
-                Plazo 48h MTPE
+                Plazo 48h Legal
               </span>
             </div>
 
@@ -457,15 +464,15 @@ ${isDismissal ? `Indemnización por Despido: ${formatCurrency(result.arbitraryDi
                     ⭐
                   </span>
                   <span className="font-bold text-xs text-emerald-950 dark:text-emerald-200 uppercase tracking-wider">
-                    Documento Legal Certificado
+                    Liquidación Formal Conforme Ley
                   </span>
                 </div>
                 <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-emerald-200/70 dark:bg-emerald-900/80 text-emerald-900 dark:text-emerald-200">
-                  Formato MTPE / SUNAFIL
+                  D.L. 728 / Ley 27735
                 </span>
               </div>
               <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed font-normal">
-                Genera tu <strong>Liquidación Oficial en PDF</strong> con membrete, desglose legal de CTS, Grati y Vacaciones, cita de leyes y recuadros de firma formal.
+                Genera tu <strong>Liquidación en PDF</strong> con membrete, desglose legal de CTS, Grati y Vacaciones, cita de leyes y recuadros de firma formal.
               </p>
               <button
                 type="button"
@@ -473,7 +480,7 @@ ${isDismissal ? `Indemnización por Despido: ${formatCurrency(result.arbitraryDi
                 className="w-full py-3 rounded-xl bg-[#00875A] hover:bg-[#00704A] text-white font-bold text-xs flex items-center justify-center gap-2 transition-all cursor-pointer shadow-md shadow-emerald-950/10"
               >
                 <FileCheck className="w-4 h-4" />
-                <span>Generar Liquidación Oficial Certificada</span>
+                <span>Generar Liquidación Formal en PDF</span>
               </button>
             </div>
 
@@ -483,7 +490,7 @@ ${isDismissal ? `Indemnización por Despido: ${formatCurrency(result.arbitraryDi
                 label="Descarga Rápida Simple (Resumen)"
                 getReportOptions={() => ({
                   title: 'Hoja de Liquidación de Beneficios Sociales',
-                  subtitle: `Liquidación integral laboral calculada bajo normativa MTPE Perú`,
+                  subtitle: `Liquidación integral laboral calculada bajo normativa legal peruana (D.L. 728)`,
                   items: [
                     { label: 'Último Sueldo Básico', value: formatCurrency(baseSalary) },
                     { label: 'Asignación Familiar', value: hasFamilyAllowance ? 'S/ 113.00' : 'S/ 0.00' },
@@ -556,7 +563,7 @@ ${isDismissal ? `Indemnización por Despido: ${formatCurrency(result.arbitraryDi
               `• Vacaciones Truncas: ${formatCurrency(result.truncatedVacations)}\n` +
               (result.arbitraryDismissalIndemnity > 0 ? `• Indemnización Despido: ${formatCurrency(result.arbitraryDismissalIndemnity)}\n` : '') +
               `*TOTAL LIQUIDACIÓN NETA: ${formatCurrency(result.totalSettlement)}*\n` +
-              `_Calculado con parámetros oficiales SUNAFIL en calculaperu.pe_`}
+              `_Calculado con parámetros referenciales SUNAFIL en calculaperu.pe_`}
           />
 
           {/* SUNAFIL Fines Risk Matrix */}

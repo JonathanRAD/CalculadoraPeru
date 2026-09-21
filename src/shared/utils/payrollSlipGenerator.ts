@@ -597,7 +597,7 @@ export function generateOfficialPayrollSlipPdf(options: PayrollSlipOptions) {
     doc.setFontSize(6);
     doc.setTextColor(100, 116, 139);
     doc.text(
-      'Documento de Planilla emitido conforme al D.S. N° 001-98-TR y D.S. N° 009-2011-TR · Sistema Certificado CalculaPerú PRO',
+      'Documento de Planilla emitido conforme al D.S. N° 001-98-TR y D.S. N° 009-2011-TR · Generado con CalculaPerú PRO',
       pageWidth / 2,
       288,
       { align: 'center' }

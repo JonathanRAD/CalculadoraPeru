@@ -175,10 +175,11 @@ Motivo: ${result.recommendedReason}`;
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div>
-              <label className="text-xs sm:text-sm font-bold text-slate-900 dark:text-slate-200 block mb-2">
+              <label htmlFor="taxpayerType" className="text-xs sm:text-sm font-bold text-slate-900 dark:text-slate-200 block mb-2">
                 Tipo de contribuyente
               </label>
               <select
+                id="taxpayerType"
                 value={taxpayerType}
                 onChange={(e) => setTaxpayerType(e.target.value as TaxpayerType)}
                 className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 p-2.5 text-xs font-bold text-slate-900 dark:text-white outline-none focus:border-[#08734F]"
@@ -189,10 +190,11 @@ Motivo: ${result.recommendedReason}`;
             </div>
 
             <div>
-              <label className="text-xs sm:text-sm font-bold text-slate-900 dark:text-slate-200 block mb-2">
+              <label htmlFor="clientType" className="text-xs sm:text-sm font-bold text-slate-900 dark:text-slate-200 block mb-2">
                 ¿A quiénes le venderás principalmente?
               </label>
               <select
+                id="clientType"
                 value={clientType}
                 onChange={(e) => setClientType(e.target.value as ClientType)}
                 className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 p-2.5 text-xs font-bold text-slate-900 dark:text-white outline-none focus:border-[#08734F]"
@@ -204,10 +206,11 @@ Motivo: ${result.recommendedReason}`;
             </div>
 
             <div>
-              <label className="text-xs sm:text-sm font-bold text-slate-900 dark:text-slate-200 block mb-2">
+              <label htmlFor="activityType" className="text-xs sm:text-sm font-bold text-slate-900 dark:text-slate-200 block mb-2">
                 Giro / Actividad
               </label>
               <select
+                id="activityType"
                 value={activityType}
                 onChange={(e) => setActivityType(e.target.value as ActivityType)}
                 className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 p-2.5 text-xs font-bold text-slate-900 dark:text-white outline-none focus:border-[#08734F]"

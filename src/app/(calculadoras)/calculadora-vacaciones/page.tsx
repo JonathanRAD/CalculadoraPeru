@@ -149,10 +149,11 @@ Total a Percibir: ${formatCurrency(result.totalPay)}`;
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div>
-              <label className="text-xs sm:text-sm font-bold text-slate-900 dark:text-slate-200 block mb-2">
+              <label htmlFor="companyRegime" className="text-xs sm:text-sm font-bold text-slate-900 dark:text-slate-200 block mb-2">
                 Régimen Laboral / Días al año
               </label>
               <select
+                id="companyRegime"
                 value={companyRegime}
                 onChange={(e) => setCompanyRegime(e.target.value as VacationRegime)}
                 className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 p-2.5 text-xs font-bold text-slate-900 dark:text-white outline-none focus:border-[#08734F]"

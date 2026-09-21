@@ -218,8 +218,25 @@ export default function MargenDeGananciaPage() {
               <div className="text-3xl sm:text-5xl font-black text-emerald-800 dark:text-emerald-400 mt-1 font-mono tabular-nums break-words leading-tight">
                 {formatPercent(result.profitMarginPercentage)}
               </div>
-              <div className="mt-2 text-xs text-slate-600 dark:text-slate-400 font-semibold">
-                De cada S/ 100 vendidos, te quedan {formatCurrency(result.profitMarginPercentage)} limpios
+              <div className="mt-2 text-xs text-slate-600 dark:text-slate-400 font-semibold leading-relaxed">
+                {form.priceIncludesIgv ? (
+                  <>
+                    Por cada S/ 100 cobrados con IGV, te quedan{' '}
+                    <strong className="text-emerald-700 dark:text-emerald-400 font-mono">
+                      {formatCurrency(form.salePrice > 0 ? (result.profitPerUnit / form.salePrice) * 100 : 0)}
+                    </strong>{' '}
+                    en caja limpia ({formatPercent(result.profitMarginPercentage)} sobre el valor venta neto de{' '}
+                    {formatCurrency(form.salePrice > 0 ? (result.priceWithoutIgv / form.salePrice) * 100 : 0)})
+                  </>
+                ) : (
+                  <>
+                    De cada S/ 100 de valor neto facturado, te quedan{' '}
+                    <strong className="text-emerald-700 dark:text-emerald-400 font-mono">
+                      {formatCurrency(result.profitMarginPercentage)}
+                    </strong>{' '}
+                    limpios de ganancia líquida
+                  </>
+                )}
               </div>
             </div>
 

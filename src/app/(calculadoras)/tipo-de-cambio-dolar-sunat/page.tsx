@@ -292,10 +292,11 @@ Compra: S/ ${result.buyRate.toFixed(3)} | Venta: S/ ${result.sellRate.toFixed(3)
             />
 
             <div>
-              <label className="text-xs sm:text-sm font-bold text-slate-900 dark:text-slate-200 block mb-2">
+              <label htmlFor="exchangeSource" className="text-xs sm:text-sm font-bold text-slate-900 dark:text-slate-200 block mb-2">
                 Fuente de Tipo de Cambio
               </label>
               <select
+                id="exchangeSource"
                 value={source}
                 onChange={(e) => {
                   const nextSource = e.target.value as ExchangeSource;

@@ -70,7 +70,7 @@ export function Footer() {
           </nav>
         </div>
 
-        <div className="mt-10 flex flex-col gap-3 border-t border-slate-800 pt-6 text-xs leading-5 text-slate-500 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-10 flex flex-col gap-3 border-t border-slate-800 pt-6 text-xs leading-5 text-slate-400 sm:flex-row sm:items-center sm:justify-between">
           <p>© 2026 CalculaPerú. Calcula mejor, decide mejor.</p>
           <p className="max-w-2xl sm:text-right">Los resultados son referenciales y no sustituyen asesoría profesional ni la información de cada entidad competente.</p>
         </div>

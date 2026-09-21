@@ -3,13 +3,14 @@
 import React, { useState } from 'react';
 import { ShieldAlert, AlertTriangle, Building2, HelpCircle, CheckCircle, ChevronDown } from 'lucide-react';
 import { usePro } from '@/features/premium/context/ProContext';
+import { PERU_CONSTANTS } from '@/core/constants/peru';
 
 interface SunafilFinesCardProps {
   obligationType: 'cts' | 'gratificacion' | 'liquidacion' | 'boleta';
   workerCount?: number;
 }
 
-const UIT_2026 = 5350;
+const CURRENT_UIT = PERU_CONSTANTS.CURRENT_UIT;
 
 // Escala oficial de multas SUNAFIL en porcentajes de la UIT según D.S. 008-2020-TR
 // Infracciones Graves (No depositar CTS o Grati)
@@ -38,7 +39,7 @@ export function SunafilFinesCard({ obligationType, workerCount = 1 }: SunafilFin
   // Bracket index based on affected workers
   const bracketIndex = affectedWorkers <= 1 ? 0 : affectedWorkers <= 5 ? 1 : affectedWorkers <= 10 ? 2 : 3;
   const uitFactor = table[businessType][bracketIndex];
-  const fineEstimated = Math.round(uitFactor * UIT_2026);
+  const fineEstimated = Math.round(uitFactor * CURRENT_UIT);
 
   const titleMap = {
     cts: 'Multa SUNAFIL por No Depositar CTS a Tiempo',
@@ -87,16 +88,17 @@ export function SunafilFinesCard({ obligationType, workerCount = 1 }: SunafilFin
       </div>
 
       <p className="text-xs text-slate-600 dark:text-slate-400">
-        {deadlineMap[obligationType]} El incumplimiento genera multas no subsanables calculadas en base a la UIT vigente (S/ {UIT_2026.toLocaleString('es-PE')}).
+        {deadlineMap[obligationType]} El incumplimiento genera multas no subsanables calculadas en base a la UIT vigente (S/ {CURRENT_UIT.toLocaleString('es-PE')}).
       </p>
 
       {/* Simulator parameters */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
         <div>
-          <label className="block text-[11px] font-semibold text-slate-600 dark:text-slate-400 mb-1">
+          <label htmlFor={`sunafil-regime-${obligationType}`} className="block text-[11px] font-semibold text-slate-600 dark:text-slate-400 mb-1">
             Régimen Laboral de la Empresa:
           </label>
           <select
+            id={`sunafil-regime-${obligationType}`}
             value={businessType}
             onChange={(e) => setBusinessType(e.target.value as 'micro' | 'pequena' | 'general')}
             className="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-xs font-semibold text-slate-900 dark:text-white outline-none"
@@ -108,10 +110,11 @@ export function SunafilFinesCard({ obligationType, workerCount = 1 }: SunafilFin
         </div>
 
         <div>
-          <label className="block text-[11px] font-semibold text-slate-600 dark:text-slate-400 mb-1">
+          <label htmlFor={`sunafil-workers-${obligationType}`} className="block text-[11px] font-semibold text-slate-600 dark:text-slate-400 mb-1">
             Trabajadores Afectados:
           </label>
           <input
+            id={`sunafil-workers-${obligationType}`}
             type="number"
             min={1}
             max={500}

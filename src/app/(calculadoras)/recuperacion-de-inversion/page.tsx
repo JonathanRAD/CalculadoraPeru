@@ -22,7 +22,8 @@ export default function RecuperacionDeInversionPage() {
 
   const shareSummary = `Retorno de Inversión (ROI) y Payback:
 • Tiempo de Recuperación: ${result.paybackMonths.toFixed(1)} meses (~${(result.paybackMonths / 12).toFixed(1)} años)
-• Retorno Anual (ROI): ${formatPercent(result.roiPercentage)}
+• Rendimiento del Flujo Anual: ${formatPercent(result.annualCashFlowReturnRate)}
+• Retorno Neto Año 1: ${formatPercent(result.roiPercentage)}
 • Inversión Inicial: ${formatCurrency(form.initialInvestment)}
 • Flujo Neto Mensual: ${formatCurrency(form.monthlyNetProfit)}`;
 
@@ -121,9 +122,14 @@ export default function RecuperacionDeInversionPage() {
                     <td className="p-2.5 font-bold text-emerald-800 dark:text-emerald-400">Recupera la inversión en ~1 año</td>
                   </tr>
                   <tr>
-                    <td className="p-2.5 font-medium">ROI Anualizado</td>
+                    <td className="p-2.5 font-medium">Rendimiento del Flujo Anual</td>
                     <td className="p-2.5 font-mono font-semibold text-sky-700 dark:text-sky-400">96.00% anual</td>
-                    <td className="p-2.5 text-slate-600 dark:text-slate-300">Excelente rentabilidad sobre capital</td>
+                    <td className="p-2.5 text-slate-600 dark:text-slate-300">Flujo anual / Capital (S/ 14,400 / S/ 15,000)</td>
+                  </tr>
+                  <tr>
+                    <td className="p-2.5 font-medium">Retorno Neto al Año 1 (ROI)</td>
+                    <td className="p-2.5 font-mono font-semibold text-amber-700 dark:text-amber-400">-4.00%</td>
+                    <td className="p-2.5 text-slate-600 dark:text-slate-300">Faltan S/ 600 (0.5 meses) para cubrir la inversión inicial</td>
                   </tr>
                 </tbody>
               </table>
@@ -194,16 +200,16 @@ export default function RecuperacionDeInversionPage() {
             {/* Sub-Metrics Grid */}
             <div className="grid grid-cols-2 gap-3 mb-5">
               <ResultMetricCard
-                label="Retorno Anual (ROI)"
-                value={formatPercent(result.roiPercentage)}
+                label="Rendimiento Flujo Anual"
+                value={formatPercent(result.annualCashFlowReturnRate)}
                 type="success"
-                subValue="Rentabilidad sobre capital"
+                subValue="Flujo 12 meses / capital"
               />
               <ResultMetricCard
-                label="Ganancia Anual Neta"
-                value={formatCurrency(form.monthlyNetProfit * 12)}
-                type="neutral"
-                subValue="Flujo neto en 12 meses"
+                label="Retorno Neto Año 1"
+                value={formatPercent(result.roiPercentage)}
+                type={result.roiPercentage >= 0 ? "success" : "warning"}
+                subValue={result.roiPercentage >= 0 ? "Ganancia sobre capital" : "En amortización (mes 12.5)"}
               />
             </div>
 

@@ -7,7 +7,8 @@ export interface RoiInput {
 }
 
 export interface RoiResult {
-  roiPercentage: number; // Retorno de inversión en % durante el periodo evaluado
+  roiPercentage: number; // Retorno neto sobre la inversión en % al final del periodo ((Flujo Total - Inversión) / Inversión * 100)
+  annualCashFlowReturnRate: number; // Rendimiento del flujo anual sobre el capital ((Flujo Mensual * 12) / Inversión * 100)
   paybackMonths: number; // Tiempo exacto de recuperación en meses
   isProfitable: boolean; // ¿Genera retorno positivo?
   totalNetProfitAtPeriod: number; // Ganancia acumulada al final del periodo
@@ -18,8 +19,9 @@ export interface RoiResult {
  * Calcula el Retorno de Inversión (ROI) y el Período de Recuperación (Payback Period).
  * 
  * Fórmulas:
- * - Meses de Recuperación = Inversión Inicial / Ganancia Neta Mensual
- * - ROI (%) = ((Ganancia Total del Periodo - Inversión) / Inversión) * 100
+ * - Meses de Recuperación (Payback) = Inversión Inicial / Ganancia Neta Mensual
+ * - Rendimiento Anual del Flujo = (Ganancia Mensual * 12 / Inversión Inicial) * 100
+ * - Retorno Neto del Periodo (ROI) = ((Ganancia Acumulada - Inversión) / Inversión) * 100
  */
 export function calculateRoi(input: RoiInput): RoiResult {
   const investment = Math.max(0, input.initialInvestment || 0);
@@ -28,6 +30,7 @@ export function calculateRoi(input: RoiInput): RoiResult {
 
   let paybackMonths = 0;
   let roiPercentage = 0;
+  let annualCashFlowReturnRate = 0;
   let totalNetProfitAtPeriod = 0;
   let monthlyReturnRate = 0;
 
@@ -36,11 +39,13 @@ export function calculateRoi(input: RoiInput): RoiResult {
     const totalAccumulated = monthlyProfit * durationMonths;
     totalNetProfitAtPeriod = totalAccumulated - investment;
     roiPercentage = ((totalAccumulated - investment) / investment) * 100;
+    annualCashFlowReturnRate = ((monthlyProfit * 12) / investment) * 100;
     monthlyReturnRate = (monthlyProfit / investment) * 100;
   }
 
   return {
     roiPercentage: roundTo(roiPercentage, 2),
+    annualCashFlowReturnRate: roundTo(annualCashFlowReturnRate, 2),
     paybackMonths: roundTo(paybackMonths, 1),
     isProfitable: monthlyProfit > 0 && paybackMonths <= durationMonths,
     totalNetProfitAtPeriod: roundTo(totalNetProfitAtPeriod, 2),

@@ -56,10 +56,10 @@ export default function PoliticaPrivacidadPage() {
           <section className="space-y-2">
             <h2 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
               <Eye className="h-4.5 w-4.5 text-emerald-700 dark:text-emerald-400" />
-              2. Cálculos Locales y Sin Almacenamiento
+              2. Cálculos Locales y Almacenamiento en Cuenta PRO
             </h2>
             <p>
-              Todas las operaciones matemáticas realizadas en nuestras calculadoras (Sueldo Neto, Gratificación, CTS, IGV, Precios, etc.) se procesan directamente en el navegador de tu dispositivo (client-side). <strong>CalculaPerú no recopila, guarda ni transmite a servidores externos los números, ingresos ni montos financieros que ingresas para realizar tus cálculos.</strong>
+              En la versión pública y gratuita, todas las operaciones matemáticas realizadas en nuestras calculadoras (Sueldo Neto, Gratificación, CTS, IGV, Precios, etc.) se procesan de forma 100% local en el navegador de tu dispositivo (client-side), sin registrar ni transmitir tus cifras a servidores externos. En caso de contar con una suscripción activa a <strong>CalculaPerú PRO</strong>, los cálculos, boletas o cotizaciones únicamente se almacenan en nuestra base de datos protegida cuando el usuario decide voluntariamente presionar la opción <em>&ldquo;Guardar en Mis Cálculos&rdquo;</em> para consultar su historial o exportar reportes.
             </p>
           </section>
 

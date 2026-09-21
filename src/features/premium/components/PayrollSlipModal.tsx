@@ -17,10 +17,9 @@ import {
   Clock,
   Briefcase,
 } from 'lucide-react';
-import confetti from 'canvas-confetti';
 import {
   generateOfficialPayrollSlipPdf,
-  PayrollSlipOptions,
+  type PayrollSlipOptions,
 } from '@/shared/utils/payrollSlipGenerator';
 import { exportToCsv } from '@/shared/utils/exportExcel';
 import { formatCurrency } from '@/core/math/formatters';
@@ -144,11 +143,18 @@ export function PayrollSlipModal({
         subsidizedDays: 0,
       });
 
-      confetti({
-        particleCount: 80,
-        spread: 70,
-        origin: { y: 0.6 },
-      });
+      try {
+        import('canvas-confetti').then((m) => {
+          const fire = m.default || m;
+          fire({
+            particleCount: 80,
+            spread: 70,
+            origin: { y: 0.6 },
+          });
+        });
+      } catch {
+        // confetti optional
+      }
 
       setTimeout(() => {
         setIsGenerating(false);

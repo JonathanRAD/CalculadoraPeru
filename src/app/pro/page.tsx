@@ -466,8 +466,8 @@ export default function ProSubscriptionPage() {
               <Sparkles className="w-4 h-4 text-amber-300 fill-amber-300" />
               <span>
                 {billingCycle === 'yearly'
-                  ? 'Activar Plan Anual (S/ 199 · S/ 16.58/mes)'
-                  : 'Activar Plan Mensual (S/ 29 / mes)'}
+                  ? 'Activar Plan Anual (S/ 149 · S/ 12.42/mes)'
+                  : 'Activar Plan Mensual (S/ 16 / mes)'}
               </span>
             </button>
           </div>
@@ -523,11 +523,11 @@ export default function ProSubscriptionPage() {
                     <td className="p-3.5 pl-4 font-medium">Formato Legal SUNAFIL (D.S. N° 001-98-TR) con Firmas y Huella</td>
                     <td className="p-3.5 text-center text-slate-400">Parcial</td>
                     <td className="p-3.5 text-center font-bold text-[#00875A] dark:text-emerald-400 bg-emerald-50/30 dark:bg-emerald-950/20">
-                      ✓ 100% Certificado
+                      ✓ Conforme a Ley
                     </td>
                   </tr>
                   <tr>
-                    <td className="p-3.5 pl-4 font-medium">Liquidaciones Laborales Oficiales D.L. 728</td>
+                    <td className="p-3.5 pl-4 font-medium">Liquidaciones Laborales Estructuradas D.L. 728</td>
                     <td className="p-3.5 text-center text-slate-500">S/ 9.90 por informe</td>
                     <td className="p-3.5 text-center font-bold text-[#00875A] dark:text-emerald-400 bg-emerald-50/30 dark:bg-emerald-950/20">
                       ✓ S/ 0.00 Ilimitadas
@@ -590,9 +590,9 @@ export default function ProSubscriptionPage() {
               <div className="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-950 flex items-center justify-center text-[#00875A] dark:text-[#00C853]">
                 <FileText className="w-5 h-5" />
               </div>
-              <h3 className="font-bold text-slate-900 dark:text-white text-sm">Documentos Legales Certificados</h3>
+              <h3 className="font-bold text-slate-900 dark:text-white text-sm">Documentos Laborales Formales</h3>
               <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                Liquidaciones laborales bajo el D.L. 728, boletas de pago y certificados de cese con cláusulas de 48 horas de ley para evitar multas de SUNAFIL.
+                Liquidaciones laborales bajo el D.L. 728, boletas de pago y constancias de cese con cláusulas de 48 horas de ley para prevenir contingencias ante SUNAFIL.
               </p>
             </div>
 

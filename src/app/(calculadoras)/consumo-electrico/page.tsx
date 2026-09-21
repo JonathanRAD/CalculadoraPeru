@@ -204,8 +204,9 @@ export default function ConsumoElectricoPage() {
               <h2 className="text-lg font-bold text-slate-900 dark:text-white">Artefactos y Equipos</h2>
             </div>
             <div className="flex items-center gap-2">
-              <span className="text-xs text-slate-600 dark:text-slate-400 font-medium">Tarifa S/ kWh:</span>
+              <label htmlFor="tariffPerKwh" className="text-xs text-slate-600 dark:text-slate-400 font-medium">Tarifa S/ kWh:</label>
               <input
+                id="tariffPerKwh"
                 type="number"
                 step="0.01"
                 value={tariffPerKwh}
@@ -247,7 +248,9 @@ export default function ConsumoElectricoPage() {
                 >
                   <div className="flex items-center justify-between">
                     <input
+                      id={`app-name-${app.id}`}
                       type="text"
+                      aria-label={`Nombre del artefacto ${app.name}`}
                       value={app.name}
                       onChange={(e) => updateAppliance(app.id, 'name', e.target.value)}
                       className="font-bold text-sm text-slate-900 dark:text-white bg-transparent outline-none border-b border-transparent focus:border-slate-300"
@@ -269,8 +272,9 @@ export default function ConsumoElectricoPage() {
 
                   <div className="grid grid-cols-3 gap-3">
                     <div>
-                      <label className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 block mb-1">Potencia (Watts)</label>
+                      <label htmlFor={`app-watts-${app.id}`} className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 block mb-1">Potencia (Watts)</label>
                       <input
+                        id={`app-watts-${app.id}`}
                         type="number"
                         value={app.watts}
                         onChange={(e) => updateAppliance(app.id, 'watts', parseFloat(e.target.value) || 0)}
@@ -278,8 +282,9 @@ export default function ConsumoElectricoPage() {
                       />
                     </div>
                     <div>
-                      <label className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 block mb-1">Horas / día</label>
+                      <label htmlFor={`app-hours-${app.id}`} className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 block mb-1">Horas / día</label>
                       <input
+                        id={`app-hours-${app.id}`}
                         type="number"
                         max="24"
                         value={app.hoursPerDay}
@@ -288,8 +293,9 @@ export default function ConsumoElectricoPage() {
                       />
                     </div>
                     <div>
-                      <label className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 block mb-1">Días / mes</label>
+                      <label htmlFor={`app-days-${app.id}`} className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 block mb-1">Días / mes</label>
                       <input
+                        id={`app-days-${app.id}`}
                         type="number"
                         max="31"
                         value={app.daysPerMonth}

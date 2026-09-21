@@ -597,7 +597,7 @@ export default function CotizadorLandingPage() {
                 <div className="rounded-2xl bg-[#18382C] border border-[#2E614D] p-4 text-xs text-slate-100 font-sans space-y-2">
                   <div className="flex items-center justify-between border-b border-[#285744] pb-2">
                     <span className="font-bold text-white">COTIZACIÓN N° 00142</span>
-                    <span className="text-[10px] text-[#E3A62F] font-bold">Total: S/ 546.56</span>
+                    <span className="text-[10px] text-[#E3A62F] font-bold">Total: S/ 546.58</span>
                   </div>
                   <div className="text-[11px] text-slate-300">
                     ✅ 3 Ítems detallados • RUC y Razón Social • IGV (18%) desglosado • Válido por 15 días

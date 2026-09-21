@@ -179,10 +179,11 @@ Periodo: ${monthsWorkedInSemester} meses laborados`;
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div>
-              <label className="text-xs sm:text-sm font-bold text-slate-900 dark:text-slate-200 block mb-2">
+              <label htmlFor="companyRegime" className="text-xs sm:text-sm font-bold text-slate-900 dark:text-slate-200 block mb-2">
                 Régimen Laboral
               </label>
               <select
+                id="companyRegime"
                 value={companyRegime}
                 onChange={(e) => setCompanyRegime(e.target.value as CompanyRegime)}
                 className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 p-2.5 text-xs font-bold text-slate-900 dark:text-white outline-none focus:border-[#08734F]"

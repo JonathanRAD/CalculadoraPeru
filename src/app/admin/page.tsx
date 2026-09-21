@@ -833,7 +833,7 @@ export default function AdminPage() {
         </header>
 
         {/* Tab Content Container */}
-        <main className="p-6 sm:p-8 space-y-8 max-w-7xl w-full mx-auto">
+        <div className="p-6 sm:p-8 space-y-8 max-w-7xl w-full mx-auto">
           
           {/* ================================================================= */}
           {/* TAB 1: DASHBOARD & LIVE METRICS                                   */}
@@ -1986,7 +1986,7 @@ export default function AdminPage() {
             </div>
           )}
 
-        </main>
+        </div>
       </div>
 
       {/* ===================================================================== */}

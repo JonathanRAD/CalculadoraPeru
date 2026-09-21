@@ -83,7 +83,7 @@ const CALCULATORS_GUIDE: CalculatorGuideItem[] = [
       'Ingresa sueldo, fechas de ingreso y cese.',
       'Descarga la Liquidación Oficial en PDF o expórtala a Excel para firmar con el trabajador.',
     ],
-    badgeBenefit: 'PDF Certificado + Despido Arbitrario',
+    badgeBenefit: 'PDF Formal + Despido Arbitrario',
   },
   {
     id: 'sueldo-neto',
@@ -412,7 +412,7 @@ export default function BeneficiosProPage() {
       </div>
 
       {/* Main Interactive Guide Container */}
-      <main className="mx-auto max-w-5xl px-4 sm:px-6 pt-12 space-y-8">
+      <div className="mx-auto max-w-5xl px-4 sm:px-6 pt-12 space-y-8">
         
         {/* Filter bar & Search */}
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-white dark:bg-slate-900 p-4 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-xs">
@@ -704,7 +704,7 @@ export default function BeneficiosProPage() {
           </div>
         </div>
 
-      </main>
+      </div>
     </div>
   );
 }

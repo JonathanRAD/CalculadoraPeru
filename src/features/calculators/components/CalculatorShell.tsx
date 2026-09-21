@@ -115,7 +115,7 @@ export function CalculatorShell({
       </div>
 
       {/* Main Container */}
-      <main className="mx-auto max-w-5xl px-4 sm:px-6 -mt-4">
+      <div className="mx-auto max-w-5xl px-4 sm:px-6 -mt-4">
 
         {/* Calculator Interactive Card */}
         <div className="app-card p-6 sm:p-8 mb-8 shadow-sm">
@@ -170,7 +170,7 @@ export function CalculatorShell({
           </section>
         )}
 
-      </main>
+      </div>
     </div>
   );
 }

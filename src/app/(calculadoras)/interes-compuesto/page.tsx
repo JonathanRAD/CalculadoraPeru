@@ -113,13 +113,13 @@ Total Aportado: ${formatCurrency(result.totalContributions)}`;
                   </tr>
                   <tr>
                     <td className="p-2.5 font-semibold">Intereses Ganados por Capitalización</td>
-                    <td className="p-2.5 text-slate-500">Rendimiento exponencial (TREA 7.5%)</td>
-                    <td className="p-2.5 font-mono text-emerald-700 dark:text-emerald-400">+ S/ 5,885.64</td>
+                    <td className="p-2.5 text-slate-500">Rendimiento compuesto (TEM SBS s/ TREA 7.5%)</td>
+                    <td className="p-2.5 font-mono text-emerald-700 dark:text-emerald-400">+ S/ 5,797.76</td>
                   </tr>
                   <tr className="bg-emerald-50 dark:bg-emerald-950 font-bold text-slate-900 dark:text-white">
                     <td className="p-2.5 text-emerald-800 dark:text-emerald-300">Saldo Final Acumulado Disponible</td>
                     <td className="p-2.5 text-slate-500 font-normal">Capital total + Intereses ganados</td>
-                    <td className="p-2.5 font-mono text-emerald-800 dark:text-emerald-300 text-sm">S/ 28,885.64</td>
+                    <td className="p-2.5 font-mono text-emerald-800 dark:text-emerald-300 text-sm">S/ 28,797.76</td>
                   </tr>
                 </tbody>
               </table>

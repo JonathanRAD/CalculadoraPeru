@@ -1,7 +1,6 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import confetti from 'canvas-confetti';
 import { SafeUser, CompanyProfile } from '@/features/auth/types';
 
 interface ProContextType {
@@ -211,10 +210,13 @@ export function ProProvider({ children }: { children: React.ReactNode }) {
         }
 
         try {
-          confetti({
-            particleCount: 90,
-            spread: 70,
-            origin: { y: 0.6 },
+          import('canvas-confetti').then((m) => {
+            const fire = m.default || m;
+            fire({
+              particleCount: 90,
+              spread: 70,
+              origin: { y: 0.6 },
+            });
           });
         } catch {
           // confetti optional
