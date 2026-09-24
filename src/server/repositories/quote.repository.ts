@@ -215,30 +215,32 @@ export class QuoteRepository {
     if (isSupabaseConfigured) {
       const supabase = getSupabaseAdmin();
       if (supabase) {
-        if (clientId) {
-          const { data: client, error } = await supabase
-            .from('clients')
-            .select('id')
-            .eq('id', clientId)
-            .eq('user_id', userId)
-            .maybeSingle();
-
-          if (error || !client) {
-            return { isValid: false, error: 'El cliente seleccionado no pertenece a tu cuenta o no existe.' };
-          }
-        }
+        const clientPromise = clientId
+          ? supabase
+              .from('clients')
+              .select('id')
+              .eq('id', clientId)
+              .eq('user_id', userId)
+              .maybeSingle()
+          : Promise.resolve({ data: { id: clientId }, error: null });
 
         const validCatalogIds = catalogItemIds.filter(Boolean);
-        if (validCatalogIds.length > 0) {
-          const { data: items, error } = await supabase
-            .from('catalog_items')
-            .select('id')
-            .in('id', validCatalogIds)
-            .eq('user_id', userId);
+        const catalogPromise = validCatalogIds.length > 0
+          ? supabase
+              .from('catalog_items')
+              .select('id')
+              .in('id', validCatalogIds)
+              .eq('user_id', userId)
+          : Promise.resolve({ data: [], error: null });
 
-          if (error || (items && items.length !== new Set(validCatalogIds).size)) {
-            return { isValid: false, error: 'Uno o más productos del catálogo no pertenecen a tu cuenta.' };
-          }
+        const [clientRes, catalogRes] = await Promise.all([clientPromise, catalogPromise]);
+
+        if (clientId && (clientRes.error || !clientRes.data)) {
+          return { isValid: false, error: 'El cliente seleccionado no pertenece a tu cuenta o no existe.' };
+        }
+
+        if (validCatalogIds.length > 0 && (catalogRes.error || !catalogRes.data || catalogRes.data.length !== new Set(validCatalogIds).size)) {
+          return { isValid: false, error: 'Uno o más productos del catálogo no pertenecen a tu cuenta.' };
         }
       }
     } else {
@@ -426,27 +428,26 @@ export class QuoteRepository {
     if (isSupabaseConfigured) {
       const supabase = getSupabaseAdmin();
       if (supabase) {
-        const { data: quoteData, error: quoteError } = await supabase
-          .from('quotes')
-          .select('*')
-          .eq('id', id)
-          .eq('user_id', userId)
-          .maybeSingle();
+        const [quoteRes, itemsRes] = await Promise.all([
+          supabase
+            .from('quotes')
+            .select('*')
+            .eq('id', id)
+            .eq('user_id', userId)
+            .maybeSingle(),
+          supabase
+            .from('quote_items')
+            .select('*')
+            .eq('quote_id', id)
+            .eq('user_id', userId)
+            .order('sort_order', { ascending: true }),
+        ]);
 
-        if (quoteError || !quoteData) return null;
-
-        const { data: itemsData, error: itemsError } = await supabase
-          .from('quote_items')
-          .select('*')
-          .eq('quote_id', id)
-          .eq('user_id', userId)
-          .order('sort_order', { ascending: true });
-
-        if (itemsError) return null;
+        if (quoteRes.error || !quoteRes.data || itemsRes.error) return null;
 
         return {
-          quote: mapQuoteDb(quoteData as Record<string, unknown>),
-          items: (itemsData || []).map(r => mapItemDb(r as Record<string, unknown>)),
+          quote: mapQuoteDb(quoteRes.data as Record<string, unknown>),
+          items: (itemsRes.data || []).map(r => mapItemDb(r as Record<string, unknown>)),
         };
       }
     }

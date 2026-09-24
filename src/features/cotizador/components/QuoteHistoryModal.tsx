@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import Link from 'next/link';
 import {
   X,
@@ -66,6 +66,7 @@ export const QuoteHistoryModal: React.FC<QuoteHistoryModalProps> = ({
   const [error, setError] = useState<string | null>(null);
   const [actionMessage, setActionMessage] = useState<string | null>(null);
   const [busyQuoteId, setBusyQuoteId] = useState<string | null>(null);
+  const quotesDetailsCacheRef = useRef<Map<string, { quote: QuoteRecord; items: QuoteItemRecord[] }>>(new Map());
 
   // Debounce de búsqueda
   useEffect(() => {
@@ -130,6 +131,19 @@ export const QuoteHistoryModal: React.FC<QuoteHistoryModalProps> = ({
 
   if (!isOpen) return null;
 
+  const getQuoteDetails = async (quoteId: string): Promise<{ quote: QuoteRecord; items: QuoteItemRecord[] } | null> => {
+    const cached = quotesDetailsCacheRef.current.get(quoteId);
+    if (cached) return cached;
+    const res = await fetch(`/api/quotes/${quoteId}`, { credentials: 'include' });
+    const data = await res.json();
+    if (data.success && data.quote && data.items) {
+      const details = { quote: data.quote, items: data.items };
+      quotesDetailsCacheRef.current.set(quoteId, details);
+      return details;
+    }
+    return null;
+  };
+
   const handleDuplicate = async (quote: QuoteRecord) => {
     setBusyQuoteId(quote.id);
     setActionMessage(null);
@@ -165,6 +179,7 @@ export const QuoteHistoryModal: React.FC<QuoteHistoryModalProps> = ({
       });
       const data = await res.json();
       if (data.success) {
+        quotesDetailsCacheRef.current.delete(quote.id);
         setActionMessage(`Cotización ${quote.quoteNumber} anulada correctamente.`);
         await fetchQuotes();
       } else {
@@ -186,6 +201,7 @@ export const QuoteHistoryModal: React.FC<QuoteHistoryModalProps> = ({
       });
       const data = await res.json();
       if (data.success) {
+        quotesDetailsCacheRef.current.delete(quote.id);
         setActionMessage(`Cotización ${quote.quoteNumber} eliminada definitivamente.`);
         await fetchQuotes();
       } else {
@@ -201,9 +217,8 @@ export const QuoteHistoryModal: React.FC<QuoteHistoryModalProps> = ({
   const handleDownloadPdf = async (quote: QuoteRecord) => {
     setBusyQuoteId(quote.id);
     try {
-      const res = await fetch(`/api/quotes/${quote.id}`, { credentials: 'include' });
-      const data = await res.json();
-      if (data.success && data.quote && data.items) {
+      const data = await getQuoteDetails(quote.id);
+      if (data && data.quote && data.items) {
         generateQuotePdf({
           quoteNumber: data.quote.quoteNumber,
           issueDate: data.quote.issueDate,
@@ -236,6 +251,8 @@ export const QuoteHistoryModal: React.FC<QuoteHistoryModalProps> = ({
           deliveryTime: data.quote.deliveryTime,
           publicNotes: data.quote.publicNotes,
         });
+      } else {
+        setError('No se pudo obtener el detalle de la cotización para descargar el PDF.');
       }
     } catch {
       setError('Error descargando el PDF de la cotización.');
@@ -247,9 +264,8 @@ export const QuoteHistoryModal: React.FC<QuoteHistoryModalProps> = ({
   const handleDownloadCsv = async (quote: QuoteRecord) => {
     setBusyQuoteId(quote.id);
     try {
-      const res = await fetch(`/api/quotes/${quote.id}`, { credentials: 'include' });
-      const data = await res.json();
-      if (data.success && data.quote && data.items) {
+      const data = await getQuoteDetails(quote.id);
+      if (data && data.quote && data.items) {
         downloadQuoteCsv({
           quoteNumber: data.quote.quoteNumber,
           issueDate: data.quote.issueDate,
@@ -282,6 +298,8 @@ export const QuoteHistoryModal: React.FC<QuoteHistoryModalProps> = ({
           deliveryTime: data.quote.deliveryTime,
           publicNotes: data.quote.publicNotes,
         });
+      } else {
+        setError('No se pudo obtener el detalle de la cotización para exportar el CSV.');
       }
     } catch {
       setError('Error descargando el archivo CSV.');
@@ -293,11 +311,14 @@ export const QuoteHistoryModal: React.FC<QuoteHistoryModalProps> = ({
   const handleShareWhatsApp = async (quote: QuoteRecord) => {
     setBusyQuoteId(quote.id);
     try {
-      const res = await fetch(`/api/quotes/${quote.id}`, { credentials: 'include' });
-      const data = await res.json();
-      if (data.success && data.quote && data.items) {
+      const data = await getQuoteDetails(quote.id);
+      if (data && data.quote && data.items) {
         onOpenWhatsApp(data.quote, data.items);
+      } else {
+        setError('No se pudo obtener el detalle de la cotización.');
       }
+    } catch {
+      setError('Error al preparar la cotización para WhatsApp.');
     } finally {
       setBusyQuoteId(null);
     }
@@ -528,11 +549,15 @@ export const QuoteHistoryModal: React.FC<QuoteHistoryModalProps> = ({
                       type="button"
                       disabled={isBusy}
                       onClick={() => handleDownloadPdf(q)}
-                      className="rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 p-2 text-xs transition-colors cursor-pointer"
+                      className="rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 p-2 text-xs transition-colors cursor-pointer disabled:opacity-50"
                       title="Descargar PDF"
                       aria-label="Descargar PDF"
                     >
-                      <Download className="h-4 w-4 text-[#00875A] dark:text-[#00C853]" />
+                      {isBusy ? (
+                        <Loader2 className="h-4 w-4 animate-spin text-[#00875A]" />
+                      ) : (
+                        <Download className="h-4 w-4 text-[#00875A] dark:text-[#00C853]" />
+                      )}
                     </button>
 
                     <button
