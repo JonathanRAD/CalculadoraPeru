@@ -1,5 +1,5 @@
 import { LicenseCode } from '@/features/auth/types';
-import { getSupabaseAdmin, isSupabaseConfigured } from '../config/supabase';
+import { getSupabaseAdmin, isSupabaseConfigured, requireDurableStorage } from '../config/supabase';
 import * as localStorage from '@/features/auth/server/storage';
 
 export class LicenseRepository {
@@ -31,7 +31,8 @@ export class LicenseRepository {
       }
     }
 
-    // Local fallback
+    requireDurableStorage();
+    // Local fallback for development only.
     return localStorage.getAllLicenses();
   }
 
@@ -63,10 +64,12 @@ export class LicenseRepository {
             createdBy: data.created_by || undefined,
           };
         }
+        if (!error) return null;
       }
     }
 
-    // Local fallback
+    requireDurableStorage();
+    // Local fallback for development only.
     return localStorage.findLicenseByCode(cleanCode);
   }
 
@@ -110,6 +113,7 @@ export class LicenseRepository {
       }
     }
 
+    requireDurableStorage();
     // Local fallback (dev only)
     return localStorage.createLicense({
       plan: license.plan,
@@ -143,7 +147,8 @@ export class LicenseRepository {
       }
     }
 
-    // Local fallback
+    requireDurableStorage();
+    // Local fallback for development only.
     return localStorage.updateLicense(cleanCode, updates);
   }
 
@@ -158,6 +163,7 @@ export class LicenseRepository {
       }
     }
 
+    requireDurableStorage();
     return localStorage.deleteLicense(cleanCode);
   }
 }

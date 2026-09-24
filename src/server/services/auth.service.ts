@@ -5,13 +5,17 @@ import { userRepository } from '../repositories/user.repository';
 import { auditRepository } from '../repositories/audit.repository';
 import { LoginInput, RegisterInput } from '../validators/auth.validator';
 
-const AUTH_SECRET = process.env.AUTH_SECRET || 'calculaperu-secret-auth-key-2026-secure-salt';
-const ADMIN_KEY = process.env.ADMIN_SECRET_KEY || 'admin2026';
+const devAuthSecret = crypto.randomBytes(32).toString('hex');
+function authSecret(): string {
+  if (process.env.AUTH_SECRET) return process.env.AUTH_SECRET;
+  if (process.env.NODE_ENV === 'production') throw new Error('AUTH_SECRET debe configurarse en producción.');
+  return devAuthSecret;
+}
 
 export function getAuthCookieOptions(req?: Request | NextRequest) {
-  const host = req?.headers.get('host') || '';
+  const host = req?.headers.get('host') || (req ? new URL(req.url).host : '');
   const isProduction = process.env.NODE_ENV === 'production';
-  const isCalculaPeru = host.includes('calculaperu.com.pe');
+  const isCalculaPeru = /^(?:[a-z0-9-]+\.)*calculaperu\.com\.pe(?::\d+)?$/i.test(host);
 
   return {
     path: '/',
@@ -25,13 +29,19 @@ export function getAuthCookieOptions(req?: Request | NextRequest) {
 
 export class AuthService {
   hashPassword(password: string, salt = crypto.randomBytes(16).toString('hex')) {
-    const hash = crypto.pbkdf2Sync(password, salt, 1000, 64, 'sha256').toString('hex');
+    const hash = `scrypt:${crypto.scryptSync(password, salt, 64).toString('hex')}`;
     return { hash, salt };
   }
 
   verifyPassword(password: string, hash: string, salt: string): boolean {
-    const check = crypto.pbkdf2Sync(password, salt, 1000, 64, 'sha256').toString('hex');
-    return check === hash;
+    if (!salt || !hash) return false;
+    const modern = hash.startsWith('scrypt:');
+    const expected = modern ? hash.slice(7) : hash;
+    if (!/^[a-f0-9]{128}$/i.test(expected)) return false;
+    const check = modern
+      ? crypto.scryptSync(password, salt, 64)
+      : crypto.pbkdf2Sync(password, salt, 1000, 64, 'sha256');
+    return crypto.timingSafeEqual(check, Buffer.from(expected, 'hex'));
   }
 
   toSafeUser(user: UserAccount): SafeUser {
@@ -40,28 +50,31 @@ export class AuthService {
     return safe;
   }
 
-  signToken(payload: { userId: string; email: string; role: UserRole }): string {
+  signToken(payload: { userId: string; email: string; role: UserRole; sessionVersion?: number }): string {
     const header = Buffer.from(JSON.stringify({ alg: 'HS256', typ: 'JWT' })).toString('base64url');
     const now = Math.floor(Date.now() / 1000);
     const exp = now + 60 * 60 * 24 * 30; // 30 days
     const body = Buffer.from(JSON.stringify({ ...payload, iat: now, exp })).toString('base64url');
-    const signature = crypto.createHmac('sha256', AUTH_SECRET).update(`${header}.${body}`).digest('base64url');
+    const signature = crypto.createHmac('sha256', authSecret()).update(`${header}.${body}`).digest('base64url');
     return `${header}.${body}.${signature}`;
   }
 
-  verifyToken(token: string): { userId: string; email: string; role: UserRole } | null {
+  verifyToken(token: string): { userId: string; email: string; role: UserRole; sessionVersion: number } | null {
     try {
       const parts = token.split('.');
       if (parts.length !== 3) return null;
       const [header, body, signature] = parts;
-      const expectedSignature = crypto.createHmac('sha256', AUTH_SECRET).update(`${header}.${body}`).digest('base64url');
-      if (expectedSignature !== signature) return null;
+      const expectedSignature = crypto.createHmac('sha256', authSecret()).update(`${header}.${body}`).digest('base64url');
+      if (signature.length !== expectedSignature.length ||
+          !crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(expectedSignature))) return null;
 
       const payload = JSON.parse(Buffer.from(body, 'base64url').toString('utf-8'));
       const now = Math.floor(Date.now() / 1000);
-      if (payload.exp && payload.exp < now) return null;
+      if (!Number.isInteger(payload.exp) || payload.exp <= now ||
+          typeof payload.userId !== 'string' || typeof payload.email !== 'string' ||
+          !['user', 'admin'].includes(payload.role)) return null;
 
-      return { userId: payload.userId, email: payload.email, role: payload.role };
+      return { userId: payload.userId, email: payload.email, role: payload.role, sessionVersion: payload.sessionVersion ?? 0 };
     } catch {
       return null;
     }
@@ -75,12 +88,14 @@ export class AuthService {
     if (!payload) return null;
 
     const user = await userRepository.findById(payload.userId);
-    return user ? this.toSafeUser(user) : null;
+    return user && (user.sessionVersion ?? 0) === payload.sessionVersion ? this.toSafeUser(user) : null;
   }
 
   async isAuthorizedAdmin(req: NextRequest): Promise<boolean> {
     const headerKey = req.headers.get('x-admin-secret');
-    if (headerKey && headerKey === ADMIN_KEY) return true;
+    const adminKey = process.env.ADMIN_SECRET_KEY;
+    if (adminKey && headerKey && headerKey.length === adminKey.length &&
+        crypto.timingSafeEqual(Buffer.from(headerKey), Buffer.from(adminKey))) return true;
 
     const user = await this.authenticateRequest(req);
     return Boolean(user && user.role === 'admin');
@@ -99,10 +114,16 @@ export class AuthService {
       return { success: false, message: 'Correo o contraseña incorrectos.' };
     }
 
+    if (!user.passwordHash.startsWith('scrypt:')) {
+      const upgraded = this.hashPassword(input.password);
+      await userRepository.update(user.id, { passwordHash: upgraded.hash, salt: upgraded.salt });
+    }
+
     const token = this.signToken({
       userId: user.id,
       email: user.email,
       role: user.role,
+      sessionVersion: user.sessionVersion ?? 0,
     });
 
     await userRepository.update(user.id, { lastLoginAt: new Date().toISOString() });
@@ -135,6 +156,7 @@ export class AuthService {
       salt,
       role: 'user',
       isPro: false,
+      sessionVersion: 0,
       createdAt: new Date().toISOString(),
     };
 
@@ -143,6 +165,7 @@ export class AuthService {
       userId: created.id,
       email: created.email,
       role: created.role,
+      sessionVersion: created.sessionVersion ?? 0,
     });
 
     await auditRepository.logAction('USER_REGISTERED', created.email, created.id);

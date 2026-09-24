@@ -6,7 +6,7 @@ import { Sparkles, KeyRound, Check, X, ShieldCheck, ArrowRight, Loader2 } from '
 import { useModalAnimation } from '@/shared/hooks/useModalAnimation';
 
 export default function ProActivationModal() {
-  const { isActivationModalOpen, closeActivationModal, activatePro, isPro, subscriberName, plan, logoutPro } = usePro();
+  const { isActivationModalOpen, closeActivationModal, activatePro, isPro, subscriberName, plan, user, openAuthModal } = usePro();
   const { shouldRender, backdropClass, modalClass } = useModalAnimation(isActivationModalOpen);
 
   const [code, setCode] = useState('');
@@ -52,7 +52,7 @@ export default function ProActivationModal() {
           <X className="w-4 h-4" />
         </button>
 
-        {/* If already PRO, show membership status + logout */}
+        {/* If already PRO, show membership status */}
         {isPro ? (
           <div className="text-center space-y-4 py-2">
             <div className="w-14 h-14 bg-emerald-100 dark:bg-emerald-950/80 rounded-2xl flex items-center justify-center text-emerald-600 dark:text-emerald-400 mx-auto shadow-inner">
@@ -84,17 +84,13 @@ export default function ProActivationModal() {
               >
                 Continuar usando PRO
               </button>
-              <button
-                type="button"
-                onClick={() => {
-                  logoutPro();
-                  closeActivationModal();
-                }}
-                className="py-2.5 px-4 rounded-xl border border-red-300 dark:border-red-900/60 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40 font-bold text-xs transition-colors"
-              >
-                Cerrar Sesión (Probar Gratuito)
-              </button>
             </div>
+          </div>
+        ) : !user ? (
+          <div className="space-y-4 text-center">
+            <h3 className="text-lg font-bold">Activa tu código PRO en tu cuenta</h3>
+            <p className="text-sm text-slate-600 dark:text-slate-300">Inicia sesión o crea una cuenta gratuita para conservar tu acceso en cualquier dispositivo.</p>
+            <button type="button" onClick={() => { closeActivationModal(); openAuthModal('login'); }} className="w-full rounded-xl bg-[#00875A] px-4 py-3 text-sm font-bold text-white hover:bg-[#00704A]">Iniciar sesión</button>
           </div>
         ) : (
           /* Normal code input form */
@@ -123,15 +119,12 @@ export default function ProActivationModal() {
                   type="text"
                   required
                   autoFocus
-                  placeholder="Ej. PRO-VIP-2026"
+                  placeholder="Ingresa tu código"
                   value={code}
                   onChange={(e) => setCode(e.target.value.toUpperCase())}
                   className="w-full uppercase font-mono font-bold tracking-wider bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-900 dark:text-white outline-none focus:border-[#00875A] focus:ring-2 focus:ring-emerald-500/20 text-sm"
                 />
               </div>
-              <p className="text-[11px] text-slate-400">
-                ¿Pruebas en local? Puedes usar el código de prueba: <code className="text-emerald-600 dark:text-emerald-400 font-mono font-bold">PRO-VIP-2026</code> o <code className="text-emerald-600 dark:text-emerald-400 font-mono font-bold">ADMIN-TEST</code>
-              </p>
             </div>
 
             {errorMsg && (

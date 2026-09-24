@@ -1,12 +1,11 @@
 import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';
-import { UserAccount, SafeUser, LicenseCode, ProPlan, UserRole } from '../types';
+import { UserAccount, SafeUser, LicenseCode, ProPlan } from '../types';
 
 const DATA_DIR = path.join(process.cwd(), '.data');
 const DB_FILE = path.join(DATA_DIR, 'db.json');
 
-const AUTH_SECRET = process.env.AUTH_SECRET || 'calculaperu-secret-auth-key-2026-secure-salt';
 
 interface DatabaseSchema {
   users: Record<string, UserAccount>; // keyed by id
@@ -24,35 +23,7 @@ function readDatabase(): DatabaseSchema {
   if (!fs.existsSync(DB_FILE)) {
     const initialDb: DatabaseSchema = {
       users: {},
-      licenses: {
-        'PRO-VIP-2026': {
-          id: 'lic-initial-1',
-          code: 'PRO-VIP-2026',
-          plan: 'yearly',
-          durationDays: 365,
-          assignedClientName: 'Usuario VIP (Anual)',
-          status: 'available',
-          createdAt: new Date().toISOString(),
-        },
-        'ADMIN-TEST': {
-          id: 'lic-initial-2',
-          code: 'ADMIN-TEST',
-          plan: 'yearly',
-          durationDays: 730,
-          assignedClientName: 'Jonathan Rujel (Admin)',
-          status: 'available',
-          createdAt: new Date().toISOString(),
-        },
-        'PRO-MENSUAL': {
-          id: 'lic-initial-3',
-          code: 'PRO-MENSUAL',
-          plan: 'monthly',
-          durationDays: 30,
-          assignedClientName: 'Suscripción Mensual',
-          status: 'available',
-          createdAt: new Date().toISOString(),
-        },
-      },
+      licenses: {},
     };
     fs.writeFileSync(DB_FILE, JSON.stringify(initialDb, null, 2), 'utf-8');
     return initialDb;
@@ -72,51 +43,20 @@ function writeDatabase(db: DatabaseSchema) {
   fs.writeFileSync(DB_FILE, JSON.stringify(db, null, 2), 'utf-8');
 }
 
-// ---------------------------------------------------------------------------
-// Cryptography & Tokens
-// ---------------------------------------------------------------------------
-
-export function hashPassword(password: string, salt = crypto.randomBytes(16).toString('hex')) {
-  const hash = crypto.pbkdf2Sync(password, salt, 1000, 64, 'sha256').toString('hex');
-  return { hash, salt };
-}
-
-export function verifyPassword(password: string, hash: string, salt: string): boolean {
-  const check = crypto.pbkdf2Sync(password, salt, 1000, 64, 'sha256').toString('hex');
-  return check === hash;
-}
-
 export function toSafeUser(user: UserAccount): SafeUser {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { passwordHash, salt, ...safe } = user;
   return safe;
 }
 
-export function signToken(payload: { userId: string; email: string; role: UserRole }): string {
-  const header = Buffer.from(JSON.stringify({ alg: 'HS256', typ: 'JWT' })).toString('base64url');
-  const now = Math.floor(Date.now() / 1000);
-  const exp = now + 60 * 60 * 24 * 30; // 30 days
-  const body = Buffer.from(JSON.stringify({ ...payload, iat: now, exp })).toString('base64url');
-  const signature = crypto.createHmac('sha256', AUTH_SECRET).update(`${header}.${body}`).digest('base64url');
-  return `${header}.${body}.${signature}`;
-}
-
-export function verifyToken(token: string): { userId: string; email: string; role: UserRole } | null {
-  try {
-    const parts = token.split('.');
-    if (parts.length !== 3) return null;
-    const [header, body, signature] = parts;
-    const expectedSignature = crypto.createHmac('sha256', AUTH_SECRET).update(`${header}.${body}`).digest('base64url');
-    if (expectedSignature !== signature) return null;
-
-    const payload = JSON.parse(Buffer.from(body, 'base64url').toString('utf-8'));
-    const now = Math.floor(Date.now() / 1000);
-    if (payload.exp && payload.exp < now) return null;
-
-    return { userId: payload.userId, email: payload.email, role: payload.role };
-  } catch {
-    return null;
+export function insertUser(user: UserAccount): SafeUser {
+  const db = readDatabase();
+  if (Object.values(db.users).some(existing => existing.email === user.email)) {
+    throw new Error('Ya existe una cuenta registrada con este correo electrónico.');
   }
+  db.users[user.id] = user;
+  writeDatabase(db);
+  return toSafeUser(user);
 }
 
 // ---------------------------------------------------------------------------
@@ -143,41 +83,6 @@ export function findUserById(id: string): UserAccount | null {
 export function getAllUsers(): SafeUser[] {
   const db = readDatabase();
   return Object.values(db.users).map(toSafeUser);
-}
-
-export function createUser(data: {
-  name: string;
-  email: string;
-  password: string;
-  role?: UserRole;
-}): SafeUser {
-  const db = readDatabase();
-  const normalizedEmail = data.email.toLowerCase().trim();
-
-  if (findUserByEmail(normalizedEmail)) {
-    throw new Error('Ya existe una cuenta registrada con este correo electrónico.');
-  }
-
-  const { hash, salt } = hashPassword(data.password);
-  const id = `usr_${crypto.randomUUID().slice(0, 8)}`;
-
-  const newUser: UserAccount = {
-    id,
-    name: data.name.trim(),
-    email: normalizedEmail,
-    passwordHash: hash,
-    salt,
-    role: data.role || 'user',
-    isPro: false,
-    plan: null,
-    proExpiresAt: null,
-    createdAt: new Date().toISOString(),
-    lastLoginAt: new Date().toISOString(),
-  };
-
-  db.users[id] = newUser;
-  writeDatabase(db);
-  return toSafeUser(newUser);
 }
 
 export function updateUser(id: string, updates: Partial<UserAccount>): SafeUser {

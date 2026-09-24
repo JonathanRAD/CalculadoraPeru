@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { getSupabaseAdmin, isSupabaseConfigured } from '../config/supabase';
+import { getSupabaseAdmin, isSupabaseConfigured, requireDurableStorage } from '../config/supabase';
 
 export interface AnalyticsEvent {
   id?: string;
@@ -123,6 +123,7 @@ export class AnalyticsRepository {
       }
     }
 
+    requireDurableStorage();
     // Local fallback store (persisted to .data/analytics.json)
     const local = loadLocalEvents();
     local.unshift(entry);
@@ -145,7 +146,8 @@ export class AnalyticsRepository {
           .gte('created_at', cutoffDate.toISOString())
           .order('created_at', { ascending: false });
 
-        if (!error && data && data.length > 0) {
+        if (error) throw new Error('No se pudieron consultar las métricas.');
+        if (data) {
           events = data.map(r => ({
             id: r.id,
             eventType: r.event_type,
@@ -160,8 +162,9 @@ export class AnalyticsRepository {
       }
     }
 
-    // If Supabase didn't yield events or is not configured, check local file storage
-    if (events.length === 0) {
+    // Only the development-only local mode reads local events.
+    if (!isSupabaseConfigured) {
+      requireDurableStorage();
       const local = loadLocalEvents();
       events = local.filter(e => e.createdAt && new Date(e.createdAt) >= cutoffDate);
     }
@@ -171,8 +174,8 @@ export class AnalyticsRepository {
     let livePageViews = 0;
     events.forEach(e => {
       if (e.createdAt && new Date(e.createdAt) >= liveCutoff) {
-        livePageViews++;
-        if (e.sessionId) liveSessions.add(e.sessionId);
+        if (e.eventType === 'page_view') livePageViews++;
+        if (e.eventType === 'page_view' && e.sessionId) liveSessions.add(e.sessionId);
       }
     });
     const liveActiveVisitors = liveSessions.size > 0 ? liveSessions.size : (livePageViews > 0 ? 1 : 0);
@@ -203,7 +206,7 @@ export class AnalyticsRepository {
       date,
       dayName: val.dayName,
       visits: val.visits,
-      uniqueUsers: val.sessions.size || Math.floor(val.visits * 0.75),
+      uniqueUsers: val.sessions.size,
     }));
 
     const totalPeriodVisits = trafficHistory.reduce((acc, curr) => acc + curr.visits, 0);
@@ -256,13 +259,14 @@ export class AnalyticsRepository {
     let mobileCount = 0;
     let desktopCount = 0;
     events.forEach(e => {
+      if (e.eventType !== 'page_view') return;
       if (e.device === 'mobile') mobileCount++;
       else desktopCount++;
     });
     const totalDevices = mobileCount + desktopCount || 1;
     const deviceShare = {
-      mobile: Math.round((mobileCount / totalDevices) * 100) || 68, // Normal Peruvian mobile share
-      desktop: Math.round((desktopCount / totalDevices) * 100) || 32,
+      mobile: Math.round((mobileCount / totalDevices) * 100),
+      desktop: Math.round((desktopCount / totalDevices) * 100),
     };
 
     return {

@@ -4,6 +4,7 @@ import { licenseRepository } from '../repositories/license.repository';
 import { userRepository } from '../repositories/user.repository';
 import { auditRepository } from '../repositories/audit.repository';
 import { CreateLicenseInput } from '../validators/license.validator';
+import { getSupabaseAdmin, isSupabaseConfigured, requireDurableStorage } from '../config/supabase';
 
 export class LicenseService {
   private generateSecureCode(prefix = 'PRO'): string {
@@ -47,6 +48,30 @@ export class LicenseService {
 
   async redeemLicense(code: string, userId?: string, userEmail?: string): Promise<{ success: boolean; message: string; license?: LicenseCode }> {
     const cleanCode = code.trim().toUpperCase();
+    if (!userId) return { success: false, message: 'Inicia sesión para activar tu código PRO.' };
+    if (isSupabaseConfigured || process.env.NODE_ENV === 'production') {
+      requireDurableStorage();
+      const supabase = getSupabaseAdmin();
+      if (!supabase) throw new Error('Base de datos no disponible.');
+      const { data, error } = await supabase.rpc('redeem_license_for_user', {
+        p_code: cleanCode,
+        p_user_id: userId,
+      });
+      if (error) throw new Error('No se pudo activar el código.');
+      if (data !== 'redeemed_ok') {
+        const messages: Record<string, string> = {
+          not_found: 'El código de activación no existe en el sistema.',
+          redeemed: 'Este código ya fue utilizado.',
+          revoked: 'Este código fue revocado.',
+          user_not_found: 'Tu cuenta ya no está disponible.',
+          assigned_to_other: 'Este código está asignado a otro correo.',
+        };
+        return { success: false, message: messages[data as string] || 'No se pudo activar el código.' };
+      }
+      const license = await licenseRepository.findByCode(cleanCode);
+      await auditRepository.logAction('LICENSE_REDEEMED', userEmail || userId, cleanCode);
+      return { success: true, message: '¡Membresía PRO activada exitosamente!', license: license || undefined };
+    }
     const license = await licenseRepository.findByCode(cleanCode);
 
     if (!license) {
@@ -65,17 +90,18 @@ export class LicenseService {
     const expiresAt = new Date(now.getTime() + license.durationDays * 24 * 60 * 60 * 1000).toISOString();
 
     // If userId provided, update their user profile if user exists
-    if (userId) {
-      const user = await userRepository.findById(userId);
-      if (user) {
-        await userRepository.update(userId, {
-          isPro: true,
-          plan: license.plan,
-          proExpiresAt: expiresAt,
-          activatedCode: license.code,
-        });
-      }
+    const user = await userRepository.findById(userId);
+    if (!user) return { success: false, message: 'Tu cuenta ya no está disponible.' };
+    if (license.assignedClientEmail && license.assignedClientEmail.toLowerCase() !== user.email.toLowerCase()) {
+      return { success: false, message: 'Este código está asignado a otro correo.' };
     }
+    const updatedUser = await userRepository.update(userId, {
+      isPro: true,
+      plan: license.plan,
+      proExpiresAt: expiresAt,
+      activatedCode: license.code,
+    });
+    if (!updatedUser) throw new Error('No se pudo actualizar la cuenta.');
 
     const updatedLicense = await licenseRepository.update(cleanCode, {
       status: 'redeemed',

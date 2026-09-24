@@ -69,6 +69,16 @@ describe('Subscription Requests & Payment Flow (Yape / Plin)', () => {
       expect(resYearly.isValid).toBe(true);
       expect(resYearly.data?.plan).toBe('yearly');
       expect(resYearly.data?.amount).toBe(149);
+
+      const forged = validateCreateSubscriptionInput({
+        customerName: 'Empresa Test', customerEmail: 'admin@empresa.pe', customerPhone: '913544715',
+        plan: 'yearly', operationCode: 'OP-998877', amount: 0,
+      });
+      expect(forged.data?.amount).toBe(149);
+      expect(validateCreateSubscriptionInput({
+        customerName: 'Empresa Test', customerEmail: 'admin@empresa.pe', customerPhone: '913544715',
+        plan: 'yearly', operationCode: 'OP-998877', couponCode: 'CODIGO-INVENTADO',
+      }).isValid).toBe(false);
     });
   });
 

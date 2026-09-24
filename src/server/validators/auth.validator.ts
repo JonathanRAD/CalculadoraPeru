@@ -20,11 +20,11 @@ export function validateLoginInput(data: unknown): { isValid: boolean; data?: Lo
   const email = typeof payload.email === 'string' ? payload.email.trim().toLowerCase() : '';
   const password = typeof payload.password === 'string' ? payload.password : '';
 
-  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+  if (!email || email.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return { isValid: false, error: 'Ingresa un correo electrónico válido.' };
   }
 
-  if (!password || password.length < 6) {
+  if (!password || password.length < 6 || password.length > 1024) {
     return { isValid: false, error: 'La contraseña debe tener al menos 6 caracteres.' };
   }
 
@@ -41,15 +41,15 @@ export function validateRegisterInput(data: unknown): { isValid: boolean; data?:
   const password = typeof payload.password === 'string' ? payload.password : '';
   const name = typeof payload.name === 'string' ? payload.name.trim() : '';
 
-  if (!name || name.length < 2) {
+  if (!name || name.length < 2 || name.length > 120) {
     return { isValid: false, error: 'El nombre debe tener al menos 2 caracteres.' };
   }
 
-  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+  if (!email || email.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return { isValid: false, error: 'Ingresa un correo electrónico válido.' };
   }
 
-  if (!password || password.length < 8) {
+  if (!password || password.length < 8 || password.length > 1024) {
     return { isValid: false, error: 'La contraseña debe tener al menos 8 caracteres.' };
   }
 
@@ -78,6 +78,13 @@ export function validateCompanyProfileInput(data: unknown): { isValid: boolean; 
   const companyRuc = typeof payload.companyRuc === 'string' ? payload.companyRuc.trim() : undefined;
   const companyAddress = typeof payload.companyAddress === 'string' ? payload.companyAddress.trim() : undefined;
   const companyLogoBase64 = typeof payload.companyLogoBase64 === 'string' ? payload.companyLogoBase64 : undefined;
+
+  if ((companyName?.length ?? 0) > 160 || (companyAddress?.length ?? 0) > 500) {
+    return { isValid: false, error: 'Los datos de empresa superan el límite permitido.' };
+  }
+  if (companyLogoBase64 && (companyLogoBase64.length > 450000 || !/^data:image\/(png|jpeg|webp);base64,[A-Za-z0-9+/=]+$/.test(companyLogoBase64))) {
+    return { isValid: false, error: 'El logo debe ser PNG, JPEG o WebP y no superar 330 KB.' };
+  }
 
   if (companyRuc && !/^(10|20)\d{9}$/.test(companyRuc)) {
     return { isValid: false, error: 'El RUC debe iniciar con 10 o 20 y contener exactamente 11 dígitos numéricos.' };

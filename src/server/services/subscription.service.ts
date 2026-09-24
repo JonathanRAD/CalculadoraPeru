@@ -6,6 +6,8 @@ import { userRepository } from '../repositories/user.repository';
 import { auditRepository } from '../repositories/audit.repository';
 import { CreateSubscriptionRequestInput } from '../validators/subscription.validator';
 
+const escapeHtml = (value: string) => value.replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]!);
+
 export class SubscriptionService {
   async createRequest(input: CreateSubscriptionRequestInput): Promise<SubscriptionRequest> {
     const request = await subscriptionRequestRepository.create(input);
@@ -72,18 +74,8 @@ export class SubscriptionService {
       );
 
       if (matchedUser) {
-        const expiresAt = new Date();
-        expiresAt.setDate(expiresAt.getDate() + durationDays);
-
-        await userRepository.update(matchedUser.id, {
-          isPro: true,
-          plan: request.plan,
-          proExpiresAt: expiresAt.toISOString(),
-          activatedCode: license.code,
-        });
-
-        // Also mark license redeemed by this user
-        await licenseService.redeemLicense(license.code, matchedUser.id, matchedUser.email);
+        const redemption = await licenseService.redeemLicense(license.code, matchedUser.id, matchedUser.email);
+        if (!redemption.success) console.warn('No se pudo asociar la licencia al usuario:', redemption.message);
       }
     } catch (err) {
       console.warn('Could not auto-link user account to approved subscription:', err);
@@ -119,8 +111,8 @@ export class SubscriptionService {
                 <p style="color: #64748b; font-size: 13px; margin: 4px 0 0 0;">Tu pago ha sido validado exitosamente</p>
               </div>
               <p style="font-size: 14px; color: #1e293b; line-height: 1.6;">
-                Hola <strong>${request.customerName}</strong>,<br/><br/>
-                Tu operación <strong>${request.operationCode}</strong> para el <strong>${request.plan === 'yearly' ? 'Plan Anual' : 'Plan Mensual'}</strong> ha sido aprobada.
+                Hola <strong>${escapeHtml(request.customerName)}</strong>,<br/><br/>
+                Tu operación <strong>${escapeHtml(request.operationCode)}</strong> para el <strong>${request.plan === 'yearly' ? 'Plan Anual' : 'Plan Mensual'}</strong> ha sido aprobada.
               </p>
               <div style="background-color: #f0fdf4; border: 2px dashed #00875a; padding: 16px; margin: 20px 0; border-radius: 12px; text-align: center;">
                 <span style="font-size: 11px; color: #00875a; font-weight: bold; text-transform: uppercase;">Tu Código de Activación Oficial:</span><br/>
@@ -208,11 +200,11 @@ export class SubscriptionService {
                 <p style="color: #64748b; font-size: 13px; margin: 4px 0 0 0;">Equipo de Soporte de CalculaPerú</p>
               </div>
               <p style="font-size: 14px; color: #1e293b; line-height: 1.6;">
-                Hola <strong>${request.customerName}</strong>,<br/><br/>
-                Hemos revisado la transferencia correspondiente a tu solicitud para el <strong>${request.plan === 'yearly' ? 'Plan Anual (S/ 149.00)' : 'Plan Mensual (S/ 16.00)'}</strong> con código de operación <strong>${request.operationCode}</strong>, pero nuestro equipo encontró la siguiente observación:
+                Hola <strong>${escapeHtml(request.customerName)}</strong>,<br/><br/>
+                Hemos revisado la transferencia correspondiente a tu solicitud para el <strong>${request.plan === 'yearly' ? 'Plan Anual (S/ 149.00)' : 'Plan Mensual (S/ 16.00)'}</strong> con código de operación <strong>${escapeHtml(request.operationCode)}</strong>, pero nuestro equipo encontró la siguiente observación:
               </p>
               <div style="background-color: #fff7ed; border-left: 4px solid #ea580c; padding: 14px 18px; margin: 18px 0; border-radius: 4px; font-size: 14px; color: #9a3412;">
-                <strong>Motivo:</strong> ${notes || 'No se pudo verificar la transferencia en el extracto bancario.'}
+                <strong>Motivo:</strong> ${escapeHtml(notes || 'No se pudo verificar la transferencia en el extracto bancario.')}
               </div>
               <p style="font-size: 13px; color: #475569; line-height: 1.5;">
                 ¿Qué puedes hacer?<br/>

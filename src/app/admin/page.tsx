@@ -105,7 +105,7 @@ export default function AdminPage() {
   const [trafficHistory, setTrafficHistory] = useState<TrafficDay[]>([]);
   const [topCalculators, setTopCalculators] = useState<TopCalculator[]>([]);
   const [topSearches, setTopSearches] = useState<TopSearchItem[]>([]);
-  const [deviceShare, setDeviceShare] = useState<DeviceShare>({ mobile: 68, desktop: 32 });
+  const [deviceShare, setDeviceShare] = useState<DeviceShare>({ mobile: 0, desktop: 0 });
   const [liveActiveVisitors, setLiveActiveVisitors] = useState<number>(0);
   const [systemHealth, setSystemHealth] = useState<SystemHealth | null>(null);
   const [auditLogs, setAuditLogs] = useState<AuditLog[]>([]);
@@ -197,7 +197,7 @@ export default function AdminPage() {
         setTrafficHistory(metricsData.trafficHistory || []);
         setTopCalculators(metricsData.topCalculators || []);
         setTopSearches(metricsData.topSearches || []);
-        setDeviceShare(metricsData.deviceShare || { mobile: 68, desktop: 32 });
+        setDeviceShare(metricsData.deviceShare || { mobile: 0, desktop: 0 });
         setLiveActiveVisitors(metricsData.liveActiveVisitors || 0);
         setSystemHealth(metricsData.systemHealth || null);
         setAuditLogs(metricsData.recentLogs || []);
@@ -215,8 +215,8 @@ export default function AdminPage() {
   useEffect(() => {
     const saved = sessionStorage.getItem('calculaperu_admin_secret');
     if (saved) {
-      setAdminSecret(saved);
-      fetchAllData(saved);
+      queueMicrotask(() => setAdminSecret(saved));
+      void Promise.resolve().then(() => fetchAllData(saved));
     }
   }, [fetchAllData]);
 
@@ -802,7 +802,7 @@ export default function AdminPage() {
               </span>
               <span className="text-slate-400">·</span>
               <span className="text-slate-400 font-mono text-[11px]">
-                Latencia: {systemHealth?.dbLatencyMs || 24}ms
+                Consulta: {systemHealth?.dbLatencyMs == null ? 'No disponible' : `${systemHealth.dbLatencyMs}ms`}
               </span>
             </div>
           </div>
@@ -1547,7 +1547,7 @@ export default function AdminPage() {
                   <span className="text-slate-400 font-semibold">Estado:</span>
                   <select
                     value={licenseStatusFilter}
-                    onChange={e => setLicenseStatusFilter(e.target.value as any)}
+                    onChange={e => setLicenseStatusFilter(e.target.value as typeof licenseStatusFilter)}
                     className="px-3 py-2 bg-slate-50 dark:bg-slate-850 border border-slate-200 dark:border-slate-750 rounded-xl text-slate-700 dark:text-slate-300 font-semibold focus:outline-none"
                   >
                     <option value="all">Todos los estados</option>
@@ -1562,7 +1562,7 @@ export default function AdminPage() {
                   <span className="text-slate-400 font-semibold">Plan:</span>
                   <select
                     value={licensePlanFilter}
-                    onChange={e => setLicensePlanFilter(e.target.value as any)}
+                    onChange={e => setLicensePlanFilter(e.target.value as typeof licensePlanFilter)}
                     className="px-3 py-2 bg-slate-50 dark:bg-slate-850 border border-slate-200 dark:border-slate-750 rounded-xl text-slate-700 dark:text-slate-300 font-semibold focus:outline-none"
                   >
                     <option value="all">Todos los planes</option>
@@ -1738,7 +1738,7 @@ export default function AdminPage() {
                   <span className="text-slate-400 font-semibold">Membresía:</span>
                   <select
                     value={userProFilter}
-                    onChange={e => setUserProFilter(e.target.value as any)}
+                    onChange={e => setUserProFilter(e.target.value as typeof userProFilter)}
                     className="px-3 py-2 bg-slate-50 dark:bg-slate-850 border border-slate-200 dark:border-slate-750 rounded-xl text-slate-700 dark:text-slate-300 font-semibold focus:outline-none"
                   >
                     <option value="all">Todos</option>
@@ -1751,7 +1751,7 @@ export default function AdminPage() {
                   <span className="text-slate-400 font-semibold">Rol:</span>
                   <select
                     value={userRoleFilter}
-                    onChange={e => setUserRoleFilter(e.target.value as any)}
+                    onChange={e => setUserRoleFilter(e.target.value as typeof userRoleFilter)}
                     className="px-3 py-2 bg-slate-50 dark:bg-slate-850 border border-slate-200 dark:border-slate-750 rounded-xl text-slate-700 dark:text-slate-300 font-semibold focus:outline-none"
                   >
                     <option value="all">Todos los roles</option>
@@ -2501,4 +2501,3 @@ export default function AdminPage() {
     </div>
   );
 }
-

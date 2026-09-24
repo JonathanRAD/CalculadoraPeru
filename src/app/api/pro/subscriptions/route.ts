@@ -3,6 +3,7 @@ import { authService } from '@/server/services/auth.service';
 import { subscriptionService } from '@/server/services/subscription.service';
 import { subscriptionRequestRepository } from '@/server/repositories/subscription_request.repository';
 import { validateCreateSubscriptionInput } from '@/server/validators/subscription.validator';
+import { readJsonBody, RequestBodyError } from '@/server/validators/request-body';
 
 export async function GET(req: NextRequest) {
   try {
@@ -47,7 +48,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const rawBody = await req.json();
+    const rawBody = await readJsonBody(req, 4096);
     const validation = validateCreateSubscriptionInput(rawBody);
 
     if (!validation.isValid || !validation.data) {
@@ -74,9 +75,8 @@ export async function POST(req: NextRequest) {
   } catch (err) {
     console.error('Error creating subscription request:', err);
     return NextResponse.json(
-      { success: false, message: 'Error en el servidor al registrar la suscripción.' },
-      { status: 500 }
+      { success: false, message: err instanceof RequestBodyError ? err.message : 'Error en el servidor al registrar la suscripción.' },
+      { status: err instanceof RequestBodyError ? err.status : 500 }
     );
   }
 }
-

@@ -1,8 +1,9 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { validateCreateLicenseInput, validateRedeemLicenseInput } from '../validators/license.validator';
 import { validateLoginInput, validateRegisterInput, validateCompanyProfileInput } from '../validators/auth.validator';
 import { licenseService } from '../services/license.service';
 import { authService } from '../services/auth.service';
+import { userRepository } from '../repositories/user.repository';
 
 describe('Backend Clean Architecture - Validators & Services', () => {
   describe('License Validator', () => {
@@ -57,16 +58,12 @@ describe('Backend Clean Architecture - Validators & Services', () => {
   });
 
   describe('Auth Service', () => {
-    it('debe autenticar exitosamente la cuenta de administrador', async () => {
-      const result = await authService.login({
-        email: 'rujeljonathan4@gmail.com',
-        password: 'Elmaspro_123',
-      });
-
-      expect(result.success).toBe(true);
-      expect(result.user?.role).toBe('admin');
-      expect(result.user?.isPro).toBe(true);
-      expect(result.token).toBeDefined();
+    it('genera y verifica contraseñas nuevas sin depender de una cuenta real', () => {
+      const password = 'EjemploSeguro123456';
+      const { hash, salt } = authService.hashPassword(password);
+      expect(hash.startsWith('scrypt:')).toBe(true);
+      expect(authService.verifyPassword(password, hash, salt)).toBe(true);
+      expect(authService.verifyPassword('Incorrecta123456', hash, salt)).toBe(false);
     });
 
     it('debe rechazar contraseña incorrecta', async () => {
@@ -99,6 +96,14 @@ describe('Backend Clean Architecture - Validators & Services', () => {
     });
 
     it('debe canjear una licencia y no permitir volver a canjearla', async () => {
+      const user = {
+        id: 'user-test-1', email: 'test@calculaperu.pe', name: 'Cliente de prueba',
+        passwordHash: '', salt: '', role: 'user' as const, isPro: false,
+        createdAt: new Date().toISOString(), sessionVersion: 0,
+      };
+      const findSpy = vi.spyOn(userRepository, 'findById').mockResolvedValue(user);
+      const updateSpy = vi.spyOn(userRepository, 'update').mockResolvedValue(authService.toSafeUser(user));
+      try {
       const license = await licenseService.issueLicense({
         plan: 'monthly',
         clientName: 'Cliente Canje',
@@ -110,6 +115,10 @@ describe('Backend Clean Architecture - Validators & Services', () => {
       const secondRedeem = await licenseService.redeemLicense(license.code, 'user-test-2', 'other@calculaperu.pe');
       expect(secondRedeem.success).toBe(false);
       expect(secondRedeem.message).toContain('ya ha sido utilizado');
+      } finally {
+        findSpy.mockRestore();
+        updateSpy.mockRestore();
+      }
     });
   });
 

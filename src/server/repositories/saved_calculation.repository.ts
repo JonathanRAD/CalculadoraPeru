@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';
-import { getSupabaseAdmin, isSupabaseConfigured } from '../config/supabase';
+import { getSupabaseAdmin, isSupabaseConfigured, requireDurableStorage } from '../config/supabase';
 
 export interface SavedCalculation {
   id: string;
@@ -83,7 +83,8 @@ export class SavedCalculationRepository {
       }
     }
 
-    // Local fallback store
+    requireDurableStorage();
+    // Local fallback store for development only.
     const list = loadLocalCalculations();
     list.unshift(newEntry);
     saveLocalCalculations(list);
@@ -100,7 +101,7 @@ export class SavedCalculationRepository {
           .eq('user_id', userId)
           .order('created_at', { ascending: false });
 
-        if (!error && data && data.length > 0) {
+        if (!error && data) {
           return data.map(r => ({
             id: r.id,
             userId: r.user_id,
@@ -115,6 +116,7 @@ export class SavedCalculationRepository {
       }
     }
 
+    requireDurableStorage();
     const list = loadLocalCalculations();
     return list.filter(item => item.userId === userId);
   }
@@ -133,6 +135,7 @@ export class SavedCalculationRepository {
       }
     }
 
+    requireDurableStorage();
     const list = loadLocalCalculations();
     const filtered = list.filter(item => !(item.id === id && item.userId === userId));
     saveLocalCalculations(filtered);

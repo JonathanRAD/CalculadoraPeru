@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
 import { SafeUser, CompanyProfile } from '@/features/auth/types';
 
 interface ProContextType {
@@ -9,7 +9,7 @@ interface ProContextType {
   isLoadingUser: boolean;
   login: (email: string, pass: string) => Promise<{ success: boolean; message: string }>;
   register: (name: string, email: string, pass: string) => Promise<{ success: boolean; message: string }>;
-  logout: () => Promise<void>;
+  logout: () => Promise<{ success: boolean; message: string }>;
   updateCompanyProfile: (data: CompanyProfile & { name?: string }) => Promise<{ success: boolean; message: string }>;
 
   // PRO Status & Session
@@ -41,35 +41,10 @@ const LOCAL_STORAGE_KEY = 'calculaperu_pro_session_v1';
 const USER_STORAGE_KEY = 'calculaperu_user_account';
 
 export function ProProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<SafeUser | null>(() => {
-    if (typeof window !== 'undefined') {
-      try {
-        const stored = localStorage.getItem(USER_STORAGE_KEY);
-        if (stored) {
-          return JSON.parse(stored);
-        }
-      } catch {
-        // ignore
-      }
-    }
-    return null;
-  });
+  const [user, setUser] = useState<SafeUser | null>(null);
   const [isLoadingUser, setIsLoadingUser] = useState(true);
+  const authEpoch = useRef(0);
 
-  // PRO state (derived from user OR fallback local session)
-  const [localProSession, setLocalProSession] = useState<{
-    isPro: boolean;
-    plan: 'yearly' | 'monthly' | null;
-    subscriberName: string;
-    code: string;
-    expiresAt: string | null;
-  }>({
-    isPro: false,
-    plan: null,
-    subscriberName: '',
-    code: '',
-    expiresAt: null,
-  });
 
   // Modals
   const [isActivationModalOpen, setIsActivationModalOpen] = useState(false);
@@ -79,60 +54,44 @@ export function ProProvider({ children }: { children: React.ReactNode }) {
 
   // 1. Fetch current logged-in user on mount
   const checkCurrentUser = useCallback(async () => {
+    const epoch = authEpoch.current;
     try {
       const res = await fetch('/api/auth/me', {
         credentials: 'include',
         cache: 'no-store',
       });
       const data = await res.json();
-      if (data.authenticated && data.user) {
+      if (epoch !== authEpoch.current) return;
+      if (res.ok && data.authenticated && data.user) {
         setUser(data.user);
-        try {
-          localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(data.user));
-        } catch {
-          // ignore
-        }
       } else {
         setUser(null);
-        try {
-          localStorage.removeItem(USER_STORAGE_KEY);
-        } catch {
-          // ignore
-        }
       }
     } catch {
-      // On connection issue, preserve local cached user state if exists
+      if (epoch === authEpoch.current) setUser(null);
     } finally {
-      setIsLoadingUser(false);
+      if (epoch === authEpoch.current) setIsLoadingUser(false);
     }
   }, []);
 
   useEffect(() => {
-    checkCurrentUser();
+    try { localStorage.removeItem(USER_STORAGE_KEY); } catch { /* storage may be disabled */ }
+    void Promise.resolve().then(checkCurrentUser);
   }, [checkCurrentUser]);
 
-  // 2. Load fallback local session for anonymous users
+  // Remove legacy browser-only PRO state; the account is the authority.
   useEffect(() => {
     try {
-      const stored = localStorage.getItem(LOCAL_STORAGE_KEY);
-      if (stored) {
-        const parsed = JSON.parse(stored);
-        if (parsed.expiresAt && new Date(parsed.expiresAt) > new Date()) {
-          setLocalProSession(parsed);
-        } else {
-          localStorage.removeItem(LOCAL_STORAGE_KEY);
-        }
-      }
+      localStorage.removeItem(LOCAL_STORAGE_KEY);
     } catch {
       // ignore
     }
   }, []);
 
-  // Compute effective PRO status: User Account PRO takes precedence, then local cookie/session
-  const isPro = !!user?.isPro || localProSession.isPro;
-  const plan = user?.plan || localProSession.plan;
-  const subscriberName = user?.name || localProSession.subscriberName || 'Usuario PRO';
-  const expiresAt = user?.proExpiresAt || localProSession.expiresAt;
+  const isPro = Boolean(user?.isPro && user.proExpiresAt && new Date(user.proExpiresAt) > new Date());
+  const plan = user?.plan ?? null;
+  const subscriberName = user?.name || 'Usuario PRO';
+  const expiresAt = user?.proExpiresAt ?? null;
 
   // Modal openers
   const openActivationModal = useCallback(() => setIsActivationModalOpen(true), []);
@@ -158,12 +117,9 @@ export function ProProvider({ children }: { children: React.ReactNode }) {
       });
       const data = await res.json();
       if (data.success && data.user) {
+        authEpoch.current += 1;
         setUser(data.user);
-        try {
-          localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(data.user));
-        } catch {
-          // ignore
-        }
+        setIsLoadingUser(false);
         setIsAuthModalOpen(false);
         return { success: true, message: data.message };
       }
@@ -183,12 +139,9 @@ export function ProProvider({ children }: { children: React.ReactNode }) {
       });
       const data = await res.json();
       if (data.success && data.user) {
+        authEpoch.current += 1;
         setUser(data.user);
-        try {
-          localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(data.user));
-        } catch {
-          // ignore
-        }
+        setIsLoadingUser(false);
         setIsAuthModalOpen(false);
         return { success: true, message: data.message };
       }
@@ -198,12 +151,14 @@ export function ProProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const logout = async () => {
+  const logout = async (): Promise<{ success: boolean; message: string }> => {
     try {
-      await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' });
+      const response = await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' });
+      if (!response.ok) return { success: false, message: 'No se pudo cerrar la sesión. Intenta de nuevo.' };
     } catch {
-      // ignore
+      return { success: false, message: 'No hay conexión para cerrar la sesión. Intenta de nuevo.' };
     }
+    authEpoch.current += 1;
     setUser(null);
     try {
       localStorage.removeItem(USER_STORAGE_KEY);
@@ -212,6 +167,7 @@ export function ProProvider({ children }: { children: React.ReactNode }) {
     }
     logoutPro();
     setIsProfileModalOpen(false);
+    return { success: true, message: 'Sesión cerrada.' };
   };
 
   const updateCompanyProfile = async (data: CompanyProfile & { name?: string }): Promise<{ success: boolean; message: string }> => {
@@ -225,11 +181,6 @@ export function ProProvider({ children }: { children: React.ReactNode }) {
       const resData = await res.json();
       if (resData.success && resData.user) {
         setUser(resData.user);
-        try {
-          localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(resData.user));
-        } catch {
-          // ignore
-        }
         return { success: true, message: resData.message };
       }
       return { success: false, message: resData.message || 'Error actualizando perfil.' };
@@ -253,15 +204,6 @@ export function ProProvider({ children }: { children: React.ReactNode }) {
       if (data.success) {
         if (data.user) {
           setUser(data.user);
-          try {
-            localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(data.user));
-          } catch {
-            // ignore
-          }
-        }
-        if (data.session) {
-          setLocalProSession(data.session);
-          localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(data.session));
         }
 
         try {
@@ -288,13 +230,6 @@ export function ProProvider({ children }: { children: React.ReactNode }) {
   };
 
   const logoutPro = useCallback(() => {
-    setLocalProSession({
-      isPro: false,
-      plan: null,
-      subscriberName: '',
-      code: '',
-      expiresAt: null,
-    });
     try {
       localStorage.removeItem(LOCAL_STORAGE_KEY);
       document.cookie = 'calculaperu_pro_active=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';

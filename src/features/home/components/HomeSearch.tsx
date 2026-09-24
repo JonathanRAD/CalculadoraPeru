@@ -149,7 +149,7 @@ export function HomeSearch({ calculators }: HomeSearchProps) {
           id="home-search-results"
           role="listbox"
           aria-label="Resultados de búsqueda"
-          className="home-search-results absolute inset-x-0 top-[calc(100%+0.5rem)] z-30 overflow-hidden rounded-2xl border border-slate-200 bg-white p-2 shadow-2xl dark:border-slate-700 dark:bg-[#101a38] dark:shadow-black/40"
+          className="home-search-results absolute inset-x-0 top-[calc(100%+0.5rem)] z-30 max-h-[min(24rem,55dvh)] overflow-y-auto rounded-2xl border border-slate-200 bg-white p-2 shadow-2xl dark:border-slate-700 dark:bg-[#101a38] dark:shadow-black/40"
         >
           {results.length > 0 ? (
             results.map((calculator, index) => (

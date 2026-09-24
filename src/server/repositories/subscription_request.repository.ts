@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';
 import { SubscriptionRequest, SubscriptionStatus } from '@/features/auth/types';
-import { getSupabaseAdmin, isSupabaseConfigured } from '../config/supabase';
+import { getSupabaseAdmin, isSupabaseConfigured, requireDurableStorage } from '../config/supabase';
 
 const DATA_DIR = path.join(process.cwd(), '.data');
 const SUB_REQUESTS_FILE = path.join(DATA_DIR, 'subscription_requests.json');
@@ -24,22 +24,7 @@ function loadLocalRequests(): SubscriptionRequest[] {
     }
   } catch {}
 
-  // Seed default test request from user's submission if new
-  const initial: SubscriptionRequest[] = [
-    {
-      id: 'sub-user-test-1',
-      customerName: 'juansito',
-      customerEmail: 'jonathanrujel4@gmail.com',
-      customerPhone: '913544716',
-      plan: 'yearly',
-      amount: 149,
-      operationCode: '1241252151',
-      status: 'pending',
-      createdAt: new Date().toISOString(),
-    },
-  ];
-  saveLocalRequests(initial);
-  return initial;
+  return [];
 }
 
 function saveLocalRequests(items: SubscriptionRequest[]) {
@@ -83,6 +68,7 @@ export class SubscriptionRequestRepository {
       }
     }
 
+    requireDurableStorage();
     return loadLocalRequests().sort(
       (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     );
@@ -117,9 +103,11 @@ export class SubscriptionRequestRepository {
             reviewedBy: data.reviewed_by || undefined,
           };
         }
+        if (!error) return null;
       }
     }
 
+    requireDurableStorage();
     const list = loadLocalRequests();
     return list.find(r => r.id === id) || null;
   }
@@ -162,6 +150,7 @@ export class SubscriptionRequestRepository {
       }
     }
 
+    requireDurableStorage();
     const list = loadLocalRequests();
     // Prevent duplicate submission with same operation code within 24h
     const existing = list.find(
@@ -216,6 +205,7 @@ export class SubscriptionRequestRepository {
       }
     }
 
+    requireDurableStorage();
     const list = loadLocalRequests();
     const idx = list.findIndex(r => r.id === id);
     if (idx === -1) return null;
@@ -270,6 +260,7 @@ export class SubscriptionRequestRepository {
       }
     }
 
+    requireDurableStorage();
     const list = loadLocalRequests();
     const idx = list.findIndex(r => r.id === id);
     if (idx === -1) return null;

@@ -67,14 +67,23 @@ La ruta `/api/tipo-de-cambio` consulta la última publicación disponible de BCR
 
 ## Variables de entorno
 
-La calculadora pública funciona sin variables obligatorias. La integración preparada para Supabase reconoce:
+Las calculadoras públicas funcionan sin cuenta ni variables obligatorias. Para habilitar cuentas, guardado, PRO, métricas y limitación de intentos en producción se requiere una base de datos Supabase persistente:
 
 ```env
 NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_ANON_KEY=
+SUPABASE_SECRET_KEY=
+AUTH_SECRET=
+ADMIN_SECRET_KEY=
+RESEND_API_KEY=
+PRO_PROMO_CODES=
 ```
 
-Si Supabase no se utiliza, conviene retirar su cliente y dependencias antes de producción.
+`SUPABASE_SERVICE_ROLE_KEY` puede utilizarse en lugar de `SUPABASE_SECRET_KEY`. Mantén estas claves solo en variables del servidor, nunca con prefijo `NEXT_PUBLIC_`. `AUTH_SECRET` debe ser aleatorio y estable entre despliegues; cambiarlo invalida todas las sesiones. `PRO_PROMO_CODES` es opcional: lista de códigos gratuitos separados por comas. Sin esa variable no se aceptan cupones. La solicitud de pago siempre calcula el importe en el servidor.
+
+Antes de desplegar esta actualización sobre una base existente, ejecuta [migrate_session_security.sql](src/server/db/migrate_session_security.sql) en el SQL Editor de Supabase. Añade `session_version`, el limitador de intentos y el canje atómico de licencias. Después prueba inicio/cierre de sesión, canje PRO, formulario de contacto y búsqueda del inicio. Si la migración falta, esas operaciones fallan de forma explícita en vez de aparentar que se guardaron localmente. El modo local de desarrollo sigue disponible cuando Supabase no está configurado; no es persistencia válida para producción.
+
+Para crear o rotar la cuenta administradora, `scripts/setup_admin.mjs` exige `SETUP_ADMIN_EMAIL` y `SETUP_ADMIN_PASSWORD` (mínimo 16 caracteres). Las credenciales antiguas que pudieran haberse usado antes de este cambio deben rotarse; quitar una clave del código no revoca contraseñas ya desplegadas.
 
 ## Alcance
 

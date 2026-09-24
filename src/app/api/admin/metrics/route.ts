@@ -14,6 +14,7 @@ export async function GET(req: NextRequest) {
   }
 
   try {
+    const startedAt = performance.now();
     const [metrics, logs, analytics] = await Promise.all([
       adminService.getDashboardMetrics(),
       adminService.getRecentAuditLogs(30),
@@ -32,9 +33,9 @@ export async function GET(req: NextRequest) {
 
     const systemHealth = {
       supabase: isSupabaseConfigured ? 'connected' : 'local_fallback',
-      dbLatencyMs: isSupabaseConfigured ? 28 : 2,
-      authStatus: 'operational',
-      resendEmail: Boolean(process.env.RESEND_API_KEY) ? 'configured' : 'mock',
+      dbLatencyMs: Math.round(performance.now() - startedAt),
+      authStatus: process.env.AUTH_SECRET ? 'configured' : 'development',
+      resendEmail: Boolean(process.env.RESEND_API_KEY) ? 'configured' : 'not_configured',
       nodeEnv: process.env.NODE_ENV || 'development',
       serverTime: new Date().toISOString(),
     };
@@ -44,7 +45,6 @@ export async function GET(req: NextRequest) {
       metrics: {
         ...metrics,
         totalPeriodVisits,
-        monthlyActiveEstimate: Math.floor(totalPeriodVisits * 2.2),
       },
       liveActiveVisitors: analytics.liveActiveVisitors,
       trafficHistory,

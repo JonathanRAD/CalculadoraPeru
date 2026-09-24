@@ -112,13 +112,19 @@ export default function ProSubscriptionPage() {
     setTimeout(() => setCopiedPhone(false), 2500);
   };
 
-  const handleApplyCoupon = (e: React.FormEvent) => {
+  const handleApplyCoupon = async (e: React.FormEvent) => {
     e.preventDefault();
     const clean = couponCode.trim().toUpperCase();
-    if (clean === 'PROMO' || clean === 'CALCULA100' || clean === 'VIP') {
-      setIsCouponApplied(true);
-    } else {
-      alert('Cupón no válido o expirado.');
+    try {
+      const response = await fetch('/api/pro/coupon', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ code: clean }),
+      });
+      const result = await response.json();
+      setIsCouponApplied(Boolean(response.ok && result.valid));
+      if (!response.ok || !result.valid) alert(result.message || 'Cupón no válido o expirado.');
+    } catch {
+      setIsCouponApplied(false);
+      alert('No se pudo verificar el cupón. Intenta nuevamente.');
     }
   };
 
@@ -454,7 +460,7 @@ export default function ProSubscriptionPage() {
                 </div>
                 <div className="flex items-start gap-2.5 text-slate-800 dark:text-slate-200 font-medium">
                   <Check className="w-4 h-4 text-[#00875A] shrink-0 mt-0.5 font-bold" />
-                  <span><strong>Historial en la Nube ("Mis Cálculos"):</strong> Guarda y consulta tus liquidaciones y cotizaciones desde cualquier PC o celular.</span>
+                  <span><strong>Historial en la Nube (&quot;Mis Cálculos&quot;):</strong> Guarda y consulta tus liquidaciones y cotizaciones desde cualquier PC o celular.</span>
                 </div>
                 <div className="flex items-start gap-2.5 text-slate-800 dark:text-slate-200 font-medium">
                   <Check className="w-4 h-4 text-[#00875A] shrink-0 mt-0.5 font-bold" />
@@ -921,7 +927,7 @@ export default function ProSubscriptionPage() {
                       type="text"
                       placeholder="¿Tienes un cupón promocional?"
                       value={couponCode}
-                      onChange={(e) => setCouponCode(e.target.value)}
+                      onChange={(e) => { setCouponCode(e.target.value); setIsCouponApplied(false); }}
                       className="flex-1 bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-1.5 text-xs text-slate-900 dark:text-white outline-none uppercase font-mono"
                     />
                     <button

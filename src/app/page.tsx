@@ -98,7 +98,7 @@ export default function HomePage() {
       {/* ·  Tablet  (640-1023px) : franja 180 px                                  */}
       {/* ·  Desktop (≥1024px) : columna derecha aspect-[16/11]                    */}
       {/* ========================================================================= */}
-      <section className="relative overflow-hidden border-b border-slate-200/80 bg-white dark:border-slate-800/80 dark:bg-[#0B132B] transition-colors">
+      <section className="relative z-10 border-b border-slate-200/80 bg-white dark:border-slate-800/80 dark:bg-[#0B132B] transition-colors">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-12">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 lg:gap-12 items-center">
 

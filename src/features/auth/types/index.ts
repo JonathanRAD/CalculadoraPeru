@@ -21,6 +21,7 @@ export interface UserAccount extends CompanyProfile {
   activatedCode?: string | null;
   createdAt: string;
   lastLoginAt?: string;
+  sessionVersion?: number;
 }
 
 export type SafeUser = Omit<UserAccount, 'passwordHash' | 'salt'>;

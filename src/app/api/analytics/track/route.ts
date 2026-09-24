@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import crypto from 'crypto';
 import { analyticsRepository } from '@/server/repositories/analytics.repository';
+import { readJsonBody, RequestBodyError } from '@/server/validators/request-body';
 
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json().catch(() => ({}));
-    const rawPath = typeof body.path === 'string' ? body.path.trim() : '/';
+    const body = await readJsonBody(req, 2048) as Record<string, unknown>;
+    const rawPath = typeof body.path === 'string' ? body.path.trim().slice(0, 200) : '/';
     const eventType = body.eventType === 'search' ? 'search' : 'page_view';
     const query = typeof body.query === 'string' ? body.query.trim().slice(0, 100) : undefined;
     const referrer = typeof body.referrer === 'string' ? body.referrer.slice(0, 300) : undefined;
@@ -40,6 +41,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (err) {
     console.error('Error tracking analytics event:', err);
-    return NextResponse.json({ success: false }, { status: 200 });
+    return NextResponse.json({ success: false }, { status: err instanceof RequestBodyError ? err.status : 503 });
   }
 }

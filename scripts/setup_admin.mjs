@@ -1,7 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
 import crypto from 'crypto';
-import fs from 'fs';
-import path from 'path';
 
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL || '';
 const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SECRET_KEY || '';
@@ -15,12 +13,17 @@ const supabase = createClient(url, serviceRoleKey, {
   auth: { autoRefreshToken: false, persistSession: false },
 });
 
-const ADMIN_EMAIL = 'rujeljonathan4@gmail.com';
-const ADMIN_PASSWORD = 'Elmaspro_123';
-const ADMIN_NAME = 'Jonathan Rujel (Admin)';
+const ADMIN_EMAIL = process.env.SETUP_ADMIN_EMAIL?.trim().toLowerCase();
+const ADMIN_PASSWORD = process.env.SETUP_ADMIN_PASSWORD;
+const ADMIN_NAME = process.env.SETUP_ADMIN_NAME?.trim() || 'Administrador CalculaPerú';
+
+if (!ADMIN_EMAIL || !ADMIN_PASSWORD || ADMIN_PASSWORD.length < 16) {
+  console.error('Configura SETUP_ADMIN_EMAIL y SETUP_ADMIN_PASSWORD (mínimo 16 caracteres) antes de ejecutar este script.');
+  process.exit(1);
+}
 
 function hashPassword(password, salt = crypto.randomBytes(16).toString('hex')) {
-  const hash = crypto.pbkdf2Sync(password, salt, 1000, 64, 'sha256').toString('hex');
+  const hash = `scrypt:${crypto.scryptSync(password, salt, 64).toString('hex')}`;
   return { hash, salt };
 }
 
@@ -39,7 +42,7 @@ async function setupAdmin() {
 
     if (existingAuth) {
       console.log('1. Usuario existente en Supabase Auth. Actualizando contraseña...');
-      const { data: updated, error: updateErr } = await supabase.auth.admin.updateUserById(existingAuth.id, {
+      const { error: updateErr } = await supabase.auth.admin.updateUserById(existingAuth.id, {
         password: ADMIN_PASSWORD,
         email_confirm: true,
         user_metadata: { name: ADMIN_NAME, role: 'admin' },
@@ -75,7 +78,7 @@ async function setupAdmin() {
   console.log('\n2. Sincronizando en tabla public.profiles...');
   const { data: existingProfile } = await supabase
     .from('profiles')
-    .select('id')
+    .select('id, session_version')
     .eq('email', ADMIN_EMAIL)
     .maybeSingle();
 
@@ -92,6 +95,7 @@ async function setupAdmin() {
     pro_expires_at: '2099-12-31T23:59:59.999Z',
     password_hash: adminHash,
     salt: adminSalt,
+    session_version: Number(existingProfile?.session_version || 0) + 1,
     updated_at: new Date().toISOString(),
   };
 
@@ -101,48 +105,13 @@ async function setupAdmin() {
 
   if (profileError) {
     console.error('   ❌ Error al upsert en profiles:', profileError.message);
+    process.exitCode = 1;
+    return;
   } else {
     console.log(`   ✅ Perfil sincronizado en public.profiles con rol 'admin' y estado PRO permanente.`);
   }
 
-  // 3. Sincronizar en almacenamiento local (.data/db.json) para el sistema de hash PBKDF2
-  console.log('\n3. Sincronizando en almacenamiento de contraseñas locales (.data/db.json)...');
-  const dbPath = path.join(process.cwd(), '.data', 'db.json');
-  try {
-    let db = { users: {}, licenses: {} };
-    if (fs.existsSync(dbPath)) {
-      db = JSON.parse(fs.readFileSync(dbPath, 'utf-8'));
-    }
-
-    const { hash, salt } = hashPassword(ADMIN_PASSWORD);
-    
-    // Buscar si ya existía con otro ID
-    let targetKey = Object.keys(db.users || {}).find(
-      k => db.users[k].email?.toLowerCase() === ADMIN_EMAIL.toLowerCase()
-    ) || finalId;
-
-    if (!db.users) db.users = {};
-    db.users[targetKey] = {
-      id: finalId,
-      name: ADMIN_NAME,
-      email: ADMIN_EMAIL,
-      passwordHash: hash,
-      salt: salt,
-      role: 'admin',
-      isPro: true,
-      plan: 'yearly',
-      proExpiresAt: '2099-12-31T23:59:59.999Z',
-      createdAt: db.users[targetKey]?.createdAt || new Date().toISOString(),
-      lastLoginAt: new Date().toISOString(),
-    };
-
-    fs.writeFileSync(dbPath, JSON.stringify(db, null, 2), 'utf-8');
-    console.log('   ✅ Contraseña PBKDF2 y credenciales sincronizadas en base local.');
-  } catch (err) {
-    console.warn('   ⚠️ Error al actualizar db.json:', err.message);
-  }
-
-  // 4. Registrar log de auditoría en Supabase
+  // 3. Registrar log de auditoría en Supabase
   try {
     await supabase.from('audit_logs').insert({
       action: 'ADMIN_USER_INITIALIZED',
@@ -151,15 +120,14 @@ async function setupAdmin() {
       metadata: { email: ADMIN_EMAIL, role: 'admin' },
       created_at: new Date().toISOString(),
     });
-    console.log('\n4. Registro de auditoría guardado en Supabase.');
-  } catch (err) {
+    console.log('\n3. Registro de auditoría guardado en Supabase.');
+  } catch {
     // ignore
   }
 
   console.log('\n' + '='.repeat(60));
   console.log('🎉 ¡USUARIO ADMINISTRADOR LISTO!');
   console.log(`   Email:      ${ADMIN_EMAIL}`);
-  console.log(`   Password:   ${ADMIN_PASSWORD}`);
   console.log(`   Rol:        admin`);
   console.log(`   Estado PRO: Activo (Ilimitado)`);
   console.log('='.repeat(60));

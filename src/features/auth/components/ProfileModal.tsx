@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import {
   X,
@@ -34,7 +34,7 @@ interface SavedCalc {
   title: string;
   summaryText: string;
   totalAmount?: number;
-  data: Record<string, any>;
+  data: Record<string, unknown>;
   createdAt: string;
 }
 
@@ -70,6 +70,7 @@ export function ProfileModal() {
   // Profile save state
   const [isSavingProfile, setIsSavingProfile] = useState(false);
   const [saveFeedback, setSaveFeedback] = useState<string | null>(null);
+  const [logoutError, setLogoutError] = useState<string | null>(null);
 
   // Saved calculations state
   const [savedCalcs, setSavedCalcs] = useState<SavedCalc[]>([]);
@@ -83,37 +84,31 @@ export function ProfileModal() {
   // Sync company data when user changes
   useEffect(() => {
     if (user) {
-      setCompanyName(user.companyName || '');
-      setCompanyRuc(user.companyRuc || '');
-      setCompanyAddress(user.companyAddress || '');
-      setCompanyLogoBase64(user.companyLogoBase64 || null);
+      queueMicrotask(() => {
+        setCompanyName(user.companyName || '');
+        setCompanyRuc(user.companyRuc || '');
+        setCompanyAddress(user.companyAddress || '');
+        setCompanyLogoBase64(user.companyLogoBase64 || null);
+      });
     }
   }, [user]);
 
-  // Load calculations and subscriptions
-  useEffect(() => {
-    if (isProfileModalOpen && user) {
-      loadCalculations();
-      loadMySubscriptions();
-    }
-  }, [isProfileModalOpen, user]);
-
-  const loadCalculations = async () => {
+  const loadCalculations = useCallback(async () => {
     setIsLoadingCalcs(true);
     try {
       const res = await fetch('/api/calculations');
       const json = await res.json();
-      if (json.success && Array.isArray(json.data)) {
-        setSavedCalcs(json.data);
+      if (json.success && Array.isArray(json.calculations)) {
+        setSavedCalcs(json.calculations);
       }
     } catch {
       // Fallback silent
     } finally {
       setIsLoadingCalcs(false);
     }
-  };
+  }, []);
 
-  const loadMySubscriptions = async () => {
+  const loadMySubscriptions = useCallback(async () => {
     setIsLoadingSubscriptions(true);
     try {
       const res = await fetch('/api/pro/subscriptions/my-status');
@@ -126,7 +121,13 @@ export function ProfileModal() {
     } finally {
       setIsLoadingSubscriptions(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    if (isProfileModalOpen && user) {
+      void Promise.resolve().then(() => Promise.all([loadCalculations(), loadMySubscriptions()]));
+    }
+  }, [isProfileModalOpen, user, loadCalculations, loadMySubscriptions]);
 
   const handleDeleteCalc = async (id: string) => {
     if (!confirm('¿Deseas eliminar este cálculo guardado?')) return;
@@ -357,7 +358,7 @@ export function ProfileModal() {
                   Aún no tienes cálculos guardados
                 </p>
                 <p className="text-slate-500 text-[11px] max-w-sm mx-auto">
-                  Al usar cualquier calculadora (CTS, Liquidación, Boleta de Pago, etc.), haz clic en el botón <strong>"Guardar en Mis Cálculos"</strong> para sincronizarlo aquí.
+                  Al usar cualquier calculadora (CTS, Liquidación, Boleta de Pago, etc.), haz clic en el botón <strong>&quot;Guardar en Mis Cálculos&quot;</strong> para sincronizarlo aquí.
                 </p>
                 <div className="pt-2">
                   <Link
@@ -748,13 +749,18 @@ export function ProfileModal() {
           <span className="text-slate-400 text-[11px]">CalculaPerú Cloud</span>
           <button
             type="button"
-            onClick={logout}
+            onClick={async () => {
+              setLogoutError(null);
+              const result = await logout();
+              if (!result.success) setLogoutError(result.message);
+            }}
             className="flex items-center gap-1.5 font-bold text-red-600 hover:text-red-700 text-xs cursor-pointer p-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-950/30 transition-colors"
           >
             <LogOut className="w-3.5 h-3.5" />
             <span>Cerrar Sesión</span>
           </button>
         </div>
+        {logoutError && <p role="alert" className="text-xs text-red-600 dark:text-red-400">{logoutError}</p>}
 
       </div>
     </div>
