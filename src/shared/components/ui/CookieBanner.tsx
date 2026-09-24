@@ -1,31 +1,38 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useSyncExternalStore } from 'react';
 import Link from 'next/link';
 import { Cookie, X } from 'lucide-react';
 
-export function CookieBanner() {
-  const [showBanner, setShowBanner] = useState(false);
+function subscribeStorage(callback: () => void) {
+  window.addEventListener('storage', callback);
+  return () => window.removeEventListener('storage', callback);
+}
 
-  useEffect(() => {
-    try {
-      const consent = localStorage.getItem('calculaperu-cookie-consent');
-      if (!consent) {
-        setShowBanner(true);
-      }
-    } catch {
-      // localStorage disabled or private mode
-    }
-  }, []);
+function getConsentSnapshot() {
+  try {
+    return !localStorage.getItem('calculaperu-cookie-consent');
+  } catch {
+    return false;
+  }
+}
+
+function getServerSnapshot() {
+  return false;
+}
+
+export function CookieBanner() {
+  const [dismissed, setDismissed] = useState(false);
+  const isConsentMissing = useSyncExternalStore(subscribeStorage, getConsentSnapshot, getServerSnapshot);
 
   const handleAccept = () => {
     try {
       localStorage.setItem('calculaperu-cookie-consent', 'accepted');
     } catch {}
-    setShowBanner(false);
+    setDismissed(true);
   };
 
-  if (!showBanner) return null;
+  if (!isConsentMissing || dismissed) return null;
 
   return (
     <div

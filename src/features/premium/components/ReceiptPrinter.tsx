@@ -27,9 +27,7 @@ export default function ReceiptPrinter({
   const tax = Number((totalAmount - subtotal).toFixed(2));
 
   // Formatted date matching reference: "11 AUG 2026 - 14:32"
-  const [formattedDate, setFormattedDate] = useState('11 SET 2026 - 14:32');
-
-  useEffect(() => {
+  const [formattedDate] = useState(() => {
     const now = new Date();
     const months = ['ENE', 'FEB', 'MAR', 'ABR', 'MAY', 'JUN', 'JUL', 'AGO', 'SET', 'OCT', 'NOV', 'DIC'];
     const d = String(now.getDate()).padStart(2, '0');
@@ -37,8 +35,8 @@ export default function ReceiptPrinter({
     const y = now.getFullYear();
     const hrs = String(now.getHours()).padStart(2, '0');
     const mins = String(now.getMinutes()).padStart(2, '0');
-    setFormattedDate(`${d} ${m} ${y} - ${hrs}:${mins}`);
-  }, []);
+    return `${d} ${m} ${y} - ${hrs}:${mins}`;
+  });
 
   // Web Audio POS Thermal Printer Sound Synthesis
   const playPrinterClick = () => {
@@ -82,16 +80,20 @@ export default function ReceiptPrinter({
     }
   };
 
+  const playPrinterClickRef = useRef(playPrinterClick);
+  useEffect(() => {
+    playPrinterClickRef.current = playPrinterClick;
+  });
+
   // Printing Animation
   useEffect(() => {
-    setStatus('printing');
-    setProgress(0);
+    if (status !== 'printing') return;
 
     let current = 0;
     const interval = setInterval(() => {
       current += 2.2;
       if (soundEnabled && Math.random() > 0.45) {
-        playPrinterClick();
+        playPrinterClickRef.current();
       }
 
       if (current >= 100) {
@@ -105,11 +107,11 @@ export default function ReceiptPrinter({
     }, 40);
 
     return () => clearInterval(interval);
-  }, [plan, soundEnabled]);
+  }, [status, soundEnabled]);
 
   const handleReprint = () => {
-    setStatus('printing');
     setProgress(0);
+    setStatus('printing');
   };
 
   return (

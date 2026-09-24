@@ -2,9 +2,9 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
 import {
-  ArrowRight, BadgeCheck, Banknote, BookOpenCheck, BriefcaseBusiness,
-  Building2, Calculator, ChevronDown, Clock3, Percent, ReceiptText,
-  ShieldCheck, Store, TrendingUp, Sparkles, Check,
+  ArrowRight, BadgeCheck, BriefcaseBusiness,
+  Calculator, ChevronDown, ReceiptText,
+  Store, TrendingUp,
 } from 'lucide-react';
 import { CALCULATORS_REGISTRY, CATEGORIES, type CalculatorCategory } from '@/features/calculators/registry';
 import { HomeSearch } from '@/features/home/components/HomeSearch';

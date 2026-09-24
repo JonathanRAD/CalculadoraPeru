@@ -5,16 +5,11 @@ import Link from 'next/link';
 import {
   Sparkles,
   Check,
-  ShieldCheck,
   FileText,
   Building2,
   Receipt,
-  DownloadCloud,
   Zap,
-  Clock,
-  HelpCircle,
   Copy,
-  Tag,
   ArrowRight,
   UserCheck,
   FileSpreadsheet,
@@ -472,7 +467,7 @@ export default function ProSubscriptionPage() {
                 </div>
                 <div className="flex items-start gap-2.5 text-slate-800 dark:text-slate-200 font-medium">
                   <Check className="w-4 h-4 text-[#00875A] shrink-0 mt-0.5 font-bold" />
-                  <span><strong>Cotizador con Envío a WhatsApp:</strong> Emite presupuestos profesionales membretados y compártelos en 1 clic.</span>
+                  <span><strong>Cotizador Comercial PRO:</strong> Prepara presupuestos con catálogo propio, directorio de clientes, PDF con membrete y mensaje listo para WhatsApp.</span>
                 </div>
                 <div className="flex items-start gap-2.5 text-slate-800 dark:text-slate-200 font-medium">
                   <Check className="w-4 h-4 text-[#00875A] shrink-0 mt-0.5 font-bold" />

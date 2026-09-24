@@ -5,11 +5,10 @@ import { userRepository } from '../repositories/user.repository';
 import { auditRepository } from '../repositories/audit.repository';
 import { LoginInput, RegisterInput } from '../validators/auth.validator';
 
-const devAuthSecret = crypto.randomBytes(32).toString('hex');
+import { resolveAuthSecret } from '../config/server-env';
+
 function authSecret(): string {
-  if (process.env.AUTH_SECRET) return process.env.AUTH_SECRET;
-  if (process.env.NODE_ENV === 'production') throw new Error('AUTH_SECRET debe configurarse en producción.');
-  return devAuthSecret;
+  return resolveAuthSecret();
 }
 
 export function getAuthCookieOptions(req?: Request | NextRequest) {
@@ -25,6 +24,94 @@ export function getAuthCookieOptions(req?: Request | NextRequest) {
     secure: isProduction,
     domain: isCalculaPeru ? '.calculaperu.com.pe' : undefined,
   };
+}
+
+function normalizeOriginString(urlString: string): string | null {
+  try {
+    const parsed = new URL(urlString);
+    if (!['http:', 'https:'].includes(parsed.protocol)) {
+      return null;
+    }
+    return `${parsed.protocol}//${parsed.host}`.toLowerCase();
+  } catch {
+    return null;
+  }
+}
+
+export function validateAdminCsrf(req: Request | NextRequest): boolean {
+  const method = req.method.toUpperCase();
+  if (['GET', 'HEAD', 'OPTIONS'].includes(method)) return true;
+
+  const rawOrigin = req.headers.get('origin');
+  const rawReferer = req.headers.get('referer');
+
+  // 1. Si faltan ambos encabezados en una mutación web administrativa, rechazar
+  if (!rawOrigin && !rawReferer) {
+    return false;
+  }
+
+  // 2. Si existe Origin, este tiene prioridad estricta.
+  // No se utiliza Referer como bypass si Origin está presente pero no es válido.
+  let candidateOrigin: string | null = null;
+  if (rawOrigin) {
+    candidateOrigin = normalizeOriginString(rawOrigin);
+    if (!candidateOrigin) return false;
+  } else if (rawReferer) {
+    candidateOrigin = normalizeOriginString(rawReferer);
+    if (!candidateOrigin) return false;
+  }
+
+  if (!candidateOrigin) {
+    return false;
+  }
+
+  const isProduction = process.env.NODE_ENV === 'production';
+  let parsedCandidate: URL;
+  try {
+    parsedCandidate = new URL(candidateOrigin);
+  } catch {
+    return false;
+  }
+
+  // 3. Localhost permitido únicamente en desarrollo
+  const isLocalhost =
+    parsedCandidate.hostname === 'localhost' ||
+    parsedCandidate.hostname === '127.0.0.1' ||
+    parsedCandidate.hostname === '[::1]';
+
+  if (isLocalhost) {
+    return !isProduction;
+  }
+
+  // 4. Lista de orígenes autorizados canónicos explícitos
+  const allowedOrigins = new Set<string>();
+
+  const canonicalEnv = process.env.SITE_URL?.trim() || process.env.NEXT_PUBLIC_SITE_URL?.trim();
+  if (canonicalEnv) {
+    const norm = normalizeOriginString(canonicalEnv);
+    if (norm) allowedOrigins.add(norm);
+  }
+
+  // Dominios de producción canónicos y alternativas seguras de CalculaPerú
+  allowedOrigins.add('https://calculaperu.com.pe');
+  allowedOrigins.add('https://www.calculaperu.com.pe');
+  allowedOrigins.add('https://calculaperu.pe');
+  allowedOrigins.add('https://www.calculaperu.pe');
+
+  // Preview deploys explícitos (rechazando comodines '*')
+  const previewEnv = process.env.ALLOWED_ADMIN_ORIGINS?.trim();
+  if (previewEnv) {
+    const parts = previewEnv.split(',');
+    for (const p of parts) {
+      const trimmed = p.trim();
+      if (!trimmed || trimmed === '*' || trimmed.includes('*')) continue;
+      const norm = normalizeOriginString(trimmed);
+      if (norm) allowedOrigins.add(norm);
+    }
+  }
+
+  // 5. Comparación exacta contra el Set de orígenes autorizados (previene ataques de sufijo o subdominios no autorizados)
+  return allowedOrigins.has(candidateOrigin);
 }
 
 export class AuthService {
@@ -45,9 +132,10 @@ export class AuthService {
   }
 
   toSafeUser(user: UserAccount): SafeUser {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { passwordHash, salt, ...safe } = user;
-    return safe;
+    const safe: Partial<UserAccount> = { ...user };
+    delete safe.passwordHash;
+    delete safe.salt;
+    return safe as SafeUser;
   }
 
   signToken(payload: { userId: string; email: string; role: UserRole; sessionVersion?: number }): string {
@@ -92,13 +180,16 @@ export class AuthService {
   }
 
   async isAuthorizedAdmin(req: NextRequest): Promise<boolean> {
-    const headerKey = req.headers.get('x-admin-secret');
-    const adminKey = process.env.ADMIN_SECRET_KEY;
-    if (adminKey && headerKey && headerKey.length === adminKey.length &&
-        crypto.timingSafeEqual(Buffer.from(headerKey), Buffer.from(adminKey))) return true;
-
+    // Autorización exclusiva por sesión HttpOnly de usuario con rol admin
     const user = await this.authenticateRequest(req);
     return Boolean(user && user.role === 'admin');
+  }
+
+  async isAuthorizedAdminMutable(req: NextRequest): Promise<boolean> {
+    if (!validateAdminCsrf(req)) {
+      return false;
+    }
+    return this.isAuthorizedAdmin(req);
   }
 
   async login(input: LoginInput): Promise<{ success: boolean; message: string; user?: SafeUser; token?: string }> {

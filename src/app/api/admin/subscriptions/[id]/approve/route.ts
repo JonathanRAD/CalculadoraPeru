@@ -6,10 +6,10 @@ export async function POST(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const isAuthorized = await authService.isAuthorizedAdmin(req);
+  const isAuthorized = await authService.isAuthorizedAdminMutable(req);
   if (!isAuthorized) {
     return NextResponse.json(
-      { success: false, message: 'Acceso no autorizado al panel administrativo.' },
+      { success: false, message: 'Acceso no autorizado al panel administrativo o validación CSRF fallida.' },
       { status: 401 }
     );
   }
@@ -22,10 +22,10 @@ export async function POST(
 
     const result = await subscriptionService.approveRequest(id, 'Admin Panel');
     return NextResponse.json(result, { status: result.success ? 200 : 400 });
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error('Error approving subscription:', err);
     return NextResponse.json(
-      { success: false, message: err?.message || 'Error al aprobar la solicitud de suscripción.' },
+      { success: false, message: err instanceof Error ? err.message : 'Error al aprobar la solicitud de suscripción.' },
       { status: 500 }
     );
   }

@@ -4,26 +4,17 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import {
   Sparkles,
-  Check,
-  ShieldCheck,
-  FileText,
   Building2,
   Receipt,
-  DownloadCloud,
   Zap,
-  Clock,
   ArrowRight,
   FileSpreadsheet,
   Bookmark,
-  Share2,
   Search,
   CheckCircle2,
   AlertTriangle,
   Briefcase,
   Store,
-  TrendingUp,
-  DollarSign,
-  ExternalLink,
   MessageCircle,
 } from 'lucide-react';
 import { usePro } from '@/features/premium/context/ProContext';
@@ -109,23 +100,23 @@ const CALCULATORS_GUIDE: CalculatorGuideItem[] = [
   {
     id: 'cotizador',
     slug: '/cotizador',
-    name: 'Cotizador Comercial Rápido',
+    name: 'Cotizador Comercial PRO',
     category: 'negocios',
     categoryLabel: 'Negocios & Comercio',
     iconName: 'Store',
-    freeTier: 'Suma interactiva de productos, cálculo de subtotal e IGV (18%).',
+    freeTier: 'Creación de cotización temporal, cálculo en vivo de subtotal, descuentos por ítem e IGV, y copia de resumen.',
     proBenefits: [
-      'Envío Directo a WhatsApp: Abre WhatsApp Web o la App móvil con la proforma perfectamente formateada en negrita y viñetas.',
-      'Descarga de Cotización Comercial Formal en PDF: Lista con validez, condiciones de pago y membrete.',
-      'Exportación de Cotizaciones a Excel: Mantén un registro organizado de clientes y ventas potenciales.',
-      'Guardado de Proformas en la Nube: Recupera cotizaciones pasadas desde cualquier computadora.',
+      'Catálogo propio y Directorio de clientes: Guarda productos, servicios y clientes para reutilizarlos en segundos.',
+      'Cotización Formal en PDF Personalizada: Documento formal con el membrete, RUC y logo de tu negocio sin marcas de agua.',
+      'Guardado, Edición y Duplicado en la Nube: Historial ordenado con correlativos automáticos por empresa.',
+      'Exportación CSV compatible con Excel y mensaje preparado para abrir en WhatsApp.',
     ],
     howToUse: [
-      'Agrega los productos o servicios con su precio y cantidad.',
-      'Activa o desactiva el IGV según convenga con el cliente.',
-      'Haz clic en "Abrir en WhatsApp" para cerrar el trato de inmediato o en "PDF Pro" para enviar formalmente.',
+      'Selecciona un cliente de tu directorio o ingresa los datos directamente.',
+      'Añade ítems desde tu catálogo o escribe conceptos manuales con precios y descuentos.',
+      'Descarga tu proforma en PDF comercial, expórtala a CSV o abre WhatsApp con el resumen listo.',
     ],
-    badgeBenefit: 'WhatsApp 1-Click + Proforma PDF',
+    badgeBenefit: 'Catálogo + Clientes + PDF y Excel',
   },
   {
     id: 'gratificacion',
@@ -270,7 +261,7 @@ const CALCULATORS_GUIDE: CalculatorGuideItem[] = [
 ];
 
 export default function BeneficiosProPage() {
-  const { isPro, openActivationModal, openAuthModal, user } = usePro();
+  const { isPro, openActivationModal } = usePro();
   const [selectedCategory, setSelectedCategory] = useState<string>('todas');
   const [searchFilter, setSearchFilter] = useState<string>('');
 
@@ -368,7 +359,7 @@ export default function BeneficiosProPage() {
               2. Excel Editable (.CSV)
             </h2>
             <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-snug">
-              Descargas con UTF-8 BOM que abren perfecto en Excel sin romper tildes ni "S/".
+              Descargas con UTF-8 BOM que abren perfecto en Excel sin romper tildes ni &quot;S/&quot;.
             </p>
           </div>
 

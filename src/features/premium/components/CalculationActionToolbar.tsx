@@ -7,7 +7,6 @@ import {
   FileSpreadsheet,
   Sparkles,
   Share2,
-  Check,
   Loader2,
   Lock,
 } from 'lucide-react';
@@ -19,10 +18,10 @@ interface CalculationActionToolbarProps {
   title: string;
   summaryText: string;
   totalAmount?: number;
-  data: Record<string, any>;
+  data: Record<string, unknown>;
   csvFilename?: string;
   csvColumns?: { key: string; header: string }[];
-  csvRows?: Record<string, any>[];
+  csvRows?: Record<string, unknown>[];
   whatsappText?: string;
   className?: string;
 }

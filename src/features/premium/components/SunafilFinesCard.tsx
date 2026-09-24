@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { ShieldAlert, AlertTriangle, Building2, HelpCircle, CheckCircle, ChevronDown } from 'lucide-react';
+import { ShieldAlert, ChevronDown } from 'lucide-react';
 import { usePro } from '@/features/premium/context/ProContext';
 import { PERU_CONSTANTS } from '@/core/constants/peru';
 

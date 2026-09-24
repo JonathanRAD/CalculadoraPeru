@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import {
   ShieldAlert,
   KeyRound,
@@ -13,11 +14,9 @@ import {
   RefreshCw,
   Search,
   MessageCircle,
-  Calendar,
   Lock,
   ArrowRight,
   ShieldCheck,
-  Briefcase,
   BarChart3,
   TrendingUp,
   Activity,
@@ -28,26 +27,21 @@ import {
   X,
   ExternalLink,
   Trash2,
-  ChevronRight,
-  Filter,
   FileCode2,
   Clock,
   UserCheck,
-  UserX,
-  Eye,
   LogOut,
-  SlidersHorizontal,
   Smartphone,
   Monitor,
   Globe,
   CreditCard,
-  Send,
-  CheckCircle,
+  Inbox,
 } from 'lucide-react';
-import { LicenseCode, SafeUser, ProPlan, SubscriptionRequest, SubscriptionStatus } from '@/features/auth/types';
+import { LicenseCode, SafeUser, ProPlan, SubscriptionRequest } from '@/features/auth/types';
 import { ThemeToggle } from '@/shared/components/ui/ThemeToggle';
+import { SubmissionsTab } from './components/SubmissionsTab';
 
-type AdminTab = 'dashboard' | 'subscriptions' | 'licenses' | 'users' | 'audit' | 'system';
+type AdminTab = 'dashboard' | 'subscriptions' | 'submissions' | 'licenses' | 'users' | 'audit' | 'system';
 
 interface TrafficDay {
   date: string;
@@ -93,11 +87,10 @@ interface AuditLog {
 
 export default function AdminPage() {
   // Authentication & Security Gate
-  const [adminSecret, setAdminSecret] = useState('');
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [authError, setAuthError] = useState('');
   const [activeTab, setActiveTab] = useState<AdminTab>('dashboard');
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   // Data Stores
   const [licenses, setLicenses] = useState<LicenseCode[]>([]);
@@ -163,22 +156,19 @@ export default function AdminPage() {
   // Hovered data point in traffic chart
   const [hoveredPoint, setHoveredPoint] = useState<TrafficDay | null>(null);
 
-  // Load and validate admin credentials
-  const fetchAllData = useCallback(async (secret: string) => {
-    setIsLoading(true);
-    setAuthError('');
+  // Load and validate admin credentials via HttpOnly session
+  const fetchAllData = useCallback(async () => {
     try {
       const [licRes, userRes, metricsRes, subRes] = await Promise.all([
-        fetch('/api/admin/licenses', { headers: { 'x-admin-secret': secret } }),
-        fetch('/api/admin/users', { headers: { 'x-admin-secret': secret } }),
-        fetch('/api/admin/metrics', { headers: { 'x-admin-secret': secret } }),
-        fetch('/api/admin/subscriptions', { headers: { 'x-admin-secret': secret } }),
+        fetch('/api/admin/licenses', { credentials: 'include' }),
+        fetch('/api/admin/users', { credentials: 'include' }),
+        fetch('/api/admin/metrics', { credentials: 'include' }),
+        fetch('/api/admin/subscriptions', { credentials: 'include' }),
       ]);
 
       if (licRes.status === 401 || userRes.status === 401 || metricsRes.status === 401 || subRes.status === 401) {
-        setAuthError('Clave de administrador incorrecta o sesión caducada.');
+        setAuthError('Acceso restringido: Inicia sesión con una cuenta de rol Administrador para acceder.');
         setIsAuthenticated(false);
-        sessionStorage.removeItem('calculaperu_admin_secret');
         setIsLoading(false);
         return;
       }
@@ -204,7 +194,6 @@ export default function AdminPage() {
       }
 
       setIsAuthenticated(true);
-      sessionStorage.setItem('calculaperu_admin_secret', secret);
     } catch {
       setAuthError('Error de red o conexión al servidor.');
     } finally {
@@ -212,24 +201,26 @@ export default function AdminPage() {
     }
   }, []);
 
+  const router = useRouter();
+
   useEffect(() => {
-    const saved = sessionStorage.getItem('calculaperu_admin_secret');
-    if (saved) {
-      queueMicrotask(() => setAdminSecret(saved));
-      void Promise.resolve().then(() => fetchAllData(saved));
-    }
+    let isCancelled = false;
+    void Promise.resolve().then(() => {
+      if (!isCancelled) {
+        fetchAllData();
+      }
+    });
+    return () => {
+      isCancelled = true;
+    };
   }, [fetchAllData]);
 
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!adminSecret.trim()) return;
-    fetchAllData(adminSecret.trim());
-  };
-
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    try {
+      await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' });
+    } catch {}
     setIsAuthenticated(false);
-    setAdminSecret('');
-    sessionStorage.removeItem('calculaperu_admin_secret');
+    router.push('/login');
   };
 
   // Copy helper with feedback
@@ -252,9 +243,9 @@ export default function AdminPage() {
     try {
       const res = await fetch('/api/admin/licenses', {
         method: 'POST',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
-          'x-admin-secret': adminSecret,
         },
         body: JSON.stringify({
           plan: newPlan,
@@ -288,7 +279,7 @@ export default function AdminPage() {
     try {
       const res = await fetch(`/api/admin/licenses?code=${revokingLicense.code}`, {
         method: 'DELETE',
-        headers: { 'x-admin-secret': adminSecret },
+        credentials: 'include',
       });
 
       const data = await res.json();
@@ -316,9 +307,9 @@ export default function AdminPage() {
     try {
       const res = await fetch('/api/admin/users', {
         method: 'POST',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
-          'x-admin-secret': adminSecret,
         },
         body: JSON.stringify({
           userId: grantingUser.id,
@@ -357,9 +348,9 @@ export default function AdminPage() {
     try {
       const res = await fetch(`/api/admin/subscriptions/${sub.id}/approve`, {
         method: 'POST',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
-          'x-admin-secret': adminSecret,
         },
       });
 
@@ -373,7 +364,7 @@ export default function AdminPage() {
           )
         );
         // Refresh licenses & users to reflect changes immediately
-        fetchAllData(adminSecret);
+        fetchAllData();
 
         setApprovedResultModal({
           subscription: sub,
@@ -397,9 +388,9 @@ export default function AdminPage() {
     try {
       const res = await fetch(`/api/admin/subscriptions/${rejectingSub.id}/reject`, {
         method: 'POST',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
-          'x-admin-secret': adminSecret,
         },
         body: JSON.stringify({ notes: rejectReason }),
       });
@@ -545,52 +536,42 @@ export default function AdminPage() {
               <ThemeToggle />
             </div>
 
-            {/* Form */}
-            <form onSubmit={handleLogin} className="space-y-4">
-              <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-slate-400 flex items-center gap-1.5">
-                  <Lock className="w-3.5 h-3.5 text-emerald-500" />
-                  <span>Clave Maestra de Administrador</span>
-                </label>
-                <input
-                  type="password"
-                  value={adminSecret}
-                  onChange={e => setAdminSecret(e.target.value)}
-                  placeholder="Ingresa tu ADMIN_SECRET_KEY"
-                  autoFocus
-                  autoComplete="current-password"
-                  className="w-full px-4 py-3 bg-slate-950 border border-slate-700 rounded-xl text-white font-mono text-sm focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/30 transition-all placeholder:text-slate-600"
-                />
-                <p className="text-[11px] text-slate-600 pl-1">
-                  Definida en <code className="text-slate-500 font-mono">ADMIN_SECRET_KEY</code> de tu entorno
-                </p>
+            <div className="space-y-3 text-center">
+              <div className="w-12 h-12 rounded-full bg-emerald-950/80 border border-emerald-800 flex items-center justify-center text-[#00C853] mx-auto">
+                <Lock className="w-6 h-6" />
               </div>
+              <h2 className="text-sm font-bold text-white">Acceso Administrativo Protegido</h2>
+              <p className="text-xs text-slate-400 leading-relaxed">
+                Esta consola es de uso exclusivo para cuentas autorizadas con rol &apos;admin&apos; mediante sesión HttpOnly segura.
+              </p>
+            </div>
 
-              {authError && (
-                <div className="p-3 rounded-xl bg-red-950/40 border border-red-800/60 text-red-300 text-xs flex items-center gap-2">
-                  <AlertTriangle className="w-4 h-4 shrink-0" />
-                  <span>{authError}</span>
-                </div>
-              )}
+            {authError && (
+              <div className="p-3 rounded-xl bg-red-950/40 border border-red-800/60 text-red-300 text-xs flex items-center gap-2">
+                <AlertTriangle className="w-4 h-4 shrink-0" />
+                <span>{authError}</span>
+              </div>
+            )}
+
+            <div className="space-y-2.5">
+              <Link
+                href="/login?redirect=/admin"
+                className="w-full py-3 bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 text-white font-bold text-sm rounded-xl shadow-lg shadow-emerald-950/40 transition-all flex items-center justify-center gap-2 cursor-pointer"
+              >
+                <span>Iniciar Sesión como Administrador</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
 
               <button
-                type="submit"
-                disabled={isLoading || !adminSecret.trim()}
-                className="w-full py-3 bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 disabled:bg-slate-700 disabled:text-slate-500 text-white font-bold text-sm rounded-xl shadow-lg shadow-emerald-950/40 transition-all flex items-center justify-center gap-2 cursor-pointer disabled:cursor-not-allowed"
+                type="button"
+                onClick={() => fetchAllData()}
+                disabled={isLoading}
+                className="w-full py-2.5 bg-slate-800 hover:bg-slate-750 text-slate-300 hover:text-white font-semibold text-xs rounded-xl border border-slate-700 transition-colors flex items-center justify-center gap-2 cursor-pointer"
               >
-                {isLoading ? (
-                  <>
-                    <RefreshCw className="w-4 h-4 animate-spin" />
-                    <span>Verificando...</span>
-                  </>
-                ) : (
-                  <>
-                    <span>Ingresar al Sistema</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </>
-                )}
+                <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin' : ''}`} />
+                <span>Verificar Sesión Activa</span>
               </button>
-            </form>
+            </div>
 
             {/* Footer */}
             <div className="pt-1 flex items-center justify-between text-[11px] text-slate-600">
@@ -680,6 +661,21 @@ export default function AdminPage() {
                   {subscriptions.length}
                 </span>
               )}
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setActiveTab('submissions')}
+              className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl transition-all cursor-pointer ${
+                activeTab === 'submissions'
+                  ? 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 font-bold shadow-xs'
+                  : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/60 hover:text-slate-900 dark:hover:text-white'
+              }`}
+            >
+              <div className="flex items-center gap-3">
+                <Inbox className="w-4 h-4" />
+                <span>Bandeja Solicitudes</span>
+              </div>
             </button>
 
             <button
@@ -781,7 +777,7 @@ export default function AdminPage() {
           <div className="flex items-center gap-3">
             {/* Mobile Tab Switcher */}
             <div className="flex md:hidden items-center gap-1 overflow-x-auto text-xs font-bold">
-              {(['dashboard', 'subscriptions', 'licenses', 'users', 'audit'] as AdminTab[]).map(t => (
+              {(['dashboard', 'subscriptions', 'submissions', 'licenses', 'users', 'audit'] as AdminTab[]).map(t => (
                 <button
                   key={t}
                   type="button"
@@ -810,7 +806,7 @@ export default function AdminPage() {
           <div className="flex items-center gap-2">
             <button
               type="button"
-              onClick={() => fetchAllData(adminSecret)}
+              onClick={() => fetchAllData()}
               disabled={isLoading}
               title="Actualizar datos"
               className="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-colors cursor-pointer"
@@ -1215,7 +1211,7 @@ export default function AdminPage() {
                 <div className="flex items-center gap-2">
                   <button
                     type="button"
-                    onClick={() => fetchAllData(adminSecret)}
+                    onClick={() => fetchAllData()}
                     disabled={isLoading}
                     className="px-3.5 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-bold text-xs flex items-center gap-1.5 transition-colors cursor-pointer"
                   >
@@ -1494,6 +1490,13 @@ export default function AdminPage() {
               )}
 
             </div>
+          )}
+
+          {/* ================================================================= */}
+          {/* TAB: CONTACT & BETA SUBMISSIONS                                   */}
+          {/* ================================================================= */}
+          {activeTab === 'submissions' && (
+            <SubmissionsTab />
           )}
 
           {/* ================================================================= */}

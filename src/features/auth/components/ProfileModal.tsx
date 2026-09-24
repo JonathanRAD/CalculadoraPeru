@@ -2,16 +2,15 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import {
   X,
-  User,
   Sparkles,
   Building2,
   Upload,
   Trash2,
   Check,
   LogOut,
-  KeyRound,
   Calendar,
   Image as ImageIcon,
   FolderOpen,
@@ -79,7 +78,6 @@ export function ProfileModal() {
 
   // User payment / subscription requests traceability
   const [mySubscriptions, setMySubscriptions] = useState<SubscriptionRequest[]>([]);
-  const [isLoadingSubscriptions, setIsLoadingSubscriptions] = useState(false);
 
   // Sync company data when user changes
   useEffect(() => {
@@ -109,7 +107,6 @@ export function ProfileModal() {
   }, []);
 
   const loadMySubscriptions = useCallback(async () => {
-    setIsLoadingSubscriptions(true);
     try {
       const res = await fetch('/api/pro/subscriptions/my-status');
       const json = await res.json();
@@ -118,8 +115,6 @@ export function ProfileModal() {
       }
     } catch {
       // Fallback silent
-    } finally {
-      setIsLoadingSubscriptions(false);
     }
   }, []);
 
@@ -490,7 +485,7 @@ export function ProfileModal() {
               </label>
               {companyLogoBase64 ? (
                 <div className="flex items-center gap-3 p-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700">
-                  <img src={companyLogoBase64} alt="Logo" className="w-14 h-10 object-contain rounded bg-white p-0.5 border border-slate-100" />
+                  <Image src={companyLogoBase64} alt="Logotipo guardado" width={56} height={40} unoptimized className="w-14 h-10 object-contain rounded bg-white p-0.5 border border-slate-100" />
                   <div className="flex-1 text-xs">
                     <span className="font-bold text-emerald-700 dark:text-emerald-400 block">Logotipo guardado en tu cuenta</span>
                     <span className="text-[10px] text-slate-400">Aparecerá en tus documentos oficiales en cualquier dispositivo</span>

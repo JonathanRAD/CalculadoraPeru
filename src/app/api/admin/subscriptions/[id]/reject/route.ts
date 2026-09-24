@@ -6,10 +6,10 @@ export async function POST(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const isAuthorized = await authService.isAuthorizedAdmin(req);
+  const isAuthorized = await authService.isAuthorizedAdminMutable(req);
   if (!isAuthorized) {
     return NextResponse.json(
-      { success: false, message: 'Acceso no autorizado al panel administrativo.' },
+      { success: false, message: 'Acceso no autorizado al panel administrativo o validación CSRF fallida.' },
       { status: 401 }
     );
   }

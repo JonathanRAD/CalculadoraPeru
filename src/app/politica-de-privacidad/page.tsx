@@ -125,7 +125,13 @@ export default function PoliticaPrivacidadPage() {
                   <strong>Registro y autenticación PRO (/pro):</strong> Guardamos tu correo electrónico y tu contraseña cifrada mediante algoritmos seguros de derivación de claves (PBKDF2 con sal criptográfica) para el inicio de sesión.
                 </li>
                 <li>
-                  <strong>Lista informativa del Cotizador (/cotizador):</strong> Si decides dejar tu correo para recibir novedades de la herramienta MYPE, el contacto se gestiona mediante Formspree con estricta confidencialidad.
+                  <strong>Lista informativa y sugerencias del Cotizador (/cotizador):</strong> Si decides dejar voluntariamente tu correo y aportes para recibir mejoras o sugerencias de funciones del Cotizador Comercial, los datos se gestionan de forma segura a través de la infraestructura transaccional de Resend y nuestros servidores protegidos, exclusivamente para informarte sobre actualizaciones y novedades relevantes.
+                </li>
+                <li>
+                  <strong>Borradores locales del Cotizador Comercial:</strong> Mientras editas una proforma en el navegador, los datos de la cotización en curso se conservan temporalmente en el almacenamiento local de tu propio dispositivo (<code>localStorage</code>) bajo claves asociadas a tu sesión (<code>calculaperu_quote_draft_v2_...</code>). Puedes eliminar este borrador local en cualquier instante utilizando el botón &quot;Eliminar borrador local&quot; dentro de la misma herramienta.
+                </li>
+                <li>
+                  <strong>Almacenamiento en la nube para usuarios PRO:</strong> Los clientes registrados, ítems del catálogo propio y cotizaciones comerciales guardadas por usuarios con suscripción PRO se almacenan de manera transaccional y cifrada en bases de datos con políticas de seguridad a nivel de fila (Row Level Security), de modo que únicamente el usuario titular tiene acceso a sus registros.
                 </li>
               </ul>
             </div>

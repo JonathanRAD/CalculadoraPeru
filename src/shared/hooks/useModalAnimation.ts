@@ -7,22 +7,29 @@ import { useState, useEffect } from 'react';
  * Allows exit animations to play before the component unmounts from the DOM.
  */
 export function useModalAnimation(isOpen: boolean, duration = 260) {
+  const [prevIsOpen, setPrevIsOpen] = useState(isOpen);
   const [shouldRender, setShouldRender] = useState(isOpen);
   const [isClosing, setIsClosing] = useState(false);
 
-  useEffect(() => {
+  if (isOpen !== prevIsOpen) {
+    setPrevIsOpen(isOpen);
     if (isOpen) {
       setShouldRender(true);
       setIsClosing(false);
     } else if (shouldRender) {
       setIsClosing(true);
+    }
+  }
+
+  useEffect(() => {
+    if (isClosing) {
       const timer = setTimeout(() => {
         setShouldRender(false);
         setIsClosing(false);
       }, duration);
       return () => clearTimeout(timer);
     }
-  }, [isOpen, duration, shouldRender]);
+  }, [isClosing, duration]);
 
   return {
     shouldRender,

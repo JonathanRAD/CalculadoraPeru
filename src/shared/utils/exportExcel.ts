@@ -12,7 +12,7 @@ export interface ExcelColumn {
 export function exportToCsv(
   filename: string,
   columns: ExcelColumn[],
-  rows: Record<string, any>[]
+  rows: Record<string, unknown>[]
 ) {
   // BOM para que Excel en Windows/Mac reconozca UTF-8 automáticamente
   const BOM = '\uFEFF';

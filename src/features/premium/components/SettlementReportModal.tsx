@@ -9,7 +9,6 @@ import {
   Check,
   Copy,
   Download,
-  QrCode,
   Tag,
   Clock,
   Building2,

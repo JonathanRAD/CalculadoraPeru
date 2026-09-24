@@ -11,7 +11,6 @@ import {
   X,
   Sparkles,
   Calculator,
-  User,
 } from 'lucide-react';
 import {
   CALCULATORS_REGISTRY,
@@ -33,7 +32,7 @@ export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileExpandedCat, setMobileExpandedCat] = useState<string | null>(null);
 
-  const { isPro, openActivationModal, subscriberName, user, openAuthModal, openProfileModal } = usePro();
+  const { isPro, openActivationModal, user, openAuthModal, openProfileModal } = usePro();
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const closeSearch = useCallback(() => {

@@ -1,6 +1,20 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useSyncExternalStore } from 'react';
+
+function subscribeReducedMotion(callback: () => void) {
+  const media = window.matchMedia('(prefers-reduced-motion: reduce)');
+  media.addEventListener('change', callback);
+  return () => media.removeEventListener('change', callback);
+}
+
+function getReducedMotion() {
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
+function getServerReducedMotion() {
+  return false;
+}
 
 interface FadeInProps {
   children: React.ReactNode;
@@ -19,22 +33,19 @@ export function FadeIn({
   className = '',
   as: Component = 'div',
 }: FadeInProps) {
-  const [isVisible, setIsVisible] = useState(false);
+  const prefersReducedMotion = useSyncExternalStore(subscribeReducedMotion, getReducedMotion, getServerReducedMotion);
+  const [isIntersected, setIsIntersected] = useState(false);
+  const isVisible = prefersReducedMotion || isIntersected;
   const domRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
-    // Check if user prefers reduced motion
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReducedMotion) {
-      setIsVisible(true);
-      return;
-    }
+    if (prefersReducedMotion) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            setIsVisible(true);
+            setIsIntersected(true);
             if (domRef.current) {
               observer.unobserve(domRef.current);
             }
@@ -57,7 +68,7 @@ export function FadeIn({
         observer.unobserve(currentRef);
       }
     };
-  }, []);
+  }, [prefersReducedMotion]);
 
   const getTransform = () => {
     if (isVisible) return 'translate3d(0, 0, 0)';

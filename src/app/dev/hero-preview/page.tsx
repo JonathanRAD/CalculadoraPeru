@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { BadgeCheck, Eye, Sparkles, Check, ArrowRight, Monitor, Smartphone } from 'lucide-react';
+import { BadgeCheck, Eye, Sparkles } from 'lucide-react';
 import { HomeSearch } from '@/features/home/components/HomeSearch';
 import { CALCULATORS_REGISTRY } from '@/features/calculators/registry';
 

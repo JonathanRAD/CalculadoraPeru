@@ -15,7 +15,7 @@ export interface ExportTableOptions {
 export function exportTableToCsv(
   optionsOrFilename: string | ExportTableOptions,
   columns?: ({ key?: string; header: string } | string)[],
-  rowsData?: (Record<string, any> | (string | number)[])[]
+  rowsData?: (Record<string, unknown> | (string | number)[])[]
 ) {
   let filename = 'exportacion.csv';
   let title: string | undefined;
@@ -36,15 +36,18 @@ export function exportTableToCsv(
     }
     if (rowsData) {
       rows = rowsData.map((row) => {
-        if (Array.isArray(row)) return row;
+        if (Array.isArray(row)) {
+          return row.map((val) => (typeof val === 'number' ? val : String(val ?? '')));
+        }
         // row is an object, map via column keys
         if (columns) {
           return columns.map((col) => {
             const key = typeof col === 'string' ? col : col.key || col.header;
-            return row[key] ?? '';
+            const val = row[key];
+            return typeof val === 'number' ? val : String(val ?? '');
           });
         }
-        return Object.values(row);
+        return Object.values(row).map((val) => (typeof val === 'number' ? val : String(val ?? '')));
       });
     }
   }

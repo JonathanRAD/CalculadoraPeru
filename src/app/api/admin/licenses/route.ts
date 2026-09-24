@@ -14,9 +14,9 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  const isAuthorized = await authService.isAuthorizedAdmin(req);
+  const isAuthorized = await authService.isAuthorizedAdminMutable(req);
   if (!isAuthorized) {
-    return NextResponse.json({ success: false, message: 'Acceso no autorizado al panel administrativo.' }, { status: 401 });
+    return NextResponse.json({ success: false, message: 'Acceso no autorizado al panel administrativo o validación CSRF fallida.' }, { status: 401 });
   }
 
   try {
@@ -40,9 +40,9 @@ export async function POST(req: NextRequest) {
 }
 
 export async function DELETE(req: NextRequest) {
-  const isAuthorized = await authService.isAuthorizedAdmin(req);
+  const isAuthorized = await authService.isAuthorizedAdminMutable(req);
   if (!isAuthorized) {
-    return NextResponse.json({ success: false, message: 'Acceso no autorizado al panel administrativo.' }, { status: 401 });
+    return NextResponse.json({ success: false, message: 'Acceso no autorizado al panel administrativo o validación CSRF fallida.' }, { status: 401 });
   }
 
   try {

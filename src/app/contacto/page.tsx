@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { Mail, MessageSquare, Clock, MapPin, ArrowLeft, Send, ShieldCheck, CheckCircle2 } from 'lucide-react';
+import { Mail, Clock, MapPin, ArrowLeft, ShieldCheck } from 'lucide-react';
 import type { Metadata } from 'next';
 import { ContactForm } from './ContactForm';
 

@@ -41,7 +41,7 @@ async function runTests() {
 
   for (const table of tables) {
     try {
-      const { data, count, error } = await client
+      const { count, error } = await client
         .from(table)
         .select('*', { count: 'exact', head: true });
 

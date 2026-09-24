@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Image from 'next/image';
 import {
   X,
   FileText,
@@ -15,7 +16,6 @@ import {
   Trash2,
   Image as ImageIcon,
   Clock,
-  Briefcase,
 } from 'lucide-react';
 import {
   generateOfficialPayrollSlipPdf,
@@ -62,7 +62,6 @@ export function PayrollSlipModal({
   const [workerName, setWorkerName] = useState('');
   const [workerDni, setWorkerDni] = useState('');
   const [workerPosition, setWorkerPosition] = useState('');
-  const [workerStartDate, setWorkerStartDate] = useState('');
   const [cuspp, setCuspp] = useState('');
 
   // Legal MTPE/SUNAFIL inputs
@@ -72,10 +71,25 @@ export function PayrollSlipModal({
   const [workedDays, setWorkedDays] = useState('30');
   const [workedHours, setWorkedHours] = useState('240');
 
-  // Company inputs
-  const [companyName, setCompanyName] = useState('');
-  const [companyRuc, setCompanyRuc] = useState('');
-  const [companyAddress, setCompanyAddress] = useState('');
+  const { isPro, user, openActivationModal, subscriberName } = usePro();
+
+  // Company inputs initialized lazily from user account
+  const [companyName, setCompanyName] = useState(() => user?.companyName || '');
+  const [companyRuc, setCompanyRuc] = useState(() => user?.companyRuc || '');
+  const [companyAddress, setCompanyAddress] = useState(() => user?.companyAddress || '');
+  const [companyLogoBase64, setCompanyLogoBase64] = useState<string | null>(() => user?.companyLogoBase64 || null);
+
+  // Synchronize company profile when user loads asynchronously
+  const [prevUser, setPrevUser] = useState(user);
+  if (user !== prevUser) {
+    setPrevUser(user);
+    if (user) {
+      if (user.companyName && !companyName) setCompanyName(user.companyName);
+      if (user.companyRuc && !companyRuc) setCompanyRuc(user.companyRuc);
+      if (user.companyAddress && !companyAddress) setCompanyAddress(user.companyAddress);
+      if (user.companyLogoBase64 && !companyLogoBase64) setCompanyLogoBase64(user.companyLogoBase64);
+    }
+  }
 
   // Period
   const [period, setPeriod] = useState(() => {
@@ -85,20 +99,8 @@ export function PayrollSlipModal({
     return `${month.charAt(0).toUpperCase() + month.slice(1)} ${year}`;
   });
 
-  const { isPro, openActivationModal, subscriberName, user } = usePro();
-  const [companyLogoBase64, setCompanyLogoBase64] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [isExportingExcel, setIsExportingExcel] = useState(false);
-
-  // Auto-populate saved company profile from user account
-  React.useEffect(() => {
-    if (user) {
-      if (user.companyName && !companyName) setCompanyName(user.companyName);
-      if (user.companyRuc && !companyRuc) setCompanyRuc(user.companyRuc);
-      if (user.companyAddress && !companyAddress) setCompanyAddress(user.companyAddress);
-      if (user.companyLogoBase64 && !companyLogoBase64) setCompanyLogoBase64(user.companyLogoBase64);
-    }
-  }, [user]);
 
   if (!isOpen) return null;
 
@@ -131,7 +133,6 @@ export function PayrollSlipModal({
         workerName: workerName.trim() || undefined,
         workerDni: workerDni.trim() || undefined,
         workerPosition: workerPosition.trim() || undefined,
-        workerStartDate: workerStartDate.trim() || undefined,
         cuspp: cuspp.trim() || undefined,
         periodMonthYear: period,
         laborRegime,
@@ -522,7 +523,7 @@ export function PayrollSlipModal({
 
                 {companyLogoBase64 ? (
                   <div className="flex items-center gap-3 p-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700">
-                    <img src={companyLogoBase64} alt="Logo" className="w-14 h-10 object-contain rounded bg-white p-0.5 border border-slate-100" />
+                    <Image src={companyLogoBase64} alt="Logotipo de la empresa" width={56} height={40} unoptimized className="w-14 h-10 object-contain rounded bg-white p-0.5 border border-slate-100" />
                     <div className="flex-1 text-xs">
                       <span className="font-bold text-emerald-700 dark:text-emerald-400 block">Logo cargado con éxito</span>
                       <span className="text-[10px] text-slate-400">Saldrá impreso en la cabecera de la boleta</span>

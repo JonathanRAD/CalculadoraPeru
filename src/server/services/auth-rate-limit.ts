@@ -1,14 +1,27 @@
 import crypto from 'crypto';
 import { getSupabaseAdmin, isSupabaseConfigured } from '@/server/config/supabase';
+import { resolveAuthSecret } from '@/server/config/server-env';
 
-export async function checkAuthRateLimit(req: Request, action: 'login' | 'register' | 'contact' | 'coupon', email: string): Promise<boolean> {
+export type AuthRateLimitAction =
+  | 'login'
+  | 'register'
+  | 'contact'
+  | 'contact_general'
+  | 'cotizador_feedback'
+  | 'coupon'
+  | string;
+
+export async function checkAuthRateLimit(
+  req: Request,
+  action: AuthRateLimitAction,
+  email: string
+): Promise<boolean> {
   if (!isSupabaseConfigured) {
     if (process.env.NODE_ENV === 'production') throw new Error('Limitador de autenticación no configurado.');
     return true;
   }
 
-  const secret = process.env.AUTH_SECRET;
-  if (!secret) throw new Error('AUTH_SECRET debe configurarse para limitar intentos.');
+  const secret = resolveAuthSecret();
 
   const ip = (req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip') || 'unknown').split(',')[0].trim();
   const buckets = [

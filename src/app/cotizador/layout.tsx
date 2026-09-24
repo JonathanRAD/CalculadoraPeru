@@ -2,9 +2,9 @@ import type { Metadata } from 'next';
 import React from 'react';
 
 export const metadata: Metadata = {
-  title: 'Cotizador Comercial para MYPES (Demo Interactiva) | CalculaPerú',
+  title: 'Cotizador Comercial PRO para Negocios y MYPES',
   description:
-    'Simula la generación de cotizaciones comerciales para micro y pequeñas empresas peruanas. Calcula subtotal, 18% de IGV SUNAT y exporta a formato ticket para WhatsApp o Excel.',
+    'Prepara cotizaciones y proformas comerciales en Soles (PEN) con cálculo automático de IGV, descuentos por concepto, directorio de clientes, PDF personalizado y exportación compatible con Excel y WhatsApp.',
   alternates: {
     canonical: '/cotizador',
   },

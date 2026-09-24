@@ -44,9 +44,10 @@ function writeDatabase(db: DatabaseSchema) {
 }
 
 export function toSafeUser(user: UserAccount): SafeUser {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { passwordHash, salt, ...safe } = user;
-  return safe;
+  const safe: Partial<UserAccount> = { ...user };
+  delete safe.passwordHash;
+  delete safe.salt;
+  return safe as SafeUser;
 }
 
 export function insertUser(user: UserAccount): SafeUser {
