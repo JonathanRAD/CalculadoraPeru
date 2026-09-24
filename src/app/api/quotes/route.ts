@@ -161,9 +161,15 @@ export async function POST(req: NextRequest) {
     });
   } catch (err) {
     console.error('Error guardando cotización:', err);
+    const message = err instanceof RequestBodyError
+      ? err.message
+      : err instanceof Error
+        ? err.message
+        : 'Error al guardar cotización.';
+    const status = err instanceof RequestBodyError ? err.status : 500;
     return NextResponse.json(
-      { success: false, message: err instanceof RequestBodyError ? err.message : 'Error al guardar cotización.' },
-      { status: err instanceof RequestBodyError ? err.status : 500 }
+      { success: false, message },
+      { status }
     );
   }
 }

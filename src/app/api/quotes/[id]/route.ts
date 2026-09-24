@@ -139,9 +139,15 @@ export async function PUT(
     });
   } catch (err) {
     console.error('Error actualizando cotización:', err);
+    const message = err instanceof RequestBodyError
+      ? err.message
+      : err instanceof Error
+        ? err.message
+        : 'Error al actualizar cotización.';
+    const status = err instanceof RequestBodyError ? err.status : 500;
     return NextResponse.json(
-      { success: false, message: err instanceof RequestBodyError ? err.message : 'Error al actualizar cotización.' },
-      { status: err instanceof RequestBodyError ? err.status : 500 }
+      { success: false, message },
+      { status }
     );
   }
 }

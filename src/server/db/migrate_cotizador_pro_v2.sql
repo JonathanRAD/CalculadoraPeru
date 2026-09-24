@@ -116,7 +116,7 @@ grant execute on function public.get_next_quote_correlative(uuid, text) to servi
 -- 3. TABLA: CONTACT_SUBMISSIONS (Registro durable de solicitudes con traza Resend)
 -- ------------------------------------------------------------------------------
 create table if not exists public.contact_submissions (
-  id uuid primary key default uuid_generate_v4(),
+  id uuid primary key default gen_random_uuid(),
   public_request_id text unique not null,
   ip_hash text not null,
   name text not null check (length(trim(name)) between 2 and 100),
@@ -564,7 +564,7 @@ create or replace function public.save_quote_atomic(
 returns jsonb
 language plpgsql
 security definer
-set search_path = public, pg_temp
+set search_path = public, extensions, pg_temp
 as $$
 declare
   v_correlative integer;
@@ -732,7 +732,7 @@ begin
       discount_type, discount_value, discount_amount,
       is_igv_affected, gross_amount, net_amount, created_at
     ) values (
-      coalesce(nullif(v_item->>'id', '')::uuid, uuid_generate_v4()),
+      coalesce(nullif(v_item->>'id', '')::uuid, gen_random_uuid()),
       p_quote_id,
       p_user_id,
       case when v_item->>'catalogItemId' is not null and length(trim(v_item->>'catalogItemId')) > 0 then (v_item->>'catalogItemId')::uuid else null end,
