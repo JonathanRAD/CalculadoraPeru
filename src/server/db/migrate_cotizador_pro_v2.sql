@@ -564,7 +564,7 @@ create or replace function public.save_quote_atomic(
 returns jsonb
 language plpgsql
 security definer
-set search_path = public, extensions, pg_temp
+set search_path = public, pg_temp
 as $$
 declare
   v_correlative integer;

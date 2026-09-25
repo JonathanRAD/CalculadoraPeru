@@ -3,7 +3,8 @@ import { authService } from '@/server/services/auth.service';
 import { quoteRepository } from '@/server/repositories/quote.repository';
 import { calculateQuote, QuoteStatus } from '@/core/calculators/quote';
 import { validateQuoteInput } from '@/server/validators/quote.validator';
-import { readJsonBody, RequestBodyError } from '@/server/validators/request-body';
+import { readJsonBody } from '@/server/validators/request-body';
+import { handleApiError } from '@/server/utils/api-error';
 
 export async function GET(req: NextRequest) {
   const user = await authService.authenticateRequest(req);
@@ -160,16 +161,7 @@ export async function POST(req: NextRequest) {
       message: `Cotización ${saved.quote.quoteNumber} guardada exitosamente.`,
     });
   } catch (err) {
-    console.error('Error guardando cotización:', err);
-    const message = err instanceof RequestBodyError
-      ? err.message
-      : err instanceof Error
-        ? err.message
-        : 'Error al guardar cotización.';
-    const status = err instanceof RequestBodyError ? err.status : 500;
-    return NextResponse.json(
-      { success: false, message },
-      { status }
-    );
+    const { body, status } = handleApiError(err, 'POST /api/quotes', 'Error al guardar cotización.');
+    return NextResponse.json(body, { status });
   }
 }

@@ -1415,6 +1415,7 @@ export default function CotizadorProPage() {
         isOpen={isHistoryModalOpen}
         onClose={() => setIsHistoryModalOpen(false)}
         onLoadQuote={handleLoadQuoteFromHistory}
+        staleQuoteId={quoteId}
         companyProfile={{
           companyName: user?.companyName,
           companyRuc: user?.companyRuc,

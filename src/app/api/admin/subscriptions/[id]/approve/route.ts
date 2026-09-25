@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { authService } from '@/server/services/auth.service';
 import { subscriptionService } from '@/server/services/subscription.service';
+import { handleApiError } from '@/server/utils/api-error';
 
 export async function POST(
   req: NextRequest,
@@ -23,10 +24,7 @@ export async function POST(
     const result = await subscriptionService.approveRequest(id, 'Admin Panel');
     return NextResponse.json(result, { status: result.success ? 200 : 400 });
   } catch (err: unknown) {
-    console.error('Error approving subscription:', err);
-    return NextResponse.json(
-      { success: false, message: err instanceof Error ? err.message : 'Error al aprobar la solicitud de suscripción.' },
-      { status: 500 }
-    );
+    const { body, status } = handleApiError(err, 'POST /api/admin/subscriptions/[id]/approve', 'Error al aprobar la solicitud de suscripción.');
+    return NextResponse.json(body, { status });
   }
 }
