@@ -39,17 +39,21 @@ import { QuoteBetaSection } from '@/features/cotizador/components/QuoteBetaSecti
 import { generateQuotePdf, buildQuotePdfDoc } from '@/shared/utils/quotePdfGenerator';
 import { downloadQuoteCsv } from '@/shared/utils/quoteCsvGenerator';
 import { ClientRecord, CatalogItemRecord, QuoteItemRecord } from '@/features/cotizador/types';
-
-const INITIAL_ITEM: QuoteItemInput = {
-  description: '',
-  type: 'product',
-  unit: 'unit',
-  quantity: 1,
-  unitPrice: 0,
-  discountType: 'none',
-  discountValue: 0,
-  isIgvAffected: true,
-};
+import { quoteDetailsCache } from '@/features/cotizador/services/quoteDetailsCache';
+import {
+  EditableQuoteItem,
+  generateClientId,
+  createEmptyQuoteItem,
+  buildRowViewModels,
+  validateItemsForAction,
+  addItem,
+  updateItem,
+  duplicateItem,
+  removeItem,
+  moveItemUp,
+  moveItemDown,
+  normalizeSortOrders,
+} from '@/features/cotizador/utils/quoteEditor';
 
 export default function CotizadorProPage() {
   const { user, isPro, openAuthModal, openActivationModal, openProfileModal } = usePro();
@@ -57,6 +61,11 @@ export default function CotizadorProPage() {
   // Storage key con aislamiento de usuario para dispositivos compartidos
   const draftStorageKey = useMemo(() => {
     return user?.id ? `calculaperu_quote_draft_v2_${user.id}` : 'calculaperu_quote_draft_v2_guest';
+  }, [user?.id]);
+
+  // Sincronizar usuario activo con la caché de cotizaciones para evitar fugas entre cuentas
+  useEffect(() => {
+    quoteDetailsCache.setUser(user?.id);
   }, [user?.id]);
 
   // Quote Metadata
@@ -76,19 +85,8 @@ export default function CotizadorProPage() {
   const [clientEmail, setClientEmail] = useState('');
   const [clientAddress, setClientAddress] = useState('');
 
-  // Items: Se inicia en blanco sin datos ficticios
-  const [items, setItems] = useState<QuoteItemInput[]>([
-    {
-      description: '',
-      type: 'product',
-      unit: 'unit',
-      quantity: 1,
-      unitPrice: 0,
-      discountType: 'none',
-      discountValue: 0,
-      isIgvAffected: true,
-    },
-  ]);
+  // Items: Se inicia con un concepto editable garantizando identidad estable
+  const [items, setItems] = useState<EditableQuoteItem[]>(() => [createEmptyQuoteItem(0)]);
 
   // Tax and Global Discounts
   const [includeIgv, setIncludeIgv] = useState(false);
@@ -128,6 +126,13 @@ export default function CotizadorProPage() {
     });
   }, [items, includeIgv, igvRate, globalDiscountType, globalDiscountValue]);
 
+  // Modelo de vista combinado: se renderiza desde la colección fuente "items"
+  // para que ninguna fila (incluso vacía o en edición) desaparezca de la pantalla,
+  // acoplando los importes monetarios calculados de forma determinista por clientId.
+  const rowViewModels = useMemo<QuoteCalculatedItem[]>(() => {
+    return buildRowViewModels(items, calculatedResult.items);
+  }, [items, calculatedResult.items]);
+
   // 1. Restaurar borrador de la clave específica de la cuenta o visitante
   useEffect(() => {
     let cancelled = false;
@@ -148,7 +153,12 @@ export default function CotizadorProPage() {
               setClientAddress(saved.clientAddress || '');
               setIssueDate(saved.issueDate || new Date().toISOString().slice(0, 10));
               setValidUntil(saved.validUntil || '');
-              setItems(saved.items);
+              const restoredItems: EditableQuoteItem[] = saved.items.map((it: QuoteItemInput, idx: number) => ({
+                ...it,
+                clientId: (it as { clientId?: string }).clientId || generateClientId(),
+                sortOrder: typeof it.sortOrder === 'number' ? it.sortOrder : idx,
+              }));
+              setItems(normalizeSortOrders(restoredItems));
               setIncludeIgv(saved.includeIgv !== undefined ? Boolean(saved.includeIgv) : false);
               setGlobalDiscountType(saved.globalDiscountType || 'none');
               setGlobalDiscountValue(saved.globalDiscountValue || 0);
@@ -253,55 +263,28 @@ export default function CotizadorProPage() {
       setSaveErrorMessage('Se ha alcanzado el límite máximo de 100 conceptos por cotización.');
       return;
     }
-    setItems((prev) => [...prev, { ...INITIAL_ITEM, sortOrder: prev.length }]);
+    setItems((prev) => addItem(prev));
   };
 
-  const handleUpdateItem = (index: number, updated: Partial<QuoteCalculatedItem>) => {
-    setItems((prev) => {
-      const next = [...prev];
-      next[index] = { ...next[index], ...updated };
-      return next;
-    });
+  const handleUpdateItem = (clientId: string, updated: Partial<QuoteItemInput>) => {
+    setItems((prev) => updateItem(prev, clientId, updated));
   };
 
-  const handleDuplicateItem = (index: number) => {
+  const handleDuplicateItem = (clientId: string) => {
     if (items.length >= 100) return;
-    setItems((prev) => {
-      const next = [...prev];
-      const target = next[index];
-      next.splice(index + 1, 0, { ...target, id: undefined });
-      return next;
-    });
+    setItems((prev) => duplicateItem(prev, clientId));
   };
 
-  const handleRemoveItem = (index: number) => {
-    if (items.length <= 1) {
-      setItems([{ ...INITIAL_ITEM }]);
-      return;
-    }
-    setItems((prev) => prev.filter((_, i) => i !== index));
+  const handleRemoveItem = (clientId: string) => {
+    setItems((prev) => removeItem(prev, clientId));
   };
 
-  const handleMoveUp = (index: number) => {
-    if (index === 0) return;
-    setItems((prev) => {
-      const next = [...prev];
-      const temp = next[index - 1];
-      next[index - 1] = next[index];
-      next[index] = temp;
-      return next;
-    });
+  const handleMoveUp = (clientId: string) => {
+    setItems((prev) => moveItemUp(prev, clientId));
   };
 
-  const handleMoveDown = (index: number) => {
-    if (index === items.length - 1) return;
-    setItems((prev) => {
-      const next = [...prev];
-      const temp = next[index + 1];
-      next[index + 1] = next[index];
-      next[index] = temp;
-      return next;
-    });
+  const handleMoveDown = (clientId: string) => {
+    setItems((prev) => moveItemDown(prev, clientId));
   };
 
   const handleSelectClient = (client: ClientRecord) => {
@@ -316,7 +299,8 @@ export default function CotizadorProPage() {
   };
 
   const handleSelectCatalogItem = (catItem: CatalogItemRecord) => {
-    const newItem: QuoteItemInput = {
+    const newItem: EditableQuoteItem = {
+      clientId: generateClientId(),
       catalogItemId: catItem.id,
       description: catItem.name,
       type: catItem.type,
@@ -326,13 +310,14 @@ export default function CotizadorProPage() {
       isIgvAffected: catItem.isIgvAffected,
       discountType: 'none',
       discountValue: 0,
+      sortOrder: items.length,
     };
 
     setItems((prev) => {
       if (prev.length === 1 && !prev[0].description.trim() && prev[0].unitPrice === 0) {
-        return [newItem];
+        return normalizeSortOrders([newItem]);
       }
-      return [...prev, newItem];
+      return normalizeSortOrders([...prev, newItem]);
     });
 
     setIsCatalogModalOpen(false);
@@ -358,7 +343,7 @@ export default function CotizadorProPage() {
     setGlobalDiscountType('none');
     setGlobalDiscountValue(0);
     setIncludeIgv(false);
-    setItems([{ ...INITIAL_ITEM }]);
+    setItems([createEmptyQuoteItem(0)]);
     setSaveSuccessMessage(null);
     setSaveErrorMessage(null);
     setHasUnsavedChanges(false);
@@ -366,6 +351,7 @@ export default function CotizadorProPage() {
 
   const handleLoadQuoteFromHistory = async (id: string) => {
     try {
+      quoteDetailsCache.invalidate(id);
       const res = await fetch(`/api/quotes/${id}`, { credentials: 'include' });
       const data = await res.json();
       if (data.success && data.quote && data.items) {
@@ -391,19 +377,22 @@ export default function CotizadorProPage() {
         setPublicNotes(q.publicNotes || '');
         setInternalNotes(q.internalNotes || '');
         setItems(
-          data.items.map((it: QuoteItemRecord) => ({
-            id: it.id,
-            catalogItemId: it.catalogItemId,
-            sortOrder: it.sortOrder,
-            description: it.description,
-            type: it.type,
-            unit: it.unit,
-            quantity: it.quantity,
-            unitPrice: it.unitPrice,
-            discountType: it.discountType,
-            discountValue: it.discountValue,
-            isIgvAffected: it.isIgvAffected,
-          }))
+          normalizeSortOrders(
+            data.items.map((it: QuoteItemRecord, idx: number) => ({
+              id: it.id,
+              clientId: generateClientId(),
+              catalogItemId: it.catalogItemId,
+              sortOrder: it.sortOrder ?? idx,
+              description: it.description,
+              type: it.type,
+              unit: it.unit,
+              quantity: it.quantity,
+              unitPrice: it.unitPrice,
+              discountType: it.discountType,
+              discountValue: it.discountValue,
+              isIgvAffected: it.isIgvAffected,
+            }))
+          )
         );
         setSaveSuccessMessage(`Cotización ${q.quoteNumber} cargada en el editor.`);
         setHasUnsavedChanges(false);
@@ -433,8 +422,9 @@ export default function CotizadorProPage() {
       return;
     }
 
-    if (items.length === 0 || !items.some((i) => i.description.trim())) {
-      setSaveErrorMessage('Agrega al menos un concepto con descripción para guardar.');
+    const itemValidation = validateItemsForAction(items, 'guardar');
+    if (!itemValidation.isValid) {
+      setSaveErrorMessage(itemValidation.error || 'Corrige los conceptos antes de guardar.');
       return;
     }
 
@@ -453,7 +443,19 @@ export default function CotizadorProPage() {
       clientAddress: clientAddress.trim() || undefined,
       issueDate,
       validUntil: validUntil || undefined,
-      items,
+      items: calculatedResult.items.map((it, idx) => ({
+        id: it.id,
+        catalogItemId: it.catalogItemId,
+        sortOrder: idx,
+        description: it.description,
+        type: it.type,
+        unit: it.unit,
+        quantity: it.quantity,
+        unitPrice: it.unitPrice,
+        discountType: it.discountType,
+        discountValue: it.discountValue,
+        isIgvAffected: it.isIgvAffected,
+      })),
       includeIgv,
       igvRate,
       globalDiscountType,
@@ -478,6 +480,7 @@ export default function CotizadorProPage() {
 
       const data = await res.json();
       if (res.ok && data.success && data.quote) {
+        quoteDetailsCache.invalidate(data.quote.id);
         setQuoteId(data.quote.id);
         setQuoteNumber(data.quote.quoteNumber);
         setSaveSuccessMessage(data.message || 'Cotización guardada exitosamente.');
@@ -501,6 +504,11 @@ export default function CotizadorProPage() {
       setSaveErrorMessage('Ingresa el nombre del cliente para generar el documento.');
       return false;
     }
+    const itemValidation = validateItemsForAction(items, 'exportar');
+    if (!itemValidation.isValid) {
+      setSaveErrorMessage(itemValidation.error || 'Corrige los conceptos antes de exportar.');
+      return false;
+    }
     const senderName = user?.companyName || user?.name;
     if (!senderName || !senderName.trim()) {
       setSaveErrorMessage('Configura el nombre o razón social de tu empresa en "Mi Empresa" antes de descargar.');
@@ -508,6 +516,11 @@ export default function CotizadorProPage() {
       return false;
     }
     return true;
+  };
+
+  const handleOpenWhatsApp = () => {
+    if (!validateBeforeExport()) return;
+    setIsWhatsAppModalOpen(true);
   };
 
   const handleExportPdf = () => {
@@ -1017,17 +1030,17 @@ export default function CotizadorProPage() {
 
               {/* Lista de Filas */}
               <div className="space-y-3">
-                {calculatedResult.items.map((item, idx) => (
+                {rowViewModels.map((item, idx) => (
                   <QuoteItemRow
-                    key={item.id || `item-${idx}`}
+                    key={item.clientId || item.id || `item-${idx}`}
                     index={idx}
                     totalItems={items.length}
                     item={item}
-                    onChange={(updated) => handleUpdateItem(idx, updated)}
-                    onDuplicate={() => handleDuplicateItem(idx)}
-                    onRemove={() => handleRemoveItem(idx)}
-                    onMoveUp={() => handleMoveUp(idx)}
-                    onMoveDown={() => handleMoveDown(idx)}
+                    onChange={(updated) => handleUpdateItem(item.clientId!, updated)}
+                    onDuplicate={() => handleDuplicateItem(item.clientId!)}
+                    onRemove={() => handleRemoveItem(item.clientId!)}
+                    onMoveUp={() => handleMoveUp(item.clientId!)}
+                    onMoveDown={() => handleMoveDown(item.clientId!)}
                   />
                 ))}
               </div>
@@ -1323,7 +1336,7 @@ export default function CotizadorProPage() {
 
                   <button
                     type="button"
-                    onClick={() => setIsWhatsAppModalOpen(true)}
+                    onClick={handleOpenWhatsApp}
                     className="rounded-xl bg-emerald-700 hover:bg-emerald-600 text-white font-bold py-2.5 px-3 text-xs transition-colors flex items-center justify-center gap-1.5 cursor-pointer shadow-sm"
                   >
                     <MessageCircle className="h-3.5 w-3.5" />
@@ -1415,7 +1428,6 @@ export default function CotizadorProPage() {
         isOpen={isHistoryModalOpen}
         onClose={() => setIsHistoryModalOpen(false)}
         onLoadQuote={handleLoadQuoteFromHistory}
-        staleQuoteId={quoteId}
         companyProfile={{
           companyName: user?.companyName,
           companyRuc: user?.companyRuc,
@@ -1429,7 +1441,15 @@ export default function CotizadorProPage() {
           setQuoteNumber(q.quoteNumber);
           setClientName(q.clientName);
           setClientPhone(q.clientPhone || '');
-          setItems(qItems);
+          setItems(
+            normalizeSortOrders(
+              qItems.map((it, idx) => ({
+                ...it,
+                clientId: generateClientId(),
+                sortOrder: it.sortOrder ?? idx,
+              }))
+            )
+          );
           setIsWhatsAppModalOpen(true);
         }}
       />

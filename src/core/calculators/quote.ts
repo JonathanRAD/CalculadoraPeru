@@ -23,6 +23,7 @@ export type QuoteStatus = 'draft' | 'sent' | 'accepted' | 'rejected' | 'expired'
 
 export interface QuoteItemInput {
   id?: string;
+  clientId?: string;
   catalogItemId?: string | null;
   sortOrder?: number;
   description: string;
@@ -37,6 +38,7 @@ export interface QuoteItemInput {
 
 export interface QuoteCalculatedItem {
   id?: string;
+  clientId?: string;
   catalogItemId?: string | null;
   sortOrder: number;
   description: string;
@@ -219,6 +221,7 @@ export function validateQuoteItemInput(
     isValid: true,
     cleanItem: {
       id: typeof raw.id === 'string' ? raw.id : undefined,
+      clientId: typeof raw.clientId === 'string' ? raw.clientId : undefined,
       catalogItemId: typeof raw.catalogItemId === 'string' ? raw.catalogItemId : null,
       sortOrder: typeof raw.sortOrder === 'number' && Number.isFinite(raw.sortOrder) ? raw.sortOrder : index,
       description,
@@ -301,6 +304,7 @@ export function calculateQuote(options: QuoteCalculationOptions): QuoteCalculati
 
     calculatedItems.push({
       id: item.id,
+      clientId: item.clientId,
       catalogItemId: item.catalogItemId,
       sortOrder: item.sortOrder ?? i,
       description: item.description,

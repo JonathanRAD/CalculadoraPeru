@@ -571,7 +571,7 @@ declare
   v_quote_number text;
   v_clean_prefix text;
   v_item jsonb;
-  v_now timestamptz := now();
+  v_now timestamptz := pg_catalog.now();
   v_existing_correlative integer;
   v_catalog_id uuid;
   v_item_idx integer := 0;
@@ -581,11 +581,11 @@ begin
     raise exception 'Parámetros obligatorios faltantes (p_quote_id, p_user_id).';
   end if;
 
-  if p_currency is not null and upper(trim(p_currency)) <> 'PEN' then
+  if p_currency is not null and pg_catalog.upper(pg_catalog.btrim(p_currency)) <> 'PEN' then
     raise exception 'CalculaPerú únicamente admite cotizaciones en moneda PEN (Soles).';
   end if;
 
-  if p_client_name is null or length(trim(p_client_name)) < 2 or length(trim(p_client_name)) > 150 then
+  if p_client_name is null or pg_catalog.length(pg_catalog.btrim(p_client_name)) < 2 or pg_catalog.length(pg_catalog.btrim(p_client_name)) > 150 then
     raise exception 'El nombre del cliente debe tener entre 2 y 150 caracteres.';
   end if;
 
@@ -597,15 +597,15 @@ begin
     raise exception 'La fecha de vencimiento no puede ser anterior a la fecha de emisión.';
   end if;
 
-  if jsonb_typeof(p_items) <> 'array' then
+  if pg_catalog.jsonb_typeof(p_items) <> 'array' then
     raise exception 'p_items debe ser un arreglo JSON.';
   end if;
 
-  if jsonb_array_length(p_items) = 0 then
+  if pg_catalog.jsonb_array_length(p_items) = 0 then
     raise exception 'La cotización debe contener al menos un concepto.';
   end if;
 
-  if jsonb_array_length(p_items) > 100 then
+  if pg_catalog.jsonb_array_length(p_items) > 100 then
     raise exception 'La cotización no puede contener más de 100 conceptos.';
   end if;
 
@@ -620,9 +620,9 @@ begin
   end if;
 
   -- 3. Validación de pertenencia de ítems de catálogo incluidos en p_items
-  for v_item in select * from jsonb_array_elements(p_items)
+  for v_item in select * from pg_catalog.jsonb_array_elements(p_items)
   loop
-    if v_item->>'catalogItemId' is not null and length(trim(v_item->>'catalogItemId')) > 0 then
+    if v_item->>'catalogItemId' is not null and pg_catalog.length(pg_catalog.btrim(v_item->>'catalogItemId')) > 0 then
       v_catalog_id := (v_item->>'catalogItemId')::uuid;
       if not exists (
         select 1 from public.catalog_items
@@ -648,12 +648,12 @@ begin
 
     update public.quotes set
       client_id = p_client_id,
-      client_name = trim(p_client_name),
+      client_name = pg_catalog.btrim(p_client_name),
       client_doc_type = coalesce(p_client_doc_type, 'none'),
-      client_doc_number = nullif(trim(p_client_doc_number), ''),
-      client_phone = nullif(trim(p_client_phone), ''),
-      client_email = nullif(trim(lower(p_client_email)), ''),
-      client_address = nullif(trim(p_client_address), ''),
+      client_doc_number = nullif(pg_catalog.btrim(p_client_doc_number), ''),
+      client_phone = nullif(pg_catalog.btrim(p_client_phone), ''),
+      client_email = nullif(pg_catalog.btrim(pg_catalog.lower(p_client_email)), ''),
+      client_address = nullif(pg_catalog.btrim(p_client_address), ''),
       issue_date = p_issue_date,
       valid_until = p_valid_until,
       currency = 'PEN',
@@ -669,17 +669,17 @@ begin
       igv_rate = p_igv_rate,
       igv_amount = p_igv_amount,
       total_amount = p_total_amount,
-      payment_terms = nullif(trim(p_payment_terms), ''),
-      delivery_time = nullif(trim(p_delivery_time), ''),
-      public_notes = nullif(trim(p_public_notes), ''),
-      internal_notes = nullif(trim(p_internal_notes), ''),
+      payment_terms = nullif(pg_catalog.btrim(p_payment_terms), ''),
+      delivery_time = nullif(pg_catalog.btrim(p_delivery_time), ''),
+      public_notes = nullif(pg_catalog.btrim(p_public_notes), ''),
+      internal_notes = nullif(pg_catalog.btrim(p_internal_notes), ''),
       status = coalesce(p_status, 'draft'),
       updated_at = v_now
     where id = p_quote_id and user_id = p_user_id;
 
   else
     -- Es creación: Asignar correlativo atómico por usuario y prefijo
-    v_clean_prefix := upper(trim(coalesce(p_prefix, 'COT-')));
+    v_clean_prefix := pg_catalog.upper(pg_catalog.btrim(coalesce(p_prefix, 'COT-')));
     if v_clean_prefix = '' then
       v_clean_prefix := 'COT-';
     end if;
@@ -692,7 +692,7 @@ begin
       updated_at = v_now
     returning last_correlative into v_correlative;
 
-    v_quote_number := v_clean_prefix || lpad(v_correlative::text, 5, '0');
+    v_quote_number := v_clean_prefix || pg_catalog.lpad(v_correlative::text, 5, '0');
 
     insert into public.quotes (
       id, user_id, quote_number, prefix, correlative,
@@ -707,15 +707,15 @@ begin
       status, created_at, updated_at
     ) values (
       p_quote_id, p_user_id, v_quote_number, v_clean_prefix, v_correlative,
-      p_client_id, trim(p_client_name), coalesce(p_client_doc_type, 'none'), nullif(trim(p_client_doc_number), ''),
-      nullif(trim(p_client_phone), ''), nullif(trim(lower(p_client_email)), ''), nullif(trim(p_client_address), ''),
+      p_client_id, pg_catalog.btrim(p_client_name), coalesce(p_client_doc_type, 'none'), nullif(pg_catalog.btrim(p_client_doc_number), ''),
+      nullif(pg_catalog.btrim(p_client_phone), ''), nullif(pg_catalog.btrim(pg_catalog.lower(p_client_email)), ''), nullif(pg_catalog.btrim(p_client_address), ''),
       p_issue_date, p_valid_until, 'PEN',
       p_subtotal_gross, p_items_discount_total,
       coalesce(p_global_discount_type, 'none'), coalesce(p_global_discount_value, 0), coalesce(p_global_discount_amount, 0),
       p_discount_total, p_subtotal_net, p_taxable_base, p_exempt_base,
       p_igv_rate, p_igv_amount, p_total_amount,
-      nullif(trim(p_payment_terms), ''), nullif(trim(p_delivery_time), ''),
-      nullif(trim(p_public_notes), ''), nullif(trim(p_internal_notes), ''),
+      nullif(pg_catalog.btrim(p_payment_terms), ''), nullif(pg_catalog.btrim(p_delivery_time), ''),
+      nullif(pg_catalog.btrim(p_public_notes), ''), nullif(pg_catalog.btrim(p_internal_notes), ''),
       coalesce(p_status, 'draft'), v_now, v_now
     );
   end if;
@@ -723,7 +723,7 @@ begin
   -- 5. Reemplazo atómico de ítems de la cotización dentro de la misma transacción
   delete from public.quote_items where quote_id = p_quote_id and user_id = p_user_id;
 
-  for v_item in select * from jsonb_array_elements(p_items)
+  for v_item in select * from pg_catalog.jsonb_array_elements(p_items)
   loop
     v_item_idx := v_item_idx + 1;
     insert into public.quote_items (
@@ -732,12 +732,12 @@ begin
       discount_type, discount_value, discount_amount,
       is_igv_affected, gross_amount, net_amount, created_at
     ) values (
-      coalesce(nullif(v_item->>'id', '')::uuid, gen_random_uuid()),
+      coalesce(nullif(v_item->>'id', '')::uuid, pg_catalog.gen_random_uuid()),
       p_quote_id,
       p_user_id,
-      case when v_item->>'catalogItemId' is not null and length(trim(v_item->>'catalogItemId')) > 0 then (v_item->>'catalogItemId')::uuid else null end,
+      case when v_item->>'catalogItemId' is not null and pg_catalog.length(pg_catalog.btrim(v_item->>'catalogItemId')) > 0 then (v_item->>'catalogItemId')::uuid else null end,
       coalesce((v_item->>'sortOrder')::integer, v_item_idx),
-      trim((v_item->>'description')::text),
+      pg_catalog.btrim((v_item->>'description')::text),
       coalesce((v_item->>'type')::text, 'product'),
       coalesce((v_item->>'unit')::text, 'unit'),
       (v_item->>'quantity')::numeric,
@@ -752,7 +752,7 @@ begin
     );
   end loop;
 
-  return jsonb_build_object(
+  return pg_catalog.jsonb_build_object(
     'id', p_quote_id,
     'quoteNumber', v_quote_number,
     'correlative', v_correlative,
@@ -761,7 +761,13 @@ begin
 end;
 $$;
 
--- Permisos estrictos: solo service_role
+-- Endurecimiento idempotente de privilegios sobre el esquema public
+revoke create on schema public from public;
+revoke create on schema public from anon;
+revoke create on schema public from authenticated;
+grant usage on schema public to anon, authenticated, service_role;
+
+-- Permisos estrictos: solo service_role puede ejecutar la RPC
 revoke execute on function public.save_quote_atomic from public;
 revoke execute on function public.save_quote_atomic from anon;
 revoke execute on function public.save_quote_atomic from authenticated;

@@ -236,8 +236,17 @@ $$;
 do $$
 declare
   v_dummy uuid := gen_random_uuid();
+  v_dummy_quote uuid := gen_random_uuid();
 begin
   raise notice 'TEST 4: Verificando que anon y authenticated no puedan escribir en tablas críticas...';
+
+  -- Crear registros válidos como administrador para que las comprobaciones de privilegios
+  -- fallen exclusivamente por permisos (42501 insufficient_privilege) y no por FKs inexistentes
+  insert into public.profiles (id, email, full_name)
+  values (v_dummy, 'dummy-test4@calculaperu.pe', 'Dummy Test 4');
+
+  insert into public.quotes (id, user_id, quote_number, prefix, correlative, client_name, issue_date, currency, subtotal_gross, items_discount_total, discount_total, subtotal_net, taxable_base, exempt_base, igv_rate, igv_amount, total_amount, status)
+  values (v_dummy_quote, v_dummy, 'COT-00000', 'COT-', 1, 'Dummy Initial', current_date, 'PEN', 0, 0, 0, 0, 0, 0, 0.18, 0, 0, 'draft');
 
   -- 4.1 Probar rol ANON
   set local role anon;
@@ -252,7 +261,7 @@ begin
   -- quote_items
   begin
     insert into public.quote_items (quote_id, user_id, description, type, unit, quantity, unit_price, discount_type, discount_value, discount_amount, is_igv_affected, gross_amount, net_amount)
-    values (v_dummy, v_dummy, 'Item Hacker', 'product', 'unit', 1, 10, 'none', 0, 0, true, 10, 10);
+    values (v_dummy_quote, v_dummy, 'Item Hacker', 'product', 'unit', 1, 10, 'none', 0, 0, true, 10, 10);
     raise exception 'FALLO TEST 4: anon pudo escribir en quote_items.';
   exception when insufficient_privilege then end;
 
@@ -283,9 +292,9 @@ begin
     raise exception 'FALLO TEST 4: anon pudo escribir en clients.';
   exception when insufficient_privilege then end;
 
-  -- catalog_items
+  -- catalog_items (usando columna price del esquema real)
   begin
-    insert into public.catalog_items (id, user_id, name, unit_price) values (v_dummy, v_dummy, 'Item Anon', 10);
+    insert into public.catalog_items (id, user_id, name, price) values (v_dummy, v_dummy, 'Item Anon', 10);
     raise exception 'FALLO TEST 4: anon pudo escribir en catalog_items.';
   exception when insufficient_privilege then end;
 
@@ -474,6 +483,183 @@ begin
   else
     raise notice 'SKIP TEST 7: Tabla beta_requests no presente en este entorno.';
   end if;
+end;
+$$;
+
+-- ------------------------------------------------------------------------------
+-- TEST 8: AISLAMIENTO MULTITENANT Y ROLLBACK ATÓMICO EN SAVE_QUOTE_ATOMIC
+-- ------------------------------------------------------------------------------
+do $$
+declare
+  v_user_a uuid := gen_random_uuid();
+  v_user_b uuid := gen_random_uuid();
+  v_client_b uuid := gen_random_uuid();
+  v_catalog_b uuid := gen_random_uuid();
+  v_quote_id uuid := gen_random_uuid();
+  v_expected_exception_received boolean := false;
+  v_count_quotes integer;
+  v_count_items integer;
+begin
+  raise notice 'TEST 8: Verificando aislamiento multitenant y rollback atómico en save_quote_atomic...';
+
+  -- Crear usuarios de prueba A y B
+  insert into public.profiles (id, email, full_name)
+  values
+    (v_user_a, 'user-a@calculaperu.pe', 'Usuario A'),
+    (v_user_b, 'user-b@calculaperu.pe', 'Usuario B');
+
+  -- Crear cliente legítimo perteneciente a Usuario B
+  insert into public.clients (id, user_id, name, doc_type, doc_number)
+  values (v_client_b, v_user_b, 'Cliente de B', 'dni', '12345678');
+
+  -- Crear ítem de catálogo legítimo perteneciente a Usuario B
+  insert into public.catalog_items (id, user_id, name, price)
+  values (v_catalog_b, v_user_b, 'Producto Legítimo de B', 50);
+
+  -- ----------------------------------------------------------------------------
+  -- 8.1 Aislamiento de Clientes: Usuario A intenta usar el cliente de Usuario B
+  -- Demuestra que la RPC save_quote_atomic valida activamente que client_id
+  -- pertenezca al p_user_id autenticado y lanza excepción con SQLSTATE P0001.
+  -- ----------------------------------------------------------------------------
+  v_expected_exception_received := false;
+  begin
+    perform public.save_quote_atomic(
+      v_quote_id, v_user_a, 'COT-', v_client_b, 'Cliente Ilegítimo', 'dni', '12345678',
+      null, null, null, current_date, null, 'PEN', 100, 0, 'none', 0, 0, 0, 100, 100, 0,
+      0.18, 18, 118, null, null, null, null, 'draft',
+      jsonb_build_array(
+        jsonb_build_object('description', 'Item 1', 'type', 'product', 'unit', 'unit', 'quantity', 1, 'unitPrice', 100, 'grossAmount', 100, 'netAmount', 100)
+      )
+    );
+  exception when others then
+    -- Validar que la excepción proviene de la regla de negocio multitenant esperada
+    if sqlstate = 'P0001' and sqlerrm like '%El cliente no pertenece al usuario%' then
+      v_expected_exception_received := true;
+    else
+      raise exception 'FALLO TEST 8.1: Se esperaba error de cliente ajeno (P0001), pero se recibió SQLSTATE=% mensaje=%', sqlstate, sqlerrm;
+    end if;
+  end;
+
+  -- Comprobación obligatoria fuera del bloque exception: si no lanzó, el test debe fallar
+  if not v_expected_exception_received then
+    raise exception 'FALLO TEST 8.1: save_quote_atomic permitió indebidamente que Usuario A usara el cliente de Usuario B sin lanzar excepción.';
+  end if;
+
+  -- Verificar que tras el error no se persistió ningún registro
+  select count(*) into v_count_quotes from public.quotes where id = v_quote_id;
+  select count(*) into v_count_items from public.quote_items where quote_id = v_quote_id;
+  if v_count_quotes <> 0 or v_count_items <> 0 then
+    raise exception 'FALLO TEST 8.1: Se encontraron registros persistidos tras el fallo de validación de cliente (quotes: %, items: %)', v_count_quotes, v_count_items;
+  end if;
+
+  raise notice '  -> Aprobado 8.1: Aislamiento multitenant de clientes validado sin falsos positivos.';
+
+  -- ----------------------------------------------------------------------------
+  -- 8.2 Aislamiento de Catálogo y Rollback Atómico:
+  -- Usuario A intenta incluir un ítem vinculado al catalog_item de Usuario B.
+  -- Demuestra que la transacción es completamente atómica: si el segundo concepto
+  -- viola la pertenencia de catálogo, se descartan tanto la cabecera como el primer concepto.
+  -- ----------------------------------------------------------------------------
+  v_expected_exception_received := false;
+  begin
+    perform public.save_quote_atomic(
+      v_quote_id, v_user_a, 'COT-', null, 'Cliente Normal', 'none', null,
+      null, null, null, current_date, null, 'PEN', 100, 0, 'none', 0, 0, 0, 100, 100, 0,
+      0.18, 18, 118, null, null, null, null, 'draft',
+      jsonb_build_array(
+        jsonb_build_object('description', 'Item 1 Valido', 'type', 'product', 'unit', 'unit', 'quantity', 1, 'unitPrice', 50, 'grossAmount', 50, 'netAmount', 50),
+        -- Item 2 con catalogItemId existente pero perteneciente a Usuario B
+        jsonb_build_object('catalogItemId', v_catalog_b, 'description', 'Item con Catalogo de B', 'type', 'product', 'unit', 'unit', 'quantity', 1, 'unitPrice', 50, 'grossAmount', 50, 'netAmount', 50)
+      )
+    );
+  exception when others then
+    if sqlstate = 'P0001' and sqlerrm like '%El producto de catálogo (%) no pertenece al usuario%' then
+      v_expected_exception_received := true;
+    else
+      raise exception 'FALLO TEST 8.2: Se esperaba error de catálogo ajeno (P0001), pero se recibió SQLSTATE=% mensaje=%', sqlstate, sqlerrm;
+    end if;
+  end;
+
+  if not v_expected_exception_received then
+    raise exception 'FALLO TEST 8.2: save_quote_atomic no rechazó el concepto con producto de catálogo ajeno.';
+  end if;
+
+  -- Verificación exhaustiva de atomicidad (Rollback completo)
+  select count(*) into v_count_quotes from public.quotes where id = v_quote_id;
+  select count(*) into v_count_items from public.quote_items where quote_id = v_quote_id;
+
+  if v_count_quotes <> 0 or v_count_items <> 0 then
+    raise exception 'FALLO TEST 8.2: Rollback atómico falló; quedaron registros huérfanos en la BD (quotes: %, items: %)', v_count_quotes, v_count_items;
+  end if;
+
+  raise notice '  -> Aprobado 8.2: Rollback atómico y validación de catálogo ajeno confirmados sin falsos positivos.';
+  raise notice 'APROBADO TEST 8: Aislamiento multitenant y atomicidad transaccional verificadas.';
+end;
+$$;
+
+-- ------------------------------------------------------------------------------
+-- TEST 9: PRIVILEGIOS DE ESQUEMA PUBLIC, SEARCH_PATH Y GENERACIÓN DE UUID
+-- ------------------------------------------------------------------------------
+do $$
+declare
+  v_proc_search_path text[];
+  v_has_create_priv boolean;
+  v_user_test uuid := gen_random_uuid();
+  v_quote_test uuid := gen_random_uuid();
+  v_save_result jsonb;
+  v_item_gen_id uuid;
+begin
+  raise notice 'TEST 9: Verificando search_path, privilegios CREATE y generación pg_catalog.gen_random_uuid()...';
+
+  -- 9.1 Verificar configuración de search_path de save_quote_atomic en pg_proc
+  select proconfig into v_proc_search_path
+  from pg_proc
+  where proname = 'save_quote_atomic'
+    and pronamespace = 'public'::regnamespace;
+
+  if v_proc_search_path is null or not ('search_path=public, pg_temp' = any(v_proc_search_path)) then
+    raise exception 'FALLO TEST 9: save_quote_atomic debe tener search_path=public, pg_temp configurado (actual: %)', v_proc_search_path;
+  end if;
+  raise notice '  -> Aprobado: search_path de save_quote_atomic restringido a public, pg_temp.';
+
+  -- 9.2 Verificar que el rol public NO tenga privilegio CREATE sobre el esquema public
+  select has_schema_privilege('public', 'public', 'CREATE') into v_has_create_priv;
+  if v_has_create_priv then
+    raise exception 'FALLO TEST 9: El rol public no debe tener privilegio CREATE sobre el esquema public.';
+  end if;
+  raise notice '  -> Aprobado: Privilegio CREATE revocado a public sobre esquema public.';
+
+  -- 9.3 Verificar generación de UUID mediante pg_catalog.gen_random_uuid() en ítems sin ID
+  insert into public.profiles (id, email, full_name)
+  values (v_user_test, 'uuid-test@calculaperu.pe', 'Usuario UUID Test');
+
+  v_save_result := public.save_quote_atomic(
+    v_quote_test, v_user_test, 'COT-', null, 'Cliente UUID', 'none', null,
+    null, null, null, current_date, null, 'PEN', 100, 0, 'none', 0, 0, 0, 100, 100, 0,
+    0.18, 18, 118, null, null, null, null, 'draft',
+    jsonb_build_array(
+      jsonb_build_object(
+        'description', 'Item sin ID previo',
+        'type', 'product',
+        'unit', 'unit',
+        'quantity', 1,
+        'unitPrice', 100,
+        'grossAmount', 100,
+        'netAmount', 100
+      )
+    )
+  );
+
+  select id into v_item_gen_id
+  from public.quote_items
+  where quote_id = v_quote_test;
+
+  if v_item_gen_id is null then
+    raise exception 'FALLO TEST 9: pg_catalog.gen_random_uuid() no generó el ID del ítem.';
+  end if;
+  raise notice '  -> Aprobado: Generación de UUID en quote_items confirmada (id: %).', v_item_gen_id;
+
+  raise notice 'APROBADO TEST 9: Endurecimiento de search_path, esquemas y UUIDs validado.';
 end;
 $$;
 

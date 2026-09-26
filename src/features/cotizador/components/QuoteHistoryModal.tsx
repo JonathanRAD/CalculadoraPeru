@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import {
   X,
@@ -24,6 +24,7 @@ import { QuoteRecord, QuoteStatus, QuoteItemRecord } from '../types';
 import { generateQuotePdf } from '@/shared/utils/quotePdfGenerator';
 import { downloadQuoteCsv } from '@/shared/utils/quoteCsvGenerator';
 import { CompanyProfile } from '@/features/auth/types';
+import { quoteDetailsCache } from '../services/quoteDetailsCache';
 
 interface QuoteHistoryModalProps {
   isOpen: boolean;
@@ -31,10 +32,6 @@ interface QuoteHistoryModalProps {
   onLoadQuote: (quoteId: string) => void;
   companyProfile: CompanyProfile & { name?: string; phone?: string; email?: string };
   onOpenWhatsApp: (quote: QuoteRecord, items: QuoteItemRecord[]) => void;
-  /** ID de la cotización que acaba de ser editada/guardada en el editor principal.
-   *  Cuando esté definido y el modal se abra, la entrada correspondiente se expulsa
-   *  del caché de detalles para garantizar que se descarguen datos frescos. */
-  staleQuoteId?: string | undefined;
 }
 
 const STATUS_CONFIG: Record<
@@ -55,7 +52,6 @@ export const QuoteHistoryModal: React.FC<QuoteHistoryModalProps> = ({
   onLoadQuote,
   companyProfile,
   onOpenWhatsApp,
-  staleQuoteId,
 }) => {
   const [quotes, setQuotes] = useState<QuoteRecord[]>([]);
   const [search, setSearch] = useState('');
@@ -71,9 +67,6 @@ export const QuoteHistoryModal: React.FC<QuoteHistoryModalProps> = ({
   const [error, setError] = useState<string | null>(null);
   const [actionMessage, setActionMessage] = useState<string | null>(null);
   const [busyQuoteId, setBusyQuoteId] = useState<string | null>(null);
-  const quotesDetailsCacheRef = useRef<Map<string, { quote: QuoteRecord; items: QuoteItemRecord[] }>>(new Map());
-  // Mapa de promesas en vuelo para evitar peticiones duplicadas al mismo quoteId.
-  const inflight = useRef<Map<string, Promise<{ quote: QuoteRecord; items: QuoteItemRecord[] } | null>>>(new Map());
 
   // Debounce de búsqueda
   useEffect(() => {
@@ -136,42 +129,10 @@ export const QuoteHistoryModal: React.FC<QuoteHistoryModalProps> = ({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, onClose]);
 
-  // Si el modal se abre y el editor acaba de guardar un cambio en staleQuoteId,
-  // se expulsa la entrada del caché para que la próxima descarga/vista sea fresca.
-  useEffect(() => {
-    if (isOpen && staleQuoteId) {
-      quotesDetailsCacheRef.current.delete(staleQuoteId);
-      inflight.current.delete(staleQuoteId);
-    }
-  }, [isOpen, staleQuoteId]);
-
   if (!isOpen) return null;
 
   const getQuoteDetails = async (quoteId: string): Promise<{ quote: QuoteRecord; items: QuoteItemRecord[] } | null> => {
-    const cached = quotesDetailsCacheRef.current.get(quoteId);
-    if (cached) return cached;
-
-    // Dedup: si ya hay una petición en vuelo para este ID, reutilizarla.
-    const existing = inflight.current.get(quoteId);
-    if (existing) return existing;
-
-    const promise = fetch(`/api/quotes/${quoteId}`, { credentials: 'include' })
-      .then(async (res) => {
-        const data = await res.json();
-        if (data.success && data.quote && data.items) {
-          const details = { quote: data.quote as QuoteRecord, items: data.items as QuoteItemRecord[] };
-          quotesDetailsCacheRef.current.set(quoteId, details);
-          return details;
-        }
-        return null;
-      })
-      .catch(() => null)
-      .finally(() => {
-        inflight.current.delete(quoteId);
-      });
-
-    inflight.current.set(quoteId, promise);
-    return promise;
+    return quoteDetailsCache.get(quoteId);
   };
 
   const handleDuplicate = async (quote: QuoteRecord) => {
@@ -184,6 +145,7 @@ export const QuoteHistoryModal: React.FC<QuoteHistoryModalProps> = ({
       });
       const data = await res.json();
       if (data.success && data.quote) {
+        quoteDetailsCache.invalidate(data.quote.id);
         setActionMessage(`Cotización duplicada con éxito como ${data.quote.quoteNumber}.`);
         await fetchQuotes();
         onLoadQuote(data.quote.id);
@@ -209,7 +171,7 @@ export const QuoteHistoryModal: React.FC<QuoteHistoryModalProps> = ({
       });
       const data = await res.json();
       if (data.success) {
-        quotesDetailsCacheRef.current.delete(quote.id);
+        quoteDetailsCache.invalidate(quote.id);
         setActionMessage(`Cotización ${quote.quoteNumber} anulada correctamente.`);
         await fetchQuotes();
       } else {
@@ -231,7 +193,7 @@ export const QuoteHistoryModal: React.FC<QuoteHistoryModalProps> = ({
       });
       const data = await res.json();
       if (data.success) {
-        quotesDetailsCacheRef.current.delete(quote.id);
+        quoteDetailsCache.invalidate(quote.id);
         setActionMessage(`Cotización ${quote.quoteNumber} eliminada definitivamente.`);
         await fetchQuotes();
       } else {
@@ -554,6 +516,7 @@ export const QuoteHistoryModal: React.FC<QuoteHistoryModalProps> = ({
                       type="button"
                       disabled={isBusy}
                       onClick={() => {
+                        quoteDetailsCache.invalidate(q.id);
                         onLoadQuote(q.id);
                         onClose();
                       }}

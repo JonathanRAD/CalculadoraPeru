@@ -31,8 +31,8 @@ export async function GET(
 
     return NextResponse.json({ success: true, isReadOnly: !isProActive, quote: data.quote, items: data.items });
   } catch (err) {
-    console.error('Error obteniendo cotización:', err);
-    return NextResponse.json({ success: false, message: 'Error interno al consultar cotización.' }, { status: 500 });
+    const { body, status } = handleApiError(err, 'GET /api/quotes/[id]', 'Error interno al consultar cotización.');
+    return NextResponse.json(body, { status });
   }
 }
 
@@ -174,7 +174,7 @@ export async function DELETE(
 
     return NextResponse.json({ success: true, message: 'Cotización eliminada de forma segura.' });
   } catch (err) {
-    console.error('Error eliminando cotización:', err);
-    return NextResponse.json({ success: false, message: 'Error interno al eliminar cotización.' }, { status: 500 });
+    const { body, status } = handleApiError(err, 'DELETE /api/quotes/[id]', 'Error interno al eliminar cotización.');
+    return NextResponse.json(body, { status });
   }
 }
