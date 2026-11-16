@@ -129,7 +129,7 @@ export function Navbar() {
               <Calculator className="w-4 h-4 text-emerald-400 group-hover:scale-105 transition-transform" />
             </div>
             <span className="text-base sm:text-lg font-black tracking-tight text-white">
-              Calcula<span className="text-[#00C853]">Perú</span>
+              Calcula<span className="text-brand-400">Perú</span>
             </span>
           </Link>
 
@@ -260,7 +260,7 @@ export function Navbar() {
             ) : (
               <Link
                 href="/pro"
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#00875A] hover:bg-[#00704A] text-white text-xs font-bold transition-colors shadow-xs"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-brand-600 hover:bg-brand-800 text-white text-xs font-bold transition-colors shadow-xs"
               >
                 <Sparkles className="w-3 h-3 text-amber-300" />
                 <span>PRO</span>

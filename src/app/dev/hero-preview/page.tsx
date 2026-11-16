@@ -26,7 +26,7 @@ export default function HeroPreviewDevPage() {
       <div className="mx-auto max-w-7xl rounded-3xl bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-800 p-6 shadow-md">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
-            <div className="inline-flex items-center gap-2 rounded-full bg-emerald-100 text-[#08734F] dark:bg-emerald-950 dark:text-emerald-300 px-3 py-1 text-xs font-bold mb-2">
+            <div className="inline-flex items-center gap-2 rounded-full bg-emerald-100 text-brand-700 dark:bg-emerald-950 dark:text-emerald-300 px-3 py-1 text-xs font-bold mb-2">
               <Eye className="h-3.5 w-3.5" />
               <span>Vista Previa de Desarrollo (Exclusiva de revisión interna)</span>
             </div>
@@ -45,7 +45,7 @@ export default function HeroPreviewDevPage() {
               onClick={() => setActiveTab('with-photo')}
               className={`rounded-xl px-4 py-2 transition-all cursor-pointer ${
                 activeTab === 'with-photo'
-                  ? 'bg-white dark:bg-slate-800 text-[#08734F] dark:text-emerald-300 shadow-xs ring-1 ring-emerald-500/20'
+                  ? 'bg-white dark:bg-slate-800 text-brand-700 dark:text-emerald-300 shadow-xs ring-1 ring-emerald-500/20'
                   : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
@@ -56,7 +56,7 @@ export default function HeroPreviewDevPage() {
               onClick={() => setActiveTab('without-photo')}
               className={`rounded-xl px-4 py-2 transition-all cursor-pointer ${
                 activeTab === 'without-photo'
-                  ? 'bg-white dark:bg-slate-800 text-[#08734F] dark:text-emerald-300 shadow-xs ring-1 ring-emerald-500/20'
+                  ? 'bg-white dark:bg-slate-800 text-brand-700 dark:text-emerald-300 shadow-xs ring-1 ring-emerald-500/20'
                   : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
@@ -67,7 +67,7 @@ export default function HeroPreviewDevPage() {
               onClick={() => setActiveTab('both')}
               className={`rounded-xl px-4 py-2 transition-all cursor-pointer ${
                 activeTab === 'both'
-                  ? 'bg-white dark:bg-slate-800 text-[#08734F] dark:text-emerald-300 shadow-xs ring-1 ring-emerald-500/20'
+                  ? 'bg-white dark:bg-slate-800 text-brand-700 dark:text-emerald-300 shadow-xs ring-1 ring-emerald-500/20'
                   : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
@@ -83,7 +83,7 @@ export default function HeroPreviewDevPage() {
       {(activeTab === 'with-photo' || activeTab === 'both') && (
         <div className="mx-auto max-w-7xl rounded-3xl overflow-hidden border-2 border-emerald-500/40 shadow-xl bg-white dark:bg-[#0B132B]">
           <div className="bg-emerald-50 dark:bg-emerald-950/80 px-6 py-3 border-b border-emerald-200/80 dark:border-emerald-800/60 flex items-center justify-between text-xs">
-            <span className="font-bold text-[#08734F] dark:text-emerald-300 flex items-center gap-1.5">
+            <span className="font-bold text-brand-700 dark:text-emerald-300 flex items-center gap-1.5">
               <Sparkles className="h-4 w-4" />
               <span>Variante A: Con Fotografía Peruana Integrada (Recomendada)</span>
             </span>
@@ -98,7 +98,7 @@ export default function HeroPreviewDevPage() {
               {/* Left Column: Text + Search */}
               <div className="lg:col-span-7 xl:col-span-7 space-y-4 sm:space-y-5 text-left">
                 <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-800 dark:border-emerald-800/60 dark:bg-emerald-950/40 dark:text-emerald-300">
-                  <BadgeCheck className="h-3.5 w-3.5 text-[#08734F] dark:text-[#00C853]" />
+                  <BadgeCheck className="h-3.5 w-3.5 text-brand-700 dark:text-brand-400" />
                   <span>25 calculadoras gratuitas · Parámetros Perú 2026</span>
                 </div>
 
@@ -176,7 +176,7 @@ export default function HeroPreviewDevPage() {
           <section className="relative overflow-hidden py-8 sm:py-10 lg:py-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-3xl space-y-4 sm:space-y-5 text-left">
               <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-800 dark:border-emerald-800/60 dark:bg-emerald-950/40 dark:text-emerald-300">
-                <BadgeCheck className="h-3.5 w-3.5 text-[#08734F] dark:text-[#00C853]" />
+                <BadgeCheck className="h-3.5 w-3.5 text-brand-700 dark:text-brand-400" />
                 <span>25 calculadoras gratuitas · Parámetros Perú 2026</span>
               </div>
 

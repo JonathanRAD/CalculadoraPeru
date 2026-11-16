@@ -160,7 +160,7 @@ Total Facturado: ${formatCurrency(result.totalAmount)}`;
         {/* Form Column */}
         <div className="lg:col-span-7 rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 sm:p-8 shadow-sm space-y-6">
           <div className="flex items-center gap-2.5 border-b border-slate-100 dark:border-slate-800 pb-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-50 text-[#08734F] dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/60">
+            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-50 text-brand-700 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/60">
               <Receipt className="h-4.5 w-4.5" />
             </div>
             <h2 className="text-lg font-bold text-slate-900 dark:text-white">Selecciona la operación de IGV</h2>
@@ -173,7 +173,7 @@ Total Facturado: ${formatCurrency(result.totalAmount)}`;
               onClick={() => setMode('add_igv')}
               className={`rounded-xl py-3 text-xs sm:text-sm font-bold transition-all cursor-pointer ${
                 mode === 'add_igv'
-                  ? 'bg-white dark:bg-slate-800 text-[#08734F] dark:text-emerald-300 shadow-xs'
+                  ? 'bg-white dark:bg-slate-800 text-brand-700 dark:text-emerald-300 shadow-xs'
                   : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
@@ -184,7 +184,7 @@ Total Facturado: ${formatCurrency(result.totalAmount)}`;
               onClick={() => setMode('extract_igv')}
               className={`rounded-xl py-3 text-xs sm:text-sm font-bold transition-all cursor-pointer ${
                 mode === 'extract_igv'
-                  ? 'bg-white dark:bg-slate-800 text-[#08734F] dark:text-emerald-300 shadow-xs'
+                  ? 'bg-white dark:bg-slate-800 text-brand-700 dark:text-emerald-300 shadow-xs'
                   : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
@@ -205,7 +205,7 @@ Total Facturado: ${formatCurrency(result.totalAmount)}`;
 
           <div className="rounded-2xl bg-emerald-50/60 dark:bg-emerald-950/40 p-4 border border-emerald-200/80 dark:border-emerald-800 text-xs text-emerald-950 dark:text-emerald-200 space-y-1">
             <div className="font-bold flex items-center gap-1.5">
-              <CheckCircle2 className="h-4 w-4 text-[#08734F] dark:text-emerald-400" />
+              <CheckCircle2 className="h-4 w-4 text-brand-700 dark:text-emerald-400" />
               <span>Desglose Legal Tributario Perú:</span>
             </div>
             <p className="text-[11px] text-emerald-800 dark:text-emerald-300">
@@ -221,7 +221,7 @@ Total Facturado: ${formatCurrency(result.totalAmount)}`;
               <span className="text-xs font-bold uppercase tracking-wider text-emerald-950 dark:text-emerald-300">
                 Liquidación Tributaria
               </span>
-              <span className="rounded-full bg-emerald-50 dark:bg-emerald-950/70 border border-emerald-200 dark:border-emerald-800 px-2.5 py-0.5 text-[11px] font-bold text-[#08734F] dark:text-emerald-300">
+              <span className="rounded-full bg-emerald-50 dark:bg-emerald-950/70 border border-emerald-200 dark:border-emerald-800 px-2.5 py-0.5 text-[11px] font-bold text-brand-700 dark:text-emerald-300">
                 SUNAT 18%
               </span>
             </div>
@@ -233,7 +233,7 @@ Total Facturado: ${formatCurrency(result.totalAmount)}`;
               </span>
               <div
                 title={formatCurrency(mode === 'add_igv' ? result.totalAmount : result.baseAmount)}
-                className="text-3xl sm:text-4xl lg:text-[2.6rem] font-black text-[#08734F] dark:text-emerald-400 mt-1.5 font-mono tracking-tight tabular-nums break-words leading-tight"
+                className="text-3xl sm:text-4xl lg:text-[2.6rem] font-black text-brand-700 dark:text-emerald-400 mt-1.5 font-mono tracking-tight tabular-nums break-words leading-tight"
               >
                 {formatCurrency(mode === 'add_igv' ? result.totalAmount : result.baseAmount)}
               </div>

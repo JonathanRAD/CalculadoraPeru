@@ -21,7 +21,7 @@ export default function ContactoPage() {
         {/* Back Link */}
         <Link
           href="/"
-          className="inline-flex items-center gap-1.5 text-xs font-bold text-[#00875A] dark:text-[#00C853] hover:underline"
+          className="inline-flex items-center gap-1.5 text-xs font-bold text-brand-600 dark:text-brand-400 hover:underline"
         >
           <ArrowLeft className="h-4 w-4" />
           <span>Volver al inicio</span>
@@ -32,7 +32,7 @@ export default function ContactoPage() {
           
           {/* Header */}
           <div className="border-b border-slate-100 dark:border-slate-800 pb-6">
-            <div className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/80 px-2.5 py-1 text-xs font-bold text-[#00875A] dark:text-[#00C853] border border-emerald-200 dark:border-emerald-800 mb-3">
+            <div className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/80 px-2.5 py-1 text-xs font-bold text-brand-600 dark:text-brand-400 border border-emerald-200 dark:border-emerald-800 mb-3">
               <Mail className="h-4 w-4" />
               <span>ATENCIÓN AL USUARIO Y SUGERENCIAS</span>
             </div>
@@ -51,12 +51,12 @@ export default function ContactoPage() {
               
               <div className="space-y-4">
                 <div className="flex items-start gap-3">
-                  <div className="w-9 h-9 rounded-xl bg-emerald-50 dark:bg-emerald-950 flex items-center justify-center text-[#00875A] dark:text-[#00C853] shrink-0 mt-0.5">
+                  <div className="w-9 h-9 rounded-xl bg-emerald-50 dark:bg-emerald-950 flex items-center justify-center text-brand-600 dark:text-brand-400 shrink-0 mt-0.5">
                     <Mail className="h-5 w-5" />
                   </div>
                   <div>
                     <h3 className="font-bold text-slate-900 dark:text-white text-xs uppercase tracking-wider">Correo oficial</h3>
-                    <p className="font-mono text-xs sm:text-sm text-[#00875A] dark:text-[#00C853] font-semibold mt-0.5">
+                    <p className="font-mono text-xs sm:text-sm text-brand-600 dark:text-brand-400 font-semibold mt-0.5">
                       contacto@calculaperu.com.pe
                     </p>
                     <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
@@ -92,7 +92,7 @@ export default function ContactoPage() {
 
               <div className="rounded-2xl bg-slate-50 dark:bg-slate-900/60 p-4 border border-slate-200 dark:border-slate-800 space-y-2 text-xs">
                 <div className="flex items-center gap-2 font-bold text-slate-900 dark:text-white">
-                  <ShieldCheck className="h-4 w-4 text-[#00875A]" />
+                  <ShieldCheck className="h-4 w-4 text-brand-600" />
                   <span>Aviso sobre asesoría legal</span>
                 </div>
                 <p className="text-slate-500 dark:text-slate-400 leading-relaxed">

@@ -40,7 +40,7 @@ const STATUS_CONFIG: Record<
 > = {
   draft: { label: 'Borrador', bg: 'bg-slate-100 dark:bg-slate-800', text: 'text-slate-700 dark:text-slate-300', border: 'border-slate-300 dark:border-slate-700' },
   sent: { label: 'Enviada', bg: 'bg-blue-50 dark:bg-blue-950/70', text: 'text-blue-700 dark:text-blue-300', border: 'border-blue-200 dark:border-blue-800/60' },
-  accepted: { label: 'Aceptada', bg: 'bg-emerald-50 dark:bg-emerald-950/70', text: 'text-[#00875A] dark:text-[#00C853]', border: 'border-emerald-200 dark:border-emerald-800/60' },
+  accepted: { label: 'Aceptada', bg: 'bg-emerald-50 dark:bg-emerald-950/70', text: 'text-brand-600 dark:text-brand-400', border: 'border-emerald-200 dark:border-emerald-800/60' },
   rejected: { label: 'Rechazada', bg: 'bg-rose-50 dark:bg-rose-950/70', text: 'text-rose-700 dark:text-rose-300', border: 'border-rose-200 dark:border-rose-800/60' },
   expired: { label: 'Vencida', bg: 'bg-amber-50 dark:bg-amber-950/70', text: 'text-amber-800 dark:text-amber-300', border: 'border-amber-200 dark:border-amber-800/60' },
   canceled: { label: 'Anulada', bg: 'bg-zinc-100 dark:bg-zinc-800', text: 'text-zinc-600 dark:text-zinc-400', border: 'border-zinc-300 dark:border-zinc-700' },
@@ -328,7 +328,7 @@ export const QuoteHistoryModal: React.FC<QuoteHistoryModalProps> = ({
         <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-4 mb-4">
           <div>
             <h2 id="history-modal-title" className="text-xl font-bold text-slate-950 dark:text-white flex items-center gap-2">
-              <FileText className="h-6 w-6 text-[#00875A] dark:text-[#00C853]" />
+              <FileText className="h-6 w-6 text-brand-600 dark:text-brand-400" />
               Historial de Cotizaciones Comerciales
             </h2>
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
@@ -368,7 +368,7 @@ export const QuoteHistoryModal: React.FC<QuoteHistoryModalProps> = ({
           </div>
         )}
         {actionMessage && (
-          <div className="mb-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/70 border border-emerald-200 dark:border-emerald-800 p-3 text-xs text-[#00875A] dark:text-[#00C853] flex items-center gap-2">
+          <div className="mb-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/70 border border-emerald-200 dark:border-emerald-800 p-3 text-xs text-brand-600 dark:text-brand-400 flex items-center gap-2">
             <CheckCircle2 className="h-4 w-4 shrink-0" />
             <span>{actionMessage}</span>
           </div>
@@ -389,7 +389,7 @@ export const QuoteHistoryModal: React.FC<QuoteHistoryModalProps> = ({
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Buscar por N° cotización o cliente..."
-              className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 pl-9 pr-3.5 py-2.5 text-xs text-slate-900 dark:text-white placeholder:text-slate-400 focus:border-[#00875A] outline-none"
+              className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 pl-9 pr-3.5 py-2.5 text-xs text-slate-900 dark:text-white placeholder:text-slate-400 focus:border-brand-600 outline-none"
             />
           </div>
 
@@ -444,7 +444,7 @@ export const QuoteHistoryModal: React.FC<QuoteHistoryModalProps> = ({
         <div className="flex-1 overflow-y-auto space-y-2.5 pr-1 min-h-[300px]">
           {isLoading ? (
             <div className="flex flex-col items-center justify-center py-16 text-slate-400 gap-2">
-              <Loader2 className="h-7 w-7 animate-spin text-[#00875A]" />
+              <Loader2 className="h-7 w-7 animate-spin text-brand-600" />
               <span className="text-xs">Cargando cotizaciones...</span>
             </div>
           ) : quotes.length === 0 ? (
@@ -465,7 +465,7 @@ export const QuoteHistoryModal: React.FC<QuoteHistoryModalProps> = ({
               return (
                 <div
                   key={q.id}
-                  className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-950/50 p-4 transition-all hover:border-[#00875A]/50 flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs"
+                  className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-950/50 p-4 transition-all hover:border-brand-600/50 flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs"
                 >
                   {/* Info Principal */}
                   <div className="space-y-1.5 flex-1 min-w-0">
@@ -502,7 +502,7 @@ export const QuoteHistoryModal: React.FC<QuoteHistoryModalProps> = ({
                   {/* Totales */}
                   <div className="md:text-right shrink-0 border-t md:border-t-0 md:border-l border-slate-200 dark:border-slate-800 pt-2 md:pt-0 md:pl-4">
                     <span className="text-[11px] text-slate-500 dark:text-slate-400 block">Total Proforma:</span>
-                    <span className="text-lg font-black font-mono text-[#00875A] dark:text-[#00C853]">
+                    <span className="text-lg font-black font-mono text-brand-600 dark:text-brand-400">
                       S/ {q.totalAmount.toFixed(2)}
                     </span>
                     <span className="text-[10px] text-slate-400 block">
@@ -520,7 +520,7 @@ export const QuoteHistoryModal: React.FC<QuoteHistoryModalProps> = ({
                         onLoadQuote(q.id);
                         onClose();
                       }}
-                      className="rounded-xl bg-[#00875A] hover:bg-[#00704A] text-white font-bold px-3 py-2 text-xs transition-colors cursor-pointer flex items-center gap-1 shadow-sm"
+                      className="rounded-xl bg-brand-600 hover:bg-brand-800 text-white font-bold px-3 py-2 text-xs transition-colors cursor-pointer flex items-center gap-1 shadow-sm"
                       title="Abrir en el editor"
                     >
                       <FileText className="h-3.5 w-3.5" />
@@ -534,7 +534,7 @@ export const QuoteHistoryModal: React.FC<QuoteHistoryModalProps> = ({
                       className="rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-semibold px-2.5 py-2 text-xs transition-colors cursor-pointer flex items-center gap-1 disabled:opacity-40 disabled:cursor-not-allowed"
                       title={isReadOnly ? 'Duplicar requiere suscripción PRO activa' : 'Duplicar proforma'}
                     >
-                      <Copy className="h-3.5 w-3.5 text-[#00875A] dark:text-[#00C853]" />
+                      <Copy className="h-3.5 w-3.5 text-brand-600 dark:text-brand-400" />
                       <span className="hidden sm:inline">Duplicar</span>
                     </button>
 
@@ -547,9 +547,9 @@ export const QuoteHistoryModal: React.FC<QuoteHistoryModalProps> = ({
                       aria-label="Descargar PDF"
                     >
                       {isBusy ? (
-                        <Loader2 className="h-4 w-4 animate-spin text-[#00875A]" />
+                        <Loader2 className="h-4 w-4 animate-spin text-brand-600" />
                       ) : (
-                        <Download className="h-4 w-4 text-[#00875A] dark:text-[#00C853]" />
+                        <Download className="h-4 w-4 text-brand-600 dark:text-brand-400" />
                       )}
                     </button>
 

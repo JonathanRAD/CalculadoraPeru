@@ -147,7 +147,7 @@ Motivo: ${result.recommendedReason}`;
         {/* Form Column */}
         <div className="lg:col-span-7 rounded-3xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 sm:p-8 shadow-sm space-y-6">
           <div className="flex items-center gap-2.5 border-b border-slate-100 dark:border-slate-800 pb-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-50 text-[#08734F] dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/60">
+            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-50 text-brand-700 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/60">
               <Building className="h-4.5 w-4.5" />
             </div>
             <h2 className="text-lg font-bold text-slate-900 dark:text-white">Perfil de tu Emprendimiento</h2>
@@ -194,7 +194,7 @@ Motivo: ${result.recommendedReason}`;
                 id="taxpayerType"
                 value={taxpayerType}
                 onChange={(e) => setTaxpayerType(e.target.value as TaxpayerType)}
-                className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 p-2.5 text-xs font-bold text-slate-900 dark:text-white outline-none focus:border-[#08734F]"
+                className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 p-2.5 text-xs font-bold text-slate-900 dark:text-white outline-none focus:border-brand-700"
               >
                 <option value="natural_person">Persona natural con negocio</option>
                 <option value="legal_entity">Persona jurídica / Empresa</option>
@@ -209,7 +209,7 @@ Motivo: ${result.recommendedReason}`;
                 id="clientType"
                 value={clientType}
                 onChange={(e) => setClientType(e.target.value as ClientType)}
-                className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 p-2.5 text-xs font-bold text-slate-900 dark:text-white outline-none focus:border-[#08734F]"
+                className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 p-2.5 text-xs font-bold text-slate-900 dark:text-white outline-none focus:border-brand-700"
               >
                 <option value="final_consumer">Consumidor final / Personas (Boleta)</option>
                 <option value="businesses_factura">Empresas y Negocios (Factura obligatoria)</option>
@@ -225,7 +225,7 @@ Motivo: ${result.recommendedReason}`;
                 id="activityType"
                 value={activityType}
                 onChange={(e) => setActivityType(e.target.value as ActivityType)}
-                className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 p-2.5 text-xs font-bold text-slate-900 dark:text-white outline-none focus:border-[#08734F]"
+                className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 p-2.5 text-xs font-bold text-slate-900 dark:text-white outline-none focus:border-brand-700"
               >
                 <option value="commerce_trade">Comercio (Venta de productos/bodega)</option>
                 <option value="services">Servicios profesionales o técnicos</option>
@@ -248,7 +248,7 @@ Motivo: ${result.recommendedReason}`;
                     key={regime.regimeId}
                     className={`rounded-2xl border p-3.5 transition-all ${
                       isRecommended
-                        ? 'border-[#08734F] bg-emerald-50/80 dark:bg-emerald-950/60 ring-2 ring-[#08734F]/20'
+                        ? 'border-brand-700 bg-emerald-50/80 dark:bg-emerald-950/60 ring-2 ring-brand-700/20'
                         : regime.isEligible
                         ? 'border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950'
                         : 'border-slate-200 dark:border-slate-800 bg-slate-100/60 dark:bg-slate-900/40 opacity-70'
@@ -259,7 +259,7 @@ Motivo: ${result.recommendedReason}`;
                         {regime.name.split('(')[0]}
                       </span>
                       {isRecommended && (
-                        <span className="inline-flex items-center gap-1 rounded-md bg-[#08734F] text-white px-2 py-0.2 text-[10px] font-bold shrink-0">
+                        <span className="inline-flex items-center gap-1 rounded-md bg-brand-700 text-white px-2 py-0.2 text-[10px] font-bold shrink-0">
                           <Sparkles className="h-2.5 w-2.5 text-amber-300" />
                           Recomendado
                         </span>
@@ -279,7 +279,7 @@ Motivo: ${result.recommendedReason}`;
                     <div className="mt-2 text-[11px] text-slate-600 dark:text-slate-400 space-y-1">
                       <div className="flex items-center gap-1">
                         {regime.canIssueFactura ? (
-                          <Check className="h-3 w-3 text-[#08734F] shrink-0" />
+                          <Check className="h-3 w-3 text-brand-700 shrink-0" />
                         ) : (
                           <X className="h-3 w-3 text-rose-500 shrink-0" />
                         )}
@@ -304,7 +304,7 @@ Motivo: ${result.recommendedReason}`;
               <span className="text-xs font-bold uppercase tracking-wider text-emerald-950 dark:text-emerald-300">
                 Diagnóstico SUNAT
               </span>
-              <span className="rounded-full bg-emerald-50 dark:bg-emerald-950/70 border border-emerald-200 dark:border-emerald-800 px-2.5 py-0.5 text-[11px] font-bold text-[#08734F] dark:text-emerald-300">
+              <span className="rounded-full bg-emerald-50 dark:bg-emerald-950/70 border border-emerald-200 dark:border-emerald-800 px-2.5 py-0.5 text-[11px] font-bold text-brand-700 dark:text-emerald-300">
                 SUNAT 2026
               </span>
             </div>
@@ -316,7 +316,7 @@ Motivo: ${result.recommendedReason}`;
               </span>
               <div
                 title={result.recommendedRegimeName}
-                className="text-2xl sm:text-3xl font-black text-[#08734F] dark:text-emerald-400 mt-1 tracking-tight break-words px-2"
+                className="text-2xl sm:text-3xl font-black text-brand-700 dark:text-emerald-400 mt-1 tracking-tight break-words px-2"
               >
                 {result.recommendedRegimeName}
               </div>

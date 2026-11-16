@@ -189,7 +189,7 @@ Compra: S/ ${result.buyRate.toFixed(3)} | Venta: S/ ${result.sellRate.toFixed(3)
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
               <div className="space-y-1.5 p-3 bg-white dark:bg-slate-950 rounded-xl border border-slate-200 dark:border-slate-800">
-                <span className="font-bold text-[#08734F] dark:text-emerald-400 block">• Para Comprobantes de Venta:</span>
+                <span className="font-bold text-brand-700 dark:text-emerald-400 block">• Para Comprobantes de Venta:</span>
                 <p className="text-slate-600 dark:text-slate-300">
                   Se debe utilizar el tipo de cambio promedio ponderado <strong>COMPRA</strong> cotizado por la SBS al cierre del día anterior.
                 </p>
@@ -231,7 +231,7 @@ Compra: S/ ${result.buyRate.toFixed(3)} | Venta: S/ ${result.sellRate.toFixed(3)
                   <tr className="bg-emerald-50 dark:bg-emerald-950 font-bold">
                     <td className="p-2.5 text-slate-900 dark:text-white">Tipo de Cambio SBS / SUNAT</td>
                     <td className="p-2.5 text-slate-500 font-normal">Contabilidad y liquidación de impuestos</td>
-                    <td className="p-2.5 text-[#08734F] dark:text-emerald-300">Oficial para libros contables y PDT</td>
+                    <td className="p-2.5 text-brand-700 dark:text-emerald-300">Oficial para libros contables y PDT</td>
                   </tr>
                 </tbody>
               </table>
@@ -287,12 +287,12 @@ Compra: S/ ${result.buyRate.toFixed(3)} | Venta: S/ ${result.sellRate.toFixed(3)
           {/* Header with Live Pulse indicator */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3 gap-2">
             <div className="flex items-center gap-2.5">
-              <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-50 text-[#08734F] dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/60">
+              <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-50 text-brand-700 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/60">
                 <DollarSign className="h-4.5 w-4.5" />
               </div>
               <div>
                 <h2 className="text-lg font-bold text-slate-900 dark:text-white leading-tight">Conversión referencial</h2>
-                <div className="flex items-center gap-1.5 text-[11px] font-semibold text-[#08734F] dark:text-emerald-400">
+                <div className="flex items-center gap-1.5 text-[11px] font-semibold text-brand-700 dark:text-emerald-400">
                   <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
                   <span>{lastUpdatedText}</span>
                 </div>
@@ -303,7 +303,7 @@ Compra: S/ ${result.buyRate.toFixed(3)} | Venta: S/ ${result.sellRate.toFixed(3)
             <button
               type="button"
               onClick={() => setConversionMode(isUsdToPen ? 'pen_to_usd' : 'usd_to_pen')}
-              className="inline-flex items-center gap-1.5 rounded-xl border border-emerald-200 dark:border-emerald-800 bg-emerald-50 dark:bg-emerald-950/60 px-3 py-1.5 text-xs font-bold text-[#08734F] dark:text-emerald-300 hover:bg-emerald-100 cursor-pointer transition-all shadow-2xs self-start sm:self-auto"
+              className="inline-flex items-center gap-1.5 rounded-xl border border-emerald-200 dark:border-emerald-800 bg-emerald-50 dark:bg-emerald-950/60 px-3 py-1.5 text-xs font-bold text-brand-700 dark:text-emerald-300 hover:bg-emerald-100 cursor-pointer transition-all shadow-2xs self-start sm:self-auto"
             >
               <ArrowLeftRight className="h-3.5 w-3.5" />
               <span>Invertir ({isUsdToPen ? 'USD a PEN' : 'PEN a USD'})</span>
@@ -333,7 +333,7 @@ Compra: S/ ${result.buyRate.toFixed(3)} | Venta: S/ ${result.sellRate.toFixed(3)
                   setSource(nextSource);
                   setShowCustomRates(nextSource === 'custom');
                 }}
-                className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 p-2.5 text-xs font-bold text-slate-900 dark:text-white outline-none focus:border-[#08734F]"
+                className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 p-2.5 text-xs font-bold text-slate-900 dark:text-white outline-none focus:border-brand-700"
               >
                 <option value="market" disabled={!hasValidQuote(publishedRates.market)}>
                   Mercado USD/PEN actualizado
@@ -368,7 +368,7 @@ Compra: S/ ${result.buyRate.toFixed(3)} | Venta: S/ ${result.sellRate.toFixed(3)
                   setSource('custom');
                 }
               }}
-              className="text-xs font-bold text-[#08734F] dark:text-emerald-400 hover:underline flex items-center gap-1 cursor-pointer"
+              className="text-xs font-bold text-brand-700 dark:text-emerald-400 hover:underline flex items-center gap-1 cursor-pointer"
             >
               <Settings2 className="h-3.5 w-3.5" />
               <span>{showCustomRates ? 'Ocultar ajuste manual' : '⚙️ Editar o ingresar tasa manual'}</span>
@@ -423,7 +423,7 @@ Compra: S/ ${result.buyRate.toFixed(3)} | Venta: S/ ${result.sellRate.toFixed(3)
               <span className="text-xs font-bold uppercase tracking-wider text-emerald-950 dark:text-emerald-300">
                 Resultado de Conversión
               </span>
-              <span className="rounded-full bg-emerald-50 dark:bg-emerald-950/70 border border-emerald-200 dark:border-emerald-800 px-2.5 py-0.5 text-[11px] font-bold text-[#08734F] dark:text-emerald-300">
+              <span className="rounded-full bg-emerald-50 dark:bg-emerald-950/70 border border-emerald-200 dark:border-emerald-800 px-2.5 py-0.5 text-[11px] font-bold text-brand-700 dark:text-emerald-300">
                 {result.sourceName}
               </span>
             </div>
@@ -435,7 +435,7 @@ Compra: S/ ${result.buyRate.toFixed(3)} | Venta: S/ ${result.sellRate.toFixed(3)
               </span>
               <div
                 title={hasCompleteRate ? (isUsdToPen ? formatCurrency(result.convertedAmount) : `$ ${formatNumber(result.convertedAmount)} USD`) : 'Esperando una cotización completa'}
-                className="text-3xl sm:text-4xl lg:text-[2.6rem] font-black text-[#08734F] dark:text-emerald-400 mt-1.5 font-mono tracking-tight tabular-nums break-words leading-tight"
+                className="text-3xl sm:text-4xl lg:text-[2.6rem] font-black text-brand-700 dark:text-emerald-400 mt-1.5 font-mono tracking-tight tabular-nums break-words leading-tight"
               >
                 {hasCompleteRate
                   ? isUsdToPen

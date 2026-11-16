@@ -32,14 +32,14 @@ export default function GuiasPage() {
         <ul className="grid gap-4">
           {GUIDES.map((guide) => (
             <li key={guide.slug}>
-              <Link href={`/guias/${guide.slug}`} className="app-card p-6 flex flex-col gap-2 group hover:border-[#08734F] transition-all">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-[#08734F] dark:text-emerald-400">{guide.category}</span>
-                <h2 className="text-lg font-bold group-hover:text-[#08734F] dark:group-hover:text-emerald-400 transition-colors">{guide.title}</h2>
+              <Link href={`/guias/${guide.slug}`} className="app-card p-6 flex flex-col gap-2 group hover:border-brand-700 transition-all">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-brand-700 dark:text-emerald-400">{guide.category}</span>
+                <h2 className="text-lg font-bold group-hover:text-brand-700 dark:group-hover:text-emerald-400 transition-colors">{guide.title}</h2>
                 <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">{guide.description}</p>
                 <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-500 dark:text-slate-400">
                   <span className="inline-flex items-center gap-1"><Clock className="h-3.5 w-3.5" aria-hidden="true" />{guide.readingMinutes} min de lectura</span>
                   <span>Actualizada el {formatDate(guide.updated)}</span>
-                  <span className="ml-auto inline-flex items-center gap-1 font-bold text-[#08734F] dark:text-emerald-400">Leer guía <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" /></span>
+                  <span className="ml-auto inline-flex items-center gap-1 font-bold text-brand-700 dark:text-emerald-400">Leer guía <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" /></span>
                 </div>
               </Link>
             </li>
@@ -47,7 +47,7 @@ export default function GuiasPage() {
         </ul>
 
         <p className="text-xs text-slate-500 dark:text-slate-400">
-          ¿Echas de menos un tema? <Link href="/contacto" className="font-bold text-[#08734F] dark:text-emerald-400 hover:underline">Cuéntanos</Link>. También puedes revisar el <Link href="/actualizaciones" className="font-bold text-[#08734F] dark:text-emerald-400 hover:underline">registro de actualizaciones</Link>.
+          ¿Echas de menos un tema? <Link href="/contacto" className="font-bold text-brand-700 dark:text-emerald-400 hover:underline">Cuéntanos</Link>. También puedes revisar el <Link href="/actualizaciones" className="font-bold text-brand-700 dark:text-emerald-400 hover:underline">registro de actualizaciones</Link>.
         </p>
       </div>
     </div>

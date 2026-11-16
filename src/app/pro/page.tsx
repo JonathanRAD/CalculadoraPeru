@@ -189,14 +189,14 @@ export default function ProSubscriptionPage() {
           
           {/* Left Column: Value Proposition & Switchers */}
           <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
-            <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-50 dark:bg-emerald-950/60 px-4 py-1.5 text-xs font-bold text-[#00875A] dark:text-[#00C853] shadow-xs">
+            <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-50 dark:bg-emerald-950/60 px-4 py-1.5 text-xs font-bold text-brand-600 dark:text-brand-400 shadow-xs">
               <Sparkles className="h-4 w-4 text-amber-500 fill-amber-500" />
               <span>LA SUITE DEFINITIVA PARA MYPES Y PROFESIONALES DEL PERÚ</span>
             </div>
 
             <h1 className="text-3xl sm:text-5xl lg:text-5xl font-black text-slate-950 dark:text-white tracking-tight leading-[1.1]">
               Automatiza tus planillas, cotizaciones y finanzas con{' '}
-              <span className="bg-gradient-to-r from-[#00875A] via-emerald-500 to-teal-400 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-brand-600 via-emerald-500 to-teal-400 bg-clip-text text-transparent">
                 CalculaPerú PRO
               </span>
             </h1>
@@ -237,12 +237,12 @@ export default function ProSubscriptionPage() {
                   onClick={() => setBillingCycle('yearly')}
                   className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
                     billingCycle === 'yearly'
-                      ? 'bg-white dark:bg-slate-900 text-[#00875A] dark:text-[#00C853] shadow-xs'
+                      ? 'bg-white dark:bg-slate-900 text-brand-600 dark:text-brand-400 shadow-xs'
                       : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                   }`}
                 >
                   <span>Plan Anual · S/ 149 / año</span>
-                  <span className="px-1.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950 text-[#00875A] dark:text-[#00C853] text-[10px] font-black tracking-wider">
+                  <span className="px-1.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950 text-brand-600 dark:text-brand-400 text-[10px] font-black tracking-wider">
                     S/ 12.42/mes (-22%)
                   </span>
                 </button>
@@ -268,7 +268,7 @@ export default function ProSubscriptionPage() {
                   <button
                     type="button"
                     onClick={openActivationModal}
-                    className="inline-flex items-center gap-1.5 text-xs text-[#00875A] dark:text-emerald-400 font-bold hover:underline cursor-pointer"
+                    className="inline-flex items-center gap-1.5 text-xs text-brand-600 dark:text-emerald-400 font-bold hover:underline cursor-pointer"
                   >
                     <KeyRound className="w-3.5 h-3.5 text-amber-500" />
                     <span>¿Ya realizaste tu pago o tienes un código? Activar aquí</span>
@@ -385,7 +385,7 @@ export default function ProSubscriptionPage() {
           </div>
 
           {/* PRO Plan Card */}
-          <div className="rounded-3xl border-2 border-[#00875A] dark:border-emerald-500 bg-white dark:bg-slate-900 p-8 shadow-xl relative flex flex-col justify-between space-y-6">
+          <div className="rounded-3xl border-2 border-brand-600 dark:border-emerald-500 bg-white dark:bg-slate-900 p-8 shadow-xl relative flex flex-col justify-between space-y-6">
             <div className="space-y-4">
               <div className="flex justify-between items-start">
                 <div>
@@ -405,7 +405,7 @@ export default function ProSubscriptionPage() {
                 {billingCycle === 'yearly' ? (
                   <div>
                     <div className="flex items-baseline gap-1">
-                      <span className="text-4xl font-black font-mono text-[#00875A] dark:text-emerald-400">S/ 149</span>
+                      <span className="text-4xl font-black font-mono text-brand-600 dark:text-emerald-400">S/ 149</span>
                       <span className="text-xs text-slate-500 font-medium">/ al año</span>
                     </div>
                     <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">
@@ -415,7 +415,7 @@ export default function ProSubscriptionPage() {
                 ) : (
                   <div>
                     <div className="flex items-baseline gap-1">
-                      <span className="text-4xl font-black font-mono text-[#00875A] dark:text-emerald-400">S/ 16</span>
+                      <span className="text-4xl font-black font-mono text-brand-600 dark:text-emerald-400">S/ 16</span>
                       <span className="text-xs text-slate-500 font-medium">/ al mes</span>
                     </div>
                     <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">
@@ -450,31 +450,31 @@ export default function ProSubscriptionPage() {
 
               <div className="space-y-3 pt-4 border-t border-slate-100 dark:border-slate-800 text-xs">
                 <div className="flex items-start gap-2.5 text-slate-800 dark:text-slate-200 font-medium">
-                  <Check className="w-4 h-4 text-[#00875A] shrink-0 mt-0.5 font-bold" />
+                  <Check className="w-4 h-4 text-brand-600 shrink-0 mt-0.5 font-bold" />
                   <span><strong>Documentos Laborales Referenciales:</strong> Boletas y liquidaciones estructuradas bajo el D.S. 001-98-TR y D.L. 728 con tu Logo y RUC.</span>
                 </div>
                 <div className="flex items-start gap-2.5 text-slate-800 dark:text-slate-200 font-medium">
-                  <Check className="w-4 h-4 text-[#00875A] shrink-0 mt-0.5 font-bold" />
+                  <Check className="w-4 h-4 text-brand-600 shrink-0 mt-0.5 font-bold" />
                   <span><strong>Historial en la Nube (&quot;Mis Cálculos&quot;):</strong> Guarda y consulta tus liquidaciones y cotizaciones desde cualquier PC o celular.</span>
                 </div>
                 <div className="flex items-start gap-2.5 text-slate-800 dark:text-slate-200 font-medium">
-                  <Check className="w-4 h-4 text-[#00875A] shrink-0 mt-0.5 font-bold" />
+                  <Check className="w-4 h-4 text-brand-600 shrink-0 mt-0.5 font-bold" />
                   <span><strong>Exportación a Excel / CSV:</strong> Tablas y cronogramas descargables listos para hojas de cálculo.</span>
                 </div>
                 <div className="flex items-start gap-2.5 text-slate-800 dark:text-slate-200 font-medium">
-                  <Check className="w-4 h-4 text-[#00875A] shrink-0 mt-0.5 font-bold" />
+                  <Check className="w-4 h-4 text-brand-600 shrink-0 mt-0.5 font-bold" />
                   <span><strong>Estimador de Contingencias Laborales:</strong> Referencia de posibles sanciones e intereses por retrasos en depósitos de CTS o Gratificación.</span>
                 </div>
                 <div className="flex items-start gap-2.5 text-slate-800 dark:text-slate-200 font-medium">
-                  <Check className="w-4 h-4 text-[#00875A] shrink-0 mt-0.5 font-bold" />
+                  <Check className="w-4 h-4 text-brand-600 shrink-0 mt-0.5 font-bold" />
                   <span><strong>Cotizador Comercial PRO:</strong> Prepara presupuestos con catálogo propio, directorio de clientes, PDF con membrete y mensaje listo para WhatsApp.</span>
                 </div>
                 <div className="flex items-start gap-2.5 text-slate-800 dark:text-slate-200 font-medium">
-                  <Check className="w-4 h-4 text-[#00875A] shrink-0 mt-0.5 font-bold" />
+                  <Check className="w-4 h-4 text-brand-600 shrink-0 mt-0.5 font-bold" />
                   <span><strong>100% Sin Publicidad:</strong> Navegación ultrarrápida sin banners en ninguna calculadora.</span>
                 </div>
                 <div className="flex items-start gap-2.5 text-slate-800 dark:text-slate-200 font-medium">
-                  <Check className="w-4 h-4 text-[#00875A] shrink-0 mt-0.5 font-bold" />
+                  <Check className="w-4 h-4 text-brand-600 shrink-0 mt-0.5 font-bold" />
                   <span><strong>Soporte Prioritario por WhatsApp:</strong> Asistencia directa ante cualquier consulta operativa.</span>
                 </div>
               </div>
@@ -483,7 +483,7 @@ export default function ProSubscriptionPage() {
             <button
               type="button"
               onClick={() => handleOpenCheckout(billingCycle)}
-              className="w-full py-3.5 rounded-xl bg-[#00875A] hover:bg-[#00704A] text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all cursor-pointer shadow-lg shadow-emerald-950/15 hover:scale-[1.01]"
+              className="w-full py-3.5 rounded-xl bg-brand-600 hover:bg-brand-800 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all cursor-pointer shadow-lg shadow-emerald-950/15 hover:scale-[1.01]"
             >
               <Sparkles className="w-4 h-4 text-amber-300 fill-amber-300" />
               <span>
@@ -516,7 +516,7 @@ export default function ProSubscriptionPage() {
                   <tr>
                     <th className="p-4 font-bold w-1/2 text-sm">Funcionalidad</th>
                     <th className="p-4 font-bold text-center w-1/4 text-slate-500">Plan Gratuito</th>
-                    <th className="p-4 font-bold text-center w-1/4 text-[#00875A] dark:text-[#00C853] bg-emerald-50/50 dark:bg-emerald-950/30">
+                    <th className="p-4 font-bold text-center w-1/4 text-brand-600 dark:text-brand-400 bg-emerald-50/50 dark:bg-emerald-950/30">
                       CalculaPerú PRO
                     </th>
                   </tr>
@@ -530,28 +530,28 @@ export default function ProSubscriptionPage() {
                   <tr>
                     <td className="p-3.5 pl-4 font-medium">Boletas de Pago para Trabajadores (PDF)</td>
                     <td className="p-3.5 text-center text-slate-400">Con Marca de Agua</td>
-                    <td className="p-3.5 text-center font-bold text-[#00875A] dark:text-emerald-400 bg-emerald-50/30 dark:bg-emerald-950/20">
+                    <td className="p-3.5 text-center font-bold text-brand-600 dark:text-emerald-400 bg-emerald-50/30 dark:bg-emerald-950/20">
                       ✓ Ilimitadas sin marca
                     </td>
                   </tr>
                   <tr>
                     <td className="p-3.5 pl-4 font-medium">Membrete con RUC y Logotipo Corporativo</td>
                     <td className="p-3.5 text-center text-red-500 font-bold">✕</td>
-                    <td className="p-3.5 text-center font-bold text-[#00875A] dark:text-emerald-400 bg-emerald-50/30 dark:bg-emerald-950/20">
+                    <td className="p-3.5 text-center font-bold text-brand-600 dark:text-emerald-400 bg-emerald-50/30 dark:bg-emerald-950/20">
                       ✓ Tu Logo e Imagen
                     </td>
                   </tr>
                   <tr>
                     <td className="p-3.5 pl-4 font-medium">Estructura Laboral Referencial (D.S. N° 001-98-TR) con Firmas y Huella</td>
                     <td className="p-3.5 text-center text-slate-400">Parcial</td>
-                    <td className="p-3.5 text-center font-bold text-[#00875A] dark:text-emerald-400 bg-emerald-50/30 dark:bg-emerald-950/20">
+                    <td className="p-3.5 text-center font-bold text-brand-600 dark:text-emerald-400 bg-emerald-50/30 dark:bg-emerald-950/20">
                       ✓ Formato base
                     </td>
                   </tr>
                   <tr>
                     <td className="p-3.5 pl-4 font-medium">Liquidaciones Laborales Estructuradas D.L. 728</td>
                     <td className="p-3.5 text-center text-slate-500">S/ 9.90 por informe</td>
-                    <td className="p-3.5 text-center font-bold text-[#00875A] dark:text-emerald-400 bg-emerald-50/30 dark:bg-emerald-950/20">
+                    <td className="p-3.5 text-center font-bold text-brand-600 dark:text-emerald-400 bg-emerald-50/30 dark:bg-emerald-950/20">
                       ✓ S/ 0.00 Ilimitadas
                     </td>
                   </tr>
@@ -563,28 +563,28 @@ export default function ProSubscriptionPage() {
                   <tr>
                     <td className="p-3.5 pl-4 font-medium">Cotizador Comercial de Presupuestos para Clientes</td>
                     <td className="p-3.5 text-center text-slate-400">Básico</td>
-                    <td className="p-3.5 text-center font-bold text-[#00875A] dark:text-emerald-400 bg-emerald-50/30 dark:bg-emerald-950/20">
+                    <td className="p-3.5 text-center font-bold text-brand-600 dark:text-emerald-400 bg-emerald-50/30 dark:bg-emerald-950/20">
                       ✓ Membretado formal
                     </td>
                   </tr>
                   <tr>
                     <td className="p-3.5 pl-4 font-medium">Exportación a Excel (.CSV) con conceptos desglosados</td>
                     <td className="p-3.5 text-center text-red-500 font-bold">✕</td>
-                    <td className="p-3.5 text-center font-bold text-[#00875A] dark:text-emerald-400 bg-emerald-50/30 dark:bg-emerald-950/20">
+                    <td className="p-3.5 text-center font-bold text-brand-600 dark:text-emerald-400 bg-emerald-50/30 dark:bg-emerald-950/20">
                       ✓ Sí, en 1 clic
                     </td>
                   </tr>
                   <tr>
                     <td className="p-3.5 pl-4 font-medium">Acceso en Múltiples Computadoras (Oficina, Casa y Móvil)</td>
                     <td className="p-3.5 text-center text-slate-400">Solo navegador local</td>
-                    <td className="p-3.5 text-center font-bold text-[#00875A] dark:text-emerald-400 bg-emerald-50/30 dark:bg-emerald-950/20">
+                    <td className="p-3.5 text-center font-bold text-brand-600 dark:text-emerald-400 bg-emerald-50/30 dark:bg-emerald-950/20">
                       ✓ Cuenta en la Nube
                     </td>
                   </tr>
                   <tr>
                     <td className="p-3.5 pl-4 font-medium">Experiencia Sin Anuncios Publicitarios</td>
                     <td className="p-3.5 text-center text-red-500 font-bold">✕ Con anuncios</td>
-                    <td className="p-3.5 text-center font-bold text-[#00875A] dark:text-emerald-400 bg-emerald-50/30 dark:bg-emerald-950/20">
+                    <td className="p-3.5 text-center font-bold text-brand-600 dark:text-emerald-400 bg-emerald-50/30 dark:bg-emerald-950/20">
                       ✓ 100% Libre de ads
                     </td>
                   </tr>
@@ -609,7 +609,7 @@ export default function ProSubscriptionPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-3">
-              <div className="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-950 flex items-center justify-center text-[#00875A] dark:text-[#00C853]">
+              <div className="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-950 flex items-center justify-center text-brand-600 dark:text-brand-400">
                 <FileText className="w-5 h-5" />
               </div>
               <h3 className="font-bold text-slate-900 dark:text-white text-sm">Documentos Laborales Estructurados</h3>
@@ -733,7 +733,7 @@ export default function ProSubscriptionPage() {
             {/* Modal Header */}
             <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-4">
               <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-xl bg-emerald-100 dark:bg-emerald-950 flex items-center justify-center text-[#00875A] dark:text-[#00C853]">
+                <div className="w-8 h-8 rounded-xl bg-emerald-100 dark:bg-emerald-950 flex items-center justify-center text-brand-600 dark:text-brand-400">
                   <Sparkles className="w-4 h-4" />
                 </div>
                 <div>
@@ -756,7 +756,7 @@ export default function ProSubscriptionPage() {
 
             {isSuccess ? (
               <div className="text-center py-6 space-y-4 animate-in zoom-in-95">
-                <div className="w-14 h-14 bg-emerald-100 dark:bg-emerald-950 rounded-full flex items-center justify-center mx-auto text-[#00875A] dark:text-[#00C853]">
+                <div className="w-14 h-14 bg-emerald-100 dark:bg-emerald-950 rounded-full flex items-center justify-center mx-auto text-brand-600 dark:text-brand-400">
                   <CheckCircle2 className="w-8 h-8" />
                 </div>
                 <h4 className="text-lg font-bold text-slate-900 dark:text-white">
@@ -769,7 +769,7 @@ export default function ProSubscriptionPage() {
                   <button
                     type="button"
                     onClick={() => setIsCheckoutOpen(false)}
-                    className="py-2.5 px-6 rounded-xl bg-[#00875A] text-white font-bold text-xs shadow-md cursor-pointer"
+                    className="py-2.5 px-6 rounded-xl bg-brand-600 text-white font-bold text-xs shadow-md cursor-pointer"
                   >
                     Entendido, cerrar
                   </button>
@@ -788,7 +788,7 @@ export default function ProSubscriptionPage() {
                     </span>
                   </div>
                   <div className="text-right">
-                    <span className="text-lg font-black font-mono text-[#00875A] dark:text-[#00C853]">
+                    <span className="text-lg font-black font-mono text-brand-600 dark:text-brand-400">
                       {isCouponApplied ? 'S/ 0.00' : selectedPlan === 'yearly' ? 'S/ 149.00' : 'S/ 16.00'}
                     </span>
                     {isCouponApplied && (
@@ -839,7 +839,7 @@ export default function ProSubscriptionPage() {
                       placeholder="Ej. Juan Carlos Pérez / Estudio Contable"
                       value={subscriberName}
                       onChange={(e) => setSubscriberName(e.target.value)}
-                      className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-slate-900 dark:text-white outline-none focus:border-[#00875A]"
+                      className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-slate-900 dark:text-white outline-none focus:border-brand-600"
                     />
                   </div>
 
@@ -866,7 +866,7 @@ export default function ProSubscriptionPage() {
                         className={`w-full border rounded-xl px-3 py-2 text-slate-900 dark:text-white outline-none ${
                           user
                             ? 'bg-slate-100 dark:bg-slate-900/80 border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 cursor-not-allowed'
-                            : 'bg-slate-50 dark:bg-slate-950 border-slate-300 dark:border-slate-700 focus:border-[#00875A]'
+                            : 'bg-slate-50 dark:bg-slate-950 border-slate-300 dark:border-slate-700 focus:border-brand-600'
                         }`}
                       />
                     </div>
@@ -880,7 +880,7 @@ export default function ProSubscriptionPage() {
                         placeholder="Ej. 987 654 321"
                         value={subscriberPhone}
                         onChange={(e) => setSubscriberPhone(e.target.value)}
-                        className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-slate-900 dark:text-white outline-none focus:border-[#00875A]"
+                        className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-slate-900 dark:text-white outline-none focus:border-brand-600"
                       />
                     </div>
                   </div>
@@ -895,14 +895,14 @@ export default function ProSubscriptionPage() {
                       placeholder="Ej. Op. 4819203"
                       value={operationCode}
                       onChange={(e) => setOperationCode(e.target.value)}
-                      className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-slate-900 dark:text-white outline-none focus:border-[#00875A]"
+                      className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-slate-900 dark:text-white outline-none focus:border-brand-600"
                     />
                   </div>
 
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full py-3.5 rounded-xl bg-[#00875A] hover:bg-[#00704A] text-white font-bold text-xs flex items-center justify-center gap-2 transition-all cursor-pointer shadow-md disabled:opacity-50"
+                    className="w-full py-3.5 rounded-xl bg-brand-600 hover:bg-brand-800 text-white font-bold text-xs flex items-center justify-center gap-2 transition-all cursor-pointer shadow-md disabled:opacity-50"
                   >
                     {isSubmitting ? (
                       <span>Enviando confirmación...</span>

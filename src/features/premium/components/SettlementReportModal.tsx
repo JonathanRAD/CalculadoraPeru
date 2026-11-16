@@ -158,7 +158,7 @@ export function SettlementReportModal({
         {/* Modal Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/60 shrink-0">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-xl bg-emerald-100 dark:bg-emerald-950 flex items-center justify-center text-[#00875A] dark:text-[#00C853]">
+            <div className="w-8 h-8 rounded-xl bg-emerald-100 dark:bg-emerald-950 flex items-center justify-center text-brand-600 dark:text-brand-400">
               <FileText className="w-4 h-4" />
             </div>
             <div>
@@ -211,7 +211,7 @@ export function SettlementReportModal({
           {step === 'details' ? (
             <div className="space-y-4">
               <div className="p-3 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/80 rounded-xl flex items-start gap-2.5">
-                <Sparkles className="w-4 h-4 text-[#00875A] shrink-0 mt-0.5" />
+                <Sparkles className="w-4 h-4 text-brand-600 shrink-0 mt-0.5" />
                 <p className="text-emerald-900 dark:text-emerald-300 text-[11px] leading-relaxed">
                   Puedes ingresar tus nombres o los de la empresa para que aparezcan en el membrete y las casillas de firma. Si prefieres no colocarlos, el documento se emitirá en blanco para rellenar a mano.
                 </p>
@@ -220,7 +220,7 @@ export function SettlementReportModal({
               {/* Worker inputs */}
               <div className="space-y-3">
                 <span className="font-bold text-slate-900 dark:text-white flex items-center gap-1.5 text-xs uppercase tracking-wider">
-                  <User className="w-3.5 h-3.5 text-[#00875A]" />
+                  <User className="w-3.5 h-3.5 text-brand-600" />
                   <span>Datos del Trabajador</span>
                 </span>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -233,7 +233,7 @@ export function SettlementReportModal({
                       placeholder="Ej. Carlos Alberto Mendoza"
                       value={workerName}
                       onChange={(e) => setWorkerName(e.target.value)}
-                      className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-slate-900 dark:text-white outline-none focus:border-[#00875A]"
+                      className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-slate-900 dark:text-white outline-none focus:border-brand-600"
                     />
                   </div>
                   <div>
@@ -246,7 +246,7 @@ export function SettlementReportModal({
                       placeholder="Ej. 74829103"
                       value={workerDni}
                       onChange={(e) => setWorkerDni(e.target.value)}
-                      className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-slate-900 dark:text-white outline-none focus:border-[#00875A]"
+                      className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-slate-900 dark:text-white outline-none focus:border-brand-600"
                     />
                   </div>
                 </div>
@@ -259,7 +259,7 @@ export function SettlementReportModal({
                     placeholder="Ej. Asistente Administrativo / Operario"
                     value={workerPosition}
                     onChange={(e) => setWorkerPosition(e.target.value)}
-                    className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-slate-900 dark:text-white outline-none focus:border-[#00875A]"
+                    className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-slate-900 dark:text-white outline-none focus:border-brand-600"
                   />
                 </div>
               </div>
@@ -280,7 +280,7 @@ export function SettlementReportModal({
                       placeholder="Ej. Corporación Perú S.A.C."
                       value={companyName}
                       onChange={(e) => setCompanyName(e.target.value)}
-                      className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-slate-900 dark:text-white outline-none focus:border-[#00875A]"
+                      className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-slate-900 dark:text-white outline-none focus:border-brand-600"
                     />
                   </div>
                   <div>
@@ -293,7 +293,7 @@ export function SettlementReportModal({
                       placeholder="Ej. 20601234567"
                       value={companyRuc}
                       onChange={(e) => setCompanyRuc(e.target.value)}
-                      className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-slate-900 dark:text-white outline-none focus:border-[#00875A]"
+                      className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-slate-900 dark:text-white outline-none focus:border-brand-600"
                     />
                   </div>
                 </div>
@@ -303,7 +303,7 @@ export function SettlementReportModal({
                 <button
                   type="button"
                   onClick={() => setStep('payment')}
-                  className="w-full py-3 rounded-xl bg-[#00875A] hover:bg-[#00704A] text-white font-bold text-xs flex items-center justify-center gap-2 transition-colors cursor-pointer shadow-sm"
+                  className="w-full py-3 rounded-xl bg-brand-600 hover:bg-brand-800 text-white font-bold text-xs flex items-center justify-center gap-2 transition-colors cursor-pointer shadow-sm"
                 >
                   <span>Continuar al Pago y Descarga</span>
                   <span>→</span>
@@ -443,7 +443,7 @@ export function SettlementReportModal({
               {/* What is included */}
               <div className="space-y-1.5 text-[11px] text-slate-600 dark:text-slate-400">
                 <div className="flex items-center gap-2">
-                  <ShieldCheck className="w-3.5 h-3.5 text-[#00875A]" />
+                  <ShieldCheck className="w-3.5 h-3.5 text-brand-600" />
                   <span>Citación expresa de D.L. 728, D.S. 001-97-TR, Ley 27735 y D.L. 713.</span>
                 </div>
                 <div className="flex items-center gap-2">
@@ -462,7 +462,7 @@ export function SettlementReportModal({
                   type="button"
                   onClick={handleDownloadPdf}
                   disabled={isGenerating}
-                  className="flex-1 py-3.5 rounded-xl bg-[#00875A] hover:bg-[#00704A] disabled:opacity-60 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all cursor-pointer shadow-md shadow-emerald-900/10"
+                  className="flex-1 py-3.5 rounded-xl bg-brand-600 hover:bg-brand-800 disabled:opacity-60 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all cursor-pointer shadow-md shadow-emerald-900/10"
                 >
                   {isGenerating ? (
                     <span>Generando Liquidación en PDF...</span>

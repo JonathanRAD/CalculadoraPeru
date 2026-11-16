@@ -197,7 +197,7 @@ export function SubmissionsTab() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h2 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
-            <Inbox className="w-5 h-5 text-[#00875A]" />
+            <Inbox className="w-5 h-5 text-brand-600" />
             <span>Bandeja Unificada de Contacto & Feedback</span>
           </h2>
           <p className="text-xs text-slate-500 mt-0.5">
@@ -517,7 +517,7 @@ export function SubmissionsTab() {
           <div className="w-full max-w-2xl rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-2xl text-xs space-y-4 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
               <div className="flex items-center gap-2">
-                <Inbox className="w-5 h-5 text-[#00875A]" />
+                <Inbox className="w-5 h-5 text-brand-600" />
                 <h3 className="text-base font-bold text-slate-900 dark:text-white">
                   Solicitud {selectedSubmission.publicRequestId}
                 </h3>

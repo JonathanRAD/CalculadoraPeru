@@ -99,7 +99,7 @@ export function AuthModal() {
 
         {/* Header with Icon */}
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-[#00875A] to-emerald-400 flex items-center justify-center text-white shadow-md shadow-emerald-500/20">
+          <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-brand-600 to-emerald-400 flex items-center justify-center text-white shadow-md shadow-emerald-500/20">
             <ShieldCheck className="w-5 h-5" />
           </div>
           <div>
@@ -169,7 +169,7 @@ export function AuthModal() {
                   placeholder="Ej. Juan Pérez / Estudio Contable"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl pl-9 pr-3 py-2 text-slate-900 dark:text-white outline-none focus:border-[#00875A]"
+                  className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl pl-9 pr-3 py-2 text-slate-900 dark:text-white outline-none focus:border-brand-600"
                 />
               </div>
             </div>
@@ -187,7 +187,7 @@ export function AuthModal() {
                 placeholder="tu@correo.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl pl-9 pr-3 py-2 text-slate-900 dark:text-white outline-none focus:border-[#00875A]"
+                className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl pl-9 pr-3 py-2 text-slate-900 dark:text-white outline-none focus:border-brand-600"
               />
             </div>
           </div>
@@ -211,7 +211,7 @@ export function AuthModal() {
                 placeholder={isLogin ? '••••••••' : 'Crea una contraseña segura'}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl pl-9 pr-10 py-2 text-slate-900 dark:text-white outline-none focus:border-[#00875A]"
+                className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl pl-9 pr-10 py-2 text-slate-900 dark:text-white outline-none focus:border-brand-600"
               />
               <button
                 type="button"
@@ -282,7 +282,7 @@ export function AuthModal() {
                       ? isMatch
                         ? 'border-emerald-500 focus:border-emerald-500'
                         : 'border-red-400 focus:border-red-500'
-                      : 'border-slate-300 dark:border-slate-700 focus:border-[#00875A]'
+                      : 'border-slate-300 dark:border-slate-700 focus:border-brand-600'
                   }`}
                 />
                 <button
@@ -318,7 +318,7 @@ export function AuthModal() {
           <button
             type="submit"
             disabled={isLoading || (!isLogin && (!isPasswordSecure || !isMatch))}
-            className="w-full py-3 bg-[#00875A] hover:bg-[#00704A] text-white font-bold rounded-xl text-xs flex items-center justify-center gap-2 shadow-md shadow-emerald-950/20 transition-all cursor-pointer disabled:opacity-50"
+            className="w-full py-3 bg-brand-600 hover:bg-brand-800 text-white font-bold rounded-xl text-xs flex items-center justify-center gap-2 shadow-md shadow-emerald-950/20 transition-all cursor-pointer disabled:opacity-50"
           >
             {isLoading ? (
               <span>Procesando...</span>
@@ -342,7 +342,7 @@ export function AuthModal() {
                   setErrorMessage('');
                   openAuthModal('register');
                 }}
-                className="font-bold text-[#00875A] dark:text-[#00C853] hover:underline"
+                className="font-bold text-brand-600 dark:text-brand-400 hover:underline"
               >
                 Regístrate gratis
               </button>
@@ -356,7 +356,7 @@ export function AuthModal() {
                   setErrorMessage('');
                   openAuthModal('login');
                 }}
-                className="font-bold text-[#00875A] dark:text-[#00C853] hover:underline"
+                className="font-bold text-brand-600 dark:text-brand-400 hover:underline"
               >
                 Inicia sesión
               </button>

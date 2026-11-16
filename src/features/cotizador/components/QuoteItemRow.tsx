@@ -59,7 +59,7 @@ export const QuoteItemRow: React.FC<QuoteItemRowProps> = ({
                 Servicio
               </span>
             ) : (
-              <span className="inline-flex items-center gap-1 rounded bg-emerald-50 dark:bg-emerald-950/70 text-[#00875A] dark:text-[#00C853] px-2 py-0.5 border border-emerald-200 dark:border-emerald-800/60 font-medium text-[11px]">
+              <span className="inline-flex items-center gap-1 rounded bg-emerald-50 dark:bg-emerald-950/70 text-brand-600 dark:text-brand-400 px-2 py-0.5 border border-emerald-200 dark:border-emerald-800/60 font-medium text-[11px]">
                 <Package className="h-3 w-3" />
                 Producto
               </span>
@@ -99,7 +99,7 @@ export const QuoteItemRow: React.FC<QuoteItemRowProps> = ({
           <button
             type="button"
             onClick={onDuplicate}
-            className="p-1 rounded text-slate-400 hover:text-[#00875A] dark:hover:text-[#00C853] hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer transition-colors"
+            className="p-1 rounded text-slate-400 hover:text-brand-600 dark:hover:text-brand-400 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer transition-colors"
             title="Duplicar este concepto"
             aria-label={`Duplicar concepto #${index + 1}`}
           >
@@ -134,7 +134,7 @@ export const QuoteItemRow: React.FC<QuoteItemRowProps> = ({
             value={item.description}
             onChange={(e) => onChange({ description: e.target.value })}
             placeholder="Ej: Servicio de mantenimiento preventivo, Polo de algodón..."
-            className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 px-3.5 py-2.5 text-xs text-slate-900 dark:text-white placeholder:text-slate-400 outline-none focus:border-[#00875A] dark:focus:border-[#00C853] transition-colors"
+            className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 px-3.5 py-2.5 text-xs text-slate-900 dark:text-white placeholder:text-slate-400 outline-none focus:border-brand-600 dark:focus:border-brand-400 transition-colors"
           />
         </div>
 
@@ -147,7 +147,7 @@ export const QuoteItemRow: React.FC<QuoteItemRowProps> = ({
             id={`unit-${index}`}
             value={item.unit}
             onChange={(e) => onChange({ unit: e.target.value as UnitType })}
-            className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 px-2.5 py-2.5 text-xs text-slate-900 dark:text-white outline-none focus:border-[#00875A] cursor-pointer"
+            className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 px-2.5 py-2.5 text-xs text-slate-900 dark:text-white outline-none focus:border-brand-600 cursor-pointer"
           >
             {UNIT_OPTIONS.map((opt) => (
               <option key={opt.value} value={opt.value}>
@@ -176,7 +176,7 @@ export const QuoteItemRow: React.FC<QuoteItemRowProps> = ({
               onChange({ quantity: isNaN(val) ? 0 : val });
             }}
             placeholder="1"
-            className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 px-3 py-2.5 text-xs text-slate-900 dark:text-white font-mono outline-none focus:border-[#00875A]"
+            className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 px-3 py-2.5 text-xs text-slate-900 dark:text-white font-mono outline-none focus:border-brand-600"
           />
         </div>
 
@@ -201,7 +201,7 @@ export const QuoteItemRow: React.FC<QuoteItemRowProps> = ({
                 onChange({ unitPrice: isNaN(val) ? 0 : val });
               }}
               placeholder="0.00"
-              className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 pl-7 pr-2.5 py-2.5 text-xs text-slate-900 dark:text-white font-mono outline-none focus:border-[#00875A]"
+              className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 pl-7 pr-2.5 py-2.5 text-xs text-slate-900 dark:text-white font-mono outline-none focus:border-brand-600"
             />
           </div>
         </div>
@@ -246,7 +246,7 @@ export const QuoteItemRow: React.FC<QuoteItemRowProps> = ({
                   onChange({ discountValue: isNaN(v) ? 0 : v });
                 }}
                 placeholder={item.discountType === 'percent' ? '10%' : 'S/ 20'}
-                className="w-20 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 px-2 py-1 text-xs text-slate-900 dark:text-white font-mono outline-none focus:border-[#00875A]"
+                className="w-20 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 px-2 py-1 text-xs text-slate-900 dark:text-white font-mono outline-none focus:border-brand-600"
               />
               <span className="text-[11px] text-rose-600 dark:text-rose-400 font-mono">
                 {item.discountAmount > 0 && `(-S/ ${item.discountAmount.toFixed(2)})`}
@@ -263,7 +263,7 @@ export const QuoteItemRow: React.FC<QuoteItemRowProps> = ({
               type="checkbox"
               checked={item.isIgvAffected}
               onChange={(e) => onChange({ isIgvAffected: e.target.checked })}
-              className="rounded border-slate-300 dark:border-slate-700 text-[#00875A] focus:ring-0 cursor-pointer h-3.5 w-3.5"
+              className="rounded border-slate-300 dark:border-slate-700 text-brand-600 focus:ring-0 cursor-pointer h-3.5 w-3.5"
             />
             <span>Afecto a IGV</span>
           </label>
@@ -271,7 +271,7 @@ export const QuoteItemRow: React.FC<QuoteItemRowProps> = ({
           {/* Subtotal line display */}
           <div className="text-right">
             <span className="text-[10px] text-slate-400 block">Total concepto:</span>
-            <span className="text-sm font-bold font-mono text-[#00875A] dark:text-[#00C853]">
+            <span className="text-sm font-bold font-mono text-brand-600 dark:text-brand-400">
               S/ {item.netAmount.toFixed(2)}
             </span>
           </div>

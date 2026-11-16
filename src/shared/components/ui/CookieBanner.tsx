@@ -45,7 +45,7 @@ export function CookieBanner() {
       <div className="bg-white dark:bg-[#131A35] border border-slate-300 dark:border-slate-700 rounded-2xl p-4 sm:p-5 shadow-2xl text-slate-800 dark:text-slate-200 text-xs space-y-3">
         <div className="flex items-start justify-between gap-3">
           <div className="flex items-center gap-2 font-bold text-slate-900 dark:text-white">
-            <Cookie className="h-4 w-4 text-[#00875A] dark:text-[#00C853] shrink-0" />
+            <Cookie className="h-4 w-4 text-brand-600 dark:text-brand-400 shrink-0" />
             <span>Aviso de Cookies y Privacidad</span>
           </div>
           <button
@@ -78,7 +78,7 @@ export function CookieBanner() {
             </button>
             <button
               onClick={() => choose(true)}
-              className="px-4 py-2 bg-[#00875A] hover:bg-[#00704A] text-white font-bold rounded-lg text-xs transition-colors shadow-xs cursor-pointer"
+              className="px-4 py-2 bg-brand-600 hover:bg-brand-800 text-white font-bold rounded-lg text-xs transition-colors shadow-xs cursor-pointer"
             >
               Aceptar
             </button>

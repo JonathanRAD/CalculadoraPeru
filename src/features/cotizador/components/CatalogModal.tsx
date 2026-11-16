@@ -165,7 +165,7 @@ export const CatalogModal: React.FC<CatalogModalProps> = ({
         <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-4 mb-4">
           <div>
             <h2 id="catalog-modal-title" className="text-lg font-bold text-slate-950 dark:text-white flex items-center gap-2">
-              <Package className="h-5 w-5 text-[#00875A] dark:text-[#00C853]" />
+              <Package className="h-5 w-5 text-brand-600 dark:text-brand-400" />
               {mode === 'list' ? 'Catálogo de Productos y Servicios' : 'Registrar Nuevo Concepto'}
             </h2>
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
@@ -195,7 +195,7 @@ export const CatalogModal: React.FC<CatalogModalProps> = ({
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   placeholder="Buscar por nombre, SKU o descripción..."
-                  className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 pl-9 pr-3.5 py-2.5 text-xs text-slate-900 dark:text-white placeholder:text-slate-400 focus:border-[#00875A] outline-none"
+                  className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 pl-9 pr-3.5 py-2.5 text-xs text-slate-900 dark:text-white placeholder:text-slate-400 focus:border-brand-600 outline-none"
                 />
               </div>
 
@@ -227,7 +227,7 @@ export const CatalogModal: React.FC<CatalogModalProps> = ({
                     setFormError(null);
                     setMode('new');
                   }}
-                  className="rounded-xl bg-[#00875A] hover:bg-[#00704A] px-4 py-2.5 text-xs font-bold text-white transition-colors flex items-center gap-1.5 shrink-0 cursor-pointer shadow-sm"
+                  className="rounded-xl bg-brand-600 hover:bg-brand-800 px-4 py-2.5 text-xs font-bold text-white transition-colors flex items-center gap-1.5 shrink-0 cursor-pointer shadow-sm"
                 >
                   <Plus className="h-4 w-4" />
                   <span>+ Agregar Ítem</span>
@@ -239,7 +239,7 @@ export const CatalogModal: React.FC<CatalogModalProps> = ({
             <div className="flex-1 overflow-y-auto space-y-2.5 pr-1 min-h-[220px]">
               {isLoading ? (
                 <div className="flex flex-col items-center justify-center py-12 text-slate-400 gap-2">
-                  <Loader2 className="h-6 w-6 animate-spin text-[#00875A]" />
+                  <Loader2 className="h-6 w-6 animate-spin text-brand-600" />
                   <span className="text-xs">Cargando catálogo...</span>
                 </div>
               ) : error ? (
@@ -263,7 +263,7 @@ export const CatalogModal: React.FC<CatalogModalProps> = ({
                       onSelectItem(item);
                       onClose();
                     }}
-                    className="w-full text-left rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/60 p-3.5 hover:border-[#00875A] transition-all cursor-pointer group flex items-center justify-between"
+                    className="w-full text-left rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/60 p-3.5 hover:border-brand-600 transition-all cursor-pointer group flex items-center justify-between"
                   >
                     <div className="space-y-1 pr-3">
                       <div className="flex items-center gap-2">
@@ -273,12 +273,12 @@ export const CatalogModal: React.FC<CatalogModalProps> = ({
                             Servicio
                           </span>
                         ) : (
-                          <span className="rounded bg-emerald-50 dark:bg-emerald-950/70 text-[#00875A] dark:text-[#00C853] px-1.5 py-0.5 text-[10px] font-bold border border-emerald-200 dark:border-emerald-800/60 flex items-center gap-1">
+                          <span className="rounded bg-emerald-50 dark:bg-emerald-950/70 text-brand-600 dark:text-brand-400 px-1.5 py-0.5 text-[10px] font-bold border border-emerald-200 dark:border-emerald-800/60 flex items-center gap-1">
                             <Package className="h-3 w-3" />
                             Producto
                           </span>
                         )}
-                        <span className="font-bold text-sm text-slate-900 dark:text-white group-hover:text-[#00875A] dark:group-hover:text-[#00C853] transition-colors">
+                        <span className="font-bold text-sm text-slate-900 dark:text-white group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">
                           {item.name}
                         </span>
                         {item.sku && (
@@ -303,7 +303,7 @@ export const CatalogModal: React.FC<CatalogModalProps> = ({
 
                     <div className="text-right shrink-0 flex items-center gap-3">
                       <div>
-                        <div className="text-base font-bold font-mono text-[#00875A] dark:text-[#00C853]">
+                        <div className="text-base font-bold font-mono text-brand-600 dark:text-brand-400">
                           S/ {item.price.toFixed(2)}
                         </div>
                         <span className="text-[10px] uppercase font-bold text-slate-400">
@@ -361,7 +361,7 @@ export const CatalogModal: React.FC<CatalogModalProps> = ({
                   value={sku}
                   onChange={(e) => setSku(e.target.value)}
                   placeholder="Ej: POL-24-001"
-                  className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 px-3.5 py-2.5 text-xs text-slate-900 dark:text-white placeholder:text-slate-400 focus:border-[#00875A] outline-none font-mono"
+                  className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 px-3.5 py-2.5 text-xs text-slate-900 dark:text-white placeholder:text-slate-400 focus:border-brand-600 outline-none font-mono"
                 />
               </div>
             </div>
@@ -378,7 +378,7 @@ export const CatalogModal: React.FC<CatalogModalProps> = ({
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Ej: Servicio de mantenimiento, Polo de algodón 24/1..."
-                className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 px-3.5 py-2.5 text-xs text-slate-900 dark:text-white placeholder:text-slate-400 focus:border-[#00875A] outline-none"
+                className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 px-3.5 py-2.5 text-xs text-slate-900 dark:text-white placeholder:text-slate-400 focus:border-brand-600 outline-none"
               />
             </div>
 
@@ -393,7 +393,7 @@ export const CatalogModal: React.FC<CatalogModalProps> = ({
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="Especificaciones, alcance o notas..."
-                className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 px-3.5 py-2 text-xs text-slate-900 dark:text-white placeholder:text-slate-400 focus:border-[#00875A] outline-none resize-none"
+                className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 px-3.5 py-2 text-xs text-slate-900 dark:text-white placeholder:text-slate-400 focus:border-brand-600 outline-none resize-none"
               />
             </div>
 
@@ -432,7 +432,7 @@ export const CatalogModal: React.FC<CatalogModalProps> = ({
                     value={price}
                     onChange={(e) => setPrice(e.target.value === '' ? '' : parseFloat(e.target.value))}
                     placeholder="0.00"
-                    className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 pl-8 pr-3.5 py-2.5 text-xs text-slate-900 dark:text-white font-mono focus:border-[#00875A] outline-none"
+                    className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 pl-8 pr-3.5 py-2.5 text-xs text-slate-900 dark:text-white font-mono focus:border-brand-600 outline-none"
                   />
                 </div>
               </div>
@@ -444,7 +444,7 @@ export const CatalogModal: React.FC<CatalogModalProps> = ({
                   type="checkbox"
                   checked={isIgvAffected}
                   onChange={(e) => setIsIgvAffected(e.target.checked)}
-                  className="rounded border-slate-300 dark:border-slate-700 text-[#00875A] focus:ring-0 cursor-pointer h-4 w-4"
+                  className="rounded border-slate-300 dark:border-slate-700 text-brand-600 focus:ring-0 cursor-pointer h-4 w-4"
                 />
                 <span>Afecto a IGV (18%)</span>
               </label>
@@ -464,7 +464,7 @@ export const CatalogModal: React.FC<CatalogModalProps> = ({
               <button
                 type="submit"
                 disabled={isSaving}
-                className="rounded-xl bg-[#00875A] hover:bg-[#00704A] px-5 py-2.5 text-xs font-bold text-white transition-colors cursor-pointer disabled:opacity-50"
+                className="rounded-xl bg-brand-600 hover:bg-brand-800 px-5 py-2.5 text-xs font-bold text-white transition-colors cursor-pointer disabled:opacity-50"
               >
                 {isSaving ? 'Guardando...' : 'Guardar y Usar'}
               </button>

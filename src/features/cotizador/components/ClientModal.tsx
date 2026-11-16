@@ -120,7 +120,7 @@ export const ClientModal: React.FC<ClientModalProps> = ({
         <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-4 mb-4">
           <div>
             <h2 id="client-modal-title" className="text-lg font-bold text-slate-950 dark:text-white flex items-center gap-2">
-              <Building className="h-5 w-5 text-[#00875A] dark:text-[#00C853]" />
+              <Building className="h-5 w-5 text-brand-600 dark:text-brand-400" />
               {mode === 'list' ? 'Directorio de Clientes' : 'Registrar Nuevo Cliente'}
             </h2>
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
@@ -150,7 +150,7 @@ export const ClientModal: React.FC<ClientModalProps> = ({
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   placeholder="Buscar por nombre, DNI, RUC o teléfono..."
-                  className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 pl-9 pr-3.5 py-2.5 text-xs text-slate-900 dark:text-white placeholder:text-slate-400 focus:border-[#00875A] outline-none"
+                  className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 pl-9 pr-3.5 py-2.5 text-xs text-slate-900 dark:text-white placeholder:text-slate-400 focus:border-brand-600 outline-none"
                 />
               </div>
               <button
@@ -159,7 +159,7 @@ export const ClientModal: React.FC<ClientModalProps> = ({
                   setFormError(null);
                   setMode('new');
                 }}
-                className="rounded-xl bg-[#00875A] hover:bg-[#00704A] px-4 py-2.5 text-xs font-bold text-white transition-colors flex items-center gap-1.5 shrink-0 cursor-pointer shadow-sm"
+                className="rounded-xl bg-brand-600 hover:bg-brand-800 px-4 py-2.5 text-xs font-bold text-white transition-colors flex items-center gap-1.5 shrink-0 cursor-pointer shadow-sm"
               >
                 <UserPlus className="h-4 w-4" />
                 <span>+ Nuevo Cliente</span>
@@ -170,7 +170,7 @@ export const ClientModal: React.FC<ClientModalProps> = ({
             <div className="flex-1 overflow-y-auto space-y-2.5 pr-1 min-h-[220px]">
               {isLoading ? (
                 <div className="flex flex-col items-center justify-center py-12 text-slate-400 gap-2">
-                  <Loader2 className="h-6 w-6 animate-spin text-[#00875A]" />
+                  <Loader2 className="h-6 w-6 animate-spin text-brand-600" />
                   <span className="text-xs">Cargando directorio...</span>
                 </div>
               ) : error ? (
@@ -194,13 +194,13 @@ export const ClientModal: React.FC<ClientModalProps> = ({
                       onSelectClient(c);
                       onClose();
                     }}
-                    className="w-full text-left rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/60 p-3.5 hover:border-[#00875A] transition-all cursor-pointer group"
+                    className="w-full text-left rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/60 p-3.5 hover:border-brand-600 transition-all cursor-pointer group"
                   >
                     <div className="flex items-center justify-between">
-                      <div className="font-bold text-sm text-slate-900 dark:text-white group-hover:text-[#00875A] dark:group-hover:text-[#00C853] transition-colors">
+                      <div className="font-bold text-sm text-slate-900 dark:text-white group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">
                         {c.name}
                       </div>
-                      <span className="text-[10px] uppercase font-bold text-[#00875A] dark:text-[#00C853] bg-emerald-50 dark:bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-200 dark:border-emerald-800/60">
+                      <span className="text-[10px] uppercase font-bold text-brand-600 dark:text-brand-400 bg-emerald-50 dark:bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-200 dark:border-emerald-800/60">
                         Seleccionar
                       </span>
                     </div>
@@ -248,7 +248,7 @@ export const ClientModal: React.FC<ClientModalProps> = ({
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Ej: Inversiones Los Andes S.A.C."
-                className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 px-3.5 py-2.5 text-xs text-slate-900 dark:text-white placeholder:text-slate-400 focus:border-[#00875A] outline-none"
+                className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 px-3.5 py-2.5 text-xs text-slate-900 dark:text-white placeholder:text-slate-400 focus:border-brand-600 outline-none"
               />
             </div>
 
@@ -281,7 +281,7 @@ export const ClientModal: React.FC<ClientModalProps> = ({
                   value={docNumber}
                   onChange={(e) => setDocNumber(e.target.value)}
                   placeholder={docType === 'dni' ? '8 dígitos' : docType === 'ruc' ? '11 dígitos' : 'Opcional'}
-                  className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 px-3.5 py-2.5 text-xs text-slate-900 dark:text-white placeholder:text-slate-400 focus:border-[#00875A] outline-none"
+                  className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 px-3.5 py-2.5 text-xs text-slate-900 dark:text-white placeholder:text-slate-400 focus:border-brand-600 outline-none"
                 />
               </div>
             </div>
@@ -298,7 +298,7 @@ export const ClientModal: React.FC<ClientModalProps> = ({
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   placeholder="Ej: 987654321"
-                  className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 px-3.5 py-2.5 text-xs text-slate-900 dark:text-white placeholder:text-slate-400 focus:border-[#00875A] outline-none"
+                  className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 px-3.5 py-2.5 text-xs text-slate-900 dark:text-white placeholder:text-slate-400 focus:border-brand-600 outline-none"
                 />
               </div>
 
@@ -313,7 +313,7 @@ export const ClientModal: React.FC<ClientModalProps> = ({
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="correo@cliente.pe"
-                  className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 px-3.5 py-2.5 text-xs text-slate-900 dark:text-white placeholder:text-slate-400 focus:border-[#00875A] outline-none"
+                  className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 px-3.5 py-2.5 text-xs text-slate-900 dark:text-white placeholder:text-slate-400 focus:border-brand-600 outline-none"
                 />
               </div>
             </div>
@@ -329,7 +329,7 @@ export const ClientModal: React.FC<ClientModalProps> = ({
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
                 placeholder="Ej: Av. Javier Prado Este 1234, San Isidro, Lima"
-                className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 px-3.5 py-2.5 text-xs text-slate-900 dark:text-white placeholder:text-slate-400 focus:border-[#00875A] outline-none"
+                className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 px-3.5 py-2.5 text-xs text-slate-900 dark:text-white placeholder:text-slate-400 focus:border-brand-600 outline-none"
               />
             </div>
 
@@ -344,7 +344,7 @@ export const ClientModal: React.FC<ClientModalProps> = ({
               <button
                 type="submit"
                 disabled={isSaving}
-                className="rounded-xl bg-[#00875A] hover:bg-[#00704A] px-5 py-2.5 text-xs font-bold text-white transition-colors cursor-pointer disabled:opacity-50"
+                className="rounded-xl bg-brand-600 hover:bg-brand-800 px-5 py-2.5 text-xs font-bold text-white transition-colors cursor-pointer disabled:opacity-50"
               >
                 {isSaving ? 'Guardando...' : 'Guardar y Seleccionar'}
               </button>

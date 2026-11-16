@@ -157,7 +157,7 @@ export const WhatsAppShareModal: React.FC<WhatsAppShareModalProps> = ({
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               placeholder="Ej. 987654321 o +51987654321"
-              className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 px-3.5 py-2.5 text-xs text-slate-900 dark:text-white placeholder:text-slate-400 focus:border-[#00875A] dark:focus:border-[#00C853] outline-none font-mono"
+              className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 px-3.5 py-2.5 text-xs text-slate-900 dark:text-white placeholder:text-slate-400 focus:border-brand-600 dark:focus:border-brand-400 outline-none font-mono"
             />
           </div>
           <p className="text-[11px] text-slate-500 dark:text-slate-400">
@@ -206,7 +206,7 @@ export const WhatsAppShareModal: React.FC<WhatsAppShareModalProps> = ({
           <button
             type="button"
             onClick={handleOpenWhatsApp}
-            className="rounded-xl bg-[#00875A] hover:bg-[#00704A] px-5 py-2.5 text-xs font-bold text-white transition-colors flex items-center gap-2 cursor-pointer shadow-sm"
+            className="rounded-xl bg-brand-600 hover:bg-brand-800 px-5 py-2.5 text-xs font-bold text-white transition-colors flex items-center gap-2 cursor-pointer shadow-sm"
           >
             <MessageCircle className="h-4 w-4" />
             <span>Abrir WhatsApp con mensaje preparado</span>

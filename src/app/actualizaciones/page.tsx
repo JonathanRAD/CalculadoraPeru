@@ -30,11 +30,11 @@ export default function ActualizacionesPage() {
         <ol className="space-y-4">
           {SITE_UPDATES.map((entry) => (
             <li key={`${entry.date}-${entry.title}`} className="app-card p-6 space-y-2">
-              <time dateTime={entry.date} className="text-xs font-bold text-[#08734F] dark:text-emerald-400">{formatDate(entry.date)}</time>
+              <time dateTime={entry.date} className="text-xs font-bold text-brand-700 dark:text-emerald-400">{formatDate(entry.date)}</time>
               <h2 className="text-base sm:text-lg font-bold">{entry.title}</h2>
               <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">{entry.detail}</p>
               {entry.source && (
-                <a href={entry.source.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#08734F] dark:text-emerald-400 hover:underline">
+                <a href={entry.source.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-xs font-semibold text-brand-700 dark:text-emerald-400 hover:underline">
                   {entry.source.label} <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
                 </a>
               )}

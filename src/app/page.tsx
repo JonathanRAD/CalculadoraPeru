@@ -106,7 +106,7 @@ export default function HomePage() {
             {/* CONTENT COLUMN: Appears second on mobile (after photo banner), first on desktop */}
             <div className="space-y-4 sm:space-y-5 text-left order-2 lg:order-1 lg:col-span-7 xl:col-span-7">
               <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-800 dark:border-emerald-800/60 dark:bg-emerald-950/40 dark:text-emerald-300">
-                <BadgeCheck className="h-3.5 w-3.5 text-[#08734F] dark:text-[#00C853]" aria-hidden="true" />
+                <BadgeCheck className="h-3.5 w-3.5 text-brand-700 dark:text-brand-400" aria-hidden="true" />
                 <span>25 calculadoras gratuitas · Parámetros Perú 2026</span>
               </div>
 
@@ -183,7 +183,7 @@ export default function HomePage() {
         <FadeIn direction="up">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between mb-8">
             <div>
-              <span className="text-xs font-bold uppercase tracking-wider text-[#08734F] dark:text-emerald-400">
+              <span className="text-xs font-bold uppercase tracking-wider text-brand-700 dark:text-emerald-400">
                 Herramientas destacadas
               </span>
               <h2 id="featured-title" className="mt-1 text-2xl sm:text-3xl font-black tracking-tight text-slate-950 dark:text-white">
@@ -195,7 +195,7 @@ export default function HomePage() {
             </div>
             <SmoothScrollLink
               targetId="todas-las-calculadoras"
-              className="group inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-[#08734F] hover:text-emerald-800 dark:text-emerald-400 dark:hover:text-emerald-300 cursor-pointer"
+              className="group inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-brand-700 hover:text-emerald-800 dark:text-emerald-400 dark:hover:text-emerald-300 cursor-pointer"
             >
               <span>Ver las 25 calculadoras</span>
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
@@ -213,7 +213,7 @@ export default function HomePage() {
               >
                 <div>
                   <div className="flex items-center justify-between gap-3 mb-3">
-                    <span className="rounded-md bg-emerald-50 px-2 py-0.5 text-[11px] font-bold text-[#08734F] uppercase tracking-wider dark:bg-emerald-950/60 dark:text-emerald-300">
+                    <span className="rounded-md bg-emerald-50 px-2 py-0.5 text-[11px] font-bold text-brand-700 uppercase tracking-wider dark:bg-emerald-950/60 dark:text-emerald-300">
                       {calculator.tag}
                     </span>
                     <span className="text-[11px] font-mono text-slate-500 dark:text-slate-400">
@@ -221,7 +221,7 @@ export default function HomePage() {
                     </span>
                   </div>
 
-                  <h3 className="text-base font-bold text-slate-950 group-hover:text-[#08734F] dark:text-white dark:group-hover:text-emerald-400 transition-colors">
+                  <h3 className="text-base font-bold text-slate-950 group-hover:text-brand-700 dark:text-white dark:group-hover:text-emerald-400 transition-colors">
                     {label}
                   </h3>
 
@@ -230,7 +230,7 @@ export default function HomePage() {
                   </p>
                 </div>
 
-                <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-xs font-bold text-[#08734F] dark:text-emerald-400">
+                <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-xs font-bold text-brand-700 dark:text-emerald-400">
                   <span>Calcular ahora</span>
                   <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" aria-hidden="true" />
                 </div>
@@ -246,7 +246,7 @@ export default function HomePage() {
       <section id="todas-las-calculadoras" aria-labelledby="directory-title" className="scroll-mt-24 mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-14">
         <FadeIn direction="up">
           <div className="max-w-2xl mb-8">
-            <span className="text-xs font-bold uppercase tracking-wider text-[#08734F] dark:text-emerald-400">
+            <span className="text-xs font-bold uppercase tracking-wider text-brand-700 dark:text-emerald-400">
               Directorio completo
             </span>
             <h2 id="directory-title" className="mt-1 text-2xl sm:text-3xl font-black tracking-tight text-slate-950 dark:text-white">
@@ -271,7 +271,7 @@ export default function HomePage() {
                 >
                   <summary className="flex min-h-12 cursor-pointer list-none items-start justify-between gap-3 marker:content-none focus-visible:outline-2 focus-visible:outline-emerald-600">
                     <span className="flex min-w-0 items-start gap-3">
-                      <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-[#08734F] dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200/50 dark:border-emerald-800/50">
+                      <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-brand-700 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200/50 dark:border-emerald-800/50">
                         <Icon className="h-4.5 w-4.5" aria-hidden="true" />
                       </span>
                       <span>
@@ -294,7 +294,7 @@ export default function HomePage() {
                           className="group/link flex min-h-10 items-center justify-between gap-3 rounded-lg px-2 text-xs sm:text-sm font-medium text-slate-700 transition-colors hover:bg-emerald-50 hover:text-emerald-900 focus-visible:outline-2 focus-visible:outline-emerald-600 dark:text-slate-300 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300"
                         >
                           <span>{calculator.shortTitle}</span>
-                          <ArrowRight className="h-3.5 w-3.5 shrink-0 text-slate-400 transition-transform group-hover/link:translate-x-0.5 group-hover/link:text-[#08734F] dark:group-hover/link:text-emerald-400" aria-hidden="true" />
+                          <ArrowRight className="h-3.5 w-3.5 shrink-0 text-slate-400 transition-transform group-hover/link:translate-x-0.5 group-hover/link:text-brand-700 dark:group-hover/link:text-emerald-400" aria-hidden="true" />
                         </Link>
                       </li>
                     ))}
@@ -312,7 +312,7 @@ export default function HomePage() {
       <section aria-labelledby="guides-title" className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-14">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between mb-8">
           <div>
-            <span className="text-xs font-bold uppercase tracking-wider text-[#08734F] dark:text-emerald-400">
+            <span className="text-xs font-bold uppercase tracking-wider text-brand-700 dark:text-emerald-400">
               Guías
             </span>
             <h2 id="guides-title" className="mt-1 text-2xl sm:text-3xl font-black tracking-tight text-slate-950 dark:text-white">
@@ -322,7 +322,7 @@ export default function HomePage() {
               Explicaciones con ejemplos en soles y fuentes oficiales.
             </p>
           </div>
-          <Link href="/guias" className="group inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-[#08734F] hover:text-emerald-800 dark:text-emerald-400 dark:hover:text-emerald-300">
+          <Link href="/guias" className="group inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-brand-700 hover:text-emerald-800 dark:text-emerald-400 dark:hover:text-emerald-300">
             <span>Ver todas las guías</span>
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
           </Link>
@@ -330,9 +330,9 @@ export default function HomePage() {
         <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {GUIDES.slice(0, 6).map((guide) => (
             <li key={guide.slug}>
-              <Link href={`/guias/${guide.slug}`} className="app-card h-full p-5 flex flex-col gap-2 group hover:border-[#08734F] transition-all">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-[#08734F] dark:text-emerald-400">{guide.category}</span>
-                <h3 className="text-sm sm:text-base font-bold text-slate-900 dark:text-white group-hover:text-[#08734F] dark:group-hover:text-emerald-400 transition-colors">{guide.title}</h3>
+              <Link href={`/guias/${guide.slug}`} className="app-card h-full p-5 flex flex-col gap-2 group hover:border-brand-700 transition-all">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-brand-700 dark:text-emerald-400">{guide.category}</span>
+                <h3 className="text-sm sm:text-base font-bold text-slate-900 dark:text-white group-hover:text-brand-700 dark:group-hover:text-emerald-400 transition-colors">{guide.title}</h3>
                 <span className="mt-auto text-xs text-slate-500 dark:text-slate-400">{guide.readingMinutes} min de lectura</span>
               </Link>
             </li>
@@ -346,7 +346,7 @@ export default function HomePage() {
       <section aria-labelledby="method-title" className="border-t border-slate-200 bg-[#F1F5F9] dark:border-slate-800 dark:bg-[#09122a] transition-colors">
         <div className="mx-auto grid max-w-7xl gap-10 px-4 py-12 sm:px-6 sm:py-16 lg:grid-cols-12 lg:gap-16">
           <div className="lg:col-span-4 space-y-3">
-            <span className="text-xs font-bold uppercase tracking-wider text-[#08734F] dark:text-emerald-400">
+            <span className="text-xs font-bold uppercase tracking-wider text-brand-700 dark:text-emerald-400">
               Transparencia y Rigor
             </span>
             <h2 id="method-title" className="text-2xl sm:text-3xl font-black tracking-tight text-slate-950 dark:text-white">
@@ -358,7 +358,7 @@ export default function HomePage() {
             <div className="pt-2">
               <Link
                 href="/sobre-nosotros"
-                className="group inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-[#08734F] dark:text-emerald-400 hover:underline"
+                className="group inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-brand-700 dark:text-emerald-400 hover:underline"
               >
                 <span>Conoce la metodología de CalculaPerú</span>
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
@@ -372,7 +372,7 @@ export default function HomePage() {
                 <details key={faq.question} className="group py-1" open={index === 0}>
                   <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-5 py-3 text-sm sm:text-base font-bold text-slate-950 marker:content-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600 dark:text-white">
                     <span>{faq.question}</span>
-                    <ChevronDown className="h-4 w-4 shrink-0 text-[#08734F] transition-transform group-open:rotate-180 dark:text-emerald-400" aria-hidden="true" />
+                    <ChevronDown className="h-4 w-4 shrink-0 text-brand-700 transition-transform group-open:rotate-180 dark:text-emerald-400" aria-hidden="true" />
                   </summary>
                   <p className="max-w-3xl pb-5 pr-8 text-xs sm:text-sm leading-relaxed text-slate-600 dark:text-slate-400">
                     {faq.answer}

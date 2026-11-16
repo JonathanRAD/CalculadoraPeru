@@ -537,7 +537,7 @@ export default function AdminPage() {
             </div>
 
             <div className="space-y-3 text-center">
-              <div className="w-12 h-12 rounded-full bg-emerald-950/80 border border-emerald-800 flex items-center justify-center text-[#00C853] mx-auto">
+              <div className="w-12 h-12 rounded-full bg-emerald-950/80 border border-emerald-800 flex items-center justify-center text-brand-400 mx-auto">
                 <Lock className="w-6 h-6" />
               </div>
               <h2 className="text-sm font-bold text-white">Acceso Administrativo Protegido</h2>
@@ -783,7 +783,7 @@ export default function AdminPage() {
                   type="button"
                   onClick={() => setActiveTab(t)}
                   className={`px-3 py-1.5 rounded-lg capitalize ${
-                    activeTab === t ? 'bg-[#00875A] text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
+                    activeTab === t ? 'bg-brand-600 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
                   }`}
                 >
                   {t}
@@ -820,7 +820,7 @@ export default function AdminPage() {
                 setNewlyGenerated(null);
                 setIsIssueModalOpen(true);
               }}
-              className="px-3.5 py-2 bg-[#00875A] hover:bg-[#00704A] text-white font-bold text-xs rounded-xl shadow-sm flex items-center gap-1.5 transition-all hover:scale-[1.02] cursor-pointer"
+              className="px-3.5 py-2 bg-brand-600 hover:bg-brand-800 text-white font-bold text-xs rounded-xl shadow-sm flex items-center gap-1.5 transition-all hover:scale-[1.02] cursor-pointer"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>Emitir Licencia PRO</span>
@@ -984,7 +984,7 @@ export default function AdminPage() {
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                   <div>
                     <h3 className="font-bold text-base text-slate-900 dark:text-white flex items-center gap-2">
-                      <Activity className="w-4 h-4 text-[#00875A]" />
+                      <Activity className="w-4 h-4 text-brand-600" />
                       <span>Tráfico y Visitas Diarias (Últimos 14 Días)</span>
                     </h3>
                     <p className="text-xs text-slate-500">
@@ -1018,7 +1018,7 @@ export default function AdminPage() {
                               style={{ height: `${Math.max(heightPct, 4)}%` }}
                               className={`w-full rounded-t-lg transition-all duration-200 ${
                                 pt.visits > 0
-                                  ? 'bg-gradient-to-t from-[#00875A] to-emerald-400 shadow-md shadow-emerald-700/20 group-hover:brightness-110'
+                                  ? 'bg-gradient-to-t from-brand-600 to-emerald-400 shadow-md shadow-emerald-700/20 group-hover:brightness-110'
                                   : 'bg-slate-200 dark:bg-slate-800 opacity-40 group-hover:opacity-80'
                               }`}
                             />
@@ -1073,7 +1073,7 @@ export default function AdminPage() {
                           <div className="w-full h-2 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
                             <div
                               style={{ width: `${Math.max(c.share, 4)}%` }}
-                              className="h-full bg-[#00875A] rounded-full transition-all duration-500"
+                              className="h-full bg-brand-600 rounded-full transition-all duration-500"
                             />
                           </div>
                         </div>
@@ -1200,7 +1200,7 @@ export default function AdminPage() {
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
                   <h2 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                    <CreditCard className="w-5 h-5 text-[#00875A] dark:text-[#00C853]" />
+                    <CreditCard className="w-5 h-5 text-brand-600 dark:text-brand-400" />
                     <span>Solicitudes de Pago PRO (Yape / Plin)</span>
                   </h2>
                   <p className="text-xs text-slate-500">
@@ -1246,7 +1246,7 @@ export default function AdminPage() {
 
                 <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs space-y-1">
                   <span className="text-xs text-slate-500 font-semibold">Ingresos Validados</span>
-                  <div className="text-2xl font-black font-mono text-[#00875A] dark:text-[#00C853]">
+                  <div className="text-2xl font-black font-mono text-brand-600 dark:text-brand-400">
                     S/ {subscriptions
                       .filter(s => s.status === 'approved')
                       .reduce((sum, s) => sum + s.amount, 0)
@@ -1509,7 +1509,7 @@ export default function AdminPage() {
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
                   <h2 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                    <KeyRound className="w-5 h-5 text-[#00875A]" />
+                    <KeyRound className="w-5 h-5 text-brand-600" />
                     <span>Gestor de Licencias y Códigos PRO</span>
                   </h2>
                   <p className="text-xs text-slate-500">
@@ -1523,7 +1523,7 @@ export default function AdminPage() {
                     setNewlyGenerated(null);
                     setIsIssueModalOpen(true);
                   }}
-                  className="px-4 py-2.5 bg-[#00875A] hover:bg-[#00704A] text-white font-bold text-xs rounded-xl shadow-md shadow-emerald-700/20 flex items-center gap-2 cursor-pointer transition-all hover:scale-[1.01]"
+                  className="px-4 py-2.5 bg-brand-600 hover:bg-brand-800 text-white font-bold text-xs rounded-xl shadow-md shadow-emerald-700/20 flex items-center gap-2 cursor-pointer transition-all hover:scale-[1.01]"
                 >
                   <Plus className="w-4 h-4" />
                   <span>Emitir Nueva Licencia</span>
@@ -2005,7 +2005,7 @@ export default function AdminPage() {
             
             <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-4">
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-xl bg-emerald-100 dark:bg-emerald-950 flex items-center justify-center text-[#00875A] dark:text-[#00C853]">
+                <div className="w-8 h-8 rounded-xl bg-emerald-100 dark:bg-emerald-950 flex items-center justify-center text-brand-600 dark:text-brand-400">
                   <KeyRound className="w-4 h-4" />
                 </div>
                 <div>
@@ -2024,7 +2024,7 @@ export default function AdminPage() {
 
             {newlyGenerated ? (
               <div className="space-y-4 text-center py-2 animate-in zoom-in-95">
-                <div className="w-12 h-12 rounded-full bg-emerald-100 dark:bg-emerald-950 flex items-center justify-center mx-auto text-[#00875A] dark:text-[#00C853]">
+                <div className="w-12 h-12 rounded-full bg-emerald-100 dark:bg-emerald-950 flex items-center justify-center mx-auto text-brand-600 dark:text-brand-400">
                   <CheckCircle2 className="w-6 h-6" />
                 </div>
                 
@@ -2131,7 +2131,7 @@ export default function AdminPage() {
                 <button
                   type="submit"
                   disabled={isGenerating}
-                  className="w-full py-3 bg-[#00875A] hover:bg-[#00704A] text-white font-bold rounded-xl shadow-md cursor-pointer transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                  className="w-full py-3 bg-brand-600 hover:bg-brand-800 text-white font-bold rounded-xl shadow-md cursor-pointer transition-all flex items-center justify-center gap-2 disabled:opacity-50"
                 >
                   {isGenerating ? (
                     <>
@@ -2285,7 +2285,7 @@ export default function AdminPage() {
                 className={`w-full py-2.5 px-4 font-bold rounded-xl shadow-md cursor-pointer transition-all flex items-center justify-center gap-2 ${
                   grantingUser.isPro
                     ? 'bg-red-600 hover:bg-red-700 text-white'
-                    : 'bg-[#00875A] hover:bg-[#00704A] text-white'
+                    : 'bg-brand-600 hover:bg-brand-800 text-white'
                 }`}
               >
                 {isGranting
@@ -2311,7 +2311,7 @@ export default function AdminPage() {
           <div className="relative w-full max-w-md bg-white dark:bg-slate-900 rounded-3xl border border-emerald-500/40 shadow-2xl p-6 sm:p-8 space-y-6 text-xs text-center modal-origin-card modal-enter">
 
             
-            <div className="w-16 h-16 rounded-full bg-emerald-100 dark:bg-emerald-950/80 border border-emerald-500/40 text-[#00875A] dark:text-[#00C853] flex items-center justify-center mx-auto shadow-sm">
+            <div className="w-16 h-16 rounded-full bg-emerald-100 dark:bg-emerald-950/80 border border-emerald-500/40 text-brand-600 dark:text-brand-400 flex items-center justify-center mx-auto shadow-sm">
               <CheckCircle2 className="w-8 h-8" />
             </div>
 

@@ -295,7 +295,7 @@ export default function BeneficiosProPage() {
           </div>
 
           <h1 className="text-3xl sm:text-5xl font-black tracking-tight max-w-3xl mx-auto leading-tight">
-            Descubre el Poder de cada Calculadora con <span className="bg-gradient-to-r from-[#00C853] to-teal-400 bg-clip-text text-transparent">CalculaPerú PRO</span>
+            Descubre el Poder de cada Calculadora con <span className="bg-gradient-to-r from-brand-400 to-teal-400 bg-clip-text text-transparent">CalculaPerú PRO</span>
           </h1>
 
           <p className="text-slate-300 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
@@ -316,7 +316,7 @@ export default function BeneficiosProPage() {
             ) : (
               <Link
                 href="/pro"
-                className="px-5 py-2.5 rounded-2xl bg-[#00875A] hover:bg-[#00704A] text-white font-bold text-xs sm:text-sm flex items-center gap-2 transition-all shadow-lg shadow-emerald-950/40 hover:scale-[1.02] cursor-pointer"
+                className="px-5 py-2.5 rounded-2xl bg-brand-600 hover:bg-brand-800 text-white font-bold text-xs sm:text-sm flex items-center gap-2 transition-all shadow-lg shadow-emerald-950/40 hover:scale-[1.02] cursor-pointer"
               >
                 <span>Obtener Acceso PRO Ilimitado</span>
                 <ArrowRight className="w-4 h-4" />
@@ -415,7 +415,7 @@ export default function BeneficiosProPage() {
               onClick={() => setSelectedCategory('todas')}
               className={`px-3 py-1.5 rounded-xl font-bold text-xs transition-all cursor-pointer ${
                 selectedCategory === 'todas'
-                  ? 'bg-[#00875A] text-white shadow-xs'
+                  ? 'bg-brand-600 text-white shadow-xs'
                   : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
               }`}
             >
@@ -427,7 +427,7 @@ export default function BeneficiosProPage() {
               onClick={() => setSelectedCategory('laboral')}
               className={`px-3 py-1.5 rounded-xl font-bold text-xs transition-all cursor-pointer flex items-center gap-1 ${
                 selectedCategory === 'laboral'
-                  ? 'bg-[#00875A] text-white shadow-xs'
+                  ? 'bg-brand-600 text-white shadow-xs'
                   : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
               }`}
             >
@@ -440,7 +440,7 @@ export default function BeneficiosProPage() {
               onClick={() => setSelectedCategory('tributario')}
               className={`px-3 py-1.5 rounded-xl font-bold text-xs transition-all cursor-pointer flex items-center gap-1 ${
                 selectedCategory === 'tributario'
-                  ? 'bg-[#00875A] text-white shadow-xs'
+                  ? 'bg-brand-600 text-white shadow-xs'
                   : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
               }`}
             >
@@ -453,7 +453,7 @@ export default function BeneficiosProPage() {
               onClick={() => setSelectedCategory('negocios')}
               className={`px-3 py-1.5 rounded-xl font-bold text-xs transition-all cursor-pointer flex items-center gap-1 ${
                 selectedCategory === 'negocios'
-                  ? 'bg-[#00875A] text-white shadow-xs'
+                  ? 'bg-brand-600 text-white shadow-xs'
                   : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
               }`}
             >
@@ -679,7 +679,7 @@ export default function BeneficiosProPage() {
           <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
             <Link
               href="/pro"
-              className="px-6 py-3 rounded-2xl bg-[#00875A] hover:bg-[#00704A] text-white font-bold text-sm flex items-center gap-2 transition-all shadow-lg shadow-emerald-900/30 hover:scale-[1.02] cursor-pointer"
+              className="px-6 py-3 rounded-2xl bg-brand-600 hover:bg-brand-800 text-white font-bold text-sm flex items-center gap-2 transition-all shadow-lg shadow-emerald-900/30 hover:scale-[1.02] cursor-pointer"
             >
               <span>Suscribirme a PRO Ahora</span>
               <ArrowRight className="w-4 h-4" />

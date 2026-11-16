@@ -80,7 +80,7 @@ export default function ProActivationModal() {
               <button
                 type="button"
                 onClick={closeActivationModal}
-                className="flex-1 py-2.5 rounded-xl bg-[#00875A] hover:bg-[#00704A] text-white font-bold text-xs shadow-md transition-colors"
+                className="flex-1 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-800 text-white font-bold text-xs shadow-md transition-colors"
               >
                 Continuar usando PRO
               </button>
@@ -90,14 +90,14 @@ export default function ProActivationModal() {
           <div className="space-y-4 text-center">
             <h3 className="text-lg font-bold">Activa tu código PRO en tu cuenta</h3>
             <p className="text-sm text-slate-600 dark:text-slate-300">Inicia sesión o crea una cuenta gratuita para conservar tu acceso en cualquier dispositivo.</p>
-            <button type="button" onClick={() => { closeActivationModal(); openAuthModal('login'); }} className="w-full rounded-xl bg-[#00875A] px-4 py-3 text-sm font-bold text-white hover:bg-[#00704A]">Iniciar sesión</button>
+            <button type="button" onClick={() => { closeActivationModal(); openAuthModal('login'); }} className="w-full rounded-xl bg-brand-600 px-4 py-3 text-sm font-bold text-white hover:bg-brand-800">Iniciar sesión</button>
           </div>
         ) : (
           /* Normal code input form */
           <form onSubmit={handleSubmit} className="space-y-4">
             
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-950 flex items-center justify-center text-[#00875A] dark:text-[#00C853] shrink-0">
+              <div className="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-950 flex items-center justify-center text-brand-600 dark:text-brand-400 shrink-0">
                 <KeyRound className="w-5 h-5" />
               </div>
               <div>
@@ -122,7 +122,7 @@ export default function ProActivationModal() {
                   placeholder="Ingresa tu código"
                   value={code}
                   onChange={(e) => setCode(e.target.value.toUpperCase())}
-                  className="w-full uppercase font-mono font-bold tracking-wider bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-900 dark:text-white outline-none focus:border-[#00875A] focus:ring-2 focus:ring-emerald-500/20 text-sm"
+                  className="w-full uppercase font-mono font-bold tracking-wider bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-900 dark:text-white outline-none focus:border-brand-600 focus:ring-2 focus:ring-emerald-500/20 text-sm"
                 />
               </div>
             </div>
@@ -143,7 +143,7 @@ export default function ProActivationModal() {
             <button
               type="submit"
               disabled={loading || !!successMsg}
-              className="w-full py-3.5 rounded-xl bg-[#00875A] hover:bg-[#00704A] disabled:opacity-60 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all cursor-pointer shadow-md shadow-emerald-950/20 hover:scale-[1.01]"
+              className="w-full py-3.5 rounded-xl bg-brand-600 hover:bg-brand-800 disabled:opacity-60 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all cursor-pointer shadow-md shadow-emerald-950/20 hover:scale-[1.01]"
             >
               {loading ? (
                 <>

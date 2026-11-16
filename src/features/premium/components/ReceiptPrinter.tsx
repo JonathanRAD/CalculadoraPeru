@@ -356,7 +356,7 @@ export default function ReceiptPrinter({
           <button
             type="button"
             onClick={() => onCheckoutClick && onCheckoutClick(plan)}
-            className="w-full py-2.5 px-4 bg-[#00875A] hover:bg-[#00704A] text-white rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 shadow-lg shadow-emerald-950/20 transition-all hover:scale-[1.01] cursor-pointer animate-in fade-in duration-200"
+            className="w-full py-2.5 px-4 bg-brand-600 hover:bg-brand-800 text-white rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 shadow-lg shadow-emerald-950/20 transition-all hover:scale-[1.01] cursor-pointer animate-in fade-in duration-200"
           >
             <span>
               {plan === 'yearly'

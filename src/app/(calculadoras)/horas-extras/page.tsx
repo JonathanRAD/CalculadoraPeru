@@ -197,7 +197,7 @@ Total Horas Extras a Cobrar: ${formatCurrency(result.totalOvertimePay)}`;
         {/* Form Column */}
         <div className="lg:col-span-7 rounded-3xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 sm:p-8 shadow-sm space-y-6">
           <div className="flex items-center gap-2.5 border-b border-slate-100 dark:border-slate-800 pb-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-50 text-[#08734F] dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/60">
+            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-50 text-brand-700 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/60">
               <Clock className="h-4.5 w-4.5" />
             </div>
             <h2 className="text-lg font-bold text-slate-900 dark:text-white">Datos de tu Jornada</h2>
@@ -236,7 +236,7 @@ Total Horas Extras a Cobrar: ${formatCurrency(result.totalOvertimePay)}`;
           {scheduleType === 'atypical' && (
             <div className="space-y-4 rounded-2xl border border-emerald-200 bg-emerald-50/50 p-4 dark:border-emerald-900 dark:bg-emerald-950/20">
               <div className="flex items-start gap-2">
-                <CalendarDays className="mt-0.5 h-4 w-4 shrink-0 text-[#08734F] dark:text-emerald-400" />
+                <CalendarDays className="mt-0.5 h-4 w-4 shrink-0 text-brand-700 dark:text-emerald-400" />
                 <div>
                   <h3 className="text-sm font-bold text-slate-900 dark:text-white">Configura el ciclo completo</h3>
                   <p className="mt-0.5 text-xs leading-5 text-slate-600 dark:text-slate-400">
@@ -258,7 +258,7 @@ Total Horas Extras a Cobrar: ${formatCurrency(result.totalOvertimePay)}`;
                       }}
                       className={`rounded-full border px-3 py-1.5 text-xs font-bold transition-colors ${
                         isActive
-                          ? 'border-[#08734F] bg-[#08734F] text-white'
+                          ? 'border-brand-700 bg-brand-700 text-white'
                           : 'border-slate-200 bg-white text-slate-700 hover:border-emerald-400 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300'
                       }`}
                     >
@@ -436,7 +436,7 @@ Total Horas Extras a Cobrar: ${formatCurrency(result.totalOvertimePay)}`;
               <span className="text-xs font-bold uppercase tracking-wider text-emerald-950 dark:text-emerald-300">
                 Pago Total de Horas Extras
               </span>
-              <span className="rounded-full bg-emerald-50 dark:bg-emerald-950/70 border border-emerald-200 dark:border-emerald-800 px-2.5 py-0.5 text-[11px] font-bold text-[#08734F] dark:text-emerald-300">
+              <span className="rounded-full bg-emerald-50 dark:bg-emerald-950/70 border border-emerald-200 dark:border-emerald-800 px-2.5 py-0.5 text-[11px] font-bold text-brand-700 dark:text-emerald-300">
                 🇵🇪 En Soles
               </span>
             </div>
@@ -448,7 +448,7 @@ Total Horas Extras a Cobrar: ${formatCurrency(result.totalOvertimePay)}`;
               </span>
               <div
                 title={formatCurrency(result.totalOvertimePay)}
-                className="text-3xl sm:text-4xl lg:text-[2.6rem] font-black text-[#08734F] dark:text-emerald-400 mt-1.5 font-mono tracking-tight tabular-nums break-words leading-tight"
+                className="text-3xl sm:text-4xl lg:text-[2.6rem] font-black text-brand-700 dark:text-emerald-400 mt-1.5 font-mono tracking-tight tabular-nums break-words leading-tight"
               >
                 {formatCurrency(result.totalOvertimePay)}
               </div>

@@ -67,19 +67,19 @@ export default async function GuidePage({ params }: { params: Promise<Params> })
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }} />
       <article className="mx-auto max-w-3xl space-y-8">
         <nav aria-label="Migas de pan" className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400 font-semibold">
-          <Link href="/" className="hover:text-[#08734F] dark:hover:text-emerald-400">Inicio</Link>
+          <Link href="/" className="hover:text-brand-700 dark:hover:text-emerald-400">Inicio</Link>
           <ChevronRight className="h-3.5 w-3.5" aria-hidden="true" />
-          <Link href="/guias" className="hover:text-[#08734F] dark:hover:text-emerald-400">Guías</Link>
+          <Link href="/guias" className="hover:text-brand-700 dark:hover:text-emerald-400">Guías</Link>
         </nav>
 
         <header className="space-y-3">
-          <span className="text-[10px] font-bold uppercase tracking-wider text-[#08734F] dark:text-emerald-400">{guide.category}</span>
+          <span className="text-[10px] font-bold uppercase tracking-wider text-brand-700 dark:text-emerald-400">{guide.category}</span>
           <h1 className="text-2xl sm:text-4xl font-black tracking-tight leading-tight">{guide.title}</h1>
           <p className="text-xs text-slate-500 dark:text-slate-400">
             Por <Link href="/sobre-nosotros" className="font-bold hover:underline">Jonathan Rujel</Link> · Publicada el {formatDate(guide.published)} · Actualizada el {formatDate(guide.updated)} · {guide.readingMinutes} min de lectura
           </p>
           <p className="text-base text-slate-700 dark:text-slate-300 leading-relaxed">{guide.intro}</p>
-          <Link href={guide.calculator.href} className="inline-flex items-center gap-1.5 rounded-lg bg-[#08734F] px-4 py-2 text-sm font-bold text-white hover:bg-[#065c3f] transition-colors">
+          <Link href={guide.calculator.href} className="inline-flex items-center gap-1.5 rounded-lg bg-brand-700 px-4 py-2 text-sm font-bold text-white hover:bg-[#065c3f] transition-colors">
             Ir a: {guide.calculator.label} <ArrowRight className="h-4 w-4" aria-hidden="true" />
           </Link>
         </header>
@@ -138,7 +138,7 @@ export default async function GuidePage({ params }: { params: Promise<Params> })
           <ul className="space-y-2 text-sm">
             {guide.sources.map((s) => (
               <li key={s.url}>
-                <a href={s.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 font-semibold text-[#08734F] dark:text-emerald-400 hover:underline">
+                <a href={s.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 font-semibold text-brand-700 dark:text-emerald-400 hover:underline">
                   {s.label} <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
                 </a>
               </li>
@@ -155,7 +155,7 @@ export default async function GuidePage({ params }: { params: Promise<Params> })
             <ul className="grid gap-3 sm:grid-cols-2">
               {others.map((g) => (
                 <li key={g.slug}>
-                  <Link href={`/guias/${g.slug}`} className="app-card p-4 block text-sm font-bold hover:border-[#08734F] transition-all">{g.title}</Link>
+                  <Link href={`/guias/${g.slug}`} className="app-card p-4 block text-sm font-bold hover:border-brand-700 transition-all">{g.title}</Link>
                 </li>
               ))}
             </ul>

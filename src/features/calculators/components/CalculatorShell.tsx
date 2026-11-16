@@ -85,11 +85,11 @@ export function CalculatorShell({
 
           {/* Breadcrumb */}
           <nav aria-label="Migas de pan" className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400 mb-3 font-semibold">
-            <Link href="/" className="hover:text-[#08734F] dark:hover:text-emerald-400 transition-colors">
+            <Link href="/" className="hover:text-brand-700 dark:hover:text-emerald-400 transition-colors">
               Inicio
             </Link>
             <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
-            <Link href="/#todas-las-calculadoras" className="hover:text-[#08734F] dark:hover:text-emerald-400 transition-colors capitalize">
+            <Link href="/#todas-las-calculadoras" className="hover:text-brand-700 dark:hover:text-emerald-400 transition-colors capitalize">
               {meta.category}
             </Link>
             <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
@@ -100,7 +100,7 @@ export function CalculatorShell({
 
           {/* Title & Official Badge */}
           <div className="flex flex-wrap items-center gap-2 mb-2">
-            <span className="rounded-md bg-emerald-50 dark:bg-emerald-950/80 px-2.5 py-0.5 text-xs font-bold text-[#08734F] dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+            <span className="rounded-md bg-emerald-50 dark:bg-emerald-950/80 px-2.5 py-0.5 text-xs font-bold text-brand-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
               {meta.tag}
             </span>
             {meta.badge && (
@@ -108,7 +108,7 @@ export function CalculatorShell({
                 {meta.badge}
               </span>
             )}
-            <div className="flex items-center gap-1 text-xs text-[#08734F] dark:text-emerald-400 font-bold ml-auto">
+            <div className="flex items-center gap-1 text-xs text-brand-700 dark:text-emerald-400 font-bold ml-auto">
               <ShieldCheck className="h-4 w-4" />
               <span>Parámetros referenciales para Perú</span>
             </div>
@@ -150,7 +150,7 @@ export function CalculatorShell({
             <ul className="space-y-2">
               {relatedGuides.map((guide) => (
                 <li key={guide.slug}>
-                  <Link href={`/guias/${guide.slug}`} className="inline-flex items-center gap-1.5 text-sm font-bold text-[#08734F] dark:text-emerald-400 hover:underline">
+                  <Link href={`/guias/${guide.slug}`} className="inline-flex items-center gap-1.5 text-sm font-bold text-brand-700 dark:text-emerald-400 hover:underline">
                     {guide.title} <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
                   </Link>
                 </li>
@@ -189,17 +189,17 @@ export function CalculatorShell({
                 <Link
                   key={calc.id}
                   href={calc.slug}
-                  className="app-card p-4 hover:border-[#08734F] transition-all flex flex-col justify-between group"
+                  className="app-card p-4 hover:border-brand-700 transition-all flex flex-col justify-between group"
                 >
                   <div>
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#08734F] dark:text-emerald-400">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-brand-700 dark:text-emerald-400">
                       {calc.tag}
                     </span>
-                    <h3 className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white mt-1 group-hover:text-[#08734F] dark:group-hover:text-emerald-400 transition-colors">
+                    <h3 className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white mt-1 group-hover:text-brand-700 dark:group-hover:text-emerald-400 transition-colors">
                       {calc.shortTitle}
                     </h3>
                   </div>
-                  <div className="mt-3 flex items-center gap-1 text-[11px] font-bold text-slate-500 dark:text-slate-400 group-hover:text-[#08734F] dark:group-hover:text-emerald-400">
+                  <div className="mt-3 flex items-center gap-1 text-[11px] font-bold text-slate-500 dark:text-slate-400 group-hover:text-brand-700 dark:group-hover:text-emerald-400">
                     <span>Calcular</span>
                     <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" />
                   </div>

@@ -232,7 +232,7 @@ Sueldo Neto en Cuenta: ${formatCurrency(result.netSalary)}`;
         {/* Form Column */}
         <div className="lg:col-span-7 rounded-3xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 sm:p-8 shadow-sm space-y-6">
           <div className="flex items-center gap-2.5 border-b border-slate-100 dark:border-slate-800 pb-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-50 text-[#08734F] dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/60">
+            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-50 text-brand-700 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/60">
               <Briefcase className="h-4.5 w-4.5" />
             </div>
             <h2 className="text-lg font-bold text-slate-900 dark:text-white">Datos de tu Sueldo en Planilla</h2>
@@ -408,10 +408,10 @@ Sueldo Neto en Cuenta: ${formatCurrency(result.netSalary)}`;
           <div className="rounded-3xl border-2 border-emerald-200/90 dark:border-emerald-800/80 bg-white dark:bg-slate-900 p-6 sm:p-7 shadow-sm">
             <div className="flex items-center justify-between mb-4">
               <span className="text-xs font-bold uppercase tracking-wider text-emerald-950 dark:text-emerald-300 flex items-center gap-1.5">
-                <FileText className="h-4 w-4 text-[#08734F] dark:text-emerald-400" />
+                <FileText className="h-4 w-4 text-brand-700 dark:text-emerald-400" />
                 Resumen de Boleta de Pago
               </span>
-              <span className="rounded-full bg-emerald-50 dark:bg-emerald-950/70 border border-emerald-200 dark:border-emerald-800 px-2.5 py-0.5 text-[11px] font-bold text-[#08734F] dark:text-emerald-300">
+              <span className="rounded-full bg-emerald-50 dark:bg-emerald-950/70 border border-emerald-200 dark:border-emerald-800 px-2.5 py-0.5 text-[11px] font-bold text-brand-700 dark:text-emerald-300">
                 {showPayrollDetails ? 'Personalizado' : 'Estimación base'}
               </span>
             </div>
@@ -423,7 +423,7 @@ Sueldo Neto en Cuenta: ${formatCurrency(result.netSalary)}`;
               </span>
               <div
                 title={formatCurrency(result.netSalary)}
-                className="text-3xl sm:text-4xl lg:text-[2.6rem] font-black text-[#08734F] dark:text-emerald-400 mt-1.5 font-mono tracking-tight tabular-nums break-words leading-tight"
+                className="text-3xl sm:text-4xl lg:text-[2.6rem] font-black text-brand-700 dark:text-emerald-400 mt-1.5 font-mono tracking-tight tabular-nums break-words leading-tight"
               >
                 {formatCurrency(result.netSalary)}
               </div>
@@ -512,7 +512,7 @@ Sueldo Neto en Cuenta: ${formatCurrency(result.netSalary)}`;
             <div className="rounded-2xl border border-emerald-200 dark:border-emerald-800/80 bg-emerald-50/60 dark:bg-emerald-950/40 p-4 space-y-2.5 mb-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#08734F] text-white text-xs font-bold shadow-xs">
+                  <span className="flex h-6 w-6 items-center justify-center rounded-full bg-brand-700 text-white text-xs font-bold shadow-xs">
                     ✓
                   </span>
                   <span className="font-bold text-xs text-emerald-950 dark:text-emerald-200 uppercase tracking-wider">
@@ -529,7 +529,7 @@ Sueldo Neto en Cuenta: ${formatCurrency(result.netSalary)}`;
               <button
                 type="button"
                 onClick={() => setIsSlipModalOpen(true)}
-                className="w-full py-3 rounded-xl bg-[#08734F] hover:bg-emerald-800 text-white font-bold text-xs flex items-center justify-center gap-2 transition-all cursor-pointer shadow-sm"
+                className="w-full py-3 rounded-xl bg-brand-700 hover:bg-emerald-800 text-white font-bold text-xs flex items-center justify-center gap-2 transition-all cursor-pointer shadow-sm"
               >
                 <FileText className="w-4 h-4" />
                 <span>Emitir Boleta de Pago (PDF / Excel)</span>

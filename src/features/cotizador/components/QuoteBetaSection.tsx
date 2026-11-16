@@ -93,7 +93,7 @@ export const QuoteBetaSection: React.FC<QuoteBetaSectionProps> = () => {
   return (
     <section className="py-12 sm:py-16 bg-slate-900 dark:bg-[#070D1F] border-t border-slate-800 text-white">
       <div className="mx-auto max-w-3xl px-4 sm:px-6 text-center space-y-6">
-        <div className="inline-flex items-center gap-1.5 rounded-full bg-emerald-950/80 px-3.5 py-1 text-xs font-bold text-[#00C853] border border-emerald-800">
+        <div className="inline-flex items-center gap-1.5 rounded-full bg-emerald-950/80 px-3.5 py-1 text-xs font-bold text-brand-400 border border-emerald-800">
           <MessageSquarePlus className="h-3.5 w-3.5" />
           <span>SUGERENCIAS Y MEJORAS COMERCIALES</span>
         </div>
@@ -110,7 +110,7 @@ export const QuoteBetaSection: React.FC<QuoteBetaSectionProps> = () => {
           {status === 'success' ? (
             <div className="rounded-2xl bg-emerald-950/80 border border-emerald-700 p-6 space-y-3 animate-in fade-in shadow-xl">
               <div className="flex items-center gap-2 text-white font-bold text-sm">
-                <CheckCircle2 className="h-5 w-5 text-[#00C853]" />
+                <CheckCircle2 className="h-5 w-5 text-brand-400" />
                 <span>¡Sugerencia recibida con éxito!</span>
               </div>
               <p className="text-xs text-slate-300 leading-relaxed">
@@ -125,7 +125,7 @@ export const QuoteBetaSection: React.FC<QuoteBetaSectionProps> = () => {
               <button
                 type="button"
                 onClick={() => setStatus('idle')}
-                className="mt-2 text-xs font-bold text-[#00C853] hover:underline cursor-pointer"
+                className="mt-2 text-xs font-bold text-brand-400 hover:underline cursor-pointer"
               >
                 Enviar otra sugerencia
               </button>
@@ -163,7 +163,7 @@ export const QuoteBetaSection: React.FC<QuoteBetaSectionProps> = () => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="ejemplo@tunegocio.pe"
-                  className="w-full rounded-xl bg-slate-950 border border-slate-700 px-3.5 py-2.5 text-xs text-white placeholder-slate-500 outline-none focus:border-[#00C853] transition-colors"
+                  className="w-full rounded-xl bg-slate-950 border border-slate-700 px-3.5 py-2.5 text-xs text-white placeholder-slate-500 outline-none focus:border-brand-400 transition-colors"
                 />
               </div>
 
@@ -178,7 +178,7 @@ export const QuoteBetaSection: React.FC<QuoteBetaSectionProps> = () => {
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
                     placeholder="987654321"
-                    className="w-full rounded-xl bg-slate-950 border border-slate-700 px-3.5 py-2.5 text-xs text-white placeholder-slate-500 outline-none focus:border-[#00C853] transition-colors"
+                    className="w-full rounded-xl bg-slate-950 border border-slate-700 px-3.5 py-2.5 text-xs text-white placeholder-slate-500 outline-none focus:border-brand-400 transition-colors"
                   />
                 </div>
 
@@ -192,7 +192,7 @@ export const QuoteBetaSection: React.FC<QuoteBetaSectionProps> = () => {
                     value={businessType}
                     onChange={(e) => setBusinessType(e.target.value)}
                     placeholder="Ej. Servicios, Textil, Consultoría"
-                    className="w-full rounded-xl bg-slate-950 border border-slate-700 px-3.5 py-2.5 text-xs text-white placeholder-slate-500 outline-none focus:border-[#00C853] transition-colors"
+                    className="w-full rounded-xl bg-slate-950 border border-slate-700 px-3.5 py-2.5 text-xs text-white placeholder-slate-500 outline-none focus:border-brand-400 transition-colors"
                   />
                 </div>
               </div>
@@ -207,7 +207,7 @@ export const QuoteBetaSection: React.FC<QuoteBetaSectionProps> = () => {
                   value={featureNeeded}
                   onChange={(e) => setFeatureNeeded(e.target.value)}
                   placeholder="Ej: Enviar proformas con foto del producto, cotizar en dólares USD, o exportar a notas de venta..."
-                  className="w-full rounded-xl bg-slate-950 border border-slate-700 px-3.5 py-2.5 text-xs text-white placeholder-slate-500 outline-none focus:border-[#00C853] transition-colors resize-y"
+                  className="w-full rounded-xl bg-slate-950 border border-slate-700 px-3.5 py-2.5 text-xs text-white placeholder-slate-500 outline-none focus:border-brand-400 transition-colors resize-y"
                 />
               </div>
 
@@ -218,11 +218,11 @@ export const QuoteBetaSection: React.FC<QuoteBetaSectionProps> = () => {
                     required
                     checked={consent}
                     onChange={(e) => setConsent(e.target.checked)}
-                    className="mt-0.5 rounded border-slate-700 text-[#00C853] focus:ring-[#00C853]"
+                    className="mt-0.5 rounded border-slate-700 text-brand-400 focus:ring-brand-400"
                   />
                   <span className="text-[11px] text-slate-400 leading-normal">
                     Acepto la{' '}
-                    <Link href="/politica-de-privacidad" target="_blank" className="text-[#00C853] underline font-medium">
+                    <Link href="/politica-de-privacidad" target="_blank" className="text-brand-400 underline font-medium">
                       Política de Privacidad
                     </Link>
                     . Autorizo a CalculaPerú a contactarme exclusivamente respecto a novedades y mejoras de esta herramienta.
@@ -233,7 +233,7 @@ export const QuoteBetaSection: React.FC<QuoteBetaSectionProps> = () => {
               <button
                 type="submit"
                 disabled={status === 'loading' || !consent}
-                className="w-full py-3 rounded-xl bg-[#00875A] hover:bg-[#00704A] disabled:opacity-50 text-white font-bold text-xs flex items-center justify-center gap-2 transition-colors shadow-sm cursor-pointer"
+                className="w-full py-3 rounded-xl bg-brand-600 hover:bg-brand-800 disabled:opacity-50 text-white font-bold text-xs flex items-center justify-center gap-2 transition-colors shadow-sm cursor-pointer"
               >
                 {status === 'loading' ? (
                   <>

@@ -184,7 +184,7 @@ Periodo: ${monthsWorkedInSemester} meses laborados`;
         {/* Form Column */}
         <div className="lg:col-span-7 rounded-3xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 sm:p-8 shadow-sm space-y-6">
           <div className="flex items-center gap-2.5 border-b border-slate-100 dark:border-slate-800 pb-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-50 text-[#08734F] dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/60">
+            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-50 text-brand-700 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/60">
               <PiggyBank className="h-4.5 w-4.5" />
             </div>
             <h2 className="text-lg font-bold text-slate-900 dark:text-white">Datos para el Depósito de CTS</h2>
@@ -209,7 +209,7 @@ Periodo: ${monthsWorkedInSemester} meses laborados`;
                 id="companyRegime"
                 value={companyRegime}
                 onChange={(e) => setCompanyRegime(e.target.value as CompanyRegime)}
-                className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 p-2.5 text-xs font-bold text-slate-900 dark:text-white outline-none focus:border-[#08734F]"
+                className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 p-2.5 text-xs font-bold text-slate-900 dark:text-white outline-none focus:border-brand-700"
               >
                 <option value="general">Régimen General (CTS completa; también si la empresa no está inscrita en REMYPE)</option>
                 <option value="pequena_empresa">Pequeña empresa inscrita en REMYPE (50 % de la CTS)</option>
@@ -256,7 +256,7 @@ Periodo: ${monthsWorkedInSemester} meses laborados`;
               <span className="text-xs font-bold uppercase tracking-wider text-emerald-950 dark:text-emerald-300">
                 Depósito Bancario de CTS
               </span>
-              <span className="rounded-full bg-emerald-50 dark:bg-emerald-950/70 border border-emerald-200 dark:border-emerald-800 px-2.5 py-0.5 text-[11px] font-bold text-[#08734F] dark:text-emerald-300">
+              <span className="rounded-full bg-emerald-50 dark:bg-emerald-950/70 border border-emerald-200 dark:border-emerald-800 px-2.5 py-0.5 text-[11px] font-bold text-brand-700 dark:text-emerald-300">
                 Mayo / Noviembre
               </span>
             </div>
@@ -266,7 +266,7 @@ Periodo: ${monthsWorkedInSemester} meses laborados`;
               <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                 Monto de CTS a Depositar
               </span>
-              <div className="text-3xl sm:text-4xl lg:text-[2.6rem] font-black text-[#08734F] dark:text-emerald-400 mt-1.5 font-mono tracking-tight tabular-nums break-words leading-tight">
+              <div className="text-3xl sm:text-4xl lg:text-[2.6rem] font-black text-brand-700 dark:text-emerald-400 mt-1.5 font-mono tracking-tight tabular-nums break-words leading-tight">
                 {formatCurrency(result.ctsAmountToDeposit)}
               </div>
               <div className="mt-1.5 text-xs text-slate-600 dark:text-slate-400 font-semibold">

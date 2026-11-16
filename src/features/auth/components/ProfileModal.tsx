@@ -249,7 +249,7 @@ export function ProfileModal() {
 
         {/* User Profile Header */}
         <div className="flex items-center gap-3.5 border-b border-slate-100 dark:border-slate-800 pb-4">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-[#00875A] to-emerald-400 flex items-center justify-center text-white font-bold text-lg shadow-md shadow-emerald-500/20">
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-brand-600 to-emerald-400 flex items-center justify-center text-white font-bold text-lg shadow-md shadow-emerald-500/20">
             {user.name.charAt(0).toUpperCase()}
           </div>
           <div className="flex-1">
@@ -446,7 +446,7 @@ export function ProfileModal() {
                   placeholder="Ej. Corporación Perú S.A.C."
                   value={companyName}
                   onChange={(e) => setCompanyName(e.target.value)}
-                  className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-slate-900 dark:text-white outline-none focus:border-[#00875A]"
+                  className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-slate-900 dark:text-white outline-none focus:border-brand-600"
                 />
               </div>
               <div>
@@ -459,7 +459,7 @@ export function ProfileModal() {
                   placeholder="Ej. 20601928371"
                   value={companyRuc}
                   onChange={(e) => setCompanyRuc(e.target.value)}
-                  className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-slate-900 dark:text-white outline-none focus:border-[#00875A]"
+                  className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-slate-900 dark:text-white outline-none focus:border-brand-600"
                 />
               </div>
             </div>
@@ -473,7 +473,7 @@ export function ProfileModal() {
                 placeholder="Ej. Av. Javier Prado Este 1420, San Isidro, Lima"
                 value={companyAddress}
                 onChange={(e) => setCompanyAddress(e.target.value)}
-                className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-slate-900 dark:text-white outline-none focus:border-[#00875A]"
+                className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-slate-900 dark:text-white outline-none focus:border-brand-600"
               />
             </div>
 
@@ -513,7 +513,7 @@ export function ProfileModal() {
                 type="button"
                 onClick={handleSaveCompanyData}
                 disabled={isSavingProfile}
-                className="py-2.5 px-4 bg-[#00875A] hover:bg-[#00704A] text-white font-bold rounded-xl text-xs flex items-center gap-2 transition-colors cursor-pointer disabled:opacity-50 shadow-sm"
+                className="py-2.5 px-4 bg-brand-600 hover:bg-brand-800 text-white font-bold rounded-xl text-xs flex items-center gap-2 transition-colors cursor-pointer disabled:opacity-50 shadow-sm"
               >
                 <Check className="w-3.5 h-3.5 text-white" />
                 <span>{isSavingProfile ? 'Guardando...' : 'Guardar Datos en mi Cuenta'}</span>
@@ -587,7 +587,7 @@ export function ProfileModal() {
                   <Link
                     href="/pro"
                     onClick={closeProfileModal}
-                    className="inline-flex items-center gap-2 py-2 px-4 rounded-xl bg-[#00875A] hover:bg-[#00704A] text-white font-bold text-xs transition-colors cursor-pointer shadow-sm"
+                    className="inline-flex items-center gap-2 py-2 px-4 rounded-xl bg-brand-600 hover:bg-brand-800 text-white font-bold text-xs transition-colors cursor-pointer shadow-sm"
                   >
                     <span>Ver Planes y Beneficios PRO</span>
                     <ExternalLink className="w-3 h-3" />
@@ -632,7 +632,7 @@ export function ProfileModal() {
               <div className="space-y-2.5 pt-3 border-t border-slate-200 dark:border-slate-800">
                 <div className="flex items-center justify-between">
                   <h5 className="font-bold text-xs text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
-                    <Clock className="w-3.5 h-3.5 text-[#00875A]" />
+                    <Clock className="w-3.5 h-3.5 text-brand-600" />
                     <span>Trazabilidad de tus Pagos (Yape / Plin)</span>
                   </h5>
                   <span className="text-[10px] text-slate-400 font-medium">
@@ -720,7 +720,7 @@ export function ProfileModal() {
                         {isApproved && sub.generatedLicenseCode && (
                           <div className="flex items-center justify-between text-[11px]">
                             <span className="text-slate-500">Código Oficial:</span>
-                            <span className="font-mono font-bold text-[#00875A] dark:text-emerald-400">
+                            <span className="font-mono font-bold text-brand-600 dark:text-emerald-400">
                               {sub.generatedLicenseCode}
                             </span>
                           </div>

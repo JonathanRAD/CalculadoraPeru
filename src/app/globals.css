@@ -2,6 +2,17 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+/*
+ * Color de marca: único origen. Las clases se usan como text-brand-600, bg-brand-700, etc.
+ * (Fase 0 del rediseño: unifica los verdes sueltos. Cambiar la paleta es editar estas cuatro líneas.)
+ */
+@theme {
+  --color-brand-400: #00c853; /* acento sobre fondos oscuros */
+  --color-brand-600: #00875a; /* marca: acciones, enlaces y resultado clave */
+  --color-brand-700: #08734f; /* marca sobre fondo claro (texto y bordes), más contraste */
+  --color-brand-800: #00704a; /* estado hover y pulsado */
+}
+
 :root {
   --font-sans: var(--font-plex-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-mono: var(--font-mono), "JetBrains Mono", monospace;

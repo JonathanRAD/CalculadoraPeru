@@ -636,16 +636,16 @@ export default function CotizadorProPage() {
           <div className="flex items-center gap-3">
             <Link href="/" className="flex items-center gap-2 group">
               <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-50 dark:bg-emerald-950/80 border border-emerald-200 dark:border-emerald-800 transition-colors">
-                <Store className="h-4 w-4 text-[#00875A] dark:text-[#00C853]" />
+                <Store className="h-4 w-4 text-brand-600 dark:text-brand-400" />
               </span>
               <span className="font-black text-sm tracking-tight text-slate-900 dark:text-white">
-                CalculaPerú <span className="text-[#00875A] dark:text-[#00C853]">Cotizador PRO</span>
+                CalculaPerú <span className="text-brand-600 dark:text-brand-400">Cotizador PRO</span>
               </span>
             </Link>
 
             <span className={`rounded-md px-2.5 py-0.5 text-xs font-mono font-bold border ${
               quoteNumber
-                ? 'bg-emerald-50 dark:bg-emerald-950/80 text-[#00875A] dark:text-[#00C853] border-emerald-200 dark:border-emerald-800'
+                ? 'bg-emerald-50 dark:bg-emerald-950/80 text-brand-600 dark:text-brand-400 border-emerald-200 dark:border-emerald-800'
                 : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 border-slate-200 dark:border-slate-700'
             }`}>
               {quoteNumber || 'BORRADOR SIN NÚMERO'}
@@ -679,7 +679,7 @@ export default function CotizadorProPage() {
               }}
               className="rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 px-3 py-1.5 text-xs font-semibold transition-colors flex items-center gap-1.5 cursor-pointer"
             >
-              <History className="h-3.5 w-3.5 text-[#00875A] dark:text-[#00C853]" />
+              <History className="h-3.5 w-3.5 text-brand-600 dark:text-brand-400" />
               <span>Mis Cotizaciones</span>
             </button>
 
@@ -719,7 +719,7 @@ export default function CotizadorProPage() {
               className="rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 px-3 py-1.5 text-xs font-semibold transition-colors flex items-center gap-1.5 cursor-pointer"
               title="Configurar membrete, logo y RUC"
             >
-              <Building className="h-3.5 w-3.5 text-[#00875A] dark:text-[#00C853]" />
+              <Building className="h-3.5 w-3.5 text-brand-600 dark:text-brand-400" />
               <span className="hidden md:inline">Mi Empresa</span>
             </button>
           </div>
@@ -730,7 +730,7 @@ export default function CotizadorProPage() {
       {/* Aviso de borrador restaurado y control de privacidad */}
       {hasDraftRestored && !quoteId && (
         <div className="bg-emerald-50 dark:bg-emerald-950/60 border-b border-emerald-200 dark:border-emerald-800 px-4 py-2 text-center text-xs text-slate-700 dark:text-slate-300 flex flex-wrap items-center justify-center gap-2">
-          <CheckCircle2 className="h-4 w-4 text-[#00875A] dark:text-[#00C853]" />
+          <CheckCircle2 className="h-4 w-4 text-brand-600 dark:text-brand-400" />
           <span>
             Borrador conservado en tu navegador{draftSavedAt ? ` (guardado a las ${draftSavedAt})` : ''}.
           </span>
@@ -747,7 +747,7 @@ export default function CotizadorProPage() {
       {/* Mensajes de retroalimentación */}
       {saveSuccessMessage && (
         <div className="mx-auto max-w-7xl px-4 sm:px-6 pt-4">
-          <div className="rounded-2xl bg-emerald-50 dark:bg-emerald-950/70 border border-emerald-200 dark:border-emerald-800 p-3.5 text-xs text-[#00875A] dark:text-[#00C853] flex items-center justify-between gap-2 shadow-sm">
+          <div className="rounded-2xl bg-emerald-50 dark:bg-emerald-950/70 border border-emerald-200 dark:border-emerald-800 p-3.5 text-xs text-brand-600 dark:text-brand-400 flex items-center justify-between gap-2 shadow-sm">
             <div className="flex items-center gap-2">
               <CheckCircle2 className="h-4 w-4 shrink-0" />
               <span>{saveSuccessMessage}</span>
@@ -755,7 +755,7 @@ export default function CotizadorProPage() {
             <button
               type="button"
               onClick={() => setSaveSuccessMessage(null)}
-              className="text-[#00875A] hover:opacity-75"
+              className="text-brand-600 hover:opacity-75"
             >
               ✕
             </button>
@@ -793,7 +793,7 @@ export default function CotizadorProPage() {
             <div className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/90 p-5 sm:p-6 shadow-sm space-y-4">
               <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 dark:border-slate-800 pb-3">
                 <div className="flex items-center gap-2">
-                  <FileText className="h-5 w-5 text-[#00875A] dark:text-[#00C853]" />
+                  <FileText className="h-5 w-5 text-brand-600 dark:text-brand-400" />
                   <h2 className="font-bold text-sm text-slate-900 dark:text-white">Datos de la Cotización</h2>
                 </div>
                 <div className="text-[11px] text-slate-500 dark:text-slate-400">
@@ -813,7 +813,7 @@ export default function CotizadorProPage() {
                     value={prefix}
                     onChange={(e) => setPrefix(e.target.value.toUpperCase())}
                     placeholder="COT-"
-                    className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 px-3.5 py-2.5 text-xs text-slate-900 dark:text-white font-mono uppercase focus:border-[#00875A] outline-none"
+                    className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 px-3.5 py-2.5 text-xs text-slate-900 dark:text-white font-mono uppercase focus:border-brand-600 outline-none"
                   />
                 </div>
 
@@ -827,7 +827,7 @@ export default function CotizadorProPage() {
                     required
                     value={issueDate}
                     onChange={(e) => setIssueDate(e.target.value)}
-                    className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 px-3.5 py-2.5 text-xs text-slate-900 dark:text-white focus:border-[#00875A] outline-none"
+                    className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 px-3.5 py-2.5 text-xs text-slate-900 dark:text-white focus:border-brand-600 outline-none"
                   />
                 </div>
 
@@ -841,7 +841,7 @@ export default function CotizadorProPage() {
                     min={issueDate}
                     value={validUntil}
                     onChange={(e) => setValidUntil(e.target.value)}
-                    className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 px-3.5 py-2.5 text-xs text-slate-900 dark:text-white focus:border-[#00875A] outline-none"
+                    className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 px-3.5 py-2.5 text-xs text-slate-900 dark:text-white focus:border-brand-600 outline-none"
                   />
                 </div>
               </div>
@@ -885,7 +885,7 @@ export default function CotizadorProPage() {
                       setIsClientModalOpen(true);
                     }
                   }}
-                  className="rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 text-[#00875A] dark:text-[#00C853] px-3 py-1 text-xs font-semibold transition-colors flex items-center gap-1.5 cursor-pointer"
+                  className="rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 text-brand-600 dark:text-brand-400 px-3 py-1 text-xs font-semibold transition-colors flex items-center gap-1.5 cursor-pointer"
                 >
                   <Building className="h-3.5 w-3.5" />
                   <span>Elegir de mi directorio</span>
@@ -906,7 +906,7 @@ export default function CotizadorProPage() {
                     value={clientName}
                     onChange={(e) => setClientName(e.target.value)}
                     placeholder="Ej: Distribuidora Los Andes S.A.C."
-                    className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 px-3.5 py-2.5 text-xs text-slate-900 dark:text-white placeholder:text-slate-400 focus:border-[#00875A] outline-none"
+                    className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 px-3.5 py-2.5 text-xs text-slate-900 dark:text-white placeholder:text-slate-400 focus:border-brand-600 outline-none"
                   />
                 </div>
 
@@ -940,7 +940,7 @@ export default function CotizadorProPage() {
                     value={clientDocNumber}
                     onChange={(e) => setClientDocNumber(e.target.value)}
                     placeholder={clientDocType === 'dni' ? '8 dígitos' : clientDocType === 'ruc' ? '11 dígitos' : 'Opcional'}
-                    className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 px-3.5 py-2.5 text-xs text-slate-900 dark:text-white placeholder:text-slate-400 focus:border-[#00875A] outline-none font-mono"
+                    className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 px-3.5 py-2.5 text-xs text-slate-900 dark:text-white placeholder:text-slate-400 focus:border-brand-600 outline-none font-mono"
                   />
                 </div>
 
@@ -955,7 +955,7 @@ export default function CotizadorProPage() {
                     value={clientPhone}
                     onChange={(e) => setClientPhone(e.target.value)}
                     placeholder="Ej: 987654321"
-                    className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 px-3.5 py-2.5 text-xs text-slate-900 dark:text-white placeholder:text-slate-400 focus:border-[#00875A] outline-none font-mono"
+                    className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 px-3.5 py-2.5 text-xs text-slate-900 dark:text-white placeholder:text-slate-400 focus:border-brand-600 outline-none font-mono"
                   />
                 </div>
 
@@ -970,7 +970,7 @@ export default function CotizadorProPage() {
                     value={clientEmail}
                     onChange={(e) => setClientEmail(e.target.value)}
                     placeholder="cliente@empresa.pe"
-                    className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 px-3.5 py-2.5 text-xs text-slate-900 dark:text-white placeholder:text-slate-400 focus:border-[#00875A] outline-none"
+                    className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 px-3.5 py-2.5 text-xs text-slate-900 dark:text-white placeholder:text-slate-400 focus:border-brand-600 outline-none"
                   />
                 </div>
               </div>
@@ -986,7 +986,7 @@ export default function CotizadorProPage() {
                   value={clientAddress}
                   onChange={(e) => setClientAddress(e.target.value)}
                   placeholder="Ej: Av. Los Conquistadores 450, San Isidro, Lima"
-                  className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 px-3.5 py-2.5 text-xs text-slate-900 dark:text-white placeholder:text-slate-400 focus:border-[#00875A] outline-none"
+                  className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 px-3.5 py-2.5 text-xs text-slate-900 dark:text-white placeholder:text-slate-400 focus:border-brand-600 outline-none"
                 />
               </div>
             </div>
@@ -1011,7 +1011,7 @@ export default function CotizadorProPage() {
                         setIsCatalogModalOpen(true);
                       }
                     }}
-                    className="rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 text-[#00875A] dark:text-[#00C853] px-3 py-1.5 text-xs font-semibold transition-colors flex items-center gap-1.5 cursor-pointer"
+                    className="rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 text-brand-600 dark:text-brand-400 px-3 py-1.5 text-xs font-semibold transition-colors flex items-center gap-1.5 cursor-pointer"
                   >
                     <Package className="h-3.5 w-3.5" />
                     <span>+ Del Catálogo</span>
@@ -1020,7 +1020,7 @@ export default function CotizadorProPage() {
                   <button
                     type="button"
                     onClick={handleAddItem}
-                    className="rounded-xl bg-[#00875A] hover:bg-[#00704A] text-white px-3.5 py-1.5 text-xs font-bold transition-colors flex items-center gap-1.5 cursor-pointer shadow-sm"
+                    className="rounded-xl bg-brand-600 hover:bg-brand-800 text-white px-3.5 py-1.5 text-xs font-bold transition-colors flex items-center gap-1.5 cursor-pointer shadow-sm"
                   >
                     <Plus className="h-3.5 w-3.5" />
                     <span>+ Concepto Manual</span>
@@ -1049,9 +1049,9 @@ export default function CotizadorProPage() {
                 <button
                   type="button"
                   onClick={handleAddItem}
-                  className="w-full py-3 rounded-2xl border-2 border-dashed border-slate-300 dark:border-slate-700 hover:border-[#00875A] hover:bg-emerald-50/50 dark:hover:bg-emerald-950/20 text-xs font-bold text-slate-600 dark:text-slate-300 transition-all flex items-center justify-center gap-2 cursor-pointer"
+                  className="w-full py-3 rounded-2xl border-2 border-dashed border-slate-300 dark:border-slate-700 hover:border-brand-600 hover:bg-emerald-50/50 dark:hover:bg-emerald-950/20 text-xs font-bold text-slate-600 dark:text-slate-300 transition-all flex items-center justify-center gap-2 cursor-pointer"
                 >
-                  <Plus className="h-4 w-4 text-[#00875A]" />
+                  <Plus className="h-4 w-4 text-brand-600" />
                   <span>Añadir otra línea o concepto</span>
                 </button>
               </div>
@@ -1075,7 +1075,7 @@ export default function CotizadorProPage() {
                     value={paymentTerms}
                     onChange={(e) => setPaymentTerms(e.target.value)}
                     placeholder="Ej: Contado, crédito a 15 días, 50% anticipo..."
-                    className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 px-3.5 py-2.5 text-xs text-slate-900 dark:text-white placeholder:text-slate-400 focus:border-[#00875A] outline-none"
+                    className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 px-3.5 py-2.5 text-xs text-slate-900 dark:text-white placeholder:text-slate-400 focus:border-brand-600 outline-none"
                   />
                 </div>
 
@@ -1090,7 +1090,7 @@ export default function CotizadorProPage() {
                     value={deliveryTime}
                     onChange={(e) => setDeliveryTime(e.target.value)}
                     placeholder="Ej: Inmediato, 48 horas, según coordinación..."
-                    className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 px-3.5 py-2.5 text-xs text-slate-900 dark:text-white placeholder:text-slate-400 focus:border-[#00875A] outline-none"
+                    className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 px-3.5 py-2.5 text-xs text-slate-900 dark:text-white placeholder:text-slate-400 focus:border-brand-600 outline-none"
                   />
                 </div>
               </div>
@@ -1106,7 +1106,7 @@ export default function CotizadorProPage() {
                   value={publicNotes}
                   onChange={(e) => setPublicNotes(e.target.value)}
                   placeholder="Aclaraciones para el cliente sobre garantía, traslado, vigencia, etc."
-                  className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 px-3.5 py-2 text-xs text-slate-900 dark:text-white placeholder:text-slate-400 focus:border-[#00875A] outline-none resize-none"
+                  className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 px-3.5 py-2 text-xs text-slate-900 dark:text-white placeholder:text-slate-400 focus:border-brand-600 outline-none resize-none"
                 />
               </div>
 
@@ -1198,7 +1198,7 @@ export default function CotizadorProPage() {
                         value={globalDiscountValue === 0 ? '' : globalDiscountValue}
                         onChange={(e) => setGlobalDiscountValue(parseFloat(e.target.value) || 0)}
                         placeholder={globalDiscountType === 'percent' ? '5%' : 'S/ 50'}
-                        className="w-24 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 px-2 py-1 text-xs text-right font-mono text-slate-900 dark:text-white outline-none focus:border-[#00875A]"
+                        className="w-24 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 px-2 py-1 text-xs text-right font-mono text-slate-900 dark:text-white outline-none focus:border-brand-600"
                       />
                     </div>
                   )}
@@ -1235,7 +1235,7 @@ export default function CotizadorProPage() {
                       type="button"
                       onClick={() => setIncludeIgv(!includeIgv)}
                       className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
-                        includeIgv ? 'bg-[#00875A]' : 'bg-slate-300 dark:bg-slate-700'
+                        includeIgv ? 'bg-brand-600' : 'bg-slate-300 dark:bg-slate-700'
                       }`}
                       role="switch"
                       aria-checked={includeIgv}
@@ -1266,7 +1266,7 @@ export default function CotizadorProPage() {
                       )}
                       <div className="flex justify-between text-slate-900 dark:text-white font-semibold">
                         <span>IGV (18%):</span>
-                        <span className="font-mono text-[#00875A] dark:text-[#00C853]">
+                        <span className="font-mono text-brand-600 dark:text-brand-400">
                           S/ {calculatedResult.totals.igvAmount.toFixed(2)}
                         </span>
                       </div>
@@ -1279,7 +1279,7 @@ export default function CotizadorProPage() {
                   <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                     TOTAL ESTIMADO:
                   </span>
-                  <div className="text-3xl font-black font-mono text-[#00875A] dark:text-[#00C853]">
+                  <div className="text-3xl font-black font-mono text-brand-600 dark:text-brand-400">
                     S/ {calculatedResult.totals.totalAmount.toFixed(2)}
                   </div>
                   <span className="text-[10px] text-slate-400 block">
@@ -1296,7 +1296,7 @@ export default function CotizadorProPage() {
                   type="button"
                   disabled={isSaving}
                   onClick={handleSaveToCloud}
-                  className="w-full rounded-2xl bg-[#00875A] hover:bg-[#00704A] text-white font-bold py-3 px-4 text-xs transition-all cursor-pointer shadow-md shadow-emerald-950/20 flex items-center justify-center gap-2 disabled:opacity-60"
+                  className="w-full rounded-2xl bg-brand-600 hover:bg-brand-800 text-white font-bold py-3 px-4 text-xs transition-all cursor-pointer shadow-md shadow-emerald-950/20 flex items-center justify-center gap-2 disabled:opacity-60"
                 >
                   <Save className="h-4 w-4" />
                   <span>{isSaving ? 'Guardando...' : quoteId ? 'Actualizar Cotización' : 'Guardar Cotización PRO'}</span>
@@ -1309,7 +1309,7 @@ export default function CotizadorProPage() {
                     onClick={handlePreviewPdf}
                     className="rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold py-2.5 px-3 text-xs transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
                   >
-                    <Eye className="h-3.5 w-3.5 text-[#00875A] dark:text-[#00C853]" />
+                    <Eye className="h-3.5 w-3.5 text-brand-600 dark:text-brand-400" />
                     <span>Vista previa</span>
                   </button>
 
@@ -1318,7 +1318,7 @@ export default function CotizadorProPage() {
                     onClick={handleExportPdf}
                     className="rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold py-2.5 px-3 text-xs transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
                   >
-                    <Download className="h-3.5 w-3.5 text-[#00875A] dark:text-[#00C853]" />
+                    <Download className="h-3.5 w-3.5 text-brand-600 dark:text-brand-400" />
                     <span>Descargar PDF</span>
                   </button>
                 </div>
@@ -1356,7 +1356,7 @@ export default function CotizadorProPage() {
             {/* Aviso Prudente de Asesoría */}
             <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 p-4 text-xs text-slate-500 dark:text-slate-400 space-y-2">
               <div className="font-bold text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
-                <ShieldCheck className="h-4 w-4 text-[#00875A]" />
+                <ShieldCheck className="h-4 w-4 text-brand-600" />
                 <span>Orientación comercial y tributaria</span>
               </div>
               <p className="text-[11px] leading-relaxed">
@@ -1378,14 +1378,14 @@ export default function CotizadorProPage() {
           <div className="relative w-full max-w-4xl h-[85vh] rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 flex flex-col shadow-2xl">
             <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800 mb-3">
               <h3 className="font-bold text-sm text-slate-900 dark:text-white flex items-center gap-2">
-                <Eye className="h-4 w-4 text-[#00875A]" />
+                <Eye className="h-4 w-4 text-brand-600" />
                 <span>Vista Previa de la Proforma</span>
               </h3>
               <div className="flex items-center gap-2">
                 <button
                   type="button"
                   onClick={handleExportPdf}
-                  className="rounded-xl bg-[#00875A] hover:bg-[#00704A] text-white px-3 py-1.5 text-xs font-bold flex items-center gap-1"
+                  className="rounded-xl bg-brand-600 hover:bg-brand-800 text-white px-3 py-1.5 text-xs font-bold flex items-center gap-1"
                 >
                   <Download className="h-3.5 w-3.5" />
                   <span>Descargar archivo</span>
