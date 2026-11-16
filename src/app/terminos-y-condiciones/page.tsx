@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { Scale, AlertTriangle, ArrowLeft } from 'lucide-react';
+import { AlertTriangle, ArrowLeft } from 'lucide-react';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -14,34 +14,30 @@ export const metadata: Metadata = {
 
 export default function TerminosCondicionesPage() {
   return (
-    <div className="min-h-screen bg-[#eef2f6] dark:bg-slate-950 text-slate-900 dark:text-slate-100 py-12 px-4 sm:px-6 transition-colors">
-      <div className="mx-auto max-w-4xl bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-10 border-2 border-slate-200/90 dark:border-slate-800 shadow-md">
+    <div className="min-h-screen bg-[#eef2f6] dark:bg-[#0E141B] text-slate-900 dark:text-slate-100 py-12 px-4 sm:px-6 transition-colors">
+      <div className="mx-auto max-w-4xl bg-white dark:bg-[#18202A] rounded-lg p-6 sm:p-10 border-2 border-slate-200/90 dark:border-[#2C3744]">
         
         {/* Back Link */}
         <Link
           href="/"
-          className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-800 dark:text-emerald-400 hover:underline mb-6"
+          className="inline-flex items-center gap-1.5 text-[13px] font-bold text-brand-800 dark:text-brand-400 hover:underline mb-6"
         >
           <ArrowLeft className="h-4 w-4" />
           <span>Volver al inicio</span>
         </Link>
 
         {/* Header */}
-        <div className="border-b border-slate-100 dark:border-slate-800 pb-6 mb-8">
-          <div className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-950 px-2.5 py-1 text-xs font-bold text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 mb-3">
-            <Scale className="h-4 w-4" />
-            <span>TÉRMINOS LEGALES Y CONDICIONES</span>
-          </div>
-          <h1 className="text-2xl sm:text-4xl font-black text-slate-950 dark:text-white tracking-tight">
+        <div className="border-b border-slate-100 dark:border-[#2C3744] pb-6 mb-8">
+          <h1 className="text-2xl sm:text-4xl font-bold text-slate-950 dark:text-white tracking-tight">
             Términos y Condiciones
           </h1>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-2 font-medium">
+          <p className="text-[13px] text-slate-500 dark:text-slate-400 mt-2 font-medium">
             Última actualización: 28 de agosto de 2026
           </p>
         </div>
 
         {/* Content */}
-        <div className="space-y-6 text-sm text-slate-700 dark:text-slate-300 leading-relaxed font-normal">
+        <div className="space-y-6 text-[15px] text-slate-700 dark:text-slate-300 leading-relaxed font-normal">
           
           <section className="space-y-2">
             <h2 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
@@ -60,7 +56,7 @@ export default function TerminosCondicionesPage() {
             <p>
               Todas las calculadoras, simuladores, fórmulas y contenidos educativos proporcionados en CalculaPerú tienen una finalidad exclusivamente <strong>informativa, didáctica y referencial</strong>.
             </p>
-            <ul className="list-disc pl-5 space-y-1.5 text-xs text-slate-600 dark:text-slate-400">
+            <ul className="list-disc pl-5 space-y-1.5 text-[13px] text-slate-600 dark:text-slate-400">
               <li>
                 <strong>No sustituyen asesoría profesional:</strong> Los resultados obtenidos no constituyen asesoría tributaria, contable, laboral ni financiera formal. Para trámites oficiales, declaraciones juradas o controversias laborales, se recomienda consultar directamente con un contador colegiado, abogado laboralista o recurrir a los canales oficiales de la SUNAT o Ministerio de Trabajo.
               </li>

@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { Heart, Code2, Sparkles, Mail, ArrowLeft, ExternalLink } from 'lucide-react';
+import { Heart, Code2, Mail, ArrowLeft, ExternalLink } from 'lucide-react';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -14,34 +14,30 @@ export const metadata: Metadata = {
 
 export default function SobreNosotrosPage() {
   return (
-    <div className="min-h-screen bg-[#eef2f6] dark:bg-slate-950 text-slate-900 dark:text-slate-100 py-12 px-4 sm:px-6 transition-colors">
-      <div className="mx-auto max-w-4xl bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-10 border-2 border-slate-200/90 dark:border-slate-800 shadow-md space-y-8">
+    <div className="min-h-screen bg-[#eef2f6] dark:bg-[#0E141B] text-slate-900 dark:text-slate-100 py-12 px-4 sm:px-6 transition-colors">
+      <div className="mx-auto max-w-4xl bg-white dark:bg-[#18202A] rounded-lg p-6 sm:p-10 border-2 border-slate-200/90 dark:border-[#2C3744] space-y-8">
         
         {/* Back Link */}
         <Link
           href="/"
-          className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-800 dark:text-emerald-400 hover:underline"
+          className="inline-flex items-center gap-1.5 text-[13px] font-bold text-brand-800 dark:text-brand-400 hover:underline"
         >
           <ArrowLeft className="h-4 w-4" />
           <span>Volver al inicio</span>
         </Link>
 
         {/* Header */}
-        <div className="border-b border-slate-100 dark:border-slate-800 pb-6">
-          <div className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-950 px-2.5 py-1 text-xs font-bold text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 mb-3">
-            <Sparkles className="h-4 w-4 text-emerald-700 dark:text-emerald-400" />
-            <span>NUESTRA MISIÓN EN EL PERÚ</span>
-          </div>
-          <h1 className="text-2xl sm:text-4xl font-black text-slate-950 dark:text-white tracking-tight">
+        <div className="border-b border-slate-100 dark:border-[#2C3744] pb-6">
+          <h1 className="text-2xl sm:text-4xl font-bold text-slate-950 dark:text-white tracking-tight">
             Sobre CalculaPerú
           </h1>
-          <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 mt-2 font-normal leading-relaxed">
+          <p className="text-[15px] sm:text-base text-slate-600 dark:text-slate-300 mt-2 font-normal leading-relaxed">
             El portal de herramientas financieras, comerciales y laborales diseñado a la medida de la realidad peruana.
           </p>
         </div>
 
         {/* Story Section */}
-        <div className="space-y-6 text-sm text-slate-700 dark:text-slate-300 leading-relaxed font-normal">
+        <div className="space-y-6 text-[15px] text-slate-700 dark:text-slate-300 leading-relaxed font-normal">
           
           <div className="space-y-3">
             <h2 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
@@ -54,46 +50,37 @@ export default function SobreNosotrosPage() {
             <p>
               <strong>CalculaPerú</strong> nació con un objetivo simple y claro: <em>democratizar el acceso a cálculos rápidos, transparentes y rigurosamente fundamentados en la normativa peruana vigente</em> (tasas de SUNAT, UIT actualizada, tablas de AFP/ONP publicadas por la SBS, decretos del Ministerio de Trabajo y tarifas de Osinergmin).
             </p>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
+            <p className="text-[13px] text-slate-500 dark:text-slate-400">
               Desarrollado y mantenido de forma independiente por <strong>Jonathan Rujel</strong>, el portal ofrece simuladores abiertos con desgloses paso a paso para que cada usuario comprenda el origen de sus descuentos e impuestos sin depender de cajas negras. Los cálculos tienen carácter informativo y referencial, diseñados para empoderar decisiones cotidianas con parámetros oficiales verificables.
             </p>
           </div>
 
           {/* Pillars Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
-            <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 p-5 space-y-2">
-              <div className="h-9 w-9 rounded-xl bg-emerald-100 dark:bg-emerald-950 flex items-center justify-center text-emerald-800 dark:text-emerald-300 font-bold">
-                🇵🇪
-              </div>
-              <h3 className="font-bold text-sm text-slate-900 dark:text-white">100% Peruano</h3>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
+            <div className="rounded-lg border border-slate-200 dark:border-[#2C3744] bg-slate-50 dark:bg-[#0E141B] p-5 space-y-2">
+              <h3 className="font-bold text-[15px] text-slate-900 dark:text-white">100% Peruano</h3>
+              <p className="text-[13px] text-slate-500 dark:text-slate-400">
                 Adaptado a soles (S/), IGV del 18%, retenciones de 4ta y 5ta categoría y beneficios laborales de ley.
               </p>
             </div>
 
-            <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 p-5 space-y-2">
-              <div className="h-9 w-9 rounded-xl bg-indigo-100 dark:bg-indigo-950 flex items-center justify-center text-indigo-800 dark:text-indigo-300 font-bold">
-                ⚡
-              </div>
-              <h3 className="font-bold text-sm text-slate-900 dark:text-white">Rápido y Gratuito</h3>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
+            <div className="rounded-lg border border-slate-200 dark:border-[#2C3744] bg-slate-50 dark:bg-[#0E141B] p-5 space-y-2">
+              <h3 className="font-bold text-[15px] text-slate-900 dark:text-white">Rápido y Gratuito</h3>
+              <p className="text-[13px] text-slate-500 dark:text-slate-400">
                 Sin registros obligatorios para calcular, sin publicidad invasiva y con respuesta instantánea.
               </p>
             </div>
 
-            <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 p-5 space-y-2">
-              <div className="h-9 w-9 rounded-xl bg-amber-100 dark:bg-amber-950 flex items-center justify-center text-amber-800 dark:text-amber-300 font-bold">
-                🔒
-              </div>
-              <h3 className="font-bold text-sm text-slate-900 dark:text-white">Privacidad Total</h3>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
+            <div className="rounded-lg border border-slate-200 dark:border-[#2C3744] bg-slate-50 dark:bg-[#0E141B] p-5 space-y-2">
+              <h3 className="font-bold text-[15px] text-slate-900 dark:text-white">Privacidad Total</h3>
+              <p className="text-[13px] text-slate-500 dark:text-slate-400">
                 En uso libre, tus números y sueldos se calculan localmente en tu propio dispositivo. En el Plan PRO, los cálculos se guardan únicamente si tú decides almacenarlos voluntariamente.
               </p>
             </div>
           </div>
 
           {/* Method Section */}
-          <div className="border-t border-slate-100 dark:border-slate-800 pt-6 space-y-3">
+          <div className="border-t border-slate-100 dark:border-[#2C3744] pt-6 space-y-3">
             <h2 className="text-lg font-bold text-slate-900 dark:text-white">
               Cómo mantenemos las calculadoras
             </h2>
@@ -106,22 +93,22 @@ export default function SobreNosotrosPage() {
               </li>
               <li>
                 <strong>Fuentes oficiales.</strong> Los parámetros salen de SUNAT, MTPE, SBS y BCRP. Los cambios se anotan en el{' '}
-                <Link href="/actualizaciones" className="font-bold text-emerald-800 dark:text-emerald-400 hover:underline">registro de actualizaciones</Link>.
+                <Link href="/actualizaciones" className="font-bold text-brand-800 dark:text-brand-400 hover:underline">registro de actualizaciones</Link>.
               </li>
               <li>
                 <strong>Alcance.</strong> Los resultados son referenciales. Tu caso puede variar por contratos, convenios o situaciones especiales; ante una decisión importante, consulta a un contador o abogado laboral.
               </li>
               <li>
                 <strong>Correcciones.</strong> Si encuentras un error, escríbenos por el formulario de contacto y lo revisamos. Las explicaciones paso a paso están en las{' '}
-                <Link href="/guias" className="font-bold text-emerald-800 dark:text-emerald-400 hover:underline">guías</Link>.
+                <Link href="/guias" className="font-bold text-brand-800 dark:text-brand-400 hover:underline">guías</Link>.
               </li>
             </ul>
           </div>
 
           {/* Contact Section */}
-          <div className="border-t border-slate-100 dark:border-slate-800 pt-6 space-y-4">
+          <div className="border-t border-slate-100 dark:border-[#2C3744] pt-6 space-y-4">
             <h2 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
-              <Mail className="h-5 w-5 text-emerald-700 dark:text-emerald-400" />
+              <Mail className="h-5 w-5 text-brand-700 dark:text-brand-400" />
               Contacto y Sugerencias
             </h2>
             <p>
@@ -131,7 +118,7 @@ export default function SobreNosotrosPage() {
             <div className="flex flex-wrap items-center gap-4 pt-2">
               <Link
                 href="/contacto"
-                className="inline-flex items-center gap-2 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white px-4 py-2.5 text-xs font-bold transition-colors shadow-sm"
+                className="inline-flex items-center gap-2 rounded bg-brand-700 hover:bg-brand-800 text-white px-4 py-2.5 text-[13px] font-bold transition-colors"
               >
                 <Mail className="h-4 w-4" />
                 <span>Formulario de Contacto</span>
@@ -142,7 +129,7 @@ export default function SobreNosotrosPage() {
                 href="https://github.com/JonathanRAD"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-4 py-2.5 text-xs font-bold hover:bg-slate-800 transition-colors"
+                className="inline-flex items-center gap-2 rounded bg-[#18202A] dark:bg-white text-white dark:text-slate-900 px-4 py-2.5 text-[13px] font-bold hover:bg-slate-800 transition-colors"
               >
                 <Code2 className="h-4 w-4" />
                 <span>Perfil de GitHub (JonathanRAD)</span>
@@ -151,7 +138,7 @@ export default function SobreNosotrosPage() {
 
               <Link
                 href="/cotizador"
-                className="inline-flex items-center gap-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700 px-4 py-2.5 text-xs font-bold hover:bg-slate-200 transition-colors"
+                className="inline-flex items-center gap-2 rounded bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700 px-4 py-2.5 text-[13px] font-bold hover:bg-slate-200 transition-colors"
               >
                 <span>Conocer el Cotizador para MYPES</span>
                 <span>→</span>

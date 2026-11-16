@@ -22,13 +22,13 @@ export function ReferenceDataNote({ reviewed, children, sources }: ReferenceData
   return (
     <aside
       aria-label="Datos de referencia"
-      className="mb-8 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-xs leading-relaxed text-amber-950 dark:border-amber-900/60 dark:bg-amber-950/30 dark:text-amber-100"
+      className="mb-8 rounded-lg border border-amber-200 bg-amber-50 p-4 text-[13px] leading-relaxed text-amber-950 dark:border-amber-900/60 dark:bg-amber-950/30 dark:text-amber-100"
     >
       <div className="flex items-start gap-2">
         <Info className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
         <div className="space-y-2">
           <p>{children}</p>
-          <p className="text-[11px] opacity-80">Valores de referencia revisados el {date}.</p>
+          <p className="text-[13px] opacity-80">Valores de referencia revisados el {date}.</p>
           <ul className="flex flex-wrap gap-x-4 gap-y-1">
             {sources.map((source) => (
               <li key={source.url}>

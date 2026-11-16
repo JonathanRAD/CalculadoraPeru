@@ -30,7 +30,7 @@ export default function OpenGraphImage() {
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', maxWidth: 880 }}>
-            <div style={{ color: '#6ee7b7', fontSize: 20, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase' }}>25 herramientas gratuitas · Perú 2026</div>
+            <div style={{ color: '#6ee7b7', fontSize: 20, fontWeight: 700, letterSpacing: '0.08em', textTransform: '' }}>25 herramientas gratuitas · Perú 2026</div>
             <div style={{ marginTop: 18, fontSize: 64, lineHeight: 1.04, fontWeight: 800, letterSpacing: '-0.035em' }}>Sueldo, IGV, negocios y finanzas en un solo lugar</div>
           </div>
 

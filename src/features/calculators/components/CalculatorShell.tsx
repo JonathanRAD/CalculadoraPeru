@@ -67,7 +67,7 @@ export function CalculatorShell({
   } : null;
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#0B132B] text-slate-900 dark:text-slate-100 pb-20 transition-colors">
+    <div className="min-h-screen bg-[#F4F1EA] dark:bg-[#121820] text-slate-900 dark:text-slate-100 pb-20 transition-colors">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(appJsonLd) }}
@@ -79,66 +79,44 @@ export function CalculatorShell({
         />
       )}
 
-      {/* Header Banner */}
-      <div className="border-b border-slate-200/90 dark:border-slate-800 bg-white dark:bg-[#0E1736] pt-8 pb-10 shadow-2xs">
+      {/* Cabecera: migas, título, descripción y fecha de revisión */}
+      <div className="border-b border-stone-300 dark:border-slate-700 pt-6 pb-10">
         <div className="mx-auto max-w-5xl px-4 sm:px-6">
-
-          {/* Breadcrumb */}
-          <nav aria-label="Migas de pan" className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400 mb-3 font-semibold">
-            <Link href="/" className="hover:text-brand-700 dark:hover:text-emerald-400 transition-colors">
-              Inicio
-            </Link>
-            <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
-            <Link href="/#todas-las-calculadoras" className="hover:text-brand-700 dark:hover:text-emerald-400 transition-colors capitalize">
+          <nav aria-label="Migas de pan" className="mb-4 flex flex-wrap items-center gap-1.5 text-sm text-slate-600 dark:text-slate-400">
+            <Link href="/" className="hover:text-brand-700 hover:underline dark:hover:text-brand-400">Inicio</Link>
+            <ChevronRight className="h-4 w-4 text-slate-400" aria-hidden="true" />
+            <Link href="/#todas-las-calculadoras" className="capitalize hover:text-brand-700 hover:underline dark:hover:text-brand-400">
               {meta.category}
             </Link>
-            <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
-            <span className="text-slate-800 dark:text-slate-200 font-bold truncate">
-              {meta.shortTitle}
-            </span>
+            <ChevronRight className="h-4 w-4 text-slate-400" aria-hidden="true" />
+            <span className="truncate font-semibold text-slate-900 dark:text-slate-100">{meta.shortTitle}</span>
           </nav>
 
-          {/* Title & Official Badge */}
-          <div className="flex flex-wrap items-center gap-2 mb-2">
-            <span className="rounded-md bg-emerald-50 dark:bg-emerald-950/80 px-2.5 py-0.5 text-xs font-bold text-brand-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
-              {meta.tag}
-            </span>
-            {meta.badge && (
-              <span className="rounded-md bg-slate-100 dark:bg-slate-800 px-2.5 py-0.5 text-xs font-bold text-slate-700 dark:text-slate-300">
-                {meta.badge}
-              </span>
-            )}
-            <div className="flex items-center gap-1 text-xs text-brand-700 dark:text-emerald-400 font-bold ml-auto">
-              <ShieldCheck className="h-4 w-4" />
-              <span>Parámetros referenciales para Perú</span>
-            </div>
-          </div>
-
-          <h1 className="text-2xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
+          <h1 className="max-w-3xl text-3xl font-bold leading-tight tracking-tight text-slate-900 dark:text-white sm:text-4xl">
             {meta.title}
           </h1>
-          <p className="mt-2 text-sm sm:text-base text-slate-600 dark:text-slate-300 max-w-3xl font-normal leading-relaxed">
+          <p className="mt-3 max-w-3xl text-base leading-relaxed text-slate-700 dark:text-slate-300">
             {meta.description}
           </p>
-          <p className="mt-3 text-xs text-slate-500 dark:text-slate-400">
-            Última actualización del sitio:{' '}
-            <time dateTime={SITE_LAST_UPDATED}>
-              {new Date(`${SITE_LAST_UPDATED}T12:00:00`).toLocaleDateString('es-PE', { day: 'numeric', month: 'long', year: 'numeric' })}
-            </time>
-            {' · '}
-            <Link href="/actualizaciones" className="font-bold hover:underline">Ver cambios de parámetros</Link>
-            {' · '}
-            <Link href="/guias" className="font-bold hover:underline">Guías</Link>
+          <p className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-1 border-t border-stone-300 pt-3 text-sm text-slate-600 dark:border-slate-700 dark:text-slate-400">
+            <span className="inline-flex items-center gap-1.5">
+              <ShieldCheck className="h-4 w-4 text-brand-700 dark:text-brand-400" aria-hidden="true" />
+              Parámetros revisados el{' '}
+              <time dateTime={SITE_LAST_UPDATED}>
+                {new Date(`${SITE_LAST_UPDATED}T12:00:00`).toLocaleDateString('es-PE', { day: 'numeric', month: 'long', year: 'numeric' })}
+              </time>
+            </span>
+            <Link href="/actualizaciones" className="font-semibold text-brand-700 hover:underline dark:text-brand-400">Ver cambios</Link>
+            <Link href="/guias" className="font-semibold text-brand-700 hover:underline dark:text-brand-400">Guías</Link>
           </p>
-
         </div>
       </div>
 
       {/* Main Container */}
-      <div className="mx-auto max-w-5xl px-4 sm:px-6 -mt-4">
+      <div className="mx-auto max-w-5xl px-4 pt-8 sm:px-6">
 
         {/* Calculator Interactive Card */}
-        <div className="app-card p-6 sm:p-8 mb-8 shadow-sm">
+        <div className="mb-8">
           {children}
         </div>
 
@@ -180,7 +158,7 @@ export function CalculatorShell({
 
         {/* Related Calculators */}
         {related.length > 0 && (
-          <section aria-label="Otras calculadoras útiles" className="mt-10 pt-6 border-t border-slate-200 dark:border-slate-800">
+          <section aria-label="Otras calculadoras útiles" className="mt-10 pt-6 border-t border-slate-200 dark:border-[#2C3744]">
             <h2 className="text-sm font-bold text-slate-900 dark:text-white mb-4">
               Otras calculadoras de {meta.category} que te pueden interesar:
             </h2>

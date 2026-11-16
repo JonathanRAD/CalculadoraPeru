@@ -41,7 +41,7 @@ export default async function GuideOpenGraphImage({ params }: { params: Promise<
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', maxWidth: 960 }}>
-            <div style={{ color: '#6ee7b7', fontSize: 22, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase' }}>{`Guía · ${category}`}</div>
+            <div style={{ color: '#6ee7b7', fontSize: 22, fontWeight: 700, letterSpacing: '0.08em', textTransform: '' }}>{`Guía · ${category}`}</div>
             <div style={{ marginTop: 18, fontSize: 66, lineHeight: 1.06, fontWeight: 800, letterSpacing: '-0.03em' }}>{title}</div>
           </div>
 

@@ -20,34 +20,29 @@ export function SwitchToggle({
   badge,
 }: SwitchToggleProps) {
   return (
-    <div className="flex items-center justify-between gap-4 rounded-2xl border border-slate-200/90 dark:border-slate-800/80 bg-slate-50/70 dark:bg-slate-900/40 p-4 transition-colors">
+    <div className="flex items-center justify-between gap-4 rounded-lg border border-stone-300 bg-[#FFFEFB] p-4 dark:border-slate-700 dark:bg-[#18202A]">
       <div className="flex flex-col">
-        <div className="flex items-center gap-2">
-          <label htmlFor={id} className="cursor-pointer text-xs sm:text-sm font-bold text-slate-800 dark:text-slate-200">
+        <div className="flex flex-wrap items-center gap-x-2">
+          <label htmlFor={id} className="cursor-pointer text-[15px] font-semibold text-slate-900 dark:text-slate-100">
             {label}
           </label>
-          {badge && (
-            <span className="rounded-md bg-emerald-50 text-emerald-800 border border-emerald-200 dark:bg-emerald-950/70 dark:text-emerald-300 dark:border-emerald-800 px-1.5 py-0.5 text-[10px] font-bold">
-              {badge}
-            </span>
-          )}
+          {badge && <span className="font-mono text-[13px] text-brand-700 dark:text-brand-400">{badge}</span>}
         </div>
-        {description && (
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{description}</p>
-        )}
+        {description && <p className="mt-0.5 text-[13px] text-slate-600 dark:text-slate-400">{description}</p>}
       </div>
 
-      {/* 3D Skeuomorphic UIverse Toggle */}
-      <div className="relative inline-flex shrink-0 items-center">
+      <label htmlFor={id} className="relative inline-flex h-8 w-14 shrink-0 cursor-pointer items-center">
         <input
           id={id}
           type="checkbox"
+          role="switch"
           checked={checked}
           onChange={(e) => onChange(e.target.checked)}
-          className="uiverse-toggle-checkbox hidden"
+          className="peer sr-only"
         />
-        <label htmlFor={id} className="uiverse-toggle-label" />
-      </div>
+        <span className="absolute inset-0 rounded-full border border-slate-500 bg-slate-300 transition-colors peer-checked:border-brand-700 peer-checked:bg-brand-600 peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-brand-600 dark:border-slate-500 dark:bg-slate-700" />
+        <span className="absolute left-1 top-1 h-6 w-6 rounded-full bg-white shadow-sm transition-transform peer-checked:translate-x-6" />
+      </label>
     </div>
   );
 }

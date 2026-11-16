@@ -10,7 +10,6 @@ import {
   Download,
   FileSpreadsheet,
   Calendar,
-  Sparkles,
   Upload,
   Lock,
   Trash2,
@@ -240,20 +239,20 @@ export function PayrollSlipModal({
       onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
       className={`fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/75 backdrop-blur-xs ${backdropClass}`}
     >
-      <div className={`relative w-full max-w-xl bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl p-6 sm:p-8 space-y-6 text-xs max-h-[92vh] overflow-y-auto ${modalClass}`}>
+      <div className={`relative w-full max-w-xl bg-white dark:bg-[#18202A] rounded-lg border border-slate-200 dark:border-[#2C3744] shadow-lg p-6 sm:p-8 space-y-6 text-[13px] max-h-[92vh] overflow-y-auto ${modalClass}`}>
 
         
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-4">
+        <div className="flex items-center justify-between border-b border-slate-100 dark:border-[#2C3744] pb-4">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-emerald-100 dark:bg-emerald-950 flex items-center justify-center text-brand-600 dark:text-brand-400">
+            <div className="w-8 h-8 rounded bg-brand-100 dark:bg-brand-950 flex items-center justify-center text-brand-600 dark:text-brand-400">
               <FileText className="w-4 h-4" />
             </div>
             <div>
               <h3 className="font-bold text-base text-slate-900 dark:text-white">
                 Emitir Boleta de Pago Formal (Formato D.S. N° 001-98-TR)
               </h3>
-              <p className="text-[11px] text-slate-500">
+              <p className="text-[13px] text-slate-500">
                 Estructura conforme al D.S. 001-98-TR con firmas y constancia de entrega
               </p>
             </div>
@@ -269,25 +268,25 @@ export function PayrollSlipModal({
 
         {/* PRO Status Banner vs Activation Prompt */}
         {isPro ? (
-          <div className="p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-300 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 text-xs flex items-center justify-between">
+          <div className="p-3 rounded bg-brand-50 dark:bg-brand-950/40 border border-brand-300 dark:border-brand-800 text-brand-800 dark:text-brand-300 text-[13px] flex items-center justify-between">
             <div className="flex items-center gap-2 font-bold">
-              <Sparkles className="w-4 h-4 text-amber-500 fill-amber-500" />
+              
               <span>Membresía PRO Activa ({subscriberName || 'VIP'}) · Boletas con Membrete Ilimitadas</span>
             </div>
-            <span className="text-[10px] bg-emerald-200 dark:bg-emerald-900 font-bold px-2 py-0.5 rounded-full">
+            <span className="text-[13px] bg-brand-200 dark:bg-brand-900 font-bold px-2 py-0.5 rounded">
               S/ 0.00
             </span>
           </div>
         ) : (
-          <div className="p-3 rounded-xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/60 text-amber-800 dark:text-amber-300 text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div className="p-3 rounded bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/60 text-amber-800 dark:text-amber-300 text-[13px] flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div className="flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-amber-500 fill-amber-500 shrink-0" />
+              
               <span>Emisión gratuita con marca de agua. Para emitir con membrete oficial y RUC propio:</span>
             </div>
             <button
               type="button"
               onClick={openActivationModal}
-              className="font-bold underline text-amber-900 dark:text-amber-200 hover:text-amber-700 text-left cursor-pointer shrink-0 text-[11px]"
+              className="font-bold underline text-amber-900 dark:text-amber-200 hover:text-amber-700 text-left cursor-pointer shrink-0 text-[13px]"
             >
               Activar Código PRO →
             </button>
@@ -295,16 +294,16 @@ export function PayrollSlipModal({
         )}
 
         {/* Calculation Summary Pill */}
-        <div className="p-3.5 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/80 flex items-center justify-between">
+        <div className="p-3.5 rounded-lg bg-brand-50 dark:bg-brand-950/40 border border-brand-200 dark:border-brand-800/80 flex items-center justify-between">
           <div>
-            <span className="text-[11px] text-emerald-800 dark:text-emerald-300 font-semibold block">
+            <span className="text-[13px] text-brand-800 dark:text-brand-300 font-semibold block">
               Remuneración Neta a Liquidar:
             </span>
-            <span className="text-base font-black font-mono text-brand-600 dark:text-brand-400">
+            <span className="text-base font-bold font-mono text-brand-600 dark:text-brand-400">
               {formatCurrency(calculationData.netSalary)}
             </span>
           </div>
-          <div className="text-right text-[11px] text-slate-600 dark:text-slate-400">
+          <div className="text-right text-[13px] text-slate-600 dark:text-slate-400">
             <span>Sueldo Bruto: {formatCurrency(calculationData.totalGross)}</span>
             <span className="block text-slate-400">Descuentos: {formatCurrency(calculationData.totalDeductions)}</span>
           </div>
@@ -324,13 +323,13 @@ export function PayrollSlipModal({
               value={period}
               onChange={(e) => setPeriod(e.target.value)}
               placeholder="Ej. Septiembre 2026"
-              className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-slate-900 dark:text-white outline-none focus:border-brand-600"
+              className="w-full bg-slate-50 dark:bg-[#0E141B] border border-slate-300 dark:border-slate-700 rounded px-3 py-2 text-slate-900 dark:text-white outline-none focus:border-brand-600"
             />
           </div>
 
           {/* Worker Section */}
           <div className="space-y-3 pt-2">
-            <span className="font-bold text-slate-900 dark:text-white flex items-center gap-1.5 text-xs uppercase tracking-wider">
+            <span className="font-bold text-slate-900 dark:text-white flex items-center gap-1.5 text-[13px]">
               <User className="w-3.5 h-3.5 text-brand-600" />
               <span>Datos del Trabajador</span>
             </span>
@@ -344,7 +343,7 @@ export function PayrollSlipModal({
                   placeholder="Ej. Juan Pérez Ramos"
                   value={workerName}
                   onChange={(e) => setWorkerName(e.target.value)}
-                  className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-slate-900 dark:text-white outline-none focus:border-brand-600"
+                  className="w-full bg-slate-50 dark:bg-[#0E141B] border border-slate-300 dark:border-slate-700 rounded px-3 py-2 text-slate-900 dark:text-white outline-none focus:border-brand-600"
                 />
               </div>
               <div>
@@ -357,7 +356,7 @@ export function PayrollSlipModal({
                   placeholder="Ej. 45892103"
                   value={workerDni}
                   onChange={(e) => setWorkerDni(e.target.value)}
-                  className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-slate-900 dark:text-white outline-none focus:border-brand-600"
+                  className="w-full bg-slate-50 dark:bg-[#0E141B] border border-slate-300 dark:border-slate-700 rounded px-3 py-2 text-slate-900 dark:text-white outline-none focus:border-brand-600"
                 />
               </div>
             </div>
@@ -371,7 +370,7 @@ export function PayrollSlipModal({
                   placeholder="Ej. Analista Contable / Vendedor"
                   value={workerPosition}
                   onChange={(e) => setWorkerPosition(e.target.value)}
-                  className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-slate-900 dark:text-white outline-none focus:border-brand-600"
+                  className="w-full bg-slate-50 dark:bg-[#0E141B] border border-slate-300 dark:border-slate-700 rounded px-3 py-2 text-slate-900 dark:text-white outline-none focus:border-brand-600"
                 />
               </div>
               <div>
@@ -383,7 +382,7 @@ export function PayrollSlipModal({
                   placeholder="Ej. 128491JPMRA1"
                   value={cuspp}
                   onChange={(e) => setCuspp(e.target.value)}
-                  className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-slate-900 dark:text-white outline-none focus:border-brand-600"
+                  className="w-full bg-slate-50 dark:bg-[#0E141B] border border-slate-300 dark:border-slate-700 rounded px-3 py-2 text-slate-900 dark:text-white outline-none focus:border-brand-600"
                 />
               </div>
             </div>
@@ -391,8 +390,8 @@ export function PayrollSlipModal({
 
           {/* Legal Attendance & Labor Data (MTPE / SUNAFIL) */}
           <div className="space-y-3 pt-2">
-            <span className="font-bold text-slate-900 dark:text-white flex items-center gap-1.5 text-xs uppercase tracking-wider">
-              <Clock className="w-3.5 h-3.5 text-teal-600" />
+            <span className="font-bold text-slate-900 dark:text-white flex items-center gap-1.5 text-[13px]">
+              <Clock className="w-3.5 h-3.5 text-brand-600" />
               <span>Control Laboral y de Asistencia (SUNAFIL)</span>
             </span>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -403,7 +402,7 @@ export function PayrollSlipModal({
                 <select
                   value={laborRegime}
                   onChange={(e) => setLaborRegime(e.target.value)}
-                  className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-2.5 py-2 text-slate-900 dark:text-white outline-none focus:border-brand-600 text-xs"
+                  className="w-full bg-slate-50 dark:bg-[#0E141B] border border-slate-300 dark:border-slate-700 rounded px-2.5 py-2 text-slate-900 dark:text-white outline-none focus:border-brand-600 text-[13px]"
                 >
                   <option value="Régimen General (D.L. 728)">Régimen General (D.L. 728)</option>
                   <option value="Régimen Especial MYPE (D.L. 1086)">Régimen Especial MYPE</option>
@@ -417,7 +416,7 @@ export function PayrollSlipModal({
                 <select
                   value={contractType}
                   onChange={(e) => setContractType(e.target.value)}
-                  className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-2.5 py-2 text-slate-900 dark:text-white outline-none focus:border-brand-600 text-xs"
+                  className="w-full bg-slate-50 dark:bg-[#0E141B] border border-slate-300 dark:border-slate-700 rounded px-2.5 py-2 text-slate-900 dark:text-white outline-none focus:border-brand-600 text-[13px]"
                 >
                   <option value="A plazo indeterminado">A plazo indeterminado</option>
                   <option value="Sujeto a modalidad (Plazo fijo)">Sujeto a modalidad (Plazo fijo)</option>
@@ -431,7 +430,7 @@ export function PayrollSlipModal({
                 <select
                   value={paymentMethod}
                   onChange={(e) => setPaymentMethod(e.target.value)}
-                  className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-2.5 py-2 text-slate-900 dark:text-white outline-none focus:border-brand-600 text-xs"
+                  className="w-full bg-slate-50 dark:bg-[#0E141B] border border-slate-300 dark:border-slate-700 rounded px-2.5 py-2 text-slate-900 dark:text-white outline-none focus:border-brand-600 text-[13px]"
                 >
                   <option value="Depósito en cuenta sueldo">Depósito Cta. Sueldo</option>
                   <option value="Transferencia interbancaria">Transferencia Bancaria</option>
@@ -450,7 +449,7 @@ export function PayrollSlipModal({
                   max={31}
                   value={workedDays}
                   onChange={(e) => setWorkedDays(e.target.value)}
-                  className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-slate-900 dark:text-white outline-none focus:border-brand-600"
+                  className="w-full bg-slate-50 dark:bg-[#0E141B] border border-slate-300 dark:border-slate-700 rounded px-3 py-2 text-slate-900 dark:text-white outline-none focus:border-brand-600"
                 />
               </div>
               <div>
@@ -463,7 +462,7 @@ export function PayrollSlipModal({
                   max={300}
                   value={workedHours}
                   onChange={(e) => setWorkedHours(e.target.value)}
-                  className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-slate-900 dark:text-white outline-none focus:border-brand-600"
+                  className="w-full bg-slate-50 dark:bg-[#0E141B] border border-slate-300 dark:border-slate-700 rounded px-3 py-2 text-slate-900 dark:text-white outline-none focus:border-brand-600"
                 />
               </div>
             </div>
@@ -472,16 +471,16 @@ export function PayrollSlipModal({
           {/* Company Section */}
           <div className="space-y-3 pt-2">
             <div className="flex items-center justify-between">
-              <span className="font-bold text-slate-900 dark:text-white flex items-center gap-1.5 text-xs uppercase tracking-wider">
-                <Building2 className="w-3.5 h-3.5 text-blue-600" />
+              <span className="font-bold text-slate-900 dark:text-white flex items-center gap-1.5 text-[13px]">
+                <Building2 className="w-3.5 h-3.5 text-brand-600" />
                 <span>Datos del Empleador (Empresa)</span>
               </span>
               {isPro ? (
-                <span className="text-[10px] bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 font-bold px-2 py-0.5 rounded-full border border-emerald-300 dark:border-emerald-800">
+                <span className="text-[13px] bg-brand-100 dark:bg-brand-950 text-brand-700 dark:text-brand-300 font-bold px-2 py-0.5 rounded border border-brand-300 dark:border-brand-800">
                   MEMBRETE PRO HABILITADO ✓
                 </span>
               ) : (
-                <span className="text-[10px] bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 font-bold px-2 py-0.5 rounded-full flex items-center gap-1">
+                <span className="text-[13px] bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 font-bold px-2 py-0.5 rounded flex items-center gap-1">
                   <Lock className="w-3 h-3" /> BLOQUEADO (GRATIS)
                 </span>
               )}
@@ -489,20 +488,20 @@ export function PayrollSlipModal({
 
             {/* Warning when Free */}
             {!isPro && (
-              <div className="p-3.5 rounded-2xl bg-amber-50/80 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-800/80 space-y-2 text-xs">
+              <div className="p-3.5 rounded-lg bg-amber-50/80 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-800/80 space-y-2 text-[13px]">
                 <div className="flex items-center gap-2 font-bold text-amber-900 dark:text-amber-200">
                   <Lock className="w-4 h-4 text-amber-600 shrink-0" />
                   <span>Personalización Corporativa Bloqueada</span>
                 </div>
-                <p className="text-amber-800 dark:text-amber-300 leading-relaxed text-[11px]">
+                <p className="text-amber-800 dark:text-amber-300 leading-relaxed text-[13px]">
                   En el modo gratuito, este documento se emitirá como <strong>&quot;EMISIÓN DE PRUEBA&quot;</strong> con una <strong>marca de agua diagonal</strong>. Para colocar el RUC y logotipo oficial de tu empresa:
                 </p>
                 <button
                   type="button"
                   onClick={openActivationModal}
-                  className="w-full py-2 px-3 bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-bold rounded-xl text-xs flex items-center justify-center gap-1.5 shadow-sm hover:scale-[1.01] transition-all cursor-pointer"
+                  className="w-full py-2 px-3  bg-brand-600 text-white font-bold rounded text-[13px] flex items-center justify-center gap-1.5 hover:scale-[1.01] transition-all cursor-pointer"
                 >
-                  <Sparkles className="w-3.5 h-3.5 text-amber-300 fill-amber-300" />
+                  
                   <span>Desbloquear RUC, Logo y Quitar Marca de Agua con PRO</span>
                 </button>
               </div>
@@ -510,23 +509,23 @@ export function PayrollSlipModal({
 
             {/* Company Logo Uploader (PRO only) */}
             {isPro ? (
-              <div className="p-3 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-2">
+              <div className="p-3 rounded-lg bg-slate-50 dark:bg-[#0E141B] border border-slate-200 dark:border-[#2C3744] space-y-2">
                 <div className="flex items-center justify-between">
-                  <label className="text-xs font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
-                    <ImageIcon className="w-3.5 h-3.5 text-emerald-600" />
+                  <label className="text-[13px] font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
+                    <ImageIcon className="w-3.5 h-3.5 text-brand-600" />
                     <span>Logotipo de tu Empresa en la Boleta (Opcional)</span>
                   </label>
-                  <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold">
+                  <span className="text-[13px] text-brand-600 dark:text-brand-400 font-bold">
                     PNG / JPG
                   </span>
                 </div>
 
                 {companyLogoBase64 ? (
-                  <div className="flex items-center gap-3 p-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700">
+                  <div className="flex items-center gap-3 p-2 rounded bg-white dark:bg-[#18202A] border border-slate-200 dark:border-slate-700">
                     <Image src={companyLogoBase64} alt="Logotipo de la empresa" width={56} height={40} unoptimized className="w-14 h-10 object-contain rounded bg-white p-0.5 border border-slate-100" />
-                    <div className="flex-1 text-xs">
-                      <span className="font-bold text-emerald-700 dark:text-emerald-400 block">Logo cargado con éxito</span>
-                      <span className="text-[10px] text-slate-400">Saldrá impreso en la cabecera de la boleta</span>
+                    <div className="flex-1 text-[13px]">
+                      <span className="font-bold text-brand-700 dark:text-brand-400 block">Logo cargado con éxito</span>
+                      <span className="text-[13px] text-slate-400">Saldrá impreso en la cabecera de la boleta</span>
                     </div>
                     <button
                       type="button"
@@ -538,8 +537,8 @@ export function PayrollSlipModal({
                     </button>
                   </div>
                 ) : (
-                  <label className="flex items-center justify-center gap-2 p-3 rounded-xl border-2 border-dashed border-slate-300 dark:border-slate-700 hover:border-emerald-500 bg-white dark:bg-slate-900 cursor-pointer transition-colors text-xs font-semibold text-slate-600 dark:text-slate-300">
-                    <Upload className="w-4 h-4 text-emerald-600" />
+                  <label className="flex items-center justify-center gap-2 p-3 rounded border-2 border-dashed border-slate-300 dark:border-slate-700 hover:border-brand-500 bg-white dark:bg-[#18202A] cursor-pointer transition-colors text-[13px] font-semibold text-slate-600 dark:text-slate-300">
+                    <Upload className="w-4 h-4 text-brand-600" />
                     <span>Subir imagen de Logo corporativo</span>
                     <input type="file" accept="image/png, image/jpeg, image/webp" onChange={handleLogoChange} className="hidden" />
                   </label>
@@ -548,13 +547,13 @@ export function PayrollSlipModal({
             ) : (
               <div 
                 onClick={openActivationModal}
-                className="p-3 rounded-2xl bg-slate-100 dark:bg-slate-950/60 border border-dashed border-slate-300 dark:border-slate-800 flex items-center justify-between text-xs text-slate-400 cursor-pointer hover:bg-slate-200/60 transition-colors"
+                className="p-3 rounded-lg bg-slate-100 dark:bg-slate-950/60 border border-dashed border-slate-300 dark:border-[#2C3744] flex items-center justify-between text-[13px] text-slate-400 cursor-pointer hover:bg-slate-200/60 transition-colors"
               >
                 <div className="flex items-center gap-2">
                   <Lock className="w-4 h-4 text-amber-500" />
                   <span>Subir Logotipo Corporativo (Exclusivo con PRO)</span>
                 </div>
-                <span className="font-bold text-amber-600 text-[11px] underline">Desbloquear →</span>
+                <span className="font-bold text-amber-600 text-[13px] underline">Desbloquear →</span>
               </div>
             )}
 
@@ -569,10 +568,10 @@ export function PayrollSlipModal({
                   placeholder={isPro ? "Ej. Servicios Generales Lima S.A.C." : "EMISIÓN DE PRUEBA (REQUIERE PRO)"}
                   value={isPro ? companyName : ''}
                   onChange={(e) => setCompanyName(e.target.value)}
-                  className={`w-full border rounded-xl px-3 py-2 text-xs outline-none transition-colors ${
+                  className={`w-full border rounded px-3 py-2 text-[13px] outline-none transition-colors ${
                     isPro 
-                      ? 'bg-slate-50 dark:bg-slate-950 border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:border-brand-600' 
-                      : 'bg-slate-100 dark:bg-slate-950/60 border-slate-200 dark:border-slate-800 text-slate-400 cursor-not-allowed italic'
+                      ? 'bg-slate-50 dark:bg-[#0E141B] border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:border-brand-600' 
+                      : 'bg-slate-100 dark:bg-slate-950/60 border-slate-200 dark:border-[#2C3744] text-slate-400 cursor-not-allowed italic'
                   }`}
                 />
               </div>
@@ -587,10 +586,10 @@ export function PayrollSlipModal({
                   placeholder={isPro ? "Ej. 20601928371" : "RUC NO REGISTRADO (REQUIERE PRO)"}
                   value={isPro ? companyRuc : ''}
                   onChange={(e) => setCompanyRuc(e.target.value)}
-                  className={`w-full border rounded-xl px-3 py-2 text-xs outline-none transition-colors ${
+                  className={`w-full border rounded px-3 py-2 text-[13px] outline-none transition-colors ${
                     isPro 
-                      ? 'bg-slate-50 dark:bg-slate-950 border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:border-brand-600' 
-                      : 'bg-slate-100 dark:bg-slate-950/60 border-slate-200 dark:border-slate-800 text-slate-400 cursor-not-allowed italic'
+                      ? 'bg-slate-50 dark:bg-[#0E141B] border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:border-brand-600' 
+                      : 'bg-slate-100 dark:bg-slate-950/60 border-slate-200 dark:border-[#2C3744] text-slate-400 cursor-not-allowed italic'
                   }`}
                 />
               </div>
@@ -605,10 +604,10 @@ export function PayrollSlipModal({
                 placeholder={isPro ? "Ej. Av. Javier Prado Este 1420, San Isidro, Lima" : "Dirección Fiscal bloqueada en modo gratuito"}
                 value={isPro ? companyAddress : ''}
                 onChange={(e) => setCompanyAddress(e.target.value)}
-                className={`w-full border rounded-xl px-3 py-2 text-xs outline-none transition-colors ${
+                className={`w-full border rounded px-3 py-2 text-[13px] outline-none transition-colors ${
                   isPro 
-                    ? 'bg-slate-50 dark:bg-slate-950 border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:border-brand-600' 
-                    : 'bg-slate-100 dark:bg-slate-950/60 border-slate-200 dark:border-slate-800 text-slate-400 cursor-not-allowed italic'
+                    ? 'bg-slate-50 dark:bg-[#0E141B] border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:border-brand-600' 
+                    : 'bg-slate-100 dark:bg-slate-950/60 border-slate-200 dark:border-[#2C3744] text-slate-400 cursor-not-allowed italic'
                 }`}
               />
             </div>
@@ -622,10 +621,10 @@ export function PayrollSlipModal({
             type="button"
             onClick={handleDownloadPdf}
             disabled={isGenerating}
-            className={`flex-1 py-3.5 rounded-xl font-bold text-xs flex items-center justify-center gap-2 transition-all cursor-pointer shadow-md ${
+            className={`flex-1 py-3.5 rounded font-bold text-[13px] flex items-center justify-center gap-2 transition-all cursor-pointer ${
               isPro 
-                ? 'bg-brand-600 hover:bg-brand-800 text-white shadow-emerald-950/20' 
-                : 'bg-slate-800 hover:bg-slate-700 text-white shadow-slate-950/20'
+                ? 'bg-brand-600 hover:bg-brand-800 text-white' 
+                : 'bg-slate-800 hover:bg-slate-700 text-white'
             }`}
           >
             {isGenerating ? (
@@ -646,9 +645,9 @@ export function PayrollSlipModal({
             type="button"
             onClick={handleExportExcel}
             disabled={isExportingExcel}
-            className="sm:w-auto px-4 py-3.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 font-bold text-xs text-slate-800 dark:text-slate-200 flex items-center justify-center gap-2 transition-colors cursor-pointer"
+            className="sm:w-auto px-4 py-3.5 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 font-bold text-[13px] text-slate-800 dark:text-slate-200 flex items-center justify-center gap-2 transition-colors cursor-pointer"
           >
-            <FileSpreadsheet className="w-4 h-4 text-emerald-600" />
+            <FileSpreadsheet className="w-4 h-4 text-brand-600" />
             <span>{isExportingExcel ? 'Exportando...' : 'Exportar a Excel (.CSV)'}</span>
           </button>
         </div>

@@ -5,7 +5,6 @@ import {
   Bookmark,
   BookmarkCheck,
   FileSpreadsheet,
-  Sparkles,
   Share2,
   Loader2,
   Lock,
@@ -118,13 +117,13 @@ export function CalculationActionToolbar({
   };
 
   return (
-    <div className={`p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs space-y-2.5 ${className}`}>
+    <div className={`p-4 rounded-lg bg-white dark:bg-[#18202A] border border-slate-200 dark:border-[#2C3744] space-y-2.5 ${className}`}>
       <div className="flex items-center justify-between">
-        <span className="text-xs font-bold text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
-          <Sparkles className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
+        <span className="text-[13px] font-bold text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
+          
           <span>Acciones Profesionales (PRO)</span>
         </span>
-        <span className="text-[10px] font-semibold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60 px-2 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-800">
+        <span className="text-[13px] font-semibold text-brand-700 dark:text-brand-400 bg-brand-50 dark:bg-brand-950/60 px-2 py-0.5 rounded border border-brand-200 dark:border-brand-800">
           S/ 16 / mes
         </span>
       </div>
@@ -135,10 +134,10 @@ export function CalculationActionToolbar({
           type="button"
           onClick={handleSaveToCloud}
           disabled={isSaving}
-          className={`py-2.5 px-3 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer border ${
+          className={`py-2.5 px-3 rounded font-bold text-[13px] flex items-center justify-center gap-1.5 transition-all cursor-pointer border ${
             isSaved
-              ? 'bg-emerald-600 text-white border-emerald-600'
-              : 'bg-slate-50 dark:bg-slate-950 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 border-slate-200 dark:border-slate-700'
+              ? 'bg-brand-600 text-white border-brand-600'
+              : 'bg-slate-50 dark:bg-[#0E141B] hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 border-slate-200 dark:border-slate-700'
           }`}
         >
           {isSaving ? (
@@ -153,7 +152,7 @@ export function CalculationActionToolbar({
             </>
           ) : (
             <>
-              <Bookmark className="w-3.5 h-3.5 text-blue-600" />
+              <Bookmark className="w-3.5 h-3.5 text-brand-600" />
               <span>Guardar en Mis Cálculos</span>
               {!isPro && <Lock className="w-3 h-3 text-slate-400 ml-0.5" />}
             </>
@@ -164,9 +163,9 @@ export function CalculationActionToolbar({
         <button
           type="button"
           onClick={handleExportExcel}
-          className="py-2.5 px-3 rounded-xl bg-slate-50 dark:bg-slate-950 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700 font-bold text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+          className="py-2.5 px-3 rounded bg-slate-50 dark:bg-[#0E141B] hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700 font-bold text-[13px] flex items-center justify-center gap-1.5 transition-all cursor-pointer"
         >
-          <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-600" />
+          <FileSpreadsheet className="w-3.5 h-3.5 text-brand-600" />
           <span>Exportar a Excel (.CSV)</span>
           {!isPro && <Lock className="w-3 h-3 text-slate-400 ml-0.5" />}
         </button>
@@ -176,15 +175,15 @@ export function CalculationActionToolbar({
         <button
           type="button"
           onClick={handleWhatsAppShare}
-          className="w-full py-2 px-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-100 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 font-bold text-xs flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+          className="w-full py-2 px-3 rounded bg-brand-50 dark:bg-brand-950/40 hover:bg-brand-100 text-brand-800 dark:text-brand-300 border border-brand-200 dark:border-brand-800 font-bold text-[13px] flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
         >
-          <Share2 className="w-3.5 h-3.5 text-emerald-600" />
+          <Share2 className="w-3.5 h-3.5 text-brand-600" />
           <span>{copiedWa ? '¡Abriendo WhatsApp!' : 'Enviar Resumen a WhatsApp'}</span>
         </button>
       )}
 
       {saveMessage && !isSaved && (
-        <p className="text-[11px] text-center font-medium text-slate-500 dark:text-slate-400">
+        <p className="text-[13px] text-center font-medium text-slate-500 dark:text-slate-400">
           {saveMessage}
         </p>
       )}

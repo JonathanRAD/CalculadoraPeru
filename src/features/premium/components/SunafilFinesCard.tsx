@@ -56,22 +56,22 @@ export function SunafilFinesCard({ obligationType, workerCount = 1 }: SunafilFin
   };
 
   return (
-    <div className="rounded-3xl border border-amber-300/80 dark:border-amber-900/60 bg-gradient-to-br from-amber-50/70 via-white to-white dark:from-amber-950/20 dark:via-slate-900 dark:to-slate-900 p-5 shadow-xs space-y-4">
+    <div className="rounded-lg border border-amber-300/80 dark:border-amber-900/60  bg-amber-50/70 dark:bg-amber-950/20 p-5 space-y-4">
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-2.5">
-          <div className="w-9 h-9 rounded-xl bg-amber-100 dark:bg-amber-950 flex items-center justify-center text-amber-700 dark:text-amber-400 shrink-0">
+          <div className="w-9 h-9 rounded bg-amber-100 dark:bg-amber-950 flex items-center justify-center text-amber-700 dark:text-amber-400 shrink-0">
             <ShieldAlert className="w-5 h-5" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-amber-800 dark:text-amber-400 bg-amber-100 dark:bg-amber-950 px-2 py-0.5 rounded-md">
+              <span className="text-[13px] font-mono font-bold uppercase tracking-wider text-amber-800 dark:text-amber-400 bg-amber-100 dark:bg-amber-950 px-2 py-0.5 rounded-md">
                 ALERTA NORMATIVA SUNAFIL 2026
               </span>
-              <span className="text-[10px] font-bold text-emerald-700 dark:text-emerald-400">
+              <span className="text-[13px] font-bold text-brand-700 dark:text-brand-400">
                 PRO EXCLUSIVO
               </span>
             </div>
-            <h4 className="text-sm font-bold text-slate-900 dark:text-white mt-0.5">
+            <h4 className="text-[15px] font-bold text-slate-900 dark:text-white mt-0.5">
               {titleMap[obligationType]}
             </h4>
           </div>
@@ -87,21 +87,21 @@ export function SunafilFinesCard({ obligationType, workerCount = 1 }: SunafilFin
         </button>
       </div>
 
-      <p className="text-xs text-slate-600 dark:text-slate-400">
+      <p className="text-[13px] text-slate-600 dark:text-slate-400">
         {deadlineMap[obligationType]} El incumplimiento genera multas no subsanables calculadas en base a la UIT vigente (S/ {CURRENT_UIT.toLocaleString('es-PE')}).
       </p>
 
       {/* Simulator parameters */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
         <div>
-          <label htmlFor={`sunafil-regime-${obligationType}`} className="block text-[11px] font-semibold text-slate-600 dark:text-slate-400 mb-1">
+          <label htmlFor={`sunafil-regime-${obligationType}`} className="block text-[13px] font-semibold text-slate-600 dark:text-slate-400 mb-1">
             Régimen Laboral de la Empresa:
           </label>
           <select
             id={`sunafil-regime-${obligationType}`}
             value={businessType}
             onChange={(e) => setBusinessType(e.target.value as 'micro' | 'pequena' | 'general')}
-            className="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-xs font-semibold text-slate-900 dark:text-white outline-none"
+            className="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded px-3 py-2 text-[13px] font-semibold text-slate-900 dark:text-white outline-none"
           >
             <option value="micro">Microempresa (REMYPE)</option>
             <option value="pequena">Pequeña Empresa (REMYPE)</option>
@@ -110,7 +110,7 @@ export function SunafilFinesCard({ obligationType, workerCount = 1 }: SunafilFin
         </div>
 
         <div>
-          <label htmlFor={`sunafil-workers-${obligationType}`} className="block text-[11px] font-semibold text-slate-600 dark:text-slate-400 mb-1">
+          <label htmlFor={`sunafil-workers-${obligationType}`} className="block text-[13px] font-semibold text-slate-600 dark:text-slate-400 mb-1">
             Trabajadores Afectados:
           </label>
           <input
@@ -120,21 +120,21 @@ export function SunafilFinesCard({ obligationType, workerCount = 1 }: SunafilFin
             max={500}
             value={affectedWorkers}
             onChange={(e) => setAffectedWorkers(Math.max(1, parseInt(e.target.value, 10) || 1))}
-            className="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-xs font-semibold text-slate-900 dark:text-white outline-none"
+            className="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded px-3 py-2 text-[13px] font-semibold text-slate-900 dark:text-white outline-none"
           />
         </div>
       </div>
 
       {/* Fine Result Badge */}
-      <div className="p-3.5 rounded-2xl bg-white dark:bg-slate-800/90 border border-amber-200 dark:border-amber-900 flex items-center justify-between">
+      <div className="p-3.5 rounded-lg bg-white dark:bg-slate-800/90 border border-amber-200 dark:border-amber-900 flex items-center justify-between">
         <div>
-          <span className="text-[10px] text-slate-500 dark:text-slate-400 font-medium block">
+          <span className="text-[13px] text-slate-500 dark:text-slate-400 font-medium block">
             Rango estimado de sanción económica:
           </span>
-          <span className="text-xl font-black font-mono text-amber-600 dark:text-amber-400">
+          <span className="text-xl font-bold font-mono text-amber-600 dark:text-amber-400">
             S/ {fineEstimated.toLocaleString('es-PE')}
           </span>
-          <span className="text-[10px] text-slate-400 ml-1.5 font-mono">
+          <span className="text-[13px] text-slate-400 ml-1.5 font-mono">
             ({(uitFactor * 100).toFixed(1)}% de 1 UIT)
           </span>
         </div>
@@ -143,7 +143,7 @@ export function SunafilFinesCard({ obligationType, workerCount = 1 }: SunafilFin
           <button
             type="button"
             onClick={openActivationModal}
-            className="px-3 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs shadow-xs transition-all cursor-pointer"
+            className="px-3 py-1.5 rounded bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-[13px] transition-all cursor-pointer"
           >
             Desbloquear reporte
           </button>
@@ -151,7 +151,7 @@ export function SunafilFinesCard({ obligationType, workerCount = 1 }: SunafilFin
       </div>
 
       {isExpanded && (
-        <div className="text-[11px] text-slate-500 dark:text-slate-400 space-y-1.5 pt-2 border-t border-slate-100 dark:border-slate-800 leading-relaxed">
+        <div className="text-[13px] text-slate-500 dark:text-slate-400 space-y-1.5 pt-2 border-t border-slate-100 dark:border-[#2C3744] leading-relaxed">
           <p>• <strong>Base Legal:</strong> D.S. N° 019-2006-TR y modificatorias por D.S. N° 008-2020-TR (Reglamento de la Ley General de Inspección del Trabajo).</p>
           <p>• <strong>Intereses BCRP:</strong> Además de la multa inspectiva de SUNAFIL, el empleador está obligado por ley a abonar los intereses legales laborales fijados por el BCRP desde el día siguiente del vencimiento hasta la fecha efectiva de pago.</p>
         </div>

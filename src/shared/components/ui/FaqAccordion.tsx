@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { ChevronDown, HelpCircle } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 
 export interface FaqItem {
   question: string;
@@ -40,50 +40,48 @@ export function FaqAccordion({
   };
 
   return (
-    <section aria-label="Preguntas frecuentes" className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 sm:p-8 shadow-xs">
+    <section aria-label="Preguntas frecuentes" className="rounded-lg border border-stone-300 bg-[#FFFEFB] p-6 sm:p-8 dark:border-slate-700 dark:bg-[#18202A]">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
 
-      <div className="flex items-center gap-2.5 mb-6 pb-4 border-b border-slate-100 dark:border-slate-800">
-        <HelpCircle className="h-5 w-5 text-emerald-700 dark:text-emerald-400" />
-        <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">
-          {title}
-        </h2>
-      </div>
+      <h2 className="mb-5 text-xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-2xl">
+        {title}
+      </h2>
 
-      <div className="space-y-3">
+      <ol className="divide-y divide-stone-300 border-y border-stone-900 dark:divide-slate-700 dark:border-slate-400">
         {items.map((item, idx) => {
           const isOpen = openIndices.includes(idx);
           return (
-            <div
-              key={idx}
-              className="rounded-xl border border-slate-100 dark:border-slate-800/80 bg-slate-50/50 dark:bg-slate-950 overflow-hidden transition-colors"
-            >
+            <li key={idx}>
               <button
                 type="button"
                 onClick={() => toggle(idx)}
                 aria-expanded={isOpen}
-                className="flex w-full items-center justify-between p-4 text-left font-bold text-sm text-slate-800 dark:text-slate-200 hover:text-emerald-800 dark:hover:text-emerald-400 cursor-pointer"
+                className="flex min-h-14 w-full cursor-pointer items-baseline gap-4 py-4 text-left text-slate-900 hover:text-brand-700 dark:text-slate-100 dark:hover:text-brand-400"
               >
-                <span>{item.question}</span>
+                <span aria-hidden="true" className="w-6 shrink-0 font-mono text-[13px] text-slate-600 dark:text-slate-400">
+                  {String(idx + 1).padStart(2, '0')}
+                </span>
+                <span className="flex-1 text-base font-semibold leading-snug sm:text-lg">{item.question}</span>
                 <ChevronDown
-                  className={`h-4 w-4 shrink-0 text-slate-400 transition-transform duration-200 ${
-                    isOpen ? 'rotate-180 text-emerald-700 dark:text-emerald-400' : ''
+                  aria-hidden="true"
+                  className={`h-5 w-5 shrink-0 translate-y-1 transition-transform duration-200 ${
+                    isOpen ? 'rotate-180 text-brand-700 dark:text-brand-400' : 'text-slate-500'
                   }`}
                 />
               </button>
 
               {isOpen && (
-                <div className="border-t border-slate-100 dark:border-slate-800/80 px-4 pt-3 pb-4 text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                <div className="pb-5 pl-10 pr-8 text-[15px] leading-relaxed text-slate-700 dark:text-slate-300">
                   {item.answer}
                 </div>
               )}
-            </div>
+            </li>
           );
         })}
-      </div>
+      </ol>
     </section>
   );
 }

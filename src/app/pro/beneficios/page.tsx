@@ -3,7 +3,6 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import {
-  Sparkles,
   Building2,
   Receipt,
   Zap,
@@ -279,44 +278,35 @@ export default function BeneficiosProPage() {
   });
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-[#080E21] text-slate-900 dark:text-slate-100 transition-colors pb-24">
+    <div className="min-h-screen bg-[#F4F1EA] dark:bg-[#121820] text-slate-900 dark:text-slate-100 transition-colors pb-24">
       
       {/* Top Banner / Hero */}
-      <div className="bg-gradient-to-b from-[#0A1128] via-[#0E1B40] to-[#0A1128] text-white border-b border-slate-800 pt-12 pb-16 px-4 sm:px-6 relative overflow-hidden">
-        {/* Glow background circles */}
-        <div className="absolute top-0 right-1/4 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
-
-        <div className="mx-auto max-w-5xl text-center relative z-10 space-y-4">
+      <div className="border-b border-stone-300 dark:border-slate-700 pt-12 pb-14 px-4 sm:px-6">
+        <div className="mx-auto max-w-4xl space-y-4">
           
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs font-extrabold uppercase tracking-wider">
-            <Sparkles className="w-3.5 h-3.5 text-amber-400 fill-amber-400 animate-pulse" />
-            <span>Catálogo y Guía Maestra de Beneficios PRO</span>
-          </div>
-
-          <h1 className="text-3xl sm:text-5xl font-black tracking-tight max-w-3xl mx-auto leading-tight">
-            Descubre el Poder de cada Calculadora con <span className="bg-gradient-to-r from-brand-400 to-teal-400 bg-clip-text text-transparent">CalculaPerú PRO</span>
+          <h1 className="text-3xl sm:text-4xl font-bold tracking-tight max-w-3xl leading-tight text-slate-900 dark:text-white">
+            Qué desbloquea CalculaPerú PRO en cada calculadora
           </h1>
 
-          <p className="text-slate-300 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
-            Una guía completa para que <strong>nunca te pierdas</strong>: conoce qué funciones exclusivas desbloquea tu suscripción en cada herramienta laboral, tributaria y comercial, con enlaces directos para usarlas hoy mismo.
+          <p className="text-slate-700 dark:text-slate-300 text-base max-w-2xl leading-relaxed">
+            Guía de las funciones que incluye la suscripción en cada herramienta laboral, tributaria y comercial, con enlaces directos para usarlas.
           </p>
 
           {/* Pricing & CTA pill */}
-          <div className="pt-3 flex flex-wrap items-center justify-center gap-3">
-            <div className="px-4 py-2 rounded-2xl bg-white/5 border border-white/10 text-xs font-semibold text-slate-200">
-              Suscripción Unificada: <span className="text-emerald-400 font-bold">S/ 16.00 / mes</span> o <span className="text-amber-300 font-bold">S/ 149.00 / año</span>
+          <div className="pt-3 flex flex-wrap items-center gap-3">
+            <div className="px-4 py-2 rounded border border-stone-300 dark:border-slate-700 text-[15px] text-slate-800 dark:text-slate-200">
+              Suscripción Unificada: <span className="font-mono font-semibold text-brand-700 dark:text-brand-400">S/ 16.00 / mes</span> o <span className="font-mono font-semibold text-brand-700 dark:text-brand-400">S/ 149.00 / año</span>
             </div>
 
             {isPro ? (
-              <div className="px-4 py-2 rounded-2xl bg-emerald-950/80 border border-emerald-500/60 text-emerald-200 text-xs font-bold flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+              <div className="px-4 py-2 rounded bg-brand-100 dark:bg-brand-900 border border-brand-600 text-brand-900 dark:text-brand-100 text-[15px] font-semibold flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-brand-400" />
                 <span>Tienes membresía PRO activa. ¡Todos los beneficios están desbloqueados!</span>
               </div>
             ) : (
               <Link
                 href="/pro"
-                className="px-5 py-2.5 rounded-2xl bg-brand-600 hover:bg-brand-800 text-white font-bold text-xs sm:text-sm flex items-center gap-2 transition-all shadow-lg shadow-emerald-950/40 hover:scale-[1.02] cursor-pointer"
+                className="min-h-11 px-5 py-2.5 rounded bg-brand-600 hover:bg-brand-800 text-white font-semibold text-[15px] flex items-center gap-2 transition-all cursor-pointer"
               >
                 <span>Obtener Acceso PRO Ilimitado</span>
                 <ArrowRight className="w-4 h-4" />
@@ -326,7 +316,7 @@ export default function BeneficiosProPage() {
             <button
               type="button"
               onClick={openActivationModal}
-              className="px-4 py-2.5 rounded-2xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs transition-colors cursor-pointer border border-slate-700"
+              className="min-h-11 px-4 py-2.5 rounded bg-transparent hover:bg-stone-200/70 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 font-semibold text-[15px] transition-colors cursor-pointer border border-slate-400 dark:border-slate-600"
             >
               ¿Ya compraste? Canjear Código
             </button>
@@ -339,62 +329,62 @@ export default function BeneficiosProPage() {
       <div className="mx-auto max-w-5xl px-4 sm:px-6 -mt-8 relative z-20">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
           
-          <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-1.5">
-            <div className="w-8 h-8 rounded-xl bg-blue-100 dark:bg-blue-950/80 flex items-center justify-center text-blue-600">
+          <div className="p-4 rounded-lg bg-white dark:bg-[#18202A] border border-slate-200 dark:border-[#2C3744] space-y-1.5">
+            <div className="w-8 h-8 rounded bg-slate-100 dark:bg-slate-950/80 flex items-center justify-center text-brand-600">
               <Bookmark className="w-4 h-4" />
             </div>
-            <h2 className="font-bold text-xs text-slate-900 dark:text-white">
+            <h2 className="font-bold text-[13px] text-slate-900 dark:text-white">
               1. Cálculos en la Nube
             </h2>
-            <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-snug">
+            <p className="text-[13px] text-slate-500 dark:text-slate-400 leading-snug">
               Guarda tus escenarios y consúltalos desde tu laptop o celular sin perder datos.
             </p>
           </div>
 
-          <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-1.5">
-            <div className="w-8 h-8 rounded-xl bg-emerald-100 dark:bg-emerald-950/80 flex items-center justify-center text-emerald-600">
+          <div className="p-4 rounded-lg bg-white dark:bg-[#18202A] border border-slate-200 dark:border-[#2C3744] space-y-1.5">
+            <div className="w-8 h-8 rounded bg-brand-100 dark:bg-brand-950/80 flex items-center justify-center text-brand-600">
               <FileSpreadsheet className="w-4 h-4" />
             </div>
-            <h2 className="font-bold text-xs text-slate-900 dark:text-white">
+            <h2 className="font-bold text-[13px] text-slate-900 dark:text-white">
               2. Excel Editable (.CSV)
             </h2>
-            <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-snug">
+            <p className="text-[13px] text-slate-500 dark:text-slate-400 leading-snug">
               Descargas con UTF-8 BOM que abren perfecto en Excel sin romper tildes ni &quot;S/&quot;.
             </p>
           </div>
 
-          <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-1.5">
-            <div className="w-8 h-8 rounded-xl bg-amber-100 dark:bg-amber-950/80 flex items-center justify-center text-amber-600">
+          <div className="p-4 rounded-lg bg-white dark:bg-[#18202A] border border-slate-200 dark:border-[#2C3744] space-y-1.5">
+            <div className="w-8 h-8 rounded bg-amber-100 dark:bg-amber-950/80 flex items-center justify-center text-amber-600">
               <AlertTriangle className="w-4 h-4" />
             </div>
-            <h2 className="font-bold text-xs text-slate-900 dark:text-white">
+            <h2 className="font-bold text-[13px] text-slate-900 dark:text-white">
               3. Semáforo SUNAFIL 2026
             </h2>
-            <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-snug">
+            <p className="text-[13px] text-slate-500 dark:text-slate-400 leading-snug">
               Matriz de multas y contingencias laborales basada en la UIT 2026 (S/ 5,350).
             </p>
           </div>
 
-          <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-1.5">
-            <div className="w-8 h-8 rounded-xl bg-green-100 dark:bg-green-950/80 flex items-center justify-center text-green-600">
+          <div className="p-4 rounded-lg bg-white dark:bg-[#18202A] border border-slate-200 dark:border-[#2C3744] space-y-1.5">
+            <div className="w-8 h-8 rounded bg-green-100 dark:bg-green-950/80 flex items-center justify-center text-green-600">
               <MessageCircle className="w-4 h-4" />
             </div>
-            <h2 className="font-bold text-xs text-slate-900 dark:text-white">
+            <h2 className="font-bold text-[13px] text-slate-900 dark:text-white">
               4. Envíos a WhatsApp
             </h2>
-            <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-snug">
+            <p className="text-[13px] text-slate-500 dark:text-slate-400 leading-snug">
               Envía cotizaciones y resúmenes estructurados a tus clientes en 1 solo clic.
             </p>
           </div>
 
-          <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-1.5">
-            <div className="w-8 h-8 rounded-xl bg-purple-100 dark:bg-purple-950/80 flex items-center justify-center text-purple-600">
+          <div className="p-4 rounded-lg bg-white dark:bg-[#18202A] border border-slate-200 dark:border-[#2C3744] space-y-1.5">
+            <div className="w-8 h-8 rounded bg-slate-100 dark:bg-slate-950/80 flex items-center justify-center text-brand-600">
               <Building2 className="w-4 h-4" />
             </div>
-            <h2 className="font-bold text-xs text-slate-900 dark:text-white">
+            <h2 className="font-bold text-[13px] text-slate-900 dark:text-white">
               5. Membrete Corporativo
             </h2>
-            <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-snug">
+            <p className="text-[13px] text-slate-500 dark:text-slate-400 leading-snug">
               Guarda el logo, RUC y Razón Social de tu empresa para tus boletas de pago referenciales.
             </p>
           </div>
@@ -406,16 +396,16 @@ export default function BeneficiosProPage() {
       <div className="mx-auto max-w-5xl px-4 sm:px-6 pt-12 space-y-8">
         
         {/* Filter bar & Search */}
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-white dark:bg-slate-900 p-4 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-xs">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-white dark:bg-[#18202A] p-4 rounded-lg border border-slate-200 dark:border-[#2C3744]">
           
           {/* Categories Tab Selector */}
           <div className="flex flex-wrap gap-1">
             <button
               type="button"
               onClick={() => setSelectedCategory('todas')}
-              className={`px-3 py-1.5 rounded-xl font-bold text-xs transition-all cursor-pointer ${
+              className={`px-3 py-1.5 rounded font-bold text-[13px] transition-all cursor-pointer ${
                 selectedCategory === 'todas'
-                  ? 'bg-brand-600 text-white shadow-xs'
+                  ? 'bg-brand-600 text-white'
                   : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
               }`}
             >
@@ -425,9 +415,9 @@ export default function BeneficiosProPage() {
             <button
               type="button"
               onClick={() => setSelectedCategory('laboral')}
-              className={`px-3 py-1.5 rounded-xl font-bold text-xs transition-all cursor-pointer flex items-center gap-1 ${
+              className={`px-3 py-1.5 rounded font-bold text-[13px] transition-all cursor-pointer flex items-center gap-1 ${
                 selectedCategory === 'laboral'
-                  ? 'bg-brand-600 text-white shadow-xs'
+                  ? 'bg-brand-600 text-white'
                   : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
               }`}
             >
@@ -438,9 +428,9 @@ export default function BeneficiosProPage() {
             <button
               type="button"
               onClick={() => setSelectedCategory('tributario')}
-              className={`px-3 py-1.5 rounded-xl font-bold text-xs transition-all cursor-pointer flex items-center gap-1 ${
+              className={`px-3 py-1.5 rounded font-bold text-[13px] transition-all cursor-pointer flex items-center gap-1 ${
                 selectedCategory === 'tributario'
-                  ? 'bg-brand-600 text-white shadow-xs'
+                  ? 'bg-brand-600 text-white'
                   : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
               }`}
             >
@@ -451,9 +441,9 @@ export default function BeneficiosProPage() {
             <button
               type="button"
               onClick={() => setSelectedCategory('negocios')}
-              className={`px-3 py-1.5 rounded-xl font-bold text-xs transition-all cursor-pointer flex items-center gap-1 ${
+              className={`px-3 py-1.5 rounded font-bold text-[13px] transition-all cursor-pointer flex items-center gap-1 ${
                 selectedCategory === 'negocios'
-                  ? 'bg-brand-600 text-white shadow-xs'
+                  ? 'bg-brand-600 text-white'
                   : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
               }`}
             >
@@ -470,7 +460,7 @@ export default function BeneficiosProPage() {
               placeholder="Buscar beneficio (ej. Excel, CTS)..."
               value={searchFilter}
               onChange={(e) => setSearchFilter(e.target.value)}
-              className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl pl-9 pr-3 py-1.5 text-xs text-slate-900 dark:text-white outline-none focus:border-emerald-500"
+              className="w-full bg-slate-50 dark:bg-[#0E141B] border border-slate-200 dark:border-[#2C3744] rounded pl-9 pr-3 py-1.5 text-[13px] text-slate-900 dark:text-white outline-none focus:border-brand-500"
             />
           </div>
 
@@ -481,29 +471,29 @@ export default function BeneficiosProPage() {
           {filteredGuides.map((guide) => (
             <div
               key={guide.id}
-              className="rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 sm:p-7 shadow-sm hover:shadow-md transition-shadow space-y-5"
+              className="rounded-lg bg-white dark:bg-[#18202A] border border-slate-200 dark:border-[#2C3744] p-6 sm:p-7 transition-shadow space-y-5"
             >
               
               {/* Header: Title, Category Badge, Star Benefit */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 dark:border-slate-800 pb-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 dark:border-[#2C3744] pb-4">
                 <div>
                   <div className="flex items-center gap-2 mb-1">
-                    <span className="px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-extrabold text-[10px] uppercase">
+                    <span className="px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-bold text-[13px]">
                       {guide.categoryLabel}
                     </span>
-                    <span className="px-2.5 py-0.5 rounded-md bg-emerald-50 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800 font-extrabold text-[10px] flex items-center gap-1">
-                      <Sparkles className="w-3 h-3 text-amber-500 fill-amber-500" />
+                    <span className="px-2.5 py-0.5 rounded-md bg-brand-50 dark:bg-brand-950 text-brand-800 dark:text-brand-300 border border-brand-300 dark:border-brand-800 font-bold text-[13px] flex items-center gap-1">
+                      
                       {guide.badgeBenefit}
                     </span>
                   </div>
-                  <h3 className="text-lg sm:text-xl font-black text-slate-900 dark:text-white">
+                  <h3 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">
                     {guide.name}
                   </h3>
                 </div>
 
                 <Link
                   href={guide.slug}
-                  className="self-start sm:self-center inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-white dark:hover:bg-slate-100 text-white dark:text-slate-900 font-bold text-xs transition-colors shadow-xs"
+                  className="self-start sm:self-center inline-flex items-center gap-1.5 px-4 py-2 rounded bg-[#18202A] hover:bg-slate-800 dark:bg-white dark:hover:bg-slate-100 text-white dark:text-slate-900 font-bold text-[13px] transition-colors"
                 >
                   <span>Ir a la Calculadora</span>
                   <ArrowRight className="w-3.5 h-3.5" />
@@ -514,36 +504,36 @@ export default function BeneficiosProPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 
                 {/* Free tier card */}
-                <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 space-y-2">
+                <div className="p-4 rounded-lg bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-[#2C3744] space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="font-bold text-xs text-slate-700 dark:text-slate-300 uppercase tracking-wider">
+                    <span className="font-bold text-[13px] text-slate-700 dark:text-slate-300">
                       Versión Gratuita (Pública)
                     </span>
-                    <span className="text-[10px] bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 px-2 py-0.5 rounded font-semibold">
+                    <span className="text-[13px] bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 px-2 py-0.5 rounded font-semibold">
                       Básico
                     </span>
                   </div>
-                  <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                  <p className="text-[13px] text-slate-600 dark:text-slate-400 leading-relaxed">
                     {guide.freeTier}
                   </p>
                 </div>
 
                 {/* PRO Superpowers card */}
-                <div className="p-4 rounded-2xl bg-gradient-to-br from-emerald-50/70 to-teal-50/70 dark:from-emerald-950/30 dark:to-teal-950/30 border border-emerald-300 dark:border-emerald-800/80 space-y-2.5">
+                <div className="p-4 rounded-lg  bg-brand-50/70 dark:bg-brand-950/30 border border-brand-300 dark:border-brand-800/80 space-y-2.5">
                   <div className="flex items-center justify-between">
-                    <span className="font-bold text-xs text-emerald-900 dark:text-emerald-200 uppercase tracking-wider flex items-center gap-1.5">
-                      <Sparkles className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
+                    <span className="font-bold text-[13px] text-brand-900 dark:text-brand-200 flex items-center gap-1.5">
+                      
                       <span>Lo que desbloqueas con PRO (S/ 16 / mes)</span>
                     </span>
-                    <span className="text-[10px] bg-emerald-600 text-white px-2 py-0.5 rounded font-extrabold">
+                    <span className="text-[13px] bg-brand-600 text-white px-2 py-0.5 rounded font-bold">
                       ACCESO TOTAL
                     </span>
                   </div>
 
-                  <ul className="space-y-1.5 text-xs text-emerald-950 dark:text-emerald-200">
+                  <ul className="space-y-1.5 text-[13px] text-brand-950 dark:text-brand-200">
                     {guide.proBenefits.map((benefit, idx) => (
                       <li key={idx} className="flex items-start gap-2">
-                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
+                        <CheckCircle2 className="w-3.5 h-3.5 text-brand-600 dark:text-brand-400 shrink-0 mt-0.5" />
                         <span className="leading-snug">{benefit}</span>
                       </li>
                     ))}
@@ -553,18 +543,18 @@ export default function BeneficiosProPage() {
               </div>
 
               {/* How to use step-by-step */}
-              <div className="p-4 rounded-2xl bg-blue-50/50 dark:bg-slate-950/40 border border-blue-100 dark:border-blue-900/40 space-y-2">
-                <span className="font-bold text-xs text-blue-900 dark:text-blue-300 uppercase tracking-wider flex items-center gap-1.5">
-                  <Zap className="w-3.5 h-3.5 text-blue-600" />
+              <div className="p-4 rounded-lg bg-slate-50/50 dark:bg-slate-950/40 border border-slate-100 dark:border-slate-900/40 space-y-2">
+                <span className="font-bold text-[13px] text-brand-900 dark:text-brand-300 flex items-center gap-1.5">
+                  <Zap className="w-3.5 h-3.5 text-brand-600" />
                   <span>¿Cómo aprovechar este beneficio en esta herramienta?</span>
                 </span>
-                <ol className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs text-slate-700 dark:text-slate-300 pt-1">
+                <ol className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-[13px] text-slate-700 dark:text-slate-300 pt-1">
                   {guide.howToUse.map((step, sIdx) => (
-                    <li key={sIdx} className="flex items-start gap-2 bg-white dark:bg-slate-900 p-2.5 rounded-xl border border-blue-100 dark:border-blue-900/30">
-                      <span className="w-5 h-5 rounded-full bg-blue-600 text-white font-bold text-[10px] flex items-center justify-center shrink-0">
+                    <li key={sIdx} className="flex items-start gap-2 bg-white dark:bg-[#18202A] p-2.5 rounded border border-slate-100 dark:border-slate-900/30">
+                      <span className="w-5 h-5 rounded-full bg-slate-600 text-white font-bold text-[13px] flex items-center justify-center shrink-0">
                         {sIdx + 1}
                       </span>
-                      <span className="text-[11px] leading-relaxed">{step}</span>
+                      <span className="text-[13px] leading-relaxed">{step}</span>
                     </li>
                   ))}
                 </ol>
@@ -575,26 +565,26 @@ export default function BeneficiosProPage() {
         </div>
 
         {/* Side by Side Comparative Table */}
-        <div className="rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 sm:p-8 space-y-5 shadow-sm">
+        <div className="rounded-lg bg-white dark:bg-[#18202A] border border-slate-200 dark:border-[#2C3744] p-6 sm:p-8 space-y-5">
           <div className="text-center max-w-xl mx-auto space-y-2">
-            <span className="text-xs font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-950 px-3 py-1 rounded-full border border-emerald-300 dark:border-emerald-800">
+            <span className="text-[13px] font-bold text-brand-700 dark:text-brand-400 bg-brand-100 dark:bg-brand-950 px-3 py-1 rounded border border-brand-300 dark:border-brand-800">
               TABLA COMPARATIVA DIRECTA
             </span>
-            <h2 className="text-2xl font-black text-slate-900 dark:text-white">
+            <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
               ¿Por qué vale la pena pagar S/ 16.00 al mes?
             </h2>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
+            <p className="text-[13px] text-slate-500 dark:text-slate-400">
               Compara de un vistazo lo que ofrece la versión pública gratuita vs. la membresía profesional:
             </p>
           </div>
 
           <div className="overflow-x-auto">
-            <table className="w-full text-xs text-left border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden">
+            <table className="w-full text-[13px] text-left border border-slate-200 dark:border-[#2C3744] rounded-lg overflow-hidden">
               <thead className="bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white">
                 <tr>
                   <th className="p-3.5 font-bold">Característica / Beneficio</th>
                   <th className="p-3.5 font-bold text-center w-36">Plan Gratuito</th>
-                  <th className="p-3.5 font-bold text-center w-48 bg-emerald-100/70 dark:bg-emerald-950 text-emerald-900 dark:text-emerald-200 border-x border-emerald-300 dark:border-emerald-800">
+                  <th className="p-3.5 font-bold text-center w-48 bg-brand-100/70 dark:bg-brand-950 text-brand-900 dark:text-brand-200 border-x border-brand-300 dark:border-brand-800">
                     CalculaPerú PRO (S/ 16/mes)
                   </th>
                 </tr>
@@ -603,56 +593,56 @@ export default function BeneficiosProPage() {
                 <tr>
                   <td className="p-3.5 font-medium">Cálculos matemáticos con fórmulas de la normativa vigente 2026</td>
                   <td className="p-3.5 text-center text-slate-600 dark:text-slate-400 font-semibold">Ilimitado</td>
-                  <td className="p-3.5 text-center font-bold text-emerald-700 dark:text-emerald-400 bg-emerald-50/40 dark:bg-emerald-950/20 border-x border-emerald-200 dark:border-emerald-900">
+                  <td className="p-3.5 text-center font-bold text-brand-700 dark:text-brand-400 bg-brand-50/40 dark:bg-brand-950/20 border-x border-brand-200 dark:border-brand-900">
                     Ilimitado
                   </td>
                 </tr>
                 <tr>
                   <td className="p-3.5 font-medium">Semáforo y Matriz de Multas SUNAFIL 2026 (UIT S/ 5,350)</td>
                   <td className="p-3.5 text-center text-slate-400">Solo referencial</td>
-                  <td className="p-3.5 text-center font-bold text-emerald-700 dark:text-emerald-400 bg-emerald-50/40 dark:bg-emerald-950/20 border-x border-emerald-200 dark:border-emerald-900">
+                  <td className="p-3.5 text-center font-bold text-brand-700 dark:text-brand-400 bg-brand-50/40 dark:bg-brand-950/20 border-x border-brand-200 dark:border-brand-900">
                     ✓ Completo por régimen y trabajadores
                   </td>
                 </tr>
                 <tr>
                   <td className="p-3.5 font-medium">Exportación a Excel / CSV Editable (UTF-8 BOM)</td>
                   <td className="p-3.5 text-center text-slate-400">✗ No disponible</td>
-                  <td className="p-3.5 text-center font-bold text-emerald-700 dark:text-emerald-400 bg-emerald-50/40 dark:bg-emerald-950/20 border-x border-emerald-200 dark:border-emerald-900">
+                  <td className="p-3.5 text-center font-bold text-brand-700 dark:text-brand-400 bg-brand-50/40 dark:bg-brand-950/20 border-x border-brand-200 dark:border-brand-900">
                     ✓ Ilimitado en todas las herramientas
                   </td>
                 </tr>
                 <tr>
                   <td className="p-3.5 font-medium">Guardado de cálculos en la nube (Sincronización PC y Móvil)</td>
                   <td className="p-3.5 text-center text-slate-400">✗ Se borra al recargar</td>
-                  <td className="p-3.5 text-center font-bold text-emerald-700 dark:text-emerald-400 bg-emerald-50/40 dark:bg-emerald-950/20 border-x border-emerald-200 dark:border-emerald-900">
+                  <td className="p-3.5 text-center font-bold text-brand-700 dark:text-brand-400 bg-brand-50/40 dark:bg-brand-950/20 border-x border-brand-200 dark:border-brand-900">
                     ✓ Historial en tu cuenta siempre disponible
                   </td>
                 </tr>
                 <tr>
                   <td className="p-3.5 font-medium">Boletas de pago formales en PDF (Formato D.S. 001-98-TR)</td>
                   <td className="p-3.5 text-center text-slate-400">✗ No disponible</td>
-                  <td className="p-3.5 text-center font-bold text-emerald-700 dark:text-emerald-400 bg-emerald-50/40 dark:bg-emerald-950/20 border-x border-emerald-200 dark:border-emerald-900">
+                  <td className="p-3.5 text-center font-bold text-brand-700 dark:text-brand-400 bg-brand-50/40 dark:bg-brand-950/20 border-x border-brand-200 dark:border-brand-900">
                     ✓ Estructura legal lista para firmar
                   </td>
                 </tr>
                 <tr>
                   <td className="p-3.5 font-medium">Liquidaciones con indemnización por despido arbitrario</td>
                   <td className="p-3.5 text-center text-slate-400">✗ No disponible</td>
-                  <td className="p-3.5 text-center font-bold text-emerald-700 dark:text-emerald-400 bg-emerald-50/40 dark:bg-emerald-950/20 border-x border-emerald-200 dark:border-emerald-900">
+                  <td className="p-3.5 text-center font-bold text-brand-700 dark:text-brand-400 bg-brand-50/40 dark:bg-brand-950/20 border-x border-brand-200 dark:border-brand-900">
                     ✓ PDF formal con cláusula de plazo legal
                   </td>
                 </tr>
                 <tr>
                   <td className="p-3.5 font-medium">Logotipo y RUC de la empresa guardados en perfil</td>
                   <td className="p-3.5 text-center text-slate-400">✗ No disponible</td>
-                  <td className="p-3.5 text-center font-bold text-emerald-700 dark:text-emerald-400 bg-emerald-50/40 dark:bg-emerald-950/20 border-x border-emerald-200 dark:border-emerald-900">
+                  <td className="p-3.5 text-center font-bold text-brand-700 dark:text-brand-400 bg-brand-50/40 dark:bg-brand-950/20 border-x border-brand-200 dark:border-brand-900">
                     ✓ Carga automática en todos los documentos
                   </td>
                 </tr>
                 <tr>
                   <td className="p-3.5 font-medium">Envío rápido de proformas y resúmenes a WhatsApp</td>
                   <td className="p-3.5 text-center text-slate-400">Texto básico</td>
-                  <td className="p-3.5 text-center font-bold text-emerald-700 dark:text-emerald-400 bg-emerald-50/40 dark:bg-emerald-950/20 border-x border-emerald-200 dark:border-emerald-900">
+                  <td className="p-3.5 text-center font-bold text-brand-700 dark:text-brand-400 bg-brand-50/40 dark:bg-brand-950/20 border-x border-brand-200 dark:border-brand-900">
                     ✓ 1 Clic con formato profesional
                   </td>
                 </tr>
@@ -662,24 +652,24 @@ export default function BeneficiosProPage() {
         </div>
 
         {/* Final CTA Card */}
-        <div className="rounded-3xl bg-gradient-to-r from-slate-900 via-[#0E1E38] to-[#0A1128] text-white p-8 sm:p-10 text-center space-y-5 border border-slate-800 shadow-xl">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 font-bold text-xs">
-            <Sparkles className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
+        <div className="rounded-lg  bg-[#18202A] text-white p-8 sm:p-10 text-center space-y-5 border border-[#2C3744] shadow-lg">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-brand-500/20 text-brand-300 font-bold text-[13px]">
+            
             <span>ACTIVACIÓN INMEDIATA POR YAPE O PLIN</span>
           </div>
 
-          <h2 className="text-2xl sm:text-4xl font-black tracking-tight max-w-2xl mx-auto">
+          <h2 className="text-2xl sm:text-4xl font-bold tracking-tight max-w-2xl mx-auto">
             Ahorra tiempo contable y mantén en orden los cálculos laborales de tu negocio
           </h2>
 
-          <p className="text-slate-300 text-xs sm:text-sm max-w-xl mx-auto leading-relaxed">
+          <p className="text-slate-300 text-[13px] sm:text-[15px] max-w-xl mx-auto leading-relaxed">
             Paga solo <strong>S/ 16.00 al mes</strong> (o aprovecha el descuento anual de <strong>S/ 149.00</strong>) y accede a todas las funciones premium desde cualquier computadora o celular.
           </p>
 
           <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
             <Link
               href="/pro"
-              className="px-6 py-3 rounded-2xl bg-brand-600 hover:bg-brand-800 text-white font-bold text-sm flex items-center gap-2 transition-all shadow-lg shadow-emerald-900/30 hover:scale-[1.02] cursor-pointer"
+              className="px-6 py-3 rounded-lg bg-brand-600 hover:bg-brand-800 text-white font-bold text-[15px] flex items-center gap-2 transition-all cursor-pointer"
             >
               <span>Suscribirme a PRO Ahora</span>
               <ArrowRight className="w-4 h-4" />
@@ -688,7 +678,7 @@ export default function BeneficiosProPage() {
             <button
               type="button"
               onClick={openActivationModal}
-              className="px-5 py-3 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-bold text-sm transition-colors cursor-pointer border border-white/20"
+              className="px-5 py-3 rounded-lg bg-white/10 hover:bg-white/20 text-white font-bold text-[15px] transition-colors cursor-pointer border border-white/20"
             >
               Canjear Código de Suscripción
             </button>

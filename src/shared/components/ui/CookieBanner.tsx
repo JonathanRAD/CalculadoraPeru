@@ -40,9 +40,9 @@ export function CookieBanner() {
     <div
       role="region"
       aria-label="Aviso de cookies y privacidad"
-      className="fixed bottom-4 left-4 right-4 sm:left-auto sm:right-6 sm:max-w-md z-50 animate-in fade-in slide-in-from-bottom-5 duration-300"
+      className="fixed bottom-4 left-4 right-4 sm:left-auto sm:right-6 sm:max-w-md z-50 animate-in fade-in slide-in-bg-bottom-5 duration-300"
     >
-      <div className="bg-white dark:bg-[#131A35] border border-slate-300 dark:border-slate-700 rounded-2xl p-4 sm:p-5 shadow-2xl text-slate-800 dark:text-slate-200 text-xs space-y-3">
+      <div className="bg-white dark:bg-[#18202A] border border-slate-300 dark:border-slate-700 rounded-lg p-4 sm:p-5 shadow-lg text-slate-800 dark:text-slate-200 text-[13px] space-y-3">
         <div className="flex items-start justify-between gap-3">
           <div className="flex items-center gap-2 font-bold text-slate-900 dark:text-white">
             <Cookie className="h-4 w-4 text-brand-600 dark:text-brand-400 shrink-0" />
@@ -64,7 +64,7 @@ export function CookieBanner() {
         <div className="flex flex-wrap items-center justify-between gap-3 pt-1">
           <Link
             href="/politica-de-privacidad"
-            className="text-[11px] text-sky-700 dark:text-sky-400 hover:underline font-semibold"
+            className="text-[13px] text-brand-700 dark:text-brand-400 hover:underline font-semibold"
           >
             Leer Política de Privacidad
           </Link>
@@ -72,13 +72,13 @@ export function CookieBanner() {
           <div className="flex items-center gap-2">
             <button
               onClick={() => choose(false)}
-              className="px-4 py-2 border border-slate-300 dark:border-slate-600 text-slate-800 dark:text-slate-200 font-bold rounded-lg text-xs transition-colors hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer"
+              className="min-h-11 px-4 border border-slate-300 dark:border-slate-600 text-slate-800 dark:text-slate-200 font-bold rounded-lg text-[13px] transition-colors hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer"
             >
               Rechazar
             </button>
             <button
               onClick={() => choose(true)}
-              className="px-4 py-2 bg-brand-600 hover:bg-brand-800 text-white font-bold rounded-lg text-xs transition-colors shadow-xs cursor-pointer"
+              className="min-h-11 px-4 bg-brand-600 hover:bg-brand-800 text-white font-bold rounded-lg text-[13px] transition-colors cursor-pointer"
             >
               Aceptar
             </button>

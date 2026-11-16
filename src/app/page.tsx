@@ -2,15 +2,16 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
 import {
-  ArrowRight, BadgeCheck, BriefcaseBusiness,
-  Calculator, ChevronDown, ReceiptText,
-  Store, TrendingUp,
+  ArrowRight, BriefcaseBusiness,
+  Calculator, ChevronDown, CircleDollarSign, Gift, PiggyBank, Receipt, ReceiptText,
+  Store, Tag, TrendingUp, Wallet,
 } from 'lucide-react';
 import { CALCULATORS_REGISTRY, CATEGORIES, type CalculatorCategory } from '@/features/calculators/registry';
 import { GUIDES } from '@/features/guias/data';
 import { HomeSearch } from '@/features/home/components/HomeSearch';
 import { ResponsiveDetails } from '@/features/home/components/ResponsiveDetails';
 import { FadeIn } from '@/shared/components/ui/FadeIn';
+import { PayslipResult } from '@/shared/components/ui/PayslipResult';
 import { SmoothScrollLink } from '@/shared/components/ui/SmoothScrollLink';
 
 export const metadata: Metadata = {
@@ -25,12 +26,30 @@ export const metadata: Metadata = {
 };
 
 const FEATURED_CALCULATORS = [
-  { id: 'sueldo-neto', label: 'Sueldo neto', category: 'laboral', description: 'Estima tu remuneración líquida tras descuentos de AFP u ONP y retención de 5ta categoría.' },
-  { id: 'calculadora-igv', label: 'IGV 18%', category: 'tributario', description: 'Calcula o desglosa el Impuesto General a las Ventas sobre el subtotal o importe total.' },
-  { id: 'calculadora-cts', label: 'CTS semestral', category: 'laboral', description: 'Proyecta el depósito semestral de Compensación por Tiempo de Servicios de mayo o noviembre.' },
-  { id: 'gratificacion', label: 'Gratificaciones', category: 'laboral', description: 'Calcula la gratificación legal de julio o diciembre más la bonificación extraordinaria de EsSalud/EPS.' },
-  { id: 'precio-de-venta', label: 'Precio de venta', category: 'negocios', description: 'Define precios comerciales considerando costo unitario, margen deseado y comisiones POS.' },
-  { id: 'tipo-de-cambio-dolar-sunat', label: 'Dólar a soles', category: 'tributario', description: 'Convierte montos USD/PEN con cotizaciones actualizadas del mercado y referencia SBS.' },
+  {
+    id: 'sueldo-neto', icon: Wallet, question: '¿Cuánto me descuentan del sueldo?',
+    from: { label: 'Sueldo bruto', value: 'S/ 3,000.00' }, to: { label: 'Neto estimado (ONP)', value: 'S/ 2,583.07' },
+  },
+  {
+    id: 'calculadora-igv', icon: Receipt, question: '¿Cuánto es el IGV de una venta?',
+    from: { label: 'Base imponible', value: 'S/ 100.00' }, to: { label: 'Total con IGV 18 %', value: 'S/ 118.00' },
+  },
+  {
+    id: 'calculadora-cts', icon: PiggyBank, question: '¿Cuánto me depositan de CTS?',
+    from: { label: 'Sueldo S/ 3,000 · 6 meses', value: '' }, to: { label: 'Depósito semestral', value: 'S/ 1,750.00' },
+  },
+  {
+    id: 'gratificacion', icon: Gift, question: '¿Cuánto me toca de gratificación?',
+    from: { label: 'Sueldo S/ 3,000 · 6 meses', value: '' }, to: { label: 'Con bonificación del 9 %', value: 'S/ 3,270.00' },
+  },
+  {
+    id: 'precio-de-venta', icon: Tag, question: '¿A cuánto debo vender mi producto?',
+    from: { label: 'Costo S/ 50 · margen 30 %', value: '' }, to: { label: 'Precio de venta', value: 'S/ 71.43' },
+  },
+  {
+    id: 'tipo-de-cambio-dolar-sunat', icon: CircleDollarSign, question: '¿A cuánto equivale el dólar hoy?',
+    from: { label: 'Monto en dólares', value: 'US$ 100' }, to: { label: 'Equivalente en soles', value: 'al cambio del día' },
+  },
 ].map((featured) => ({
   ...featured,
   calculator: CALCULATORS_REGISTRY.find((calc) => calc.id === featured.id)!,
@@ -90,47 +109,45 @@ export default function HomePage() {
   );
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] text-slate-950 transition-colors duration-200 dark:bg-[#070D1E] dark:text-slate-100">
+    <div className="min-h-screen bg-[#F4F1EA] text-slate-950 transition-colors duration-200 dark:bg-[#121820] dark:text-slate-100">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(homeItemListJsonLd) }} />
 
-      {/* ========================================================================= */}
-      {/* HERO SECTION                                                              */}
-      {/* ·  Mobile  (<640px) : franja panorámica 128 px encima del texto          */}
-      {/* ·  Tablet  (640-1023px) : franja 180 px                                  */}
-      {/* ·  Desktop (≥1024px) : columna derecha aspect-[16/11]                    */}
-      {/* ========================================================================= */}
-      <section className="relative z-10 border-b border-slate-200/80 bg-white dark:border-slate-800/80 dark:bg-[#0B132B] transition-colors">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-12">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 lg:gap-12 items-center">
+      {/* Hero: pregunta, búsqueda y una boleta de ejemplo como producto real */}
+      <section className="relative isolate z-10 border-b border-stone-300 dark:border-slate-700">
+        <div aria-hidden="true" className="hero-photo pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+          <Image
+            src="/machu_pichu.jpg"
+            alt=""
+            fill
+            fetchPriority="low"
+            quality={70}
+            sizes="(min-width: 1280px) 1100px, 100vw"
+            className="object-cover object-[center_40%]"
+          />
+        </div>
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 sm:py-14 lg:py-16">
+          <div className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:gap-14 items-start">
 
-            {/* CONTENT COLUMN: Appears second on mobile (after photo banner), first on desktop */}
-            <div className="space-y-4 sm:space-y-5 text-left order-2 lg:order-1 lg:col-span-7 xl:col-span-7">
-              <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-800 dark:border-emerald-800/60 dark:bg-emerald-950/40 dark:text-emerald-300">
-                <BadgeCheck className="h-3.5 w-3.5 text-brand-700 dark:text-brand-400" aria-hidden="true" />
-                <span>25 calculadoras gratuitas · Parámetros Perú 2026</span>
-              </div>
-
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-slate-950 dark:text-white leading-[1.12]">
+            <div className="space-y-5 lg:col-span-6">
+              <h1 className="rise-in text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-slate-900 dark:text-white leading-[1.12]">
                 ¿Qué necesitas calcular?
               </h1>
 
-              <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 font-normal leading-relaxed max-w-xl">
-                Herramientas laborales, tributarias, comerciales y financieras adaptadas a la normativa oficial de <strong>SUNAT, MTPE, SBS y BCRP</strong>.
+              <p className="rise-in-2 text-base sm:text-lg text-slate-800 dark:text-slate-200 leading-relaxed max-w-xl">
+                Herramientas laborales, tributarias, comerciales y financieras con parámetros 2026 de SUNAT, MTPE, SBS y BCRP.
               </p>
 
-              {/* Left-Aligned Instant Search */}
-              <div className="pt-1 w-full max-w-xl">
+              <div className="rise-in-3 relative z-20 w-full max-w-xl">
                 <HomeSearch calculators={CALCULATORS_REGISTRY} />
               </div>
 
-              {/* Quick Filter Pills */}
-              <div className="pt-1 flex flex-wrap items-center gap-2 text-xs">
-                <span className="font-semibold text-slate-500 dark:text-slate-400 mr-1">Directos:</span>
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[15px]">
+                <span className="text-slate-600 dark:text-slate-400">Más usadas:</span>
                 {POPULAR_PILLS.map((pill) => (
                   <Link
                     key={pill.href}
                     href={pill.href}
-                    className="inline-flex items-center rounded-full border border-slate-200 bg-slate-50 px-3 py-1 font-semibold text-slate-700 hover:border-emerald-500 hover:bg-emerald-50 hover:text-emerald-900 transition-all dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-emerald-400 dark:hover:text-emerald-300 shadow-2xs"
+                    className="inline-flex min-h-11 items-center font-semibold text-brand-700 underline-offset-4 hover:underline dark:text-brand-400"
                   >
                     {pill.label}
                   </Link>
@@ -138,37 +155,28 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* UNIFIED HERO PHOTO: Appears as compact panoramic banner above title on mobile, right column on desktop */}
-            <div className="order-1 lg:order-2 w-full lg:col-span-5 xl:col-span-5">
-              <div className="relative rounded-2xl sm:rounded-3xl overflow-hidden border border-slate-200/80 dark:border-slate-800 shadow-md lg:shadow-xl shadow-slate-200/50 dark:shadow-slate-950/60 w-full h-32 sm:h-44 lg:h-auto lg:aspect-[16/11] group">
-                <Image
-                  src="/machu_pichu.jpg"
-                  alt="Machu Picchu — Paisaje emblemático del Perú"
-                  fill
-                  priority
-                  loading="eager"
-                  fetchPriority="high"
-                  quality={75}
-                  sizes="(max-width: 640px) calc(100vw - 32px), (max-width: 1023px) calc(100vw - 48px), (max-width: 1280px) 42vw, 560px"
-                  className="object-cover object-[center_35%] transition-transform duration-700 group-hover:scale-105"
-                />
-                {/* Subtle mobile vignette and bottom gradient */}
-                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/25 lg:hidden pointer-events-none" />
-                {/* Desktop gradients for smooth edge blending */}
-                <div className="hidden lg:block absolute inset-0 bg-gradient-to-r from-white/30 via-transparent to-transparent dark:from-[#0B132B]/50 pointer-events-none" />
-                <div className="hidden lg:block absolute inset-0 bg-gradient-to-t from-slate-950/70 via-slate-950/10 to-transparent pointer-events-none" />
-
-                {/* Discreet badge overlay */}
-                <div className="absolute bottom-2 sm:bottom-3 left-3 sm:left-4 right-3 sm:right-4 flex items-center justify-between text-[10px] sm:text-[11px] font-medium text-white/95 pointer-events-none">
-                  <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-950/80 px-2 sm:px-2.5 py-0.5 sm:py-1 border border-white/10">
-                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-                    Parámetros Perú 2026
-                  </span>
-                  <span className="rounded-full bg-slate-950/80 px-2 sm:px-2.5 py-0.5 sm:py-1 border border-white/10 text-white/80">
-                    Cálculos locales
-                  </span>
-                </div>
-              </div>
+            <div className="slip-print lg:col-span-6">
+              <PayslipResult
+                title="BOLETA CALCULADA · EJEMPLO"
+                period="Sueldo bruto S/ 3,000 · ONP"
+                lines={[
+                  { label: 'Remuneración bruta', amount: '3,000.00' },
+                  { label: 'Descuento ONP 13 %', amount: '390.00', kind: 'deduction' },
+                  { label: 'Retención de quinta categoría', note: 'Incluye bonificación extraordinaria del 9 %', amount: '26.93', kind: 'deduction' },
+                ]}
+                subtotalLabel="Total descuentos"
+                subtotalAmount="416.93"
+                totalLabel="Sueldo neto estimado"
+                totalAmount="S/ 2,583.07"
+                footnote={
+                  <>
+                    Ejemplo ilustrativo.{' '}
+                    <Link href="/sueldo-neto" className="font-semibold text-brand-700 underline-offset-4 hover:underline dark:text-brand-400">
+                      Calcula con tus datos
+                    </Link>
+                  </>
+                }
+              />
             </div>
 
           </div>
@@ -181,63 +189,62 @@ export default function HomePage() {
       {/* ========================================================================= */}
       <section aria-labelledby="featured-title" className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-14">
         <FadeIn direction="up">
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between mb-8">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between mb-6">
             <div>
-              <span className="text-xs font-bold uppercase tracking-wider text-brand-700 dark:text-emerald-400">
-                Herramientas destacadas
-              </span>
-              <h2 id="featured-title" className="mt-1 text-2xl sm:text-3xl font-black tracking-tight text-slate-950 dark:text-white">
+              <h2 id="featured-title" className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-white">
                 Calculadoras más consultadas
               </h2>
-              <p className="mt-1 text-xs sm:text-sm text-slate-600 dark:text-slate-400">
-                Acceso directo con fórmulas actualizadas bajo parámetros oficiales 2026.
+              <p className="mt-1 text-[15px] text-slate-600 dark:text-slate-400">
+                Fórmulas con parámetros oficiales 2026.
               </p>
             </div>
             <SmoothScrollLink
               targetId="todas-las-calculadoras"
-              className="group inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-brand-700 hover:text-emerald-800 dark:text-emerald-400 dark:hover:text-emerald-300 cursor-pointer"
+              className="group inline-flex min-h-11 items-center gap-2 text-[15px] font-semibold text-brand-700 hover:underline underline-offset-4 dark:text-brand-400 cursor-pointer"
             >
               <span>Ver las 25 calculadoras</span>
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
+              <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </SmoothScrollLink>
           </div>
         </FadeIn>
 
-        {/* 6 COMPACT CARDS IN RESPONSIVE GRID — NO HEAVY IMAGES */}
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {FEATURED_CALCULATORS.map(({ calculator, label, description }, index) => (
-            <FadeIn key={calculator.id} delay={index * 50} direction="up">
+        <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {FEATURED_CALCULATORS.map(({ calculator, question, icon: Icon, from, to }) => (
+            <li key={calculator.id} className="h-full">
               <Link
                 href={calculator.slug}
-                className="group relative flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-5 shadow-xs transition-all duration-200 hover:-translate-y-1 hover:border-emerald-500/50 hover:shadow-md dark:border-slate-800 dark:bg-slate-900 h-full"
+                className="lift-card group flex h-full flex-col rounded-lg border border-stone-300 bg-[#FFFEFB] dark:border-slate-700 dark:bg-[#18202A]"
               >
-                <div>
-                  <div className="flex items-center justify-between gap-3 mb-3">
-                    <span className="rounded-md bg-emerald-50 px-2 py-0.5 text-[11px] font-bold text-brand-700 uppercase tracking-wider dark:bg-emerald-950/60 dark:text-emerald-300">
-                      {calculator.tag}
-                    </span>
-                    <span className="text-[11px] font-mono text-slate-500 dark:text-slate-400">
-                      2026
-                    </span>
+                <div className="flex-1 p-5">
+                  <div className="flex items-center gap-2 text-[13px] text-slate-600 dark:text-slate-400">
+                    <Icon className="h-5 w-5 text-brand-700 dark:text-brand-400" aria-hidden="true" />
+                    <span>{calculator.shortTitle}</span>
                   </div>
+                  <h3 className="mt-3 text-xl font-semibold leading-snug text-slate-900 dark:text-white">{question}</h3>
 
-                  <h3 className="text-base font-bold text-slate-950 group-hover:text-brand-700 dark:text-white dark:group-hover:text-emerald-400 transition-colors">
-                    {label}
-                  </h3>
-
-                  <p className="mt-1.5 text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                    {description}
-                  </p>
+                  <dl className="mt-5 border-t border-dashed border-stone-300 pt-3 font-mono text-[15px] dark:border-slate-600">
+                    {from.value ? (
+                      <div className="flex items-baseline justify-between gap-3 py-1 text-slate-700 dark:text-slate-300">
+                        <dt className="font-sans text-[13px]">{from.label}</dt>
+                        <dd className="tabular-nums">{from.value}</dd>
+                      </div>
+                    ) : (
+                      <div className="py-1 font-sans text-[13px] text-slate-700 dark:text-slate-300">{from.label}</div>
+                    )}
+                    <div className="mt-1 flex items-baseline justify-between gap-3 border-t border-slate-900 pt-2 font-semibold text-slate-900 dark:border-slate-400 dark:text-white">
+                      <dt className="font-sans text-[13px] font-medium">{to.label}</dt>
+                      <dd className="tabular-nums text-brand-700 dark:text-brand-400">{to.value}</dd>
+                    </div>
+                  </dl>
                 </div>
-
-                <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-xs font-bold text-brand-700 dark:text-emerald-400">
-                  <span>Calcular ahora</span>
-                  <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" aria-hidden="true" />
-                </div>
+                <span className="relative flex min-h-12 items-center justify-between border-t border-stone-300 px-5 text-[15px] font-semibold text-brand-700 dark:border-slate-700 dark:text-brand-400">
+                  Calcular con tus datos
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
+                </span>
               </Link>
-            </FadeIn>
+            </li>
           ))}
-        </div>
+        </ul>
       </section>
 
       {/* ========================================================================= */}
@@ -246,13 +253,13 @@ export default function HomePage() {
       <section id="todas-las-calculadoras" aria-labelledby="directory-title" className="scroll-mt-24 mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-14">
         <FadeIn direction="up">
           <div className="max-w-2xl mb-8">
-            <span className="text-xs font-bold uppercase tracking-wider text-brand-700 dark:text-emerald-400">
+            <span className="text-[13px] font-bold text-brand-700 dark:text-brand-400">
               Directorio completo
             </span>
-            <h2 id="directory-title" className="mt-1 text-2xl sm:text-3xl font-black tracking-tight text-slate-950 dark:text-white">
+            <h2 id="directory-title" className="mt-1 text-2xl sm:text-3xl font-bold tracking-tight text-slate-950 dark:text-white">
               Las 25 calculadoras de CalculaPerú
             </h2>
-            <p className="mt-1 text-xs sm:text-sm text-slate-600 dark:text-slate-400">
+            <p className="mt-1 text-[13px] sm:text-[15px] text-slate-600 dark:text-slate-400">
               Agrupadas en cuatro áreas de trabajo para acceder directamente a la que necesitas.
             </p>
           </div>
@@ -267,18 +274,18 @@ export default function HomePage() {
                 <ResponsiveDetails
                   id={category.id}
                   defaultMobileOpen={index === 0}
-                  className="directory-details group scroll-mt-24 rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900 shadow-xs h-full transition-all duration-200 hover:border-emerald-500/40"
+                  className="directory-details group scroll-mt-24 rounded-lg border border-stone-300 bg-[#FFFEFB] p-5 dark:border-slate-700 dark:bg-[#18202A] h-full"
                 >
-                  <summary className="flex min-h-12 cursor-pointer list-none items-start justify-between gap-3 marker:content-none focus-visible:outline-2 focus-visible:outline-emerald-600">
+                  <summary className="flex min-h-12 cursor-pointer list-none items-start justify-between gap-3 marker:content-none focus-visible:outline-2 focus-visible:outline-brand-600">
                     <span className="flex min-w-0 items-start gap-3">
-                      <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-brand-700 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200/50 dark:border-emerald-800/50">
+                      <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center text-brand-700 dark:text-brand-400">
                         <Icon className="h-4.5 w-4.5" aria-hidden="true" />
                       </span>
                       <span>
-                        <span className="block text-sm font-bold text-slate-950 dark:text-white">
+                        <span className="block text-[15px] font-bold text-slate-950 dark:text-white">
                           {category.label}
                         </span>
-                        <span className="mt-0.5 block text-xs text-slate-500 dark:text-slate-400">
+                        <span className="mt-0.5 block text-[13px] text-slate-500 dark:text-slate-400">
                           {calculators.length} herramientas
                         </span>
                       </span>
@@ -286,15 +293,15 @@ export default function HomePage() {
                     <ChevronDown className="mt-2 h-4 w-4 shrink-0 text-slate-500 transition-transform group-open:rotate-180 md:hidden" aria-hidden="true" />
                   </summary>
 
-                  <ul className="mt-4 space-y-1 border-t border-slate-100 pt-3 dark:border-slate-800">
+                  <ul className="mt-4 space-y-1 border-t border-slate-100 pt-3 dark:border-[#2C3744]">
                     {calculators.map((calculator) => (
                       <li key={calculator.id}>
                         <Link
                           href={calculator.slug}
-                          className="group/link flex min-h-10 items-center justify-between gap-3 rounded-lg px-2 text-xs sm:text-sm font-medium text-slate-700 transition-colors hover:bg-emerald-50 hover:text-emerald-900 focus-visible:outline-2 focus-visible:outline-emerald-600 dark:text-slate-300 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300"
+                          className="group/link flex min-h-10 items-center justify-between gap-3 rounded-lg px-2 text-[13px] sm:text-[15px] font-medium text-slate-700 transition-colors hover:bg-brand-50 hover:text-brand-900 focus-visible:outline-2 focus-visible:outline-brand-600 dark:text-slate-300 dark:hover:bg-brand-950/40 dark:hover:text-brand-300"
                         >
                           <span>{calculator.shortTitle}</span>
-                          <ArrowRight className="h-3.5 w-3.5 shrink-0 text-slate-400 transition-transform group-hover/link:translate-x-0.5 group-hover/link:text-brand-700 dark:group-hover/link:text-emerald-400" aria-hidden="true" />
+                          <ArrowRight className="h-3.5 w-3.5 shrink-0 text-slate-400 transition-transform group-hover/link:translate-x-0.5 group-hover/link:text-brand-700 dark:group-hover/link:text-brand-400" aria-hidden="true" />
                         </Link>
                       </li>
                     ))}
@@ -312,17 +319,17 @@ export default function HomePage() {
       <section aria-labelledby="guides-title" className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-14">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between mb-8">
           <div>
-            <span className="text-xs font-bold uppercase tracking-wider text-brand-700 dark:text-emerald-400">
+            <span className="text-[13px] font-bold text-brand-700 dark:text-brand-400">
               Guías
             </span>
-            <h2 id="guides-title" className="mt-1 text-2xl sm:text-3xl font-black tracking-tight text-slate-950 dark:text-white">
+            <h2 id="guides-title" className="mt-1 text-2xl sm:text-3xl font-bold tracking-tight text-slate-950 dark:text-white">
               Entiende tus números paso a paso
             </h2>
-            <p className="mt-1 text-xs sm:text-sm text-slate-600 dark:text-slate-400">
+            <p className="mt-1 text-[13px] sm:text-[15px] text-slate-600 dark:text-slate-400">
               Explicaciones con ejemplos en soles y fuentes oficiales.
             </p>
           </div>
-          <Link href="/guias" className="group inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-brand-700 hover:text-emerald-800 dark:text-emerald-400 dark:hover:text-emerald-300">
+          <Link href="/guias" className="group inline-flex items-center gap-2 text-[13px] sm:text-[15px] font-bold text-brand-700 hover:text-brand-800 dark:text-brand-400 dark:hover:text-brand-300">
             <span>Ver todas las guías</span>
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
           </Link>
@@ -331,9 +338,9 @@ export default function HomePage() {
           {GUIDES.slice(0, 6).map((guide) => (
             <li key={guide.slug}>
               <Link href={`/guias/${guide.slug}`} className="app-card h-full p-5 flex flex-col gap-2 group hover:border-brand-700 transition-all">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-brand-700 dark:text-emerald-400">{guide.category}</span>
-                <h3 className="text-sm sm:text-base font-bold text-slate-900 dark:text-white group-hover:text-brand-700 dark:group-hover:text-emerald-400 transition-colors">{guide.title}</h3>
-                <span className="mt-auto text-xs text-slate-500 dark:text-slate-400">{guide.readingMinutes} min de lectura</span>
+                <span className="text-[13px] font-bold text-brand-700 dark:text-brand-400">{guide.category}</span>
+                <h3 className="text-[15px] sm:text-base font-bold text-slate-900 dark:text-white group-hover:text-brand-700 dark:group-hover:text-brand-400 transition-colors">{guide.title}</h3>
+                <span className="mt-auto text-[13px] text-slate-500 dark:text-slate-400">{guide.readingMinutes} min de lectura</span>
               </Link>
             </li>
           ))}
@@ -343,22 +350,22 @@ export default function HomePage() {
       {/* ========================================================================= */}
       {/* METHODOLOGY & FAQS SECTION */}
       {/* ========================================================================= */}
-      <section aria-labelledby="method-title" className="border-t border-slate-200 bg-[#F1F5F9] dark:border-slate-800 dark:bg-[#09122a] transition-colors">
+      <section aria-labelledby="method-title" className="border-t border-stone-300 bg-[#ECE9E2] dark:border-slate-700 dark:bg-[#0E141B]">
         <div className="mx-auto grid max-w-7xl gap-10 px-4 py-12 sm:px-6 sm:py-16 lg:grid-cols-12 lg:gap-16">
           <div className="lg:col-span-4 space-y-3">
-            <span className="text-xs font-bold uppercase tracking-wider text-brand-700 dark:text-emerald-400">
+            <span className="text-[13px] font-bold text-brand-700 dark:text-brand-400">
               Transparencia y Rigor
             </span>
-            <h2 id="method-title" className="text-2xl sm:text-3xl font-black tracking-tight text-slate-950 dark:text-white">
+            <h2 id="method-title" className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-950 dark:text-white">
               Metodología y fuentes de cálculo
             </h2>
-            <p className="text-xs sm:text-sm leading-relaxed text-slate-600 dark:text-slate-400 font-normal">
+            <p className="text-[13px] sm:text-[15px] leading-relaxed text-slate-600 dark:text-slate-400 font-normal">
               Cada herramienta detalla su fórmula matemática, los parámetros normativos utilizados y su alcance referencial. Diseñadas para brindar claridad en tus decisiones cotidianas.
             </p>
             <div className="pt-2">
               <Link
                 href="/sobre-nosotros"
-                className="group inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-brand-700 dark:text-emerald-400 hover:underline"
+                className="group inline-flex items-center gap-2 text-[13px] sm:text-[15px] font-bold text-brand-700 dark:text-brand-400 hover:underline"
               >
                 <span>Conoce la metodología de CalculaPerú</span>
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
@@ -370,11 +377,11 @@ export default function HomePage() {
             <div className="divide-y divide-slate-200 border-y border-slate-300 dark:divide-slate-700 dark:border-slate-700">
               {FAQS.map((faq, index) => (
                 <details key={faq.question} className="group py-1" open={index === 0}>
-                  <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-5 py-3 text-sm sm:text-base font-bold text-slate-950 marker:content-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600 dark:text-white">
+                  <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-5 py-3 text-[15px] sm:text-base font-bold text-slate-950 marker:content-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600 dark:text-white">
                     <span>{faq.question}</span>
-                    <ChevronDown className="h-4 w-4 shrink-0 text-brand-700 transition-transform group-open:rotate-180 dark:text-emerald-400" aria-hidden="true" />
+                    <ChevronDown className="h-4 w-4 shrink-0 text-brand-700 transition-transform group-open:rotate-180 dark:text-brand-400" aria-hidden="true" />
                   </summary>
-                  <p className="max-w-3xl pb-5 pr-8 text-xs sm:text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+                  <p className="max-w-3xl pb-5 pr-8 text-[13px] sm:text-[15px] leading-relaxed text-slate-600 dark:text-slate-400">
                     {faq.answer}
                   </p>
                 </details>

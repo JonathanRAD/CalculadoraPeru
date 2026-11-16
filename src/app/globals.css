@@ -7,10 +7,18 @@
  * (Fase 0 del rediseño: unifica los verdes sueltos. Cambiar la paleta es editar estas cuatro líneas.)
  */
 @theme {
-  --color-brand-400: #00c853; /* acento sobre fondos oscuros */
+  --color-brand-400: #5fbf98; /* acento sobre fondos oscuros, verde suave sin brillo */
   --color-brand-600: #00875a; /* marca: acciones, enlaces y resultado clave */
   --color-brand-700: #08734f; /* marca sobre fondo claro (texto y bordes), más contraste */
   --color-brand-800: #00704a; /* estado hover y pulsado */
+  --color-brand-50: #f0f8f4;
+  --color-brand-100: #e3f1ea; /* fondo suave de la línea de total */
+  --color-brand-200: #c4e3d3;
+  --color-brand-300: #8fd0b3;
+  --color-brand-500: #129768;
+  --color-brand-900: #0e3a2b; /* cabecera de la boleta y total en modo oscuro */
+  --color-brand-950: #09271d;
+  --color-stamp: #b42318; /* sello "REFERENCIAL" */
 }
 
 :root {
@@ -190,25 +198,22 @@ input[type="number"] {
 
 /* Card & Surface utilities */
 .app-card {
-  background-color: #ffffff;
-  border: 1px solid #E2E8F0;
-  border-radius: 16px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
-  transition: all 0.2s ease;
+  background-color: #fffefb;
+  border: 1px solid #d8d2c4;
+  border-radius: 8px;
 }
 
 .dark .app-card {
-  background-color: #131A35;
-  border-color: #1E294B;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  background-color: #18202a;
+  border-color: #2c3744;
 }
 
 .app-card:hover {
-  border-color: #CBD5E1;
+  border-color: #8c877a;
 }
 
 .dark .app-card:hover {
-  border-color: #2D3D6E;
+  border-color: #4a5868;
 }
 
 /* UIverse Day / Night Animated Theme Switch (Ingenious & Pixel-Perfect) */
@@ -347,3 +352,128 @@ input[type="number"] {
 .uiverse-toggle-checkbox:checked + .uiverse-toggle-label::before {
   left: 26px;
 }
+
+/* Inicio: foto de fondo con deriva lenta y boleta que se "imprime" al cargar */
+.hero-photo {
+  opacity: 0.3;
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, transparent 85%);
+  mask-image: linear-gradient(to bottom, #000 0%, transparent 85%);
+}
+
+@media (min-width: 1024px) {
+  .hero-photo {
+    -webkit-mask-image: linear-gradient(to left, #000 15%, transparent 80%);
+    mask-image: linear-gradient(to left, #000 15%, transparent 80%);
+  }
+}
+
+.dark .hero-photo {
+  opacity: 0.38;
+  filter: brightness(0.75) saturate(0.9);
+}
+
+.hero-photo img {
+  animation: hero-drift 45s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+@keyframes hero-drift {
+  from { transform: scale(1.04) translate3d(0, 0, 0); }
+  to { transform: scale(1.16) translate3d(-2.5%, -2%, 0); }
+}
+
+@keyframes slip-print {
+  from { clip-path: inset(0 0 100% 0); }
+  to { clip-path: inset(0 0 0 0); }
+}
+
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+
+.slip-print { animation: slip-print 1.6s cubic-bezier(0.22, 0.7, 0.2, 1) 0.35s both; }
+.rise-in { animation: rise-in 0.8s ease-out both; }
+.rise-in-2 { animation: rise-in 0.8s ease-out 0.12s both; }
+.rise-in-3 { animation: rise-in 0.8s ease-out 0.24s both; }
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-photo img,
+  .slip-print,
+  .rise-in,
+  .rise-in-2,
+  .rise-in-3 { animation: none; }
+}
+
+/* Tarjetas del inicio: al apuntar se levantan, giran un poco y reciben una luz suave */
+.lift-card {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.28s cubic-bezier(0.22, 0.7, 0.2, 1), box-shadow 0.28s ease, border-color 0.28s ease;
+}
+
+.lift-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(120% 80% at 20% -10%, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0) 60%);
+  transition: opacity 0.28s ease;
+}
+
+.dark .lift-card::before {
+  background: radial-gradient(120% 80% at 20% -10%, rgba(255, 244, 214, 0.1), rgba(255, 244, 214, 0) 60%);
+}
+
+.lift-card:hover,
+.lift-card:focus-visible {
+  transform: translateY(-6px) scale(1.04) rotate(-1deg);
+  box-shadow: 0 18px 32px -16px rgba(28, 31, 35, 0.35);
+  border-color: #8c877a;
+  z-index: 2;
+}
+
+li:nth-child(even) > .lift-card:hover,
+li:nth-child(even) > .lift-card:focus-visible {
+  transform: translateY(-6px) scale(1.04) rotate(1deg);
+}
+
+.dark .lift-card:hover,
+.dark .lift-card:focus-visible {
+  box-shadow: 0 18px 34px -14px rgba(0, 0, 0, 0.7);
+  border-color: #5b6878;
+}
+
+.lift-card:hover::before,
+.lift-card:focus-visible::before {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lift-card:hover,
+  .lift-card:focus-visible,
+  li:nth-child(even) > .lift-card:hover { transform: none; }
+}
+
+/* Selectores: flecha propia, texto largo con puntos suspensivos y alto uniforme */
+.select-field {
+  -webkit-appearance: none;
+  appearance: none;
+  min-height: 3rem;
+  padding-right: 2.5rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  cursor: pointer;
+  background-repeat: no-repeat;
+  background-position: right 0.85rem center;
+  background-size: 1rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23454b52' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+}
+
+.dark .select-field {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23cbd5e1' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+}
+
+.select-field option { white-space: normal; }

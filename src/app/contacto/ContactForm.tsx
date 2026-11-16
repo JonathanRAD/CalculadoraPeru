@@ -118,24 +118,24 @@ export function ContactForm() {
 
   if (status === 'success') {
     return (
-      <div className="bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/80 rounded-2xl p-8 text-center space-y-4 animate-in fade-in duration-300">
-        <div className="w-12 h-12 bg-emerald-100 dark:bg-emerald-900 rounded-full flex items-center justify-center text-brand-600 dark:text-brand-400 mx-auto">
+      <div className="bg-brand-50 dark:bg-brand-950/40 border border-brand-200 dark:border-brand-800/80 rounded-lg p-8 text-center space-y-4 animate-in fade-in duration-300">
+        <div className="w-12 h-12 bg-brand-100 dark:bg-brand-900 rounded-full flex items-center justify-center text-brand-600 dark:text-brand-400 mx-auto">
           <CheckCircle2 className="w-6 h-6" />
         </div>
         <h3 className="text-lg font-bold text-slate-900 dark:text-white">
           Consulta recibida correctamente
         </h3>
-        <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-md mx-auto leading-relaxed">
+        <p className="text-[13px] sm:text-[15px] text-slate-600 dark:text-slate-300 max-w-md mx-auto leading-relaxed">
           {responseInfo.message || 'Recibimos tu consulta. Si requiere respuesta, podremos contactarte mediante el correo proporcionado.'}
         </p>
         {responseInfo.warning && (
-          <div className="p-3 bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-700 rounded-xl text-xs text-amber-800 dark:text-amber-200 text-left max-w-md mx-auto flex items-start gap-2">
+          <div className="p-3 bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-700 rounded text-[13px] text-amber-800 dark:text-amber-200 text-left max-w-md mx-auto flex items-start gap-2">
             <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 text-amber-600" />
             <span>{responseInfo.warning}</span>
           </div>
         )}
         {responseInfo.requestId && (
-          <p className="text-xs font-mono text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-800 inline-block">
+          <p className="text-[13px] font-mono text-slate-500 dark:text-slate-400 bg-white dark:bg-[#18202A] px-3 py-1.5 rounded-lg border border-slate-200 dark:border-[#2C3744] inline-block">
             Código de seguimiento: <span className="font-bold text-brand-600 dark:text-brand-400">{responseInfo.requestId}</span>
           </p>
         )}
@@ -143,7 +143,7 @@ export function ContactForm() {
           <button
             type="button"
             onClick={() => setStatus('idle')}
-            className="mt-2 text-xs font-bold text-brand-600 dark:text-brand-400 hover:underline cursor-pointer"
+            className="mt-2 text-[13px] font-bold text-brand-600 dark:text-brand-400 hover:underline cursor-pointer"
           >
             Enviar otra consulta
           </button>
@@ -153,20 +153,20 @@ export function ContactForm() {
   }
 
   return (
-    <div className="bg-slate-50 dark:bg-slate-900/40 rounded-2xl p-6 border border-slate-200 dark:border-slate-800">
+    <div className="bg-slate-50 dark:bg-slate-900/40 rounded-lg p-6 border border-slate-200 dark:border-[#2C3744]">
       <h2 className="text-base font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
         <MessageSquare className="h-4 w-4 text-brand-600" />
         <span>Envíanos un mensaje o consulta</span>
       </h2>
 
       {status === 'error' && (
-        <div className="mb-4 p-3 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800 rounded-xl flex items-start gap-2.5 text-xs text-red-700 dark:text-red-300">
+        <div className="mb-4 p-3 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800 rounded flex items-start gap-2.5 text-[13px] text-red-700 dark:text-red-300">
           <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
           <span>{errorMessage}</span>
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-4 text-xs">
+      <form onSubmit={handleSubmit} className="space-y-4 text-[13px]">
         {/* Campo Honeypot para neutralizar bots */}
         <div className="hidden" aria-hidden="true">
           <label htmlFor="website_hp">No llenar si eres humano</label>
@@ -192,7 +192,7 @@ export function ContactForm() {
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="Ej. María Sánchez - Negocio MYPE"
-            className="w-full bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-slate-900 dark:text-white outline-none focus:border-brand-600 transition-colors"
+            className="w-full bg-white dark:bg-[#0E141B] border border-slate-300 dark:border-slate-700 rounded px-3.5 py-2.5 text-slate-900 dark:text-white outline-none focus:border-brand-600 transition-colors"
           />
         </div>
 
@@ -208,7 +208,7 @@ export function ContactForm() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="nombre@ejemplo.com"
-              className="w-full bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-slate-900 dark:text-white outline-none focus:border-brand-600 transition-colors"
+              className="w-full bg-white dark:bg-[#0E141B] border border-slate-300 dark:border-slate-700 rounded px-3.5 py-2.5 text-slate-900 dark:text-white outline-none focus:border-brand-600 transition-colors"
             />
           </div>
 
@@ -222,7 +222,7 @@ export function ContactForm() {
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               placeholder="Ej. 987654321"
-              className="w-full bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-slate-900 dark:text-white outline-none focus:border-brand-600 transition-colors"
+              className="w-full bg-white dark:bg-[#0E141B] border border-slate-300 dark:border-slate-700 rounded px-3.5 py-2.5 text-slate-900 dark:text-white outline-none focus:border-brand-600 transition-colors"
             />
           </div>
         </div>
@@ -234,7 +234,7 @@ export function ContactForm() {
           <select
             value={category}
             onChange={(e) => setChosenCategory(e.target.value)}
-            className="w-full bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-slate-900 dark:text-white outline-none focus:border-brand-600 transition-colors cursor-pointer"
+            className="w-full bg-white dark:bg-[#0E141B] border border-slate-300 dark:border-slate-700 rounded px-3.5 py-2.5 text-slate-900 dark:text-white outline-none focus:border-brand-600 transition-colors cursor-pointer"
           >
             {CATEGORIES.map((c) => (
               <option key={c.value} value={c.value}>
@@ -250,7 +250,7 @@ export function ContactForm() {
               ¿Qué necesitas o cuál es tu consulta? <span className="text-red-500">*</span>
             </label>
             <span
-              className={`text-[11px] ${
+              className={`text-[13px] ${
                 message.length < 20
                   ? 'text-amber-600 dark:text-amber-400'
                   : message.length > 1900
@@ -269,7 +269,7 @@ export function ContactForm() {
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             placeholder="Explica aquí tu consulta, duda sobre cálculos, función que te gustaría ver en el cotizador o reporte técnico..."
-            className="w-full bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-slate-900 dark:text-white outline-none focus:border-brand-600 transition-colors resize-y"
+            className="w-full bg-white dark:bg-[#0E141B] border border-slate-300 dark:border-slate-700 rounded px-3.5 py-2.5 text-slate-900 dark:text-white outline-none focus:border-brand-600 transition-colors resize-y"
           />
         </div>
 
@@ -283,7 +283,7 @@ export function ContactForm() {
               onChange={(e) => setConsent(e.target.checked)}
               className="mt-0.5 rounded border-slate-300 dark:border-slate-700 text-brand-600 focus:ring-brand-600"
             />
-            <span className="text-[11px] text-slate-600 dark:text-slate-400 leading-normal">
+            <span className="text-[13px] text-slate-600 dark:text-slate-400 leading-normal">
               He leído y acepto la{' '}
               <Link href="/politica-de-privacidad" target="_blank" className="text-brand-600 dark:text-brand-400 underline font-medium">
                 Política de Privacidad
@@ -296,7 +296,7 @@ export function ContactForm() {
         <button
           type="submit"
           disabled={isSubmitting || !consent || message.trim().length < 20}
-          className="w-full py-3 rounded-xl bg-brand-600 hover:bg-brand-800 disabled:opacity-50 text-white font-bold text-xs flex items-center justify-center gap-2 transition-colors shadow-sm cursor-pointer"
+          className="w-full py-3 rounded bg-brand-600 hover:bg-brand-800 disabled:opacity-50 text-white font-bold text-[13px] flex items-center justify-center gap-2 transition-colors cursor-pointer"
         >
           {isSubmitting ? (
             <>
@@ -311,7 +311,7 @@ export function ContactForm() {
           )}
         </button>
 
-        <p className="text-[11px] text-center text-slate-400 leading-relaxed">
+        <p className="text-[13px] text-center text-slate-400 leading-relaxed">
           Tus datos se procesan de forma confidencial. No realizamos llamadas no solicitadas ni compartimos tu correo con terceros comerciales.
         </p>
       </form>

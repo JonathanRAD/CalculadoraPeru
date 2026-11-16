@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { ShieldCheck, Lock, Eye, Cookie, ArrowLeft } from 'lucide-react';
+import { Lock, Eye, Cookie, ArrowLeft } from 'lucide-react';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -14,54 +14,50 @@ export const metadata: Metadata = {
 
 export default function PoliticaPrivacidadPage() {
   return (
-    <div className="min-h-screen bg-[#eef2f6] dark:bg-slate-950 text-slate-900 dark:text-slate-100 py-12 px-4 sm:px-6 transition-colors">
-      <div className="mx-auto max-w-4xl bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-10 border-2 border-slate-200/90 dark:border-slate-800 shadow-md">
+    <div className="min-h-screen bg-[#eef2f6] dark:bg-[#0E141B] text-slate-900 dark:text-slate-100 py-12 px-4 sm:px-6 transition-colors">
+      <div className="mx-auto max-w-4xl bg-white dark:bg-[#18202A] rounded-lg p-6 sm:p-10 border-2 border-slate-200/90 dark:border-[#2C3744]">
         
         {/* Back Link */}
         <Link
           href="/"
-          className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-800 dark:text-emerald-400 hover:underline mb-6"
+          className="inline-flex items-center gap-1.5 text-[13px] font-bold text-brand-800 dark:text-brand-400 hover:underline mb-6"
         >
           <ArrowLeft className="h-4 w-4" />
           <span>Volver al inicio</span>
         </Link>
 
         {/* Header */}
-        <div className="border-b border-slate-100 dark:border-slate-800 pb-6 mb-8">
-          <div className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-950 px-2.5 py-1 text-xs font-bold text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 mb-3">
-            <ShieldCheck className="h-4 w-4" />
-            <span>PROTECCIÓN DE DATOS Y PRIVACIDAD</span>
-          </div>
-          <h1 className="text-2xl sm:text-4xl font-black text-slate-950 dark:text-white tracking-tight">
+        <div className="border-b border-slate-100 dark:border-[#2C3744] pb-6 mb-8">
+          <h1 className="text-2xl sm:text-4xl font-bold text-slate-950 dark:text-white tracking-tight">
             Política de Privacidad
           </h1>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-2 font-medium">
+          <p className="text-[13px] text-slate-500 dark:text-slate-400 mt-2 font-medium">
             Última actualización: 14 de noviembre de 2026
           </p>
         </div>
 
         {/* Content */}
-        <div className="space-y-6 text-sm text-slate-700 dark:text-slate-300 leading-relaxed font-normal">
+        <div className="space-y-6 text-[15px] text-slate-700 dark:text-slate-300 leading-relaxed font-normal">
           
           <section className="space-y-2">
             <h2 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
-              <Lock className="h-4.5 w-4.5 text-emerald-700 dark:text-emerald-400" />
+              <Lock className="h-4.5 w-4.5 text-brand-700 dark:text-brand-400" />
               1. Compromiso con tu Privacidad
             </h2>
             <p>
-              En <strong>CalculaPerú</strong> (accesible desde <Link href="https://www.calculaperu.com.pe" className="text-emerald-700 dark:text-emerald-400 underline">https://www.calculaperu.com.pe</Link>), una de nuestras principales prioridades es la privacidad de nuestros visitantes. Este documento describe los tipos de información que recopilamos y cómo la utilizamos, en estricto cumplimiento de la Ley de Protección de Datos Personales del Perú (Ley N° 29733) y las políticas de proveedores de publicidad digital como Google.
+              En <strong>CalculaPerú</strong> (accesible desde <Link href="https://www.calculaperu.com.pe" className="text-brand-700 dark:text-brand-400 underline">https://www.calculaperu.com.pe</Link>), una de nuestras principales prioridades es la privacidad de nuestros visitantes. Este documento describe los tipos de información que recopilamos y cómo la utilizamos, en estricto cumplimiento de la Ley de Protección de Datos Personales del Perú (Ley N° 29733) y las políticas de proveedores de publicidad digital como Google.
             </p>
           </section>
 
           <section className="space-y-2">
             <h2 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
-              <Eye className="h-4.5 w-4.5 text-emerald-700 dark:text-emerald-400" />
+              <Eye className="h-4.5 w-4.5 text-brand-700 dark:text-brand-400" />
               2. Cálculos Locales, URLs y Tratamiento de Información Financiera
             </h2>
             <p>
               En la versión pública y gratuita, todas las operaciones matemáticas realizadas en nuestras calculadoras (Sueldo Neto, Gratificación, CTS, Liquidación, IGV, Renta, etc.) se procesan de forma <strong>100% local en el navegador de tu dispositivo (client-side)</strong> mediante JavaScript. No registramos, almacenamos ni transmitimos a servidores externos las cifras monetarias ni datos remunerativos que ingresas al calcular.
             </p>
-            <ul className="list-disc pl-5 space-y-1.5 text-xs text-slate-600 dark:text-slate-400">
+            <ul className="list-disc pl-5 space-y-1.5 text-[13px] text-slate-600 dark:text-slate-400">
               <li>
                 <strong>Enlaces y navegación web:</strong> La dirección web de las calculadoras y los enlaces copiados al portapapeles mediante el botón &ldquo;Copiar Enlace&rdquo; no contienen parámetros con tus montos, sueldos ni resultados (son URLs limpias como <code>/sueldo-neto</code>). La única ocasión en que un texto incorpora cifras calculadas es cuando el usuario presiona voluntariamente &ldquo;Compartir en WhatsApp&rdquo;, acción que genera un texto preformateado en la aplicación de mensajería con el resumen del cálculo para que el propio usuario decida si lo envía o no a sus contactos.
               </li>
@@ -79,13 +75,13 @@ export default function PoliticaPrivacidadPage() {
 
           <section className="space-y-2">
             <h2 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
-              <Cookie className="h-4.5 w-4.5 text-emerald-700 dark:text-emerald-400" />
+              <Cookie className="h-4.5 w-4.5 text-brand-700 dark:text-brand-400" />
               3. Cookies y Publicidad de Terceros (Google AdSense)
             </h2>
             <p>
               CalculaPerú utiliza almacenamiento local y cookies técnicas para recordar tus preferencias (como el Modo Claro u Oscuro, tu elección sobre cookies y si cerraste un aviso informativo, por ejemplo el de sistemas a medida, para no volver a mostrártelo durante un tiempo). Asimismo, proveedores externos, incluido <strong>Google</strong>, utilizan cookies para publicar anuncios cuando visitas nuestro sitio web:
             </p>
-            <ul className="list-disc pl-5 space-y-1.5 text-xs text-slate-600 dark:text-slate-400">
+            <ul className="list-disc pl-5 space-y-1.5 text-[13px] text-slate-600 dark:text-slate-400">
               <li>
                 <strong>Tu elección:</strong> Al entrar te pedimos aceptar o rechazar las cookies opcionales de medición y publicidad. Hasta que elijas, y si rechazas, todas las señales de consentimiento de Google (almacenamiento de anuncios, analítica, datos de usuario para anuncios y personalización) permanecen denegadas, y los anuncios que se muestren no serán personalizados. Puedes cambiar tu elección en cualquier momento desde «Preferencias de cookies» en el pie de página. Si visitas el sitio desde el Espacio Económico Europeo, el Reino Unido o Suiza, Google puede mostrarte además su propio mensaje de consentimiento.
               </li>
@@ -98,7 +94,7 @@ export default function PoliticaPrivacidadPage() {
                   href="https://www.google.com/settings/ads"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-emerald-700 dark:text-emerald-400 underline"
+                  className="text-brand-700 dark:text-brand-400 underline"
                 >
                   Configuración de anuncios de Google
                 </a>{' '}
@@ -107,7 +103,7 @@ export default function PoliticaPrivacidadPage() {
                   href="https://www.aboutads.info"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-emerald-700 dark:text-emerald-400 underline"
+                  className="text-brand-700 dark:text-brand-400 underline"
                 >
                   www.aboutads.info
                 </a>.
@@ -119,7 +115,7 @@ export default function PoliticaPrivacidadPage() {
             <h2 className="text-lg font-bold text-slate-900 dark:text-white">
               4. Formularios, Cuentas y Destino de los Datos
             </h2>
-            <div className="space-y-2 text-xs sm:text-sm text-slate-600 dark:text-slate-400">
+            <div className="space-y-2 text-[13px] sm:text-[15px] text-slate-600 dark:text-slate-400">
               <p>
                 CalculaPerú recopila datos personales exclusivamente cuando el usuario decide interactuar de forma voluntaria:
               </p>
@@ -147,18 +143,18 @@ export default function PoliticaPrivacidadPage() {
             <h2 className="text-lg font-bold text-slate-900 dark:text-white">
               5. Derechos ARCO y Supresión de Datos
             </h2>
-            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
+            <p className="text-[13px] sm:text-[15px] text-slate-600 dark:text-slate-400">
               Conforme a la Ley N° 29733 (Ley de Protección de Datos Personales de Perú) y su reglamento, tienes derecho a acceder, rectificar, cancelar u oponerte al tratamiento de tus datos personales:
             </p>
-            <ul className="list-disc pl-5 space-y-2 text-xs text-slate-600 dark:text-slate-400">
+            <ul className="list-disc pl-5 space-y-2 text-[13px] text-slate-600 dark:text-slate-400">
               <li>
-                <strong>Usuarios de la versión gratuita:</strong> Las operaciones y cifras monetarias ingresadas en las calculadoras públicas se procesan localmente en tu navegador y no se guardan en nuestros servidores. No obstante, si como usuario libre interactúas voluntariamente mediante nuestro formulario de contacto (<Link href="/contacto" className="text-emerald-700 dark:text-emerald-400 underline">/contacto</Link>), la lista informativa de novedades (<Link href="/cotizador" className="text-emerald-700 dark:text-emerald-400 underline">/cotizador</Link>) o canales de soporte, los datos personales remitidos (como nombre, correo o mensaje) se conservan temporalmente con la finalidad exclusiva de responder y gestionar tu comunicación conforme a la sección 4, pudiendo solicitar su rectificación o supresión en cualquier momento.
+                <strong>Usuarios de la versión gratuita:</strong> Las operaciones y cifras monetarias ingresadas en las calculadoras públicas se procesan localmente en tu navegador y no se guardan en nuestros servidores. No obstante, si como usuario libre interactúas voluntariamente mediante nuestro formulario de contacto (<Link href="/contacto" className="text-brand-700 dark:text-brand-400 underline">/contacto</Link>), la lista informativa de novedades (<Link href="/cotizador" className="text-brand-700 dark:text-brand-400 underline">/cotizador</Link>) o canales de soporte, los datos personales remitidos (como nombre, correo o mensaje) se conservan temporalmente con la finalidad exclusiva de responder y gestionar tu comunicación conforme a la sección 4, pudiendo solicitar su rectificación o supresión en cualquier momento.
               </li>
               <li>
                 <strong>Eliminación de cálculos guardados (Autogestión PRO):</strong> Puedes eliminar individualmente cualquiera de tus cálculos guardados en cualquier momento desde el panel de perfil de tu cuenta PRO, haciendo clic en el icono de papelera. La eliminación en base de datos es inmediata a través del servicio de cálculos.
               </li>
               <li>
-                <strong>Eliminación de cuenta PRO y conservación de registros:</strong> Si solicitas la baja definitiva de tu cuenta de usuario PRO a través de nuestro <Link href="/contacto" className="text-emerald-700 dark:text-emerald-400 underline">formulario de contacto</Link> o canal de WhatsApp indicando tu correo registrado:
+                <strong>Eliminación de cuenta PRO y conservación de registros:</strong> Si solicitas la baja definitiva de tu cuenta de usuario PRO a través de nuestro <Link href="/contacto" className="text-brand-700 dark:text-brand-400 underline">formulario de contacto</Link> o canal de WhatsApp indicando tu correo registrado:
                 <ul className="list-[circle] pl-5 mt-1.5 space-y-1 text-slate-500 dark:text-slate-400">
                   <li>
                     <em>Datos eliminados inmediatamente:</em> Se suprime el perfil de usuario en la base de datos (<code>profiles</code>), destruyendo de forma inmediata tus credenciales de acceso (correo, contraseña protegida y sal criptográfica) y ejecutando el borrado en cascada (<code>ON DELETE CASCADE</code>) de todos los cálculos guardados que tenías en la nube.
@@ -185,7 +181,7 @@ export default function PoliticaPrivacidadPage() {
               7. Canales de Consulta y Soporte
             </h2>
             <p>
-              Para cualquier consulta sobre esta política, ejercicio de derechos sobre tus datos o aclaraciones técnicas, puedes contactarnos a través de nuestra página de <Link href="/contacto" className="text-emerald-700 dark:text-emerald-400 underline">Contacto</Link> o revisar la misión del proyecto en <Link href="/sobre-nosotros" className="text-emerald-700 dark:text-emerald-400 underline">Sobre Nosotros</Link>.
+              Para cualquier consulta sobre esta política, ejercicio de derechos sobre tus datos o aclaraciones técnicas, puedes contactarnos a través de nuestra página de <Link href="/contacto" className="text-brand-700 dark:text-brand-400 underline">Contacto</Link> o revisar la misión del proyecto en <Link href="/sobre-nosotros" className="text-brand-700 dark:text-brand-400 underline">Sobre Nosotros</Link>.
             </p>
           </section>
 

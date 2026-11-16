@@ -51,15 +51,15 @@ export function PwaInstallBanner() {
   if (!isVisible || isDismissed) return null;
 
   return (
-    <div className="fixed bottom-4 left-4 right-4 sm:left-auto sm:right-6 sm:max-w-sm z-50 animate-in fade-in slide-in-from-bottom-5 duration-300">
-      <div className="flex items-center justify-between gap-3 rounded-2xl border border-emerald-300 dark:border-emerald-800 bg-emerald-950/95 backdrop-blur-md p-3.5 text-white shadow-xl shadow-emerald-950/30">
+    <div className="fixed bottom-4 left-4 right-4 sm:left-auto sm:right-6 sm:max-w-sm z-50 animate-in fade-in slide-in-bg-bottom-5 duration-300">
+      <div className="flex items-center justify-between gap-3 rounded-lg border border-brand-300 dark:border-brand-800 bg-brand-950/95 p-3.5 text-white shadow-lg">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-600/30 text-emerald-400 border border-emerald-500/40 shrink-0">
+          <div className="flex h-10 w-10 items-center justify-center rounded bg-brand-600/30 text-brand-400 border border-brand-500/40 shrink-0">
             <Smartphone className="h-5 w-5" />
           </div>
           <div>
-            <span className="text-xs font-bold block leading-tight">Instala CalculaPerú</span>
-            <span className="text-[11px] text-emerald-200/80 block">Acceso rápido desde tu celular</span>
+            <span className="text-[13px] font-bold block leading-tight">Instala CalculaPerú</span>
+            <span className="text-[13px] text-brand-200/80 block">Acceso rápido desde tu celular</span>
           </div>
         </div>
 
@@ -67,7 +67,7 @@ export function PwaInstallBanner() {
           <button
             type="button"
             onClick={handleInstall}
-            className="rounded-xl bg-emerald-500 hover:bg-emerald-400 px-3 py-1.5 text-xs font-bold text-slate-950 transition-colors cursor-pointer flex items-center gap-1"
+            className="rounded bg-brand-500 hover:bg-brand-400 px-3 py-1.5 text-[13px] font-bold text-slate-950 transition-colors cursor-pointer flex items-center gap-1"
           >
             <Download className="h-3.5 w-3.5" />
             <span>Instalar</span>
@@ -76,7 +76,7 @@ export function PwaInstallBanner() {
             type="button"
             onClick={handleDismiss}
             aria-label="Cerrar aviso"
-            className="rounded-lg p-1.5 text-emerald-300 hover:text-white transition-colors cursor-pointer"
+            className="rounded-lg p-1.5 text-brand-300 hover:text-white transition-colors cursor-pointer"
           >
             <X className="h-4 w-4" />
           </button>

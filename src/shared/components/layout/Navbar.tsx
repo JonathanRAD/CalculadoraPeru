@@ -2,6 +2,7 @@
 
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import {
   Search,
@@ -9,8 +10,6 @@ import {
   ArrowRight,
   Menu,
   X,
-  Sparkles,
-  Calculator,
 } from 'lucide-react';
 import {
   CALCULATORS_REGISTRY,
@@ -112,10 +111,8 @@ export function Navbar() {
   return (
     <>
       <header
-        className={`sticky top-0 z-50 transition-colors duration-200 border-b ${
-          isScrolled
-            ? 'bg-[#0A1128]/95 backdrop-blur-md border-slate-800 shadow-md shadow-black/20'
-            : 'bg-[#0A1128] border-slate-800/80'
+        className={`sticky top-0 z-50 border-b bg-[#F4F1EA] dark:bg-[#121820] ${
+          isScrolled ? 'border-slate-900 dark:border-slate-500' : 'border-stone-300 dark:border-slate-700'
         }`}
       >
         {/* Full-width container using navbar extremes */}
@@ -125,18 +122,23 @@ export function Navbar() {
           {/* LEFT EXTREME: Minimalist Crisp Brand Logo */}
           {/* ========================================================================= */}
           <Link href="/" className="flex items-center gap-2.5 group shrink-0">
-            <div className="w-8 h-8 rounded-xl bg-slate-900 border border-slate-700/80 flex items-center justify-center p-1.5 shadow-xs group-hover:border-emerald-500/60 transition-colors">
-              <Calculator className="w-4 h-4 text-emerald-400 group-hover:scale-105 transition-transform" />
-            </div>
-            <span className="text-base sm:text-lg font-black tracking-tight text-white">
-              Calcula<span className="text-brand-400">Perú</span>
+            <Image
+              src="/calculaperu-icon-192.png"
+              alt=""
+              width={36}
+              height={36}
+              priority
+              className="h-9 w-9 object-contain transition-transform group-hover:scale-105"
+            />
+            <span className="text-base sm:text-lg font-black tracking-tight text-slate-900 dark:text-white">
+              Calcula<span className="text-brand-700 dark:text-[#00c853]">Perú</span>
             </span>
           </Link>
 
           {/* ========================================================================= */}
           {/* CENTER: Clean, Spaced Desktop Navigation */}
           {/* ========================================================================= */}
-          <nav ref={dropdownRef} className="hidden lg:flex items-center gap-1 xl:gap-2 text-xs font-medium text-slate-300">
+          <nav ref={dropdownRef} className="hidden xl:flex items-center gap-1 xl:gap-2 text-sm font-medium text-slate-700 dark:text-slate-200">
             {navCategories.map((cat) => {
               const isOpen = activeDropdown === cat.id;
               const calcsInCat = CALCULATORS_REGISTRY.filter((c) => c.category === cat.id);
@@ -146,22 +148,24 @@ export function Navbar() {
                   <button
                     type="button"
                     onClick={() => setActiveDropdown(isOpen ? null : (cat.id as CalculatorCategory))}
-                    className={`flex items-center gap-1 px-3 py-1.5 rounded-lg transition-colors cursor-pointer ${
-                      isOpen ? 'text-white bg-slate-800' : 'hover:text-white hover:bg-slate-800/50'
+                    className={`flex min-h-10 items-center gap-1 px-3 py-2 rounded transition-colors cursor-pointer ${
+                      isOpen
+                        ? 'text-slate-900 bg-stone-200 dark:text-white dark:bg-slate-800'
+                        : 'hover:text-slate-900 hover:bg-stone-200/70 dark:hover:text-white dark:hover:bg-slate-800/50'
                     }`}
                   >
-                    <span>{cat.label}</span>
+                    <span className="whitespace-nowrap">{cat.label.split(" ")[0]}</span>
                     <ChevronDown
                       className={`w-3 h-3 transition-transform duration-150 ${
-                        isOpen ? 'rotate-180 text-emerald-400' : 'text-slate-500'
+                        isOpen ? 'rotate-180 text-brand-700 dark:text-brand-400' : 'text-slate-500'
                       }`}
                     />
                   </button>
 
                   {/* Clean, Lightweight Floating Dropdown */}
                   {isOpen && (
-                    <div className="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-72 rounded-2xl bg-[#0E1736] text-slate-100 shadow-2xl p-2 z-50 border border-slate-800 animate-in fade-in zoom-in-95 duration-100">
-                      <div className="text-[10px] font-mono uppercase tracking-wider text-slate-400 px-3 py-1 mb-1 border-b border-slate-800/80">
+                    <div className="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-72 rounded-lg bg-white dark:bg-[#18202A] text-slate-900 dark:text-slate-100 shadow-lg p-2 z-50 border border-stone-300 dark:border-slate-700 animate-in fade-in zoom-in-95 duration-100">
+                      <div className="text-[13px] font-mono uppercase tracking-wider text-slate-600 dark:text-slate-300 px-3 py-1 mb-1 border-b border-stone-300 dark:border-slate-700">
                         {cat.label} ({calcsInCat.length})
                       </div>
                       <div className="space-y-0.5 max-h-72 overflow-y-auto">
@@ -170,10 +174,10 @@ export function Navbar() {
                             key={calc.id}
                             href={calc.slug}
                             onClick={() => setActiveDropdown(null)}
-                            className="flex items-center justify-between p-2 rounded-xl hover:bg-slate-800/80 text-xs text-slate-300 hover:text-white transition-colors group"
+                            className="flex min-h-10 items-center justify-between px-2 py-2 rounded hover:bg-stone-100 dark:hover:bg-slate-800/80 text-sm text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors group"
                           >
                             <span className="truncate">{calc.shortTitle}</span>
-                            <ArrowRight className="w-3 h-3 opacity-0 group-hover:opacity-100 text-emerald-400 transition-opacity shrink-0" />
+                            <ArrowRight className="w-4 h-4 opacity-0 group-hover:opacity-100 text-brand-700 dark:text-brand-400 transition-opacity shrink-0" />
                           </Link>
                         ))}
                       </div>
@@ -185,16 +189,15 @@ export function Navbar() {
 
             <Link
               href="/guias"
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800/50 transition-colors font-semibold"
+              className="flex min-h-10 items-center gap-1.5 whitespace-nowrap px-3 py-2 rounded text-slate-700 dark:text-slate-200 hover:text-slate-900 hover:bg-stone-200/70 dark:hover:text-white dark:hover:bg-slate-800/50 transition-colors font-semibold"
             >
               <span>Guías</span>
             </Link>
 
             <Link
               href="/pro/beneficios"
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-emerald-400 hover:text-emerald-300 hover:bg-slate-800/50 transition-colors font-semibold"
+              className="flex min-h-10 items-center gap-1.5 px-3 py-2 rounded text-brand-700 dark:text-brand-400 hover:bg-stone-200/70 dark:hover:bg-slate-800/50 transition-colors font-semibold"
             >
-              <Sparkles className="w-3.5 h-3.5 text-amber-400" />
               <span>Beneficios PRO</span>
             </Link>
           </nav>
@@ -208,12 +211,12 @@ export function Navbar() {
             <button
               onClick={() => setIsSearchOpen(true)}
               aria-label="Buscar (Ctrl + K)"
-              className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg bg-slate-900/90 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-800 transition-colors text-xs cursor-pointer"
+              className="hidden sm:flex min-h-10 items-center gap-2 px-3 py-2 rounded bg-white dark:bg-slate-900 hover:bg-stone-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 border border-stone-300 dark:border-slate-700 transition-colors text-sm cursor-pointer"
               title="Buscar (Ctrl + K)"
             >
-              <Search className="w-3.5 h-3.5 text-slate-400" aria-hidden="true" />
-              <span className="hidden xl:inline text-slate-300">Buscar</span>
-              <kbd aria-hidden="true" className="hidden sm:inline-block text-[10px] font-mono text-slate-200 bg-slate-800 px-1.5 py-0.5 rounded border border-slate-600 font-semibold">
+              <Search className="w-4 h-4 text-slate-600 dark:text-slate-400" aria-hidden="true" />
+              <span className="hidden xl:inline">Buscar</span>
+              <kbd aria-hidden="true" className="hidden sm:inline-block text-[13px] font-mono text-slate-700 dark:text-slate-200 bg-stone-100 dark:bg-slate-800 px-1.5 py-0.5 rounded-xs border border-stone-300 dark:border-slate-600">
                 ⌘K
               </kbd>
             </button>
@@ -228,10 +231,10 @@ export function Navbar() {
               <button
                 type="button"
                 onClick={openProfileModal}
-                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer"
+                className="flex min-h-10 items-center gap-1.5 px-3 py-2 rounded text-sm font-semibold text-slate-700 dark:text-slate-300 hover:text-slate-900 hover:bg-stone-200/70 dark:hover:text-white dark:hover:bg-slate-800 transition-colors cursor-pointer"
                 title={`Mi Cuenta: ${user.name}`}
               >
-                <div className="w-5 h-5 rounded-full bg-emerald-600 text-white font-bold flex items-center justify-center text-[10px]">
+                <div className="w-6 h-6 rounded-full bg-brand-600 text-white font-bold flex items-center justify-center text-[13px]">
                   {user.name.charAt(0).toUpperCase()}
                 </div>
                 <span className="hidden sm:inline truncate max-w-[80px]">{user.name.split(' ')[0]}</span>
@@ -240,7 +243,7 @@ export function Navbar() {
               <button
                 type="button"
                 onClick={() => openAuthModal('login')}
-                className="text-xs font-semibold text-slate-300 hover:text-white px-2.5 py-1.5 rounded-lg hover:bg-slate-800 transition-colors cursor-pointer"
+                className="min-h-10 text-sm font-semibold text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white px-3 py-2 rounded hover:bg-stone-200/70 dark:hover:bg-slate-800 transition-colors cursor-pointer"
               >
                 Entrar
               </button>
@@ -251,18 +254,16 @@ export function Navbar() {
               <button
                 type="button"
                 onClick={openActivationModal}
-                className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-emerald-950/60 border border-emerald-500/50 text-emerald-300 text-xs font-bold hover:bg-emerald-900/60 transition-colors cursor-pointer"
+                className="flex min-h-10 items-center gap-1 px-4 py-2 rounded border border-brand-600 text-brand-700 dark:text-brand-400 text-sm font-semibold hover:bg-brand-100 dark:hover:bg-brand-900 transition-colors cursor-pointer"
                 title="Tu suscripción PRO está activa"
               >
-                <Sparkles className="w-3 h-3 text-amber-400" />
-                <span>PRO</span>
+                <span>PRO activo</span>
               </button>
             ) : (
               <Link
                 href="/pro"
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-brand-600 hover:bg-brand-800 text-white text-xs font-bold transition-colors shadow-xs"
+                className="flex min-h-10 items-center gap-1.5 px-4 py-2 rounded bg-brand-600 hover:bg-brand-800 text-white text-sm font-semibold transition-colors"
               >
-                <Sparkles className="w-3 h-3 text-amber-300" />
                 <span>PRO</span>
               </Link>
             )}
@@ -270,7 +271,7 @@ export function Navbar() {
             {/* Mobile Hamburger Button */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="lg:hidden p-1.5 text-slate-300 hover:text-white hover:bg-slate-800 rounded-lg cursor-pointer transition-colors"
+              className="xl:hidden flex h-10 w-10 items-center justify-center text-slate-700 dark:text-slate-300 hover:bg-stone-200/70 dark:hover:bg-slate-800 rounded cursor-pointer transition-colors"
               aria-label="Abrir Menú"
             >
               {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -283,7 +284,7 @@ export function Navbar() {
         {/* MOBILE MENU DRAWER: Lightweight & Responsive */}
         {/* ========================================================================= */}
         {isMobileMenuOpen && (
-          <div className="border-t border-slate-800 bg-[#0A1128] px-4 py-4 lg:hidden max-h-[82vh] overflow-y-auto space-y-3">
+          <div className="border-t border-stone-300 dark:border-slate-700 bg-[#F4F1EA] dark:bg-[#121820] px-4 py-4 xl:hidden max-h-[82vh] overflow-y-auto space-y-3">
             
             {/* Quick Search Tap */}
             <div
@@ -291,9 +292,9 @@ export function Navbar() {
                 setIsMobileMenuOpen(false);
                 setIsSearchOpen(true);
               }}
-              className="flex items-center gap-2.5 p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 text-xs cursor-pointer"
+              className="flex min-h-11 items-center gap-2.5 px-3 rounded bg-white dark:bg-slate-900 border border-stone-300 dark:border-slate-700 text-slate-600 dark:text-slate-400 text-sm cursor-pointer"
             >
-              <Search className="w-4 h-4 text-emerald-400" />
+              <Search className="w-4 h-4 text-slate-600 dark:text-slate-400" />
               <span>Buscar calculadora...</span>
             </div>
 
@@ -301,13 +302,10 @@ export function Navbar() {
             <Link
               href="/pro/beneficios"
               onClick={() => setIsMobileMenuOpen(false)}
-              className="flex items-center justify-between p-2.5 rounded-xl bg-emerald-950/40 border border-emerald-500/30 text-emerald-300 text-xs font-bold"
+              className="flex min-h-11 items-center justify-between px-3 rounded border border-brand-600 text-brand-700 dark:text-brand-400 text-sm font-semibold"
             >
-              <div className="flex items-center gap-2">
-                <Sparkles className="h-3.5 w-3.5 text-amber-300" />
-                <span>Guía de Beneficios PRO</span>
-              </div>
-              <ArrowRight className="h-3.5 w-3.5 text-emerald-400" />
+              <span>Beneficios PRO</span>
+              <ArrowRight className="h-4 w-4" />
             </Link>
 
             {/* Category Accordions */}
@@ -317,27 +315,27 @@ export function Navbar() {
                 const isExpanded = mobileExpandedCat === cat.id;
 
                 return (
-                  <div key={cat.id} className="rounded-xl bg-slate-900/80 border border-slate-800/80 overflow-hidden">
+                  <div key={cat.id} className="rounded bg-white dark:bg-slate-900 border border-stone-300 dark:border-slate-700 overflow-hidden">
                     <button
                       type="button"
                       onClick={() => setMobileExpandedCat(isExpanded ? null : cat.id)}
-                      className="w-full flex items-center justify-between p-2.5 text-xs font-bold text-white text-left cursor-pointer"
+                      className="w-full flex min-h-11 items-center justify-between px-3 text-sm font-semibold text-slate-900 dark:text-white text-left cursor-pointer"
                     >
                       <span>{cat.label}</span>
-                      <div className="flex items-center gap-1.5 text-slate-400 text-[10px]">
+                      <div className="flex items-center gap-1.5 text-slate-600 dark:text-slate-400 text-[13px]">
                         <span>{calcsInCat.length}</span>
                         <ChevronDown className={`w-3.5 h-3.5 transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
                       </div>
                     </button>
 
                     {isExpanded && (
-                      <div className="p-2 pt-0 space-y-0.5 border-t border-slate-800/60">
+                      <div className="p-2 pt-2 space-y-0.5 border-t border-stone-300 dark:border-slate-700">
                         {calcsInCat.map((calc) => (
                           <Link
                             key={calc.id}
                             href={calc.slug}
                             onClick={() => setIsMobileMenuOpen(false)}
-                            className="block p-2 rounded-lg hover:bg-slate-800 text-xs text-slate-300 hover:text-white transition-colors"
+                            className="block min-h-11 px-2 py-2.5 rounded hover:bg-stone-100 dark:hover:bg-slate-800 text-sm text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors"
                           >
                             {calc.shortTitle}
                           </Link>
@@ -350,8 +348,8 @@ export function Navbar() {
             </div>
 
             {/* Theme Toggle on Mobile */}
-            <div className="flex items-center justify-between p-2.5 rounded-xl bg-slate-900 border border-slate-800">
-              <span className="text-xs text-slate-300 font-medium">Tema (Día / Noche)</span>
+            <div className="flex items-center justify-between px-3 py-2 rounded bg-white dark:bg-slate-900 border border-stone-300 dark:border-slate-700">
+              <span className="text-sm text-slate-700 dark:text-slate-300 font-medium">Tema (Día / Noche)</span>
               <ThemeToggle />
             </div>
 
@@ -370,24 +368,24 @@ export function Navbar() {
           }}
           className={`fixed inset-0 z-50 flex items-start justify-center pt-16 sm:pt-20 bg-slate-950/70 backdrop-blur-xs p-4 ${searchBackdropClass}`}
         >
-          <div className={`w-full max-w-xl bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 rounded-2xl shadow-2xl p-4 border border-slate-200 dark:border-slate-800 space-y-3 ${searchModalClass}`}>
+          <div className={`w-full max-w-xl bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 rounded-lg shadow-lg p-4 border border-slate-200 dark:border-slate-800 space-y-3 ${searchModalClass}`}>
 
             
             <div className="flex items-center gap-3 border-b border-slate-100 dark:border-slate-800 pb-3">
-              <Search className="h-4 w-4 text-emerald-500" />
+              <Search className="h-4 w-4 text-slate-600 dark:text-slate-400" />
               <input
                 type="text"
                 autoFocus
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Busca por 'sueldo', 'cts', 'dólar', 'igv'..."
-                className="w-full bg-transparent text-sm font-semibold text-slate-900 dark:text-white placeholder:text-slate-400 outline-none"
+                className="w-full bg-transparent text-base font-medium text-slate-900 dark:text-white placeholder:text-slate-400 outline-none"
               />
               <button
                 type="button"
                 onClick={closeSearch}
                 aria-label="Cerrar búsqueda"
-                className="text-xs font-mono text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 p-1"
+                className="text-[13px] font-mono text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 p-2"
               >
                 ESC
               </button>
@@ -402,17 +400,17 @@ export function Navbar() {
                     trackSearchQuery(searchQuery);
                     closeSearch();
                   }}
-                  className="flex items-center justify-between p-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/80 transition-colors group"
+                  className="flex min-h-11 items-center justify-between px-3 py-2 rounded hover:bg-stone-100 dark:hover:bg-slate-800/80 transition-colors group"
                 >
                   <div className="space-y-0.5 truncate pr-2">
-                    <div className="text-xs font-bold text-slate-900 dark:text-slate-100 group-hover:text-emerald-600 dark:group-hover:text-emerald-400">
+                    <div className="text-sm font-semibold text-slate-900 dark:text-slate-100 group-hover:text-brand-700 dark:group-hover:text-brand-400">
                       {calc.title}
                     </div>
-                    <div className="text-[11px] text-slate-500 dark:text-slate-400 truncate">
+                    <div className="text-[13px] text-slate-600 dark:text-slate-400 truncate">
                       {calc.cardSummary || calc.description}
                     </div>
                   </div>
-                  <ArrowRight className="h-3.5 w-3.5 text-slate-400 group-hover:text-emerald-500 shrink-0" />
+                  <ArrowRight className="h-4 w-4 text-slate-500 group-hover:text-brand-700 shrink-0" />
                 </Link>
               ))}
             </div>
