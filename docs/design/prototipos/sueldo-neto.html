@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CalculaPerú · Prototipos de sueldo neto</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap">
+<style>
+:root{
+  --brand-100:#E3F1EA; --brand-500:#00875A; --brand-700:#06694A; --brand-900:#0E3A2B;
+  --paper:#F4F1EA; --sheet:#FFFEFB; --ink:#1B1F23; --ink2:#454B52; --ink3:#666C73;
+  --rule:#D8D2C4; --rule-strong:#1B1F23; --stamp:#B42318;
+  --sans:"IBM Plex Sans",system-ui,sans-serif; --mono:"IBM Plex Mono",ui-monospace,monospace;
+  --serif:"Fraunces",Georgia,serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:#E5E1D8;color:var(--ink);font:16px/1.6 var(--sans)}
+.switch{position:sticky;top:0;z-index:10;background:#1B1F23;color:#fff;display:flex;gap:8px;flex-wrap:wrap;padding:10px 16px;align-items:center}
+.switch span{font-size:14px;color:#B9BEC4;margin-right:8px}
+.switch button{min-height:44px;padding:0 16px;border:1px solid #4A5057;background:transparent;color:#fff;border-radius:4px;font:inherit;font-size:15px;cursor:pointer}
+.switch button[aria-pressed=true]{background:#fff;color:#1B1F23;border-color:#fff}
+.proto{display:none;background:var(--paper)}
+.proto.on{display:block}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+.nav{display:flex;align-items:center;gap:20px;height:64px;border-bottom:1px solid var(--rule)}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:19px;letter-spacing:-.01em}
+.logo i{font:600 15px var(--mono);font-style:normal;background:var(--brand-500);color:#fff;border-radius:4px;padding:3px 7px}
+.logo b{color:var(--brand-700)}
+.nav a{color:var(--ink2);font-size:15px;text-decoration:none}
+.nav .sp{margin-left:auto}
+.crumb{font-size:14px;color:var(--ink3);padding:20px 0 4px}
+h1{font-size:clamp(28px,4vw,40px);line-height:1.15;margin:4px 0 8px;letter-spacing:-.02em}
+.lead{color:var(--ink2);max-width:60ch;margin:0 0 6px}
+.meta{font-size:14px;color:var(--ink3);margin:0 0 24px}
+.grid{display:grid;gap:32px;grid-template-columns:1fr;padding-bottom:48px}
+@media(min-width:900px){.grid{grid-template-columns:380px 1fr;align-items:start}}
+label{display:block;font-size:15px;font-weight:600;margin:0 0 6px}
+.field{margin-bottom:18px}
+.inp{display:flex;border:1px solid #8C877A;border-radius:4px;background:var(--sheet);min-height:48px;align-items:stretch}
+.inp:focus-within{outline:2px solid var(--brand-500);outline-offset:1px}
+.inp em{font:500 16px var(--mono);font-style:normal;padding:0 12px;display:flex;align-items:center;border-right:1px solid var(--rule);color:var(--ink3);background:#F0ECE3}
+.inp input,.inp select{flex:1;border:0;background:transparent;font:500 17px var(--mono);padding:0 12px;min-width:0;color:var(--ink)}
+.inp input:focus,.inp select:focus{outline:0}
+.hint{font-size:14px;color:var(--ink3);margin:6px 0 0}
+.btn{min-height:48px;padding:0 20px;background:var(--brand-500);color:#fff;border:0;border-radius:4px;font:600 16px var(--sans);cursor:pointer}
+.note{font-size:14px;color:var(--ink3);border-top:1px solid var(--rule);padding-top:12px;margin-top:16px}
+.note a{color:var(--brand-700)}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
+
+/* ---------- A: BOLETA ---------- */
+.slip{background:var(--sheet);border:1px solid var(--rule-strong);position:relative}
+.slip-h{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:14px 18px;background:var(--brand-900);color:#fff}
+.slip-h strong{font:600 14px var(--mono);letter-spacing:.04em}
+.slip-h span{font:400 14px var(--mono);color:#BFE3D2}
+.slip table{width:100%;border-collapse:collapse}
+.slip th{font:600 13px var(--mono);letter-spacing:.06em;text-transform:uppercase;text-align:left;color:var(--ink3);padding:12px 18px 8px;border-bottom:1px solid var(--rule-strong)}
+.slip th:last-child{text-align:right}
+.slip td{padding:12px 18px;border-bottom:1px dashed var(--rule);font-size:16px}
+.slip td small{display:block;color:var(--ink3);font-size:14px}
+.slip tr.sub td{font-weight:600;border-bottom:1px solid var(--rule-strong)}
+.slip .total{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:18px;border-top:4px double var(--rule-strong);background:var(--brand-100)}
+.slip .total span{font-weight:600}
+.slip .total strong{font:600 clamp(30px,5vw,40px) var(--mono);letter-spacing:-.02em;color:var(--brand-900)}
+.stamp{position:absolute;right:14px;top:62px;transform:rotate(-6deg);border:2px solid var(--stamp);color:var(--stamp);font:600 13px var(--mono);letter-spacing:.1em;padding:3px 8px;border-radius:2px;opacity:.85;pointer-events:none}
+.slip-f{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:12px 18px;font-size:14px;color:var(--ink3);border-top:1px solid var(--rule)}
+
+/* ---------- B: LIBRO CONTABLE ---------- */
+.ledger{background:var(--sheet);border:1px solid var(--rule);border-left:3px solid var(--stamp);
+  background-image:linear-gradient(var(--rule) 1px,transparent 1px);background-size:100% 40px;background-position:0 -1px}
+.ledger h2{font:600 13px var(--mono);letter-spacing:.08em;text-transform:uppercase;margin:0;padding:12px 20px;border-bottom:2px solid var(--rule-strong);background:var(--sheet);color:var(--ink3)}
+.ledger .row{display:grid;grid-template-columns:1fr 120px 120px;align-items:center;min-height:40px;padding:0 20px;font-size:16px}
+.ledger .row.head{font:600 13px var(--mono);color:var(--ink3);background:var(--sheet)}
+.ledger .row .num{padding-left:8px}
+.ledger .tot{display:grid;grid-template-columns:1fr auto;padding:14px 20px;background:var(--sheet);border-top:2px solid var(--rule-strong);align-items:baseline}
+.ledger .tot strong{font:600 clamp(30px,5vw,42px) var(--mono);color:var(--brand-700)}
+.ledger .tot span{font-family:var(--serif);font-size:22px;font-weight:600}
+@media(max-width:520px){.ledger .row{grid-template-columns:1fr 92px 92px;padding:0 12px;font-size:15px}}
+
+/* ---------- C: FORMULARIO CON CASILLAS ---------- */
+.form{display:grid;gap:0;border:1.5px solid var(--rule-strong);background:var(--sheet)}
+.form .cas{display:grid;grid-template-columns:48px 1fr auto;align-items:center;border-bottom:1px solid var(--rule-strong);min-height:56px}
+.form .cas:last-of-type{border-bottom:0}
+.form .n{font:600 15px var(--mono);align-self:stretch;display:flex;align-items:center;justify-content:center;background:var(--rule-strong);color:#fff}
+.form .t{padding:8px 14px}
+.form .t small{display:block;color:var(--ink3);font-size:14px;line-height:1.3}
+.form .v{padding:0 16px;font:500 18px var(--mono);align-self:stretch;display:flex;align-items:center;border-left:1px solid var(--rule-strong);min-width:130px;justify-content:flex-end}
+.form .cas.final{background:var(--brand-900);color:#fff}
+.form .cas.final .n{background:var(--brand-500)}
+.form .cas.final .t small{color:#BFE3D2}
+.form .cas.final .v{font-size:clamp(24px,4vw,32px);font-weight:600;border-left-color:#fff}
+.serif-h{font-family:var(--serif);font-weight:700}
+.tag{display:inline-block;font:600 13px var(--mono);letter-spacing:.05em;color:var(--brand-700);border-bottom:2px solid var(--brand-500);padding-bottom:2px;margin-bottom:8px}
+.cmp{background:#fff;border-top:1px solid var(--rule)}
+.cmp .wrap{padding-top:24px;padding-bottom:40px}
+.cmp h3{margin:0 0 8px;font-size:18px}
+.cmp ul{margin:0;padding-left:20px;color:var(--ink2)}
+</style>
+</head>
+<body>
+
+<div class="switch" role="group" aria-label="Elegir propuesta">
+  <span>Propuesta de resultado:</span>
+  <button data-p="a" aria-pressed="true">A · Boleta de pago</button>
+  <button data-p="b" aria-pressed="false">B · Libro contable</button>
+  <button data-p="c" aria-pressed="false">C · Formulario con casillas</button>
+</div>
+
+<!-- Estructura compartida: cada propuesta repite cabecera y datos para verse completa -->
+<template id="chrome">
+  <div class="wrap">
+    <div class="nav">
+      <div class="logo"><i>S/</i><span>Calcula<b>Perú</b></span></div>
+      <a href="#" class="sp">Calculadoras</a><a href="#">Guías</a><a href="#">PRO</a>
+    </div>
+    <div class="crumb">Inicio › Laboral y planilla › Sueldo neto</div>
+    <h1 class="serif-h">Calculadora de sueldo neto</h1>
+    <p class="lead">Descuentos de AFP u ONP y retención de quinta categoría con los parámetros vigentes.</p>
+    <p class="meta">Parámetros revisados el 16 de noviembre de 2026 · UIT S/ 5,500 · <a href="#" style="color:var(--brand-700)">Ver cambios</a></p>
+    <div class="grid">
+      <form onsubmit="return false">
+        <div class="field"><label for="b">Sueldo bruto mensual</label>
+          <div class="inp"><em>S/</em><input id="b" inputmode="decimal" value="3,000.00"></div></div>
+        <div class="field"><label for="s">Sistema de pensiones</label>
+          <div class="inp"><select id="s"><option>ONP (13 %)</option><option>AFP</option></select></div></div>
+        <div class="field"><label for="h">Hijos menores de 18 años</label>
+          <div class="inp"><input id="h" inputmode="numeric" value="0"></div>
+          <p class="hint">Si tienes hijos, se suma la asignación familiar (S/ 123).</p></div>
+        <button class="btn">Calcular</button>
+        <p class="note">Base legal: <a href="#">D.S. 179-2004-EF, quinta categoría (SUNAT)</a>. Resultado referencial; no sustituye asesoría.</p>
+      </form>
+      <div data-slot></div>
+    </div>
+  </div>
+</template>
+
+<section class="proto on" id="a"><div data-chrome></div></section>
+<section class="proto" id="b"><div data-chrome></div></section>
+<section class="proto" id="c"><div data-chrome></div></section>
+
+<template id="res-a">
+  <div class="slip">
+    <div class="slip-h"><strong>BOLETA CALCULADA · EJEMPLO</strong><span>Noviembre 2026 · Régimen general</span></div>
+    <span class="stamp">REFERENCIAL</span>
+    <table>
+      <thead><tr><th>Concepto</th><th>Importe S/</th></tr></thead>
+      <tbody>
+        <tr><td>Remuneración bruta</td><td class="num">3,000.00</td></tr>
+        <tr><td>Descuento ONP 13 %<small>Sistema Nacional de Pensiones</small></td><td class="num">− 390.00</td></tr>
+        <tr><td>Retención de quinta categoría<small>Incluye bonificación extraordinaria del 9 %</small></td><td class="num">− 26.93</td></tr>
+        <tr class="sub"><td>Total descuentos</td><td class="num">− 416.93</td></tr>
+      </tbody>
+    </table>
+    <div class="total"><span>Sueldo neto estimado</span><strong>S/ 2,583.07</strong></div>
+    <div class="slip-f"><span>Costo para el empleador: ver detalle</span><a href="#" style="color:var(--brand-700)">Guardar en PRO</a></div>
+  </div>
+</template>
+
+<template id="res-b">
+  <div class="ledger">
+    <h2>Libro de remuneraciones · noviembre 2026</h2>
+    <div class="row head"><span>Concepto</span><span class="num">Haber</span><span class="num">Descuento</span></div>
+    <div class="row"><span>Remuneración bruta</span><span class="num">3,000.00</span><span class="num"></span></div>
+    <div class="row"><span>ONP 13 %</span><span class="num"></span><span class="num">390.00</span></div>
+    <div class="row"><span>Quinta categoría</span><span class="num"></span><span class="num">26.93</span></div>
+    <div class="row"><span>Subtotales</span><span class="num">3,000.00</span><span class="num">416.93</span></div>
+    <div class="tot"><span>Neto a pagar</span><strong>S/ 2,583.07</strong></div>
+  </div>
+</template>
+
+<template id="res-c">
+  <div class="form" role="table" aria-label="Resultado en casillas">
+    <div class="cas"><div class="n">01</div><div class="t">Remuneración bruta mensual<small>Dato ingresado</small></div><div class="v">3,000.00</div></div>
+    <div class="cas"><div class="n">02</div><div class="t">Descuento previsional ONP<small>13 % de la casilla 01</small></div><div class="v">390.00</div></div>
+    <div class="cas"><div class="n">03</div><div class="t">Retención de quinta categoría<small>Proyección anual, incluye bonificación del 9 %</small></div><div class="v">26.93</div></div>
+    <div class="cas"><div class="n">04</div><div class="t">Total de descuentos<small>Casilla 02 + casilla 03</small></div><div class="v">416.93</div></div>
+    <div class="cas final"><div class="n">05</div><div class="t">Sueldo neto estimado<small>Casilla 01 − casilla 04</small></div><div class="v">S/ 2,583.07</div></div>
+  </div>
+</template>
+
+<div class="cmp"><div class="wrap" id="cmp"></div></div>
+
+<script>
+const chrome=document.getElementById('chrome');
+const info={
+ a:['A · Boleta de pago','Es la más reconocible para un trabajador: cabecera, conceptos con línea punteada, total con doble filete y un sello «REFERENCIAL». Hace que el resultado parezca un documento real.','Riesgo: puede parecer un adorno si se exagera el sello.'],
+ b:['B · Libro contable','Columnas Haber y Descuento sobre papel rayado con margen rojo. Transmite rigor y encaja con contadores y dueños de negocio. Más sobria y menos «de plantilla».','Riesgo: dos columnas se aprietan en móvil, por eso se reduce el ancho.'],
+ c:['C · Formulario con casillas','Casillas numeradas como un formulario de SUNAT, con la fórmula de cada paso («casilla 01 − casilla 04»). Enseña cómo se calcula, que es el valor de contenido que pide AdSense.','Riesgo: se siente más técnica y menos amable.']};
+for(const id of ['a','b','c']){
+  const sec=document.getElementById(id);
+  sec.innerHTML=chrome.innerHTML;
+  sec.querySelector('[data-slot]').innerHTML=document.getElementById('res-'+id).innerHTML;
+}
+function show(id){
+  document.querySelectorAll('.proto').forEach(s=>s.classList.toggle('on',s.id===id));
+  document.querySelectorAll('.switch button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.p===id));
+  const [t,d,r]=info[id];
+  document.getElementById('cmp').innerHTML=`<h3>${t}</h3><ul><li>${d}</li><li>${r}</li></ul>`;
+  scrollTo(0,0);
+}
+document.querySelectorAll('.switch button').forEach(b=>b.onclick=()=>show(b.dataset.p));
+show('a');
+</script>
+</body>
+</html>
