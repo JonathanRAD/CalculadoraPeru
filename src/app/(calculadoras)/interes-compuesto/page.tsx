@@ -6,7 +6,7 @@ import { CALCULATORS_REGISTRY } from '@/features/calculators/registry';
 import { calculateCompoundInterest } from '@/core/calculators/compoundInterest';
 import { formatCurrency } from '@/core/math/formatters';
 import { InputNumber } from '@/shared/components/ui/InputNumber';
-import { ResultMetricCard } from '@/shared/components/ui/ResultMetricCard';
+import { PayslipResult } from '@/shared/components/ui/PayslipResult';
 import { ShareButtons } from '@/shared/components/ui/ShareButtons';
 import { LineChart } from 'lucide-react';
 
@@ -59,35 +59,35 @@ Total Aportado: ${formatCurrency(result.totalContributions)}`;
             <h2 className="text-lg font-bold text-slate-900 dark:text-white mb-2">
               Guía Financiera: El poder del Interés Compuesto para tus Ahorros en Perú
             </h2>
-            <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+            <p className="text-[15px] text-slate-600 dark:text-slate-300 leading-relaxed">
               El <strong>Interés Compuesto</strong> es el principio multiplicador según el cual los rendimientos generados por un capital se reinvierten sistemáticamente, sumándose al saldo base para generar a su vez nuevos intereses en cada ciclo de tiempo sucesivo.
             </p>
           </div>
 
-          <div className="rounded-2xl bg-slate-50 dark:bg-slate-900 p-5 border border-slate-200 dark:border-slate-800 space-y-3 text-xs leading-relaxed">
-            <h3 className="font-bold text-sm text-slate-900 dark:text-white">
+          <div className="rounded-lg bg-slate-50 dark:bg-[#18202A] p-5 border border-slate-200 dark:border-[#2C3744] space-y-3 text-[13px] leading-relaxed">
+            <h3 className="font-bold text-[15px] text-slate-900 dark:text-white">
               1. Fórmula de capitalización con aportaciones periódicas
             </h3>
             <p className="text-slate-600 dark:text-slate-300">
               Cuando ahorras un monto inicial e inyectas abonos mensuales fijos, el saldo final al vencimiento se calcula integrando el crecimiento del capital inicial y la anualidad de los depósitos:
             </p>
-            <div className="p-3 bg-white dark:bg-slate-950 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-[11px] text-slate-800 dark:text-slate-200 space-y-1">
+            <div className="p-3 bg-white dark:bg-[#0E141B] rounded border border-slate-200 dark:border-[#2C3744] font-mono text-[13px] text-slate-800 dark:text-slate-200 space-y-1">
               <div>VF = Principal × (1 + r/12)^(12×t) + AporteMensual × [((1 + r/12)^(12×t) - 1) / (r/12)]</div>
-              <div className="text-[10px] text-slate-500 font-sans pt-1">
+              <div className="text-[13px] text-slate-500 font-sans pt-1">
                 Donde <strong>VF</strong> es el valor final acumulado, <strong>r</strong> es la tasa efectiva anual equivalente mensual y <strong>t</strong> es el número de años.
               </div>
             </div>
           </div>
 
           <div className="space-y-3">
-            <h3 className="font-bold text-sm text-slate-900 dark:text-white">
+            <h3 className="font-bold text-[15px] text-slate-900 dark:text-white">
               2. Caso práctico numérico (Ahorro disciplinado en Caja Municipal)
             </h3>
-            <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+            <p className="text-[13px] text-slate-600 dark:text-slate-300 leading-relaxed">
               Inversión inicial de <strong>S/ 5,000.00</strong> con aportes recurrentes de <strong>S/ 300.00 mensuales</strong> a una TREA anual del <strong>7.50%</strong> durante un plazo de <strong>5 años</strong>:
             </p>
             <div className="overflow-x-auto">
-              <table className="w-full text-xs text-left border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden">
+              <table className="w-full text-[13px] text-left border border-slate-200 dark:border-[#2C3744] rounded overflow-hidden">
                 <thead className="bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white">
                   <tr>
                     <th className="p-2.5">Componente del Ahorro</th>
@@ -114,19 +114,19 @@ Total Aportado: ${formatCurrency(result.totalContributions)}`;
                   <tr>
                     <td className="p-2.5 font-semibold">Intereses Ganados por Capitalización</td>
                     <td className="p-2.5 text-slate-500">Rendimiento compuesto (TEM SBS s/ TREA 7.5%)</td>
-                    <td className="p-2.5 font-mono text-emerald-700 dark:text-emerald-400">+ S/ 5,797.76</td>
+                    <td className="p-2.5 font-mono text-brand-700 dark:text-brand-400">+ S/ 5,797.76</td>
                   </tr>
-                  <tr className="bg-emerald-50 dark:bg-emerald-950 font-bold text-slate-900 dark:text-white">
-                    <td className="p-2.5 text-emerald-800 dark:text-emerald-300">Saldo Final Acumulado Disponible</td>
+                  <tr className="bg-brand-50 dark:bg-brand-950 font-bold text-slate-900 dark:text-white">
+                    <td className="p-2.5 text-brand-800 dark:text-brand-300">Saldo Final Acumulado Disponible</td>
                     <td className="p-2.5 text-slate-500 font-normal">Capital total + Intereses ganados</td>
-                    <td className="p-2.5 font-mono text-emerald-800 dark:text-emerald-300 text-sm">S/ 28,797.76</td>
+                    <td className="p-2.5 font-mono text-brand-800 dark:text-brand-300 text-[15px]">S/ 28,797.76</td>
                   </tr>
                 </tbody>
               </table>
             </div>
           </div>
 
-          <div className="rounded-2xl border border-slate-200 dark:border-slate-800 p-4 space-y-2 text-xs text-slate-500 dark:text-slate-400 bg-slate-50/50 dark:bg-slate-900/30">
+          <div className="rounded-lg border border-slate-200 dark:border-[#2C3744] p-4 space-y-2 text-[13px] text-slate-500 dark:text-slate-400 bg-slate-50/50 dark:bg-slate-900/30">
             <span className="font-bold text-slate-700 dark:text-slate-300 block">Marco de supervisión financiera:</span>
             <p>
               • <strong>Ley N° 26702:</strong> Ley General del Sistema Financiero y del Sistema de Seguros y Orgánica de la Superintendencia de Banca y Seguros.<br />
@@ -140,9 +140,9 @@ Total Aportado: ${formatCurrency(result.totalContributions)}`;
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         
         {/* Form Column */}
-        <div className="lg:col-span-7 rounded-3xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 sm:p-8 shadow-sm space-y-6">
-          <div className="flex items-center gap-2.5 border-b border-slate-100 dark:border-slate-800 pb-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-50 text-brand-700 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/60">
+        <div className="lg:col-span-7 rounded-lg border border-slate-200/90 dark:border-[#2C3744] bg-white dark:bg-[#18202A] p-6 sm:p-8 space-y-6">
+          <div className="flex items-center gap-2.5 border-b border-slate-100 dark:border-[#2C3744] pb-3">
+            <div className="flex h-8 w-8 items-center justify-center rounded bg-brand-50 text-brand-700 dark:bg-brand-950 dark:text-brand-300 border border-brand-200/60 dark:border-brand-800/60">
               <LineChart className="h-4.5 w-4.5" />
             </div>
             <h2 className="text-lg font-bold text-slate-900 dark:text-white">Parámetros del Ahorro</h2>
@@ -195,53 +195,22 @@ Total Aportado: ${formatCurrency(result.totalContributions)}`;
             />
           </div>
         </div>
-
-        {/* Results Column — Proposal A */}
+        {/* Resultado con forma de boleta */}
         <div className="lg:col-span-5 flex flex-col gap-4">
-          <div className="rounded-3xl border-2 border-emerald-200/90 dark:border-emerald-800/80 bg-white dark:bg-slate-900 p-6 sm:p-7 shadow-sm">
-            <div className="flex items-center justify-between mb-4">
-              <span className="text-xs font-bold uppercase tracking-wider text-emerald-950 dark:text-emerald-300">
-                Capital Final Acumulado
-              </span>
-              <span className="rounded-full bg-emerald-50 dark:bg-emerald-950/70 border border-emerald-200 dark:border-emerald-800 px-2.5 py-0.5 text-[11px] font-bold text-brand-700 dark:text-emerald-300">
-                📈 Crecimiento
-              </span>
-            </div>
-
-            {/* Big Main Result Box (Non-truncated tabular numerals) */}
-            <div className="rounded-2xl bg-emerald-50/50 dark:bg-slate-950 border border-emerald-100 dark:border-emerald-900/60 p-5 sm:p-6 text-center mb-5">
-              <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                Monto Total al Finalizar
-              </span>
-              <div
-                title={formatCurrency(result.finalBalance)}
-                className="text-3xl sm:text-4xl lg:text-[2.6rem] font-black text-brand-700 dark:text-emerald-400 mt-1.5 font-mono tracking-tight tabular-nums break-words leading-tight"
-              >
-                {formatCurrency(result.finalBalance)}
-              </div>
-              <div className="mt-1.5 text-xs text-slate-600 dark:text-slate-400 font-semibold">
-                En {years} años con TREA del {annualRatePercentage}%
-              </div>
-            </div>
-
-            {/* Sub-Metrics Grid */}
-            <div className="grid grid-cols-2 gap-3 mb-5">
-              <ResultMetricCard
-                label="Ganancia en Intereses"
-                value={formatCurrency(result.totalInterestEarned)}
-                type="success"
-                subValue="Dinero generado"
-              />
-              <ResultMetricCard
-                label="Total Aportado"
-                value={formatCurrency(result.totalContributions)}
-                type="neutral"
-                subValue="De tu propio bolsillo"
-              />
-            </div>
-
+          <PayslipResult
+            title={"Capital Final Acumulado"}
+            period={"Crecimiento"}
+            amountHeader="Valor"
+            lines={[
+              { label: "Ganancia en Intereses", amount: formatCurrency(result.totalInterestEarned), note: "Dinero generado" },
+              { label: "Total Aportado", amount: formatCurrency(result.totalContributions), note: "De tu propio bolsillo" },
+            ]}
+            totalLabel={"Monto Total al Finalizar"}
+            totalAmount={formatCurrency(result.finalBalance)}
+            footnote={`En ${years} años con TREA del ${annualRatePercentage}%`}
+          >
             <ShareButtons title="Simulador de Interés Compuesto" shareText={shareSummary} />
-          </div>
+          </PayslipResult>
         </div>
 
       </div>

@@ -7,7 +7,7 @@ import { calculateGratification, CompanyRegime, HealthInsurance } from '@/core/c
 import { formatCurrency } from '@/core/math/formatters';
 import { InputNumber } from '@/shared/components/ui/InputNumber';
 import { SwitchToggle } from '@/shared/components/ui/SwitchToggle';
-import { ResultMetricCard } from '@/shared/components/ui/ResultMetricCard';
+import { PayslipResult } from '@/shared/components/ui/PayslipResult';
 import { ShareButtons } from '@/shared/components/ui/ShareButtons';
 import { Gift } from 'lucide-react';
 
@@ -67,32 +67,32 @@ Total en Mano: ${formatCurrency(result.totalToReceive)} (100% libre de descuento
             <h2 className="text-lg font-bold text-slate-900 dark:text-white mb-2">
               Guía Legal: ¿Cómo se calculan las Gratificaciones de Julio y Diciembre (Ley 27735)?
             </h2>
-            <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+            <p className="text-[15px] text-slate-600 dark:text-slate-300 leading-relaxed">
               Las <strong>Gratificaciones Legales</strong> de Fiestas Patrias y Navidad son beneficios sociales obligatorios que los empleadores del régimen laboral de la actividad privada deben otorgar a sus trabajadores dos veces al año. Están reguladas por la Ley N° 27735, su Reglamento (Decreto Supremo N° 005-2002-TR) y la Ley N° 30334 de desgravación tributaria previsional.
             </p>
           </div>
 
-          <div className="rounded-2xl bg-slate-50 dark:bg-slate-900 p-5 border border-slate-200 dark:border-slate-800 space-y-3 text-xs leading-relaxed">
-            <h3 className="font-bold text-sm text-slate-900 dark:text-white">
+          <div className="rounded-lg bg-slate-50 dark:bg-[#18202A] p-5 border border-slate-200 dark:border-[#2C3744] space-y-3 text-[13px] leading-relaxed">
+            <h3 className="font-bold text-[15px] text-slate-900 dark:text-white">
               1. Base computable y fórmula de liquidación
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
-              <div className="space-y-1.5 p-3 bg-white dark:bg-slate-950 rounded-xl border border-slate-200 dark:border-slate-800">
-                <span className="font-bold text-emerald-800 dark:text-emerald-400 block">• Base Remunerativa Computable:</span>
+              <div className="space-y-1.5 p-3 bg-white dark:bg-[#0E141B] rounded border border-slate-200 dark:border-[#2C3744]">
+                <span className="font-bold text-brand-800 dark:text-brand-400 block">• Base Remunerativa Computable:</span>
                 <p className="text-slate-600 dark:text-slate-300">
                   Es el sueldo básico vigente al 30 de junio (para julio) o al 30 de noviembre (para diciembre), más la Asignación Familiar y el promedio de remuneraciones variables si se percibieron al menos en 3 meses del semestre.
                 </p>
-                <div className="font-mono text-[11px] text-slate-800 dark:text-slate-200 pt-1">
+                <div className="font-mono text-[13px] text-slate-800 dark:text-slate-200 pt-1">
                   Base = Sueldo Básico + Asignación Familiar
                 </div>
               </div>
 
-              <div className="space-y-1.5 p-3 bg-white dark:bg-slate-950 rounded-xl border border-slate-200 dark:border-slate-800">
-                <span className="font-bold text-sky-800 dark:text-sky-400 block">• Bonificación Extraordinaria (Ley 30334):</span>
+              <div className="space-y-1.5 p-3 bg-white dark:bg-[#0E141B] rounded border border-slate-200 dark:border-[#2C3744]">
+                <span className="font-bold text-brand-800 dark:text-brand-400 block">• Bonificación Extraordinaria (Ley 30334):</span>
                 <p className="text-slate-600 dark:text-slate-300">
                   Se adiciona un 9.00% sobre el monto de la gratificación si estás asegurado en EsSalud, o un 6.75% si cuentas con cobertura médica privada mediante una EPS.
                 </p>
-                <div className="font-mono text-[11px] text-slate-800 dark:text-slate-200 pt-1">
+                <div className="font-mono text-[13px] text-slate-800 dark:text-slate-200 pt-1">
                   Total = Gratificación Legal + Bonificación (9% o 6.75%)
                 </div>
               </div>
@@ -100,14 +100,14 @@ Total en Mano: ${formatCurrency(result.totalToReceive)} (100% libre de descuento
           </div>
 
           <div className="space-y-3">
-            <h3 className="font-bold text-sm text-slate-900 dark:text-white">
+            <h3 className="font-bold text-[15px] text-slate-900 dark:text-white">
               2. Caso práctico real (Régimen General con Asignación Familiar)
             </h3>
-            <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+            <p className="text-[13px] text-slate-600 dark:text-slate-300 leading-relaxed">
               Trabajador del sector privado con sueldo ordinario mensual de <strong>S/ 3,500.00</strong>, acreditado con carga familiar (recibe Asignación Familiar legal de S/ 123.00), asegurado en EsSalud y con el semestre completo laborado (enero a junio o julio a diciembre):
             </p>
             <div className="overflow-x-auto">
-              <table className="w-full text-xs text-left border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden">
+              <table className="w-full text-[13px] text-left border border-slate-200 dark:border-[#2C3744] rounded overflow-hidden">
                 <thead className="bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white">
                   <tr>
                     <th className="p-2.5">Concepto Liquidado</th>
@@ -134,24 +134,24 @@ Total en Mano: ${formatCurrency(result.totalToReceive)} (100% libre de descuento
                   <tr>
                     <td className="p-2.5 font-semibold">Bonificación Extraordinaria EsSalud (9%)</td>
                     <td className="p-2.5 text-slate-500">9% de S/ 3,623.00</td>
-                    <td className="p-2.5 font-mono text-emerald-700 dark:text-emerald-400">+ S/ 326.07</td>
+                    <td className="p-2.5 font-mono text-brand-700 dark:text-brand-400">+ S/ 326.07</td>
                   </tr>
                   <tr>
                     <td className="p-2.5 font-semibold">Descuentos Previsionales (AFP/ONP)</td>
                     <td className="p-2.5 text-slate-500">Inafecto por Ley 30334</td>
-                    <td className="p-2.5 font-mono text-emerald-700 dark:text-emerald-400">S/ 0.00 (Inafecto)</td>
+                    <td className="p-2.5 font-mono text-brand-700 dark:text-brand-400">S/ 0.00 (Inafecto)</td>
                   </tr>
-                  <tr className="bg-emerald-50 dark:bg-emerald-950 font-bold text-slate-900 dark:text-white">
-                    <td className="p-2.5 text-emerald-800 dark:text-emerald-300">Total Efectivo a Cobrar en Cuenta</td>
+                  <tr className="bg-brand-50 dark:bg-brand-950 font-bold text-slate-900 dark:text-white">
+                    <td className="p-2.5 text-brand-800 dark:text-brand-300">Total Efectivo a Cobrar en Cuenta</td>
                     <td className="p-2.5 text-slate-500 font-normal">Gratificación + Bonificación</td>
-                    <td className="p-2.5 font-mono text-emerald-800 dark:text-emerald-300 text-sm">S/ 3,949.07</td>
+                    <td className="p-2.5 font-mono text-brand-800 dark:text-brand-300 text-[15px]">S/ 3,949.07</td>
                   </tr>
                 </tbody>
               </table>
             </div>
           </div>
 
-          <div className="rounded-2xl border border-slate-200 dark:border-slate-800 p-4 space-y-2 text-xs text-slate-500 dark:text-slate-400 bg-slate-50/50 dark:bg-slate-900/30">
+          <div className="rounded-lg border border-slate-200 dark:border-[#2C3744] p-4 space-y-2 text-[13px] text-slate-500 dark:text-slate-400 bg-slate-50/50 dark:bg-slate-900/30">
             <span className="font-bold text-slate-700 dark:text-slate-300 block">Normas laborales y fuentes oficiales de consulta:</span>
             <ul className="space-y-1 list-disc pl-4">
               <li>
@@ -160,7 +160,7 @@ Total en Mano: ${formatCurrency(result.totalToReceive)} (100% libre de descuento
                   href="https://cdn.www.gob.pe/uploads/document/file/3321103/guia_gratificaciones.pdf"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-emerald-700 dark:text-emerald-400 underline hover:text-emerald-800"
+                  className="text-brand-700 dark:text-brand-400 underline hover:text-brand-800"
                 >
                   guía oficial de gratificaciones del MTPE (PDF)
                 </a>.
@@ -171,7 +171,7 @@ Total en Mano: ${formatCurrency(result.totalToReceive)} (100% libre de descuento
                   href="https://www.gob.pe/9972-denunciar-incumplimientos-laborales-de-una-empresa-privada"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-emerald-700 dark:text-emerald-400 underline hover:text-emerald-800"
+                  className="text-brand-700 dark:text-brand-400 underline hover:text-brand-800"
                 >
                   guía de SUNAFIL para denunciar incumplimientos laborales
                 </a>.
@@ -184,9 +184,9 @@ Total en Mano: ${formatCurrency(result.totalToReceive)} (100% libre de descuento
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         
         {/* Form Column */}
-        <div className="lg:col-span-7 rounded-3xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 sm:p-8 shadow-sm space-y-6">
-          <div className="flex items-center gap-2.5 border-b border-slate-100 dark:border-slate-800 pb-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-50 text-brand-700 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/60">
+        <div className="lg:col-span-7 rounded-lg border border-slate-200/90 dark:border-[#2C3744] bg-white dark:bg-[#18202A] p-6 sm:p-8 space-y-6">
+          <div className="flex items-center gap-2.5 border-b border-slate-100 dark:border-[#2C3744] pb-3">
+            <div className="flex h-8 w-8 items-center justify-center rounded bg-brand-50 text-brand-700 dark:bg-brand-950 dark:text-brand-300 border border-brand-200/60 dark:border-brand-800/60">
               <Gift className="h-4.5 w-4.5" />
             </div>
             <h2 className="text-lg font-bold text-slate-900 dark:text-white">Datos para la Gratificación</h2>
@@ -203,31 +203,32 @@ Total en Mano: ${formatCurrency(result.totalToReceive)} (100% libre de descuento
           />
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-            <div>
-              <label htmlFor="companyRegime" className="text-xs sm:text-sm font-bold text-slate-900 dark:text-slate-200 block mb-2">
+            <div className="sm:col-span-2">
+              <label htmlFor="companyRegime" className="mb-1.5 block text-[15px] font-semibold text-slate-900 dark:text-slate-100">
                 Régimen de la Empresa
               </label>
               <select
                 id="companyRegime"
                 value={companyRegime}
                 onChange={(e) => setCompanyRegime(e.target.value as CompanyRegime)}
-                className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 p-2.5 text-xs font-bold text-slate-900 dark:text-white outline-none focus:border-brand-700"
+                className="select-field w-full rounded border border-slate-400 bg-white pl-3 text-[15px] text-slate-900 focus:border-brand-600 focus:outline-2 focus:outline-offset-1 focus:outline-brand-600 dark:border-slate-600 dark:bg-[#0E141B] dark:text-slate-100"
               >
-                <option value="general">Régimen General (1 sueldo; también si la empresa no está inscrita en REMYPE)</option>
-                <option value="pequena_empresa">Pequeña empresa inscrita en REMYPE (medio sueldo)</option>
-                <option value="microempresa">Microempresa inscrita en REMYPE (sin gratificación)</option>
+                <option value="general">Régimen General (1 sueldo)</option>
+                <option value="pequena_empresa">Pequeña empresa REMYPE (medio sueldo)</option>
+                <option value="microempresa">Microempresa REMYPE (sin gratificación)</option>
               </select>
+                <p className="mt-1.5 text-[13px] text-slate-600 dark:text-slate-400">¿Tu empresa no está inscrita en REMYPE? Elige Régimen General.</p>
             </div>
 
             <div>
-              <label htmlFor="healthInsurance" className="text-xs sm:text-sm font-bold text-slate-900 dark:text-slate-200 block mb-2">
+              <label htmlFor="healthInsurance" className="mb-1.5 block text-[15px] font-semibold text-slate-900 dark:text-slate-100">
                 Seguro de Salud
               </label>
               <select
                 id="healthInsurance"
                 value={healthInsurance}
                 onChange={(e) => setHealthInsurance(e.target.value as HealthInsurance)}
-                className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 p-2.5 text-xs font-bold text-slate-900 dark:text-white outline-none focus:border-brand-700"
+                className="select-field w-full rounded border border-slate-400 bg-white pl-3 text-[15px] text-slate-900 focus:border-brand-600 focus:outline-2 focus:outline-offset-1 focus:outline-brand-600 dark:border-slate-600 dark:bg-[#0E141B] dark:text-slate-100"
               >
                 <option value="essalud">EsSalud (+9% Bono)</option>
                 <option value="eps">EPS (+6.75% Bono)</option>
@@ -265,50 +266,22 @@ Total en Mano: ${formatCurrency(result.totalToReceive)} (100% libre de descuento
             onChange={(hasFamilyAllowance) => setHasFamilyAllowance(hasFamilyAllowance)}
           />
         </div>
-
-        {/* Results Column — Proposal A */}
+        {/* Resultado con forma de boleta */}
         <div className="lg:col-span-5 flex flex-col gap-4">
-          <div className="rounded-3xl border-2 border-emerald-200/90 dark:border-emerald-800/80 bg-white dark:bg-slate-900 p-6 sm:p-7 shadow-sm">
-            <div className="flex items-center justify-between mb-4">
-              <span className="text-xs font-bold uppercase tracking-wider text-emerald-950 dark:text-emerald-300">
-                Monto Total a Cobrar
-              </span>
-              <span className="rounded-full bg-emerald-50 dark:bg-emerald-950/70 border border-emerald-200 dark:border-emerald-800 px-2.5 py-0.5 text-[11px] font-bold text-brand-700 dark:text-emerald-300">
-                100% Libre de AFP / ONP
-              </span>
-            </div>
-
-            {/* Big Main Result Box (Non-truncated tabular numerals) */}
-            <div className="rounded-2xl bg-emerald-50/50 dark:bg-slate-950 border border-emerald-100 dark:border-emerald-900/60 p-5 sm:p-6 text-center mb-5">
-              <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                Gratificación Total en Mano
-              </span>
-              <div className="text-3xl sm:text-4xl lg:text-[2.6rem] font-black text-brand-700 dark:text-emerald-400 mt-1.5 font-mono tracking-tight tabular-nums break-words leading-tight">
-                {formatCurrency(result.totalToReceive)}
-              </div>
-              <div className="mt-1.5 text-xs text-slate-600 dark:text-slate-400 font-semibold">
-                Sin descuentos de AFP, ONP ni retención previsional
-              </div>
-            </div>
-
-            {/* Sub-Metrics Grid */}
-            <div className="grid grid-cols-2 gap-3 mb-5">
-              <ResultMetricCard
-                label="Gratificación Legal"
-                value={formatCurrency(result.rawGratification)}
-                type="neutral"
-                subValue="Monto base legal"
-              />
-              <ResultMetricCard
-                label={`Bono Salud (${result.bonusPercentage}%)`}
-                value={formatCurrency(result.extraordinaryBonus)}
-                type="success"
-                subValue="Bono de EsSalud/EPS"
-              />
-            </div>
-
+          <PayslipResult
+            title={"Monto Total a Cobrar"}
+            period={"100% Libre de AFP / ONP"}
+            amountHeader="Valor"
+            lines={[
+              { label: "Gratificación Legal", amount: formatCurrency(result.rawGratification), note: "Monto base legal" },
+              { label: `Bono Salud (${result.bonusPercentage}%)`, amount: formatCurrency(result.extraordinaryBonus), note: "Bono de EsSalud/EPS" },
+            ]}
+            totalLabel={"Gratificación Total en Mano"}
+            totalAmount={formatCurrency(result.totalToReceive)}
+            footnote={"Sin descuentos de AFP, ONP ni retención previsional"}
+          >
             <ShareButtons title="Cálculo de Gratificación Perú" shareText={shareSummary} />
-          </div>
+          </PayslipResult>
         </div>
 
       </div>

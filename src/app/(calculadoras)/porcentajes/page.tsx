@@ -10,6 +10,7 @@ import {
 } from '@/core/calculators/percentages';
 import { formatNumber, formatPercent } from '@/core/math/formatters';
 import { InputNumber } from '@/shared/components/ui/InputNumber';
+import { PayslipResult } from '@/shared/components/ui/PayslipResult';
 import { ShareButtons } from '@/shared/components/ui/ShareButtons';
 import { Percent } from 'lucide-react';
 
@@ -67,42 +68,42 @@ export default function PorcentajesPage() {
             <h2 className="text-lg font-bold text-slate-900 dark:text-white mb-2">
               ¿Cómo calcular Porcentajes, Proporciones y Variaciones Financieras?
             </h2>
-            <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+            <p className="text-[15px] text-slate-600 dark:text-slate-300 leading-relaxed">
               El cálculo de porcentajes es una operación cotidiana fundamental en el comercio, la contabilidad y las finanzas en el Perú. Permite determinar el impacto de impuestos tributarios (<strong>IGV 18%</strong>, detracciones, percepciones), calcular comisiones de venta, tasas de interés bancarias y medir el crecimiento de metas empresariales.
             </p>
           </div>
 
-          <div className="rounded-2xl bg-slate-50 dark:bg-slate-900 p-5 border border-slate-200 dark:border-slate-800 space-y-3 text-xs leading-relaxed">
-            <h3 className="font-bold text-sm text-slate-900 dark:text-white">
+          <div className="rounded-lg bg-slate-50 dark:bg-[#18202A] p-5 border border-slate-200 dark:border-[#2C3744] space-y-3 text-[13px] leading-relaxed">
+            <h3 className="font-bold text-[15px] text-slate-900 dark:text-white">
               1. Fórmulas Matemáticas de Porcentajes
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-1">
-              <div className="space-y-1.5 p-3.5 bg-white dark:bg-slate-950 rounded-xl border border-slate-200 dark:border-slate-800">
-                <span className="font-bold text-emerald-800 dark:text-emerald-400 block">• Porcentaje de un Total:</span>
+              <div className="space-y-1.5 p-3.5 bg-white dark:bg-[#0E141B] rounded border border-slate-200 dark:border-[#2C3744]">
+                <span className="font-bold text-brand-800 dark:text-brand-400 block">• Porcentaje de un Total:</span>
                 <p className="text-slate-600 dark:text-slate-300">
                   ¿Cuánto es el X% de una cifra total Y?
                 </p>
-                <div className="font-mono text-[11px] text-slate-800 dark:text-slate-200 pt-1">
+                <div className="font-mono text-[13px] text-slate-800 dark:text-slate-200 pt-1">
                   Resultado = (X × Y) ÷ 100
                 </div>
               </div>
 
-              <div className="space-y-1.5 p-3.5 bg-white dark:bg-slate-950 rounded-xl border border-slate-200 dark:border-slate-800">
-                <span className="font-bold text-sky-800 dark:text-sky-400 block">• Proporción Porcentual:</span>
+              <div className="space-y-1.5 p-3.5 bg-white dark:bg-[#0E141B] rounded border border-slate-200 dark:border-[#2C3744]">
+                <span className="font-bold text-brand-800 dark:text-brand-400 block">• Proporción Porcentual:</span>
                 <p className="text-slate-600 dark:text-slate-300">
                   ¿Qué porcentaje representa A respecto a B?
                 </p>
-                <div className="font-mono text-[11px] text-slate-800 dark:text-slate-200 pt-1">
+                <div className="font-mono text-[13px] text-slate-800 dark:text-slate-200 pt-1">
                   % = (A ÷ B) × 100
                 </div>
               </div>
 
-              <div className="space-y-1.5 p-3.5 bg-white dark:bg-slate-950 rounded-xl border border-slate-200 dark:border-slate-800">
+              <div className="space-y-1.5 p-3.5 bg-white dark:bg-[#0E141B] rounded border border-slate-200 dark:border-[#2C3744]">
                 <span className="font-bold text-amber-800 dark:text-amber-400 block">• Variación Porcentual:</span>
                 <p className="text-slate-600 dark:text-slate-300">
                   Crecimiento o caída entre valor inicial y actual.
                 </p>
-                <div className="font-mono text-[11px] text-slate-800 dark:text-slate-200 pt-1">
+                <div className="font-mono text-[13px] text-slate-800 dark:text-slate-200 pt-1">
                   Δ% = ((V2 - V1) ÷ V1) × 100
                 </div>
               </div>
@@ -114,21 +115,21 @@ export default function PorcentajesPage() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         
         {/* Form Column */}
-        <div className="lg:col-span-7 rounded-3xl border-2 border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 sm:p-8 shadow-md shadow-slate-900/5 space-y-6">
-          <div className="flex items-center gap-2.5 border-b border-slate-100 dark:border-slate-800 pb-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
+        <div className="lg:col-span-7 rounded-lg border-2 border-slate-200/90 dark:border-[#2C3744] bg-white dark:bg-[#18202A] p-6 sm:p-8 space-y-6">
+          <div className="flex items-center gap-2.5 border-b border-slate-100 dark:border-[#2C3744] pb-3">
+            <div className="flex h-8 w-8 items-center justify-center rounded bg-brand-100 text-brand-800 dark:bg-brand-950 dark:text-brand-300">
               <Percent className="h-4.5 w-4.5" />
             </div>
             <h2 className="text-lg font-bold text-slate-900 dark:text-white">Operación con Porcentajes</h2>
           </div>
 
-          <div className="grid grid-cols-3 gap-2 rounded-2xl bg-slate-100 dark:bg-slate-950 p-1.5 border border-slate-200 dark:border-slate-800">
+          <div className="grid grid-cols-3 gap-2 rounded-lg bg-slate-100 dark:bg-[#0E141B] p-1.5 border border-slate-200 dark:border-[#2C3744]">
             <button
               type="button"
               onClick={() => setMode('percentOf')}
-              className={`rounded-xl py-2.5 text-xs font-bold transition-all cursor-pointer ${
+              className={`rounded py-2.5 text-[13px] font-bold transition-all cursor-pointer ${
                 mode === 'percentOf'
-                  ? 'bg-white dark:bg-slate-800 text-emerald-800 dark:text-emerald-300 shadow-xs'
+                  ? 'bg-white dark:bg-slate-800 text-brand-800 dark:text-brand-300'
                   : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
@@ -137,9 +138,9 @@ export default function PorcentajesPage() {
             <button
               type="button"
               onClick={() => setMode('whatPercent')}
-              className={`rounded-xl py-2.5 text-xs font-bold transition-all cursor-pointer ${
+              className={`rounded py-2.5 text-[13px] font-bold transition-all cursor-pointer ${
                 mode === 'whatPercent'
-                  ? 'bg-white dark:bg-slate-800 text-emerald-800 dark:text-emerald-300 shadow-xs'
+                  ? 'bg-white dark:bg-slate-800 text-brand-800 dark:text-brand-300'
                   : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
@@ -148,9 +149,9 @@ export default function PorcentajesPage() {
             <button
               type="button"
               onClick={() => setMode('change')}
-              className={`rounded-xl py-2.5 text-xs font-bold transition-all cursor-pointer ${
+              className={`rounded py-2.5 text-[13px] font-bold transition-all cursor-pointer ${
                 mode === 'change'
-                  ? 'bg-white dark:bg-slate-800 text-emerald-800 dark:text-emerald-300 shadow-xs'
+                  ? 'bg-white dark:bg-slate-800 text-brand-800 dark:text-brand-300'
                   : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
@@ -225,40 +226,47 @@ export default function PorcentajesPage() {
 
         {/* Results Column */}
         <div className="lg:col-span-5 flex flex-col gap-4">
-          <div className="rounded-3xl border-2 border-emerald-300 dark:border-emerald-800/80 bg-emerald-50/70 dark:bg-slate-900 p-6 sm:p-7 shadow-md shadow-emerald-900/5">
-            <div className="flex items-center justify-between mb-4">
-              <span className="text-xs font-bold uppercase tracking-wider text-emerald-900 dark:text-emerald-300">
-                Resultado del Cálculo
-              </span>
-              <span className="rounded-full bg-emerald-700 dark:bg-emerald-600 px-3 py-0.5 text-xs font-bold text-white shadow-xs">
-                Porcentajes
-              </span>
-            </div>
-
-            {/* Big Main Result */}
-            <div className="rounded-2xl bg-white dark:bg-slate-950 border-2 border-emerald-200 dark:border-emerald-800/60 p-6 shadow-sm text-center mb-5">
-              <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">
-                {mode === 'percentOf' && `El ${percentX}% de ${totalY}`}
-                {mode === 'whatPercent' && `${partA} respecto a ${totalB}`}
-                {mode === 'change' && `Variación de ${oldVal} a ${newVal}`}
-              </span>
-              <div className="text-3xl sm:text-5xl font-black text-emerald-800 dark:text-emerald-400 mt-1 font-mono tabular-nums break-words leading-tight">
-                {mode === 'percentOf' && formatNumber(res1)}
-                {mode === 'whatPercent' && formatPercent(res2)}
-                {mode === 'change' && `${res3.isIncrease ? '+' : '-'}${formatPercent(res3.change)}`}
-              </div>
-              <div className="mt-2 text-xs text-slate-600 dark:text-slate-400 font-semibold">
-                {mode === 'percentOf' && `Operación: (${percentX} × ${totalY}) ÷ 100`}
-                {mode === 'whatPercent' && `Proporción: (${partA} ÷ ${totalB}) × 100`}
-                {mode === 'change' && (res3.isIncrease ? `Incremento de ${formatNumber(newVal - oldVal)} unidades` : `Reducción de ${formatNumber(oldVal - newVal)} unidades`)}
-              </div>
-            </div>
-
+          <PayslipResult
+            title="Resultado del cálculo"
+            amountHeader="Valor"
+            lines={[
+              {
+                label: 'Operación',
+                amount:
+                  mode === 'percentOf'
+                    ? `(${percentX} × ${totalY}) ÷ 100`
+                    : mode === 'whatPercent'
+                      ? `(${partA} ÷ ${totalB}) × 100`
+                      : `(${newVal} − ${oldVal}) ÷ ${oldVal} × 100`,
+              },
+            ]}
+            totalLabel={
+              mode === 'percentOf'
+                ? `El ${percentX}% de ${totalY}`
+                : mode === 'whatPercent'
+                  ? `${partA} respecto a ${totalB}`
+                  : `Variación de ${oldVal} a ${newVal}`
+            }
+            totalAmount={
+              mode === 'percentOf'
+                ? formatNumber(res1)
+                : mode === 'whatPercent'
+                  ? formatPercent(res2)
+                  : `${res3.isIncrease ? '+' : '-'}${formatPercent(res3.change)}`
+            }
+            footnote={
+              mode === 'change'
+                ? res3.isIncrease
+                  ? `Incremento de ${formatNumber(newVal - oldVal)} unidades`
+                  : `Reducción de ${formatNumber(oldVal - newVal)} unidades`
+                : undefined
+            }
+          >
             <ShareButtons
               title="Cálculo de Porcentajes"
               shareText={`Resultado Porcentajes: ${mode === 'percentOf' ? `${percentX}% de ${totalY} = ${res1}` : mode === 'whatPercent' ? `${partA} de ${totalB} = ${res2}%` : `Variación de ${oldVal} a ${newVal} = ${res3.isIncrease ? '+' : '-'}${res3.change}%`}`}
             />
-          </div>
+          </PayslipResult>
         </div>
 
       </div>

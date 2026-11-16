@@ -7,7 +7,7 @@ import { CALCULATORS_REGISTRY } from '@/features/calculators/registry';
 import { calculatePosCommission, PosGateway, GATEWAY_RATES } from '@/core/calculators/posCommissions';
 import { formatCurrency, formatPercent } from '@/core/math/formatters';
 import { InputNumber } from '@/shared/components/ui/InputNumber';
-import { ResultMetricCard } from '@/shared/components/ui/ResultMetricCard';
+import { PayslipResult } from '@/shared/components/ui/PayslipResult';
 import { ShareButtons } from '@/shared/components/ui/ShareButtons';
 import { CreditCard } from 'lucide-react';
 
@@ -72,7 +72,7 @@ Monto Líquido en Cuenta: ${formatCurrency(result.netReceived)}`;
       }
       faqs={faqs}
       educationalContent={
-        <div className="space-y-4 text-sm leading-relaxed text-slate-700 dark:text-slate-300">
+        <div className="space-y-4 text-[15px] leading-relaxed text-slate-700 dark:text-slate-300">
           <p>
             Cobrar mediante tarjetas de crédito, débito o billeteras móviles es indispensable para cualquier comercio formal o emprendedor en el Perú. Sin embargo, no calcular adecuadamente la tasa de comisión y su respectivo <strong>IGV (18%)</strong> puede consumir una parte significativa del margen de utilidad de tus productos.
           </p>
@@ -84,8 +84,8 @@ Monto Líquido en Cuenta: ${formatCurrency(result.netReceived)}`;
             A continuación se resumen las tarifas publicadas por los principales operadores. Las de Culqi, Mercado Pago e Izipay provienen de un comparativo de tarifas publicadas en octubre de 2026 (CONIT); la de Yape es la publicada por la empresa. Tu tasa real depende de tu contrato, tu rubro y el tipo de tarjeta.
           </p>
 
-          <div className="my-4 overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-800">
-            <table className="w-full text-left text-xs sm:text-sm">
+          <div className="my-4 overflow-x-auto rounded-lg border border-slate-200 dark:border-[#2C3744]">
+            <table className="w-full text-left text-[13px] sm:text-[15px]">
               <thead className="bg-slate-100 dark:bg-slate-800/80 font-bold text-slate-900 dark:text-white">
                 <tr>
                   <th className="p-3">Operador / Medio</th>
@@ -141,37 +141,37 @@ Monto Líquido en Cuenta: ${formatCurrency(result.netReceived)}`;
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         
         {/* Form Column */}
-        <div className="lg:col-span-7 rounded-3xl border-2 border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 sm:p-8 shadow-md shadow-slate-900/5 space-y-6">
-          <div className="flex items-center gap-2.5 border-b border-slate-100 dark:border-slate-800 pb-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
+        <div className="lg:col-span-7 rounded-lg border-2 border-slate-200/90 dark:border-[#2C3744] bg-white dark:bg-[#18202A] p-6 sm:p-8 space-y-6">
+          <div className="flex items-center gap-2.5 border-b border-slate-100 dark:border-[#2C3744] pb-3">
+            <div className="flex h-8 w-8 items-center justify-center rounded bg-brand-100 text-brand-800 dark:bg-brand-950 dark:text-brand-300">
               <CreditCard className="h-4.5 w-4.5" />
             </div>
             <h2 className="text-lg font-bold text-slate-900 dark:text-white">Configuración del Cobro</h2>
           </div>
 
           {/* Mode Selector */}
-          <div className="grid grid-cols-2 gap-2 rounded-2xl bg-slate-100 dark:bg-slate-950 p-1.5 border border-slate-200 dark:border-slate-800">
+          <div className="grid grid-cols-2 gap-2 rounded-lg bg-slate-100 dark:bg-[#0E141B] p-1.5 border border-slate-200 dark:border-[#2C3744]">
             <button
               type="button"
               onClick={() => setMode('deduct_from_sale')}
-              className={`rounded-xl py-3 text-xs font-bold transition-all cursor-pointer ${
+              className={`rounded py-3 text-[13px] font-bold transition-all cursor-pointer ${
                 mode === 'deduct_from_sale'
-                  ? 'bg-white dark:bg-slate-800 text-emerald-800 dark:text-emerald-300 shadow-xs'
+                  ? 'bg-white dark:bg-slate-800 text-brand-800 dark:text-brand-300'
                   : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
-              📉 Cobro S/ X (¿Cuánto me queda?)
+              Cobro S/ X (¿Cuánto me queda?)
             </button>
             <button
               type="button"
               onClick={() => setMode('add_to_charge')}
-              className={`rounded-xl py-3 text-xs font-bold transition-all cursor-pointer ${
+              className={`rounded py-3 text-[13px] font-bold transition-all cursor-pointer ${
                 mode === 'add_to_charge'
-                  ? 'bg-white dark:bg-slate-800 text-emerald-800 dark:text-emerald-300 shadow-xs'
+                  ? 'bg-white dark:bg-slate-800 text-brand-800 dark:text-brand-300'
                   : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
-              🎯 Quiero recibir S/ X (¿Cuánto cobrar?)
+              Quiero recibir S/ X (¿Cuánto cobrar?)
             </button>
           </div>
 
@@ -187,7 +187,7 @@ Monto Líquido en Cuenta: ${formatCurrency(result.netReceived)}`;
 
           {/* Gateway Buttons */}
           <div>
-            <label className="text-xs sm:text-sm font-bold text-slate-900 dark:text-slate-200 block mb-2">
+            <label className="mb-1.5 block text-[15px] font-semibold text-slate-900 dark:text-slate-100">
               Pasarela o POS
             </label>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
@@ -198,14 +198,14 @@ Monto Líquido en Cuenta: ${formatCurrency(result.netReceived)}`;
                     key={key}
                     type="button"
                     onClick={() => setGateway(key)}
-                    className={`rounded-xl p-2.5 text-xs font-bold text-left border transition-all cursor-pointer ${
+                    className={`min-h-12 rounded p-3 text-[15px] font-semibold text-left border transition-colors cursor-pointer ${
                       gateway === key
-                        ? 'border-emerald-700 bg-emerald-50 dark:bg-emerald-950/80 text-emerald-900 dark:text-emerald-300 ring-1 ring-emerald-700'
-                        : 'border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-700 dark:text-slate-300 hover:bg-slate-100'
+                        ? 'border-brand-700 bg-brand-50 dark:bg-brand-950/80 text-brand-900 dark:text-brand-300 ring-1 ring-brand-700'
+                        : 'border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-[#0E141B] text-slate-700 dark:text-slate-300 hover:bg-slate-100'
                     }`}
                   >
                     <div>{info.name}</div>
-                    <span className="text-[11px] font-normal text-slate-500 dark:text-slate-400">
+                    <span className="text-[13px] font-normal text-slate-500 dark:text-slate-400">
                       Tasa: {key === 'personalizado' ? 'la de tu contrato' : `${info.rate}%${info.fixedFee > 0 ? ` + S/ ${info.fixedFee.toFixed(2)}` : ''}${info.igvApplies ? ' + IGV' : ''}`}
                     </span>
                   </button>
@@ -236,50 +236,22 @@ Monto Líquido en Cuenta: ${formatCurrency(result.netReceived)}`;
             </div>
           )}
         </div>
-
-        {/* Results Column */}
+        {/* Resultado con forma de boleta */}
         <div className="lg:col-span-5 flex flex-col gap-4">
-          <div className="rounded-3xl border-2 border-emerald-300 dark:border-emerald-800/80 bg-emerald-50/70 dark:bg-slate-900 p-6 sm:p-7 shadow-md shadow-emerald-900/5">
-            <div className="flex items-center justify-between mb-4">
-              <span className="text-xs font-bold uppercase tracking-wider text-emerald-900 dark:text-emerald-300">
-                {mode === 'deduct_from_sale' ? 'Monto Líquido en Cuenta' : 'Monto Total a Cobrar'}
-              </span>
-              <span className="rounded-full bg-emerald-700 dark:bg-emerald-600 px-3 py-0.5 text-xs font-bold text-white shadow-xs">
-                🇵🇪 En Soles
-              </span>
-            </div>
-
-            {/* Big Main Result Box */}
-            <div className="rounded-2xl bg-white dark:bg-slate-950 border-2 border-emerald-200 dark:border-emerald-800/60 p-6 shadow-sm text-center mb-5">
-              <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">
-                {mode === 'deduct_from_sale' ? 'Recibirás en tu Banco' : 'Cobrar al Cliente'}
-              </span>
-              <div className="text-3xl sm:text-5xl font-black text-emerald-800 dark:text-emerald-400 mt-1 font-mono tabular-nums break-words leading-tight">
-                {formatCurrency(mode === 'deduct_from_sale' ? result.netReceived : result.chargeAmount)}
-              </div>
-              <div className="mt-1.5 text-xs text-slate-600 dark:text-slate-400 font-semibold">
-                Comisión total descontada: {formatCurrency(result.totalCommissionFee)}
-              </div>
-            </div>
-
-            {/* Sub-Metrics Grid */}
-            <div className="grid grid-cols-2 gap-3 mb-5">
-              <ResultMetricCard
-                label="Comisión Neta"
-                value={formatCurrency(result.commissionFeeBeforeTax)}
-                type="warning"
-                subValue={`Tasa: ${formatPercent(result.commissionRate)}${result.fixedFee > 0 ? ` + ${formatCurrency(result.fixedFee)} fijo` : ''}`}
-              />
-              <ResultMetricCard
-                label="IGV Comisión (18%)"
-                value={formatCurrency(result.igvOnCommission)}
-                type="neutral"
-                subValue="Crédito fiscal facturado"
-              />
-            </div>
-
+          <PayslipResult
+            title={mode === 'deduct_from_sale' ? 'Monto Líquido en Cuenta' : 'Monto Total a Cobrar'}
+            period={"En Soles"}
+            amountHeader="Valor"
+            lines={[
+              { label: "Comisión Neta", amount: formatCurrency(result.commissionFeeBeforeTax), note: `Tasa: ${formatPercent(result.commissionRate)}${result.fixedFee > 0 ? ` + ${formatCurrency(result.fixedFee)} fijo` : ''}` },
+              { label: "IGV Comisión (18%)", amount: formatCurrency(result.igvOnCommission), note: "Crédito fiscal facturado" },
+            ]}
+            totalLabel={mode === 'deduct_from_sale' ? 'Recibirás en tu Banco' : 'Cobrar al Cliente'}
+            totalAmount={formatCurrency(mode === 'deduct_from_sale' ? result.netReceived : result.chargeAmount)}
+            footnote={`Comisión total descontada: ${formatCurrency(result.totalCommissionFee)}`}
+          >
             <ShareButtons title="Comisiones POS y Yape" shareText={shareSummary} />
-          </div>
+          </PayslipResult>
         </div>
 
       </div>

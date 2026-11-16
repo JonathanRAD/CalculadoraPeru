@@ -6,7 +6,7 @@ import { CALCULATORS_REGISTRY } from '@/features/calculators/registry';
 import { calculateProfitPerProduct, ProfitPerProductInput } from '@/core/calculators/profitPerProduct';
 import { formatCurrency, formatNumber, formatPercent } from '@/core/math/formatters';
 import { InputNumber } from '@/shared/components/ui/InputNumber';
-import { ResultMetricCard } from '@/shared/components/ui/ResultMetricCard';
+import { PayslipResult } from '@/shared/components/ui/PayslipResult';
 import { ShareButtons } from '@/shared/components/ui/ShareButtons';
 import { PackageCheck } from 'lucide-react';
 
@@ -61,32 +61,32 @@ export default function GananciaPorProductoPage() {
             <h2 className="text-lg font-bold text-slate-900 dark:text-white mb-2">
               ¿Cómo calcular la Ganancia Neta Unitaria y Proyectada de un Producto?
             </h2>
-            <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+            <p className="text-[15px] text-slate-600 dark:text-slate-300 leading-relaxed">
               Comprender la <strong>economía unitaria (Unit Economics)</strong> de cada producto es vital para emprendedores de comercio electrónico, tiendas físicas y distribuidores en el Perú. Permite saber con exactitud cuánto dinero deja cada venta después de cubrir la fabricación o importación, el empaque y la inversión en publicidad digital.
             </p>
           </div>
 
-          <div className="rounded-2xl bg-slate-50 dark:bg-slate-900 p-5 border border-slate-200 dark:border-slate-800 space-y-3 text-xs leading-relaxed">
-            <h3 className="font-bold text-sm text-slate-900 dark:text-white">
+          <div className="rounded-lg bg-slate-50 dark:bg-[#18202A] p-5 border border-slate-200 dark:border-[#2C3744] space-y-3 text-[13px] leading-relaxed">
+            <h3 className="font-bold text-[15px] text-slate-900 dark:text-white">
               1. Fórmulas de Economía Unitaria
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
-              <div className="space-y-1.5 p-3.5 bg-white dark:bg-slate-950 rounded-xl border border-slate-200 dark:border-slate-800">
-                <span className="font-bold text-emerald-800 dark:text-emerald-400 block">• Ganancia Neta por Unidad:</span>
+              <div className="space-y-1.5 p-3.5 bg-white dark:bg-[#0E141B] rounded border border-slate-200 dark:border-[#2C3744]">
+                <span className="font-bold text-brand-800 dark:text-brand-400 block">• Ganancia Neta por Unidad:</span>
                 <p className="text-slate-600 dark:text-slate-300">
                   Precio de venta neto cobrado menos la suma de todos los costos directos y marketing.
                 </p>
-                <div className="font-mono text-[11px] text-slate-800 dark:text-slate-200 pt-1">
+                <div className="font-mono text-[13px] text-slate-800 dark:text-slate-200 pt-1">
                   Ganancia Unit. = Precio Venta - Costo Producto - Publicidad Unit.
                 </div>
               </div>
 
-              <div className="space-y-1.5 p-3.5 bg-white dark:bg-slate-950 rounded-xl border border-slate-200 dark:border-slate-800">
-                <span className="font-bold text-sky-800 dark:text-sky-400 block">• Utilidad Total Mensual Proyectada:</span>
+              <div className="space-y-1.5 p-3.5 bg-white dark:bg-[#0E141B] rounded border border-slate-200 dark:border-[#2C3744]">
+                <span className="font-bold text-brand-800 dark:text-brand-400 block">• Utilidad Total Mensual Proyectada:</span>
                 <p className="text-slate-600 dark:text-slate-300">
                   Ganancia líquida total multiplicada por el volumen estimado de colocación mensual.
                 </p>
-                <div className="font-mono text-[11px] text-slate-800 dark:text-slate-200 pt-1">
+                <div className="font-mono text-[13px] text-slate-800 dark:text-slate-200 pt-1">
                   Utilidad Mes = Ganancia Unit. × Unidades Vendidas
                 </div>
               </div>
@@ -94,15 +94,15 @@ export default function GananciaPorProductoPage() {
           </div>
 
           <div className="space-y-3">
-            <h3 className="font-bold text-sm text-slate-900 dark:text-white">
+            <h3 className="font-bold text-[15px] text-slate-900 dark:text-white">
               2. Caso práctico comercial (Tienda de accesorios en redes sociales)
             </h3>
-            <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+            <p className="text-[13px] text-slate-600 dark:text-slate-300 leading-relaxed">
               Un negocio vende mochilas urbanas con un costo de adquisición de S/ 25.00 y las comercializa a S/ 60.00 neto. Invierte en pauta de TikTok Ads un equivalente a S/ 2.00 por venta y coloca 100 mochilas al mes:
             </p>
 
-            <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800">
-              <table className="w-full text-left text-xs">
+            <div className="overflow-x-auto rounded border border-slate-200 dark:border-[#2C3744]">
+              <table className="w-full text-left text-[13px]">
                 <thead className="bg-slate-100 dark:bg-slate-800/80 font-bold text-slate-900 dark:text-white">
                   <tr>
                     <th className="p-2.5">Indicador Unitario</th>
@@ -126,10 +126,10 @@ export default function GananciaPorProductoPage() {
                     <td className="p-2.5 font-mono text-amber-700 dark:text-amber-400">-S/ 2.00</td>
                     <td className="p-2.5 font-mono text-amber-700 dark:text-amber-400">-S/ 200.00</td>
                   </tr>
-                  <tr className="bg-emerald-50/60 dark:bg-emerald-950/30">
-                    <td className="p-2.5 font-bold text-emerald-950 dark:text-emerald-300">Ganancia Neta Líquida</td>
-                    <td className="p-2.5 font-mono font-bold text-emerald-800 dark:text-emerald-400">S/ 33.00 / u.</td>
-                    <td className="p-2.5 font-mono font-bold text-emerald-800 dark:text-emerald-400">S/ 3,300.00 libres</td>
+                  <tr className="bg-brand-50/60 dark:bg-brand-950/30">
+                    <td className="p-2.5 font-bold text-brand-950 dark:text-brand-300">Ganancia Neta Líquida</td>
+                    <td className="p-2.5 font-mono font-bold text-brand-800 dark:text-brand-400">S/ 33.00 / u.</td>
+                    <td className="p-2.5 font-mono font-bold text-brand-800 dark:text-brand-400">S/ 3,300.00 libres</td>
                   </tr>
                 </tbody>
               </table>
@@ -141,9 +141,9 @@ export default function GananciaPorProductoPage() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         
         {/* Form Column */}
-        <div className="lg:col-span-7 rounded-3xl border-2 border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 sm:p-8 shadow-md shadow-slate-900/5 space-y-6">
-          <div className="flex items-center gap-2.5 border-b border-slate-100 dark:border-slate-800 pb-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
+        <div className="lg:col-span-7 rounded-lg border-2 border-slate-200/90 dark:border-[#2C3744] bg-white dark:bg-[#18202A] p-6 sm:p-8 space-y-6">
+          <div className="flex items-center gap-2.5 border-b border-slate-100 dark:border-[#2C3744] pb-3">
+            <div className="flex h-8 w-8 items-center justify-center rounded bg-brand-100 text-brand-800 dark:bg-brand-950 dark:text-brand-300">
               <PackageCheck className="h-4.5 w-4.5" />
             </div>
             <h2 className="text-lg font-bold text-slate-900 dark:text-white">Costos y Proyección de Unidades</h2>
@@ -196,70 +196,27 @@ export default function GananciaPorProductoPage() {
             />
           </div>
         </div>
-
-        {/* Results Column */}
+        {/* Resultado con forma de boleta */}
         <div className="lg:col-span-5 flex flex-col gap-4">
-          <div className="rounded-3xl border-2 border-emerald-300 dark:border-emerald-800/80 bg-emerald-50/70 dark:bg-slate-900 p-6 sm:p-7 shadow-md shadow-emerald-900/5">
-            <div className="flex items-center justify-between mb-4">
-              <span className="text-xs font-bold uppercase tracking-wider text-emerald-900 dark:text-emerald-300">
-                Proyección de Ganancia
-              </span>
-              <span className="rounded-full bg-emerald-700 dark:bg-emerald-600 px-3 py-0.5 text-xs font-bold text-white shadow-xs">
-                Mensual
-              </span>
-            </div>
-
-            {/* Big Main Result Box */}
-            <div className="rounded-2xl bg-white dark:bg-slate-950 border-2 border-emerald-200 dark:border-emerald-800/60 p-6 shadow-sm text-center mb-5">
-              <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">
-                Utilidad Total Estimada al Mes
-              </span>
-              <div className="text-3xl sm:text-5xl font-black text-emerald-800 dark:text-emerald-400 mt-1 font-mono tabular-nums break-words leading-tight">
-                {formatCurrency(result.estimatedMonthlyTotalProfit)}
-              </div>
-              <div className="mt-2 text-xs text-slate-600 dark:text-slate-400 font-semibold">
-                Ganancia neta por unidad: {formatCurrency(result.unitProfit)}
-              </div>
-            </div>
-
-            {/* Sub-Metrics Grid */}
-            <div className="grid grid-cols-2 gap-3 mb-5">
-              <ResultMetricCard
-                label="Facturación Total"
-                value={formatCurrency(result.estimatedMonthlyGrossRevenue)}
-                type="neutral"
-                subValue={`${formatNumber(form.estimatedMonthlyUnits)} unidades`}
-              />
-              <ResultMetricCard
-                label="Margen Comercial"
-                value={formatPercent(result.marginPercentage)}
-                type="success"
-                subValue={`Mark-up: ${formatPercent(result.markupPercentage)}`}
-              />
-            </div>
-
-            {/* Breakdown Detail */}
-            <div className="rounded-2xl bg-white/90 dark:bg-slate-950 p-4 text-xs text-slate-700 dark:text-slate-300 space-y-2 mb-5 border border-emerald-200/80 dark:border-slate-800 shadow-2xs">
-              <div className="flex justify-between font-medium">
-                <span>Costo total en mercadería:</span>
-                <span className="font-bold text-slate-900 dark:text-white tabular-nums font-mono">{formatCurrency(form.costPrice * form.estimatedMonthlyUnits)}</span>
-              </div>
-              {(form.advertisingCostPerUnit || 0) > 0 && (
-                <div className="flex justify-between font-medium">
-                  <span>Gasto mensual en pauta publicitaria:</span>
-                  <span className="font-bold text-amber-700 dark:text-amber-400 tabular-nums font-mono">
-                    {formatCurrency((form.advertisingCostPerUnit || 0) * form.estimatedMonthlyUnits)}
-                  </span>
-                </div>
-              )}
-              <div className="flex justify-between font-medium">
-                <span>Rendimiento sobre costo (Mark-up):</span>
-                <span className="font-bold text-emerald-700 dark:text-emerald-400 tabular-nums font-mono">{formatPercent(result.markupPercentage)}</span>
-              </div>
-            </div>
+          <PayslipResult
+            title={"Proyección de Ganancia"}
+            period={"Mensual"}
+            amountHeader="Valor"
+            lines={[
+              { label: "Facturación Total", amount: formatCurrency(result.estimatedMonthlyGrossRevenue), note: `${formatNumber(form.estimatedMonthlyUnits)} unidades` },
+              { label: "Margen Comercial", amount: formatPercent(result.marginPercentage), note: `Mark-up: ${formatPercent(result.markupPercentage)}` },
+              { label: "Costo total en mercadería", amount: formatCurrency(form.costPrice * form.estimatedMonthlyUnits) },
+              ...((form.advertisingCostPerUnit || 0) > 0 ? [{ label: "Gasto mensual en pauta publicitaria", amount: formatCurrency((form.advertisingCostPerUnit || 0) * form.estimatedMonthlyUnits) }] : []),
+              { label: "Rendimiento sobre costo (Mark-up)", amount: formatPercent(result.markupPercentage) },
+            ]}
+            totalLabel={"Utilidad Total Estimada al Mes"}
+            totalAmount={formatCurrency(result.estimatedMonthlyTotalProfit)}
+            footnote={`Ganancia neta por unidad: ${formatCurrency(result.unitProfit)}`}
+          >
+            
 
             <ShareButtons title="Ganancia Proyectada por Producto" shareText={shareSummary} />
-          </div>
+          </PayslipResult>
         </div>
 
       </div>

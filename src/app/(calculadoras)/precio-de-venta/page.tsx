@@ -7,7 +7,7 @@ import { calculateSalePrice, SalePriceInput } from '@/core/calculators/pricing';
 import { formatCurrency, formatPercent } from '@/core/math/formatters';
 import { InputNumber } from '@/shared/components/ui/InputNumber';
 import { SwitchToggle } from '@/shared/components/ui/SwitchToggle';
-import { ResultMetricCard } from '@/shared/components/ui/ResultMetricCard';
+import { PayslipResult } from '@/shared/components/ui/PayslipResult';
 import { ShareButtons } from '@/shared/components/ui/ShareButtons';
 import { ShoppingBag } from 'lucide-react';
 
@@ -61,32 +61,32 @@ IGV (18%): ${formatCurrency(result.igvAmount)}`;
             <h2 className="text-lg font-bold text-slate-900 dark:text-white mb-2">
               Estrategia Comercial: ¿Cómo calcular el Precio de Venta y Margen de Ganancia para MYPES?
             </h2>
-            <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+            <p className="text-[15px] text-slate-600 dark:text-slate-300 leading-relaxed">
               Fijar un precio de venta de manera empírica o mediante sobreprecios directos es la causa número uno de falta de liquidez y quiebra en micro y pequeñas empresas peruanas. Para construir un negocio sostenible es imperativo dominar la <strong>fórmula de margen sobre ventas</strong> y considerar todos los costos directos, tributarios y financieros de cada unidad.
             </p>
           </div>
 
-          <div className="rounded-2xl bg-slate-50 dark:bg-slate-900 p-5 border border-slate-200 dark:border-slate-800 space-y-3 text-xs leading-relaxed">
-            <h3 className="font-bold text-sm text-slate-900 dark:text-white">
+          <div className="rounded-lg bg-slate-50 dark:bg-[#18202A] p-5 border border-slate-200 dark:border-[#2C3744] space-y-3 text-[13px] leading-relaxed">
+            <h3 className="font-bold text-[15px] text-slate-900 dark:text-white">
               1. Fórmulas comerciales profesionales de fijación de precios
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
-              <div className="space-y-1.5 p-3 bg-white dark:bg-slate-950 rounded-xl border border-slate-200 dark:border-slate-800">
-                <span className="font-bold text-emerald-800 dark:text-emerald-400 block">• Precio de Venta Neto (Sin IGV):</span>
+              <div className="space-y-1.5 p-3 bg-white dark:bg-[#0E141B] rounded border border-slate-200 dark:border-[#2C3744]">
+                <span className="font-bold text-brand-800 dark:text-brand-400 block">• Precio de Venta Neto (Sin IGV):</span>
                 <p className="text-slate-600 dark:text-slate-300">
                   Garantiza que tras pagar el costo unitario, el porcentaje de utilidad neta en caja sea exactamente el que planificaste.
                 </p>
-                <div className="font-mono text-[11px] text-slate-800 dark:text-slate-200 pt-1">
+                <div className="font-mono text-[13px] text-slate-800 dark:text-slate-200 pt-1">
                   Precio Neto = Costo Unitario ÷ (1 - Margen Deseado%)
                 </div>
               </div>
 
-              <div className="space-y-1.5 p-3 bg-white dark:bg-slate-950 rounded-xl border border-slate-200 dark:border-slate-800">
-                <span className="font-bold text-sky-800 dark:text-sky-400 block">• Precio al Público (Con IGV 18%):</span>
+              <div className="space-y-1.5 p-3 bg-white dark:bg-[#0E141B] rounded border border-slate-200 dark:border-[#2C3744]">
+                <span className="font-bold text-brand-800 dark:text-brand-400 block">• Precio al Público (Con IGV 18%):</span>
                 <p className="text-slate-600 dark:text-slate-300">
                   Precio obligatorio para exhibir en boleta o tienda física en el Perú, sumando el 18% del tributo fiscal.
                 </p>
-                <div className="font-mono text-[11px] text-slate-800 dark:text-slate-200 pt-1">
+                <div className="font-mono text-[13px] text-slate-800 dark:text-slate-200 pt-1">
                   Precio Final = Precio Neto × 1.18
                 </div>
               </div>
@@ -94,14 +94,14 @@ IGV (18%): ${formatCurrency(result.igvAmount)}`;
           </div>
 
           <div className="space-y-3">
-            <h3 className="font-bold text-sm text-slate-900 dark:text-white">
+            <h3 className="font-bold text-[15px] text-slate-900 dark:text-white">
               2. Caso práctico real (Emprendimiento retail / ecommerce en Lima)
             </h3>
-            <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+            <p className="text-[13px] text-slate-600 dark:text-slate-300 leading-relaxed">
               Un negocio de calzado adquiere un par de zapatillas a su proveedor en Trujillo por <strong>S/ 80.00</strong>, invierte <strong>S/ 5.00</strong> en caja y bolsa de despacho, asume <strong>S/ 5.00</strong> de flete prorrateado (Costo Total: S/ 90.00) y desea ganar un <strong>35% de margen neto</strong>:
             </p>
             <div className="overflow-x-auto">
-              <table className="w-full text-xs text-left border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden">
+              <table className="w-full text-[13px] text-left border border-slate-200 dark:border-[#2C3744] rounded overflow-hidden">
                 <thead className="bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white">
                   <tr>
                     <th className="p-2.5">Etapa del Cálculo</th>
@@ -123,24 +123,24 @@ IGV (18%): ${formatCurrency(result.igvAmount)}`;
                   <tr>
                     <td className="p-2.5 font-semibold">Ganancia Neta en Soles por Par Vendido</td>
                     <td className="p-2.5 text-slate-500">Precio Neto (138.46) - Costo (90.00)</td>
-                    <td className="p-2.5 font-mono text-emerald-700 dark:text-emerald-400 font-bold">+ S/ 48.46 (35%)</td>
+                    <td className="p-2.5 font-mono text-brand-700 dark:text-brand-400 font-bold">+ S/ 48.46 (35%)</td>
                   </tr>
                   <tr>
                     <td className="p-2.5 font-semibold">Impuesto General a las Ventas (18%)</td>
                     <td className="p-2.5 text-slate-500">18% de S/ 138.46 (SUNAT)</td>
                     <td className="p-2.5 font-mono text-slate-500">+ S/ 24.92</td>
                   </tr>
-                  <tr className="bg-emerald-50 dark:bg-emerald-950 font-bold text-slate-900 dark:text-white">
-                    <td className="p-2.5 text-emerald-800 dark:text-emerald-300">Precio de Venta al Público (PVP en Boleta)</td>
+                  <tr className="bg-brand-50 dark:bg-brand-950 font-bold text-slate-900 dark:text-white">
+                    <td className="p-2.5 text-brand-800 dark:text-brand-300">Precio de Venta al Público (PVP en Boleta)</td>
                     <td className="p-2.5 text-slate-500 font-normal">S/ 138.46 × 1.18</td>
-                    <td className="p-2.5 font-mono text-emerald-800 dark:text-emerald-300 text-sm">S/ 163.38</td>
+                    <td className="p-2.5 font-mono text-brand-800 dark:text-brand-300 text-[15px]">S/ 163.38</td>
                   </tr>
                 </tbody>
               </table>
             </div>
           </div>
 
-          <div className="rounded-2xl border border-slate-200 dark:border-slate-800 p-4 space-y-2 text-xs text-slate-500 dark:text-slate-400 bg-slate-50/50 dark:bg-slate-900/30">
+          <div className="rounded-lg border border-slate-200 dark:border-[#2C3744] p-4 space-y-2 text-[13px] text-slate-500 dark:text-slate-400 bg-slate-50/50 dark:bg-slate-900/30">
             <span className="font-bold text-slate-700 dark:text-slate-300 block">Normas peruanas de protección al consumidor y tributarias:</span>
             <p>
               • <strong>Ley N° 29571:</strong> Código de Protección y Defensa del Consumidor (Publicidad de precios con tributos incluidos).<br />
@@ -154,9 +154,9 @@ IGV (18%): ${formatCurrency(result.igvAmount)}`;
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         
         {/* Form Column */}
-        <div className="lg:col-span-7 rounded-3xl border-2 border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 sm:p-8 shadow-md shadow-slate-900/5 space-y-6">
-          <div className="flex items-center gap-2.5 border-b border-slate-100 dark:border-slate-800 pb-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
+        <div className="lg:col-span-7 rounded-lg border-2 border-slate-200/90 dark:border-[#2C3744] bg-white dark:bg-[#18202A] p-6 sm:p-8 space-y-6">
+          <div className="flex items-center gap-2.5 border-b border-slate-100 dark:border-[#2C3744] pb-3">
+            <div className="flex h-8 w-8 items-center justify-center rounded bg-brand-100 text-brand-800 dark:bg-brand-950 dark:text-brand-300">
               <ShoppingBag className="h-4.5 w-4.5" />
             </div>
             <h2 className="text-lg font-bold text-slate-900 dark:text-white">Ingresa los datos de tu producto</h2>
@@ -218,72 +218,28 @@ IGV (18%): ${formatCurrency(result.igvAmount)}`;
             badge="SUNAT"
           />
         </div>
-
-        {/* Results Column */}
+        {/* Resultado con forma de boleta */}
         <div className="lg:col-span-5 flex flex-col gap-4">
-          <div className="rounded-3xl border-2 border-emerald-300 dark:border-emerald-800/80 bg-emerald-50/70 dark:bg-slate-900 p-6 sm:p-7 shadow-md shadow-emerald-900/5">
-            <div className="flex items-center justify-between mb-4">
-              <span className="text-xs font-bold uppercase tracking-wider text-emerald-900 dark:text-emerald-300">
-                Resultado sugerido
-              </span>
-              <span className="rounded-full bg-emerald-700 dark:bg-emerald-600 px-3 py-0.5 text-xs font-bold text-white shadow-xs">
-                🇵🇪 En Soles
-              </span>
-            </div>
-
-            {/* Big Main Result Box */}
-            <div className="rounded-2xl bg-white dark:bg-slate-950 border-2 border-emerald-200 dark:border-emerald-800/60 p-6 shadow-sm text-center mb-5">
-              <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">
-                Precio de Venta Recomendado
-              </span>
-              <div
-                title={formatCurrency(result.recommendedSalePrice)}
-                className="text-3xl sm:text-4xl lg:text-5xl font-black text-emerald-800 dark:text-emerald-400 mt-1 font-mono tabular-nums break-words leading-tight max-w-full px-2"
-              >
-                {formatCurrency(result.recommendedSalePrice)}
-              </div>
-              <div className="mt-1.5 text-xs text-slate-600 dark:text-slate-400 font-semibold">
-                {form.includeIgv ? '(Incluye IGV 18% para Boleta)' : '(Precio Neto sin IGV)'}
-              </div>
-            </div>
-
-            {/* Sub-Metrics Grid */}
-            <div className="grid grid-cols-2 gap-3 mb-5">
-              <ResultMetricCard
-                label="Ganancia por unidad"
-                value={formatCurrency(result.profitPerUnit)}
-                type="success"
-                subValue={`Margen real: ${formatPercent(result.realMarginPercentage)}`}
-              />
-              <ResultMetricCard
-                label="IGV a pagar (18%)"
-                value={formatCurrency(result.igvAmount)}
-                type="neutral"
-                subValue={result.igvAmount > 0 ? 'Para declarar a SUNAT' : 'No incluido'}
-              />
-            </div>
-
-            {/* Breakdown Detail */}
-            <div className="rounded-2xl bg-white/90 dark:bg-slate-950 p-4 text-xs text-slate-700 dark:text-slate-300 space-y-2 mb-5 border border-emerald-200/80 dark:border-slate-800 shadow-2xs">
-              <div className="flex justify-between font-medium">
-                <span>Costo Total Unitario:</span>
-                <span className="font-bold text-slate-900 dark:text-white">{formatCurrency(result.totalCostPerUnit)}</span>
-              </div>
-              {result.commissionAmount > 0 && (
-                <div className="flex justify-between font-medium">
-                  <span>Comisión Pasarela ({form.salesCommissionPercentage}%):</span>
-                  <span className="font-bold text-slate-900 dark:text-white">{formatCurrency(result.commissionAmount)}</span>
-                </div>
-              )}
-              <div className="flex justify-between font-medium">
-                <span>Precio Base (sin IGV):</span>
-                <span className="font-bold text-slate-900 dark:text-white">{formatCurrency(result.basePriceWithoutIgv)}</span>
-              </div>
-            </div>
+          <PayslipResult
+            title={"Resultado sugerido"}
+            period={"En Soles"}
+            amountHeader="Valor"
+            lines={[
+              { label: "Ganancia por unidad", amount: formatCurrency(result.profitPerUnit), note: `Margen real: ${formatPercent(result.realMarginPercentage)}` },
+              { label: "IGV a pagar (18%)", amount: formatCurrency(result.igvAmount), note: result.igvAmount > 0 ? 'Para declarar a SUNAT' : 'No incluido' },
+              { label: "Costo Total Unitario", amount: formatCurrency(result.totalCostPerUnit) },
+              ...(result.commissionAmount > 0 ? [{ label: `Comisión Pasarela (${form.salesCommissionPercentage}%)`, amount: formatCurrency(result.commissionAmount) }] : []),
+              { label: "Precio Base (sin IGV)", amount: formatCurrency(result.basePriceWithoutIgv) },
+            ]}
+            totalLabel={"Precio de Venta Recomendado"}
+            totalAmount={formatCurrency(result.recommendedSalePrice)}
+            footnote={form.includeIgv ? '(Incluye IGV 18% para Boleta)' : '(Precio Neto sin IGV)'}
+          >
+            
 
             {/* Share and Copy Actions */}
             <ShareButtons title="Cálculo de Precio de Venta" shareText={shareSummary} />
-          </div>
+          </PayslipResult>
         </div>
 
       </div>

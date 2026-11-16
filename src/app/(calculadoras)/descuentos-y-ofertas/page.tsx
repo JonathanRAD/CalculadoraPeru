@@ -6,7 +6,7 @@ import { CALCULATORS_REGISTRY } from '@/features/calculators/registry';
 import { calculateDiscount, DiscountInput } from '@/core/calculators/discounts';
 import { formatCurrency, formatPercent } from '@/core/math/formatters';
 import { InputNumber } from '@/shared/components/ui/InputNumber';
-import { ResultMetricCard } from '@/shared/components/ui/ResultMetricCard';
+import { PayslipResult } from '@/shared/components/ui/PayslipResult';
 import { ShareButtons } from '@/shared/components/ui/ShareButtons';
 import { Tag } from 'lucide-react';
 
@@ -59,32 +59,32 @@ export default function DescuentosYOfertasPage() {
             <h2 className="text-lg font-bold text-slate-900 dark:text-white mb-2">
               ¿Cómo calcular Descuentos Sucesivos y Rebajas de Oferta en Perú?
             </h2>
-            <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+            <p className="text-[15px] text-slate-600 dark:text-slate-300 leading-relaxed">
               Tanto para consumidores que buscan verificar el ahorro real en campañas comerciales (Cyber Days, Black Friday, liquidaciones de temporada) como para comerciantes que diseñan promociones atractivas, dominar la matemática de los <strong>descuentos sucesivos</strong> evita falsas expectativas y protege la rentabilidad de las ventas.
             </p>
           </div>
 
-          <div className="rounded-2xl bg-slate-50 dark:bg-slate-900 p-5 border border-slate-200 dark:border-slate-800 space-y-3 text-xs leading-relaxed">
-            <h3 className="font-bold text-sm text-slate-900 dark:text-white">
+          <div className="rounded-lg bg-slate-50 dark:bg-[#18202A] p-5 border border-slate-200 dark:border-[#2C3744] space-y-3 text-[13px] leading-relaxed">
+            <h3 className="font-bold text-[15px] text-slate-900 dark:text-white">
               1. Fórmulas Matemáticas de Descuento Sucesivo
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
-              <div className="space-y-1.5 p-3.5 bg-white dark:bg-slate-950 rounded-xl border border-slate-200 dark:border-slate-800">
-                <span className="font-bold text-emerald-800 dark:text-emerald-400 block">• Precio Final de Oferta:</span>
+              <div className="space-y-1.5 p-3.5 bg-white dark:bg-[#0E141B] rounded border border-slate-200 dark:border-[#2C3744]">
+                <span className="font-bold text-brand-800 dark:text-brand-400 block">• Precio Final de Oferta:</span>
                 <p className="text-slate-600 dark:text-slate-300">
                   Multiplica el precio original por los factores residuales de cada descuento sucesivo.
                 </p>
-                <div className="font-mono text-[11px] text-slate-800 dark:text-slate-200 pt-1">
+                <div className="font-mono text-[13px] text-slate-800 dark:text-slate-200 pt-1">
                   Precio Final = Precio Original × (1 - D1%) × (1 - D2%)
                 </div>
               </div>
 
-              <div className="space-y-1.5 p-3.5 bg-white dark:bg-slate-950 rounded-xl border border-slate-200 dark:border-slate-800">
-                <span className="font-bold text-sky-800 dark:text-sky-400 block">• Descuento Único Equivalente (DUE %):</span>
+              <div className="space-y-1.5 p-3.5 bg-white dark:bg-[#0E141B] rounded border border-slate-200 dark:border-[#2C3744]">
+                <span className="font-bold text-brand-800 dark:text-brand-400 block">• Descuento Único Equivalente (DUE %):</span>
                 <p className="text-slate-600 dark:text-slate-300">
                   Porcentaje total efectivo de rebaja consolidada sobre el valor original.
                 </p>
-                <div className="font-mono text-[11px] text-slate-800 dark:text-slate-200 pt-1">
+                <div className="font-mono text-[13px] text-slate-800 dark:text-slate-200 pt-1">
                   DUE% = [D1 + D2 - ((D1 × D2) ÷ 100)]%
                 </div>
               </div>
@@ -92,15 +92,15 @@ export default function DescuentosYOfertasPage() {
           </div>
 
           <div className="space-y-3">
-            <h3 className="font-bold text-sm text-slate-900 dark:text-white">
+            <h3 className="font-bold text-[15px] text-slate-900 dark:text-white">
               2. Caso práctico: Prenda de vestir con oferta y cupón bancario
             </h3>
-            <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+            <p className="text-[13px] text-slate-600 dark:text-slate-300 leading-relaxed">
               Un producto tiene un precio de lista de S/ 120.00. La tienda ofrece un 20% de descuento de liquidación más un 10% adicional pagando con una tarjeta de crédito específica:
             </p>
 
-            <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800">
-              <table className="w-full text-left text-xs">
+            <div className="overflow-x-auto rounded border border-slate-200 dark:border-[#2C3744]">
+              <table className="w-full text-left text-[13px]">
                 <thead className="bg-slate-100 dark:bg-slate-800/80 font-bold text-slate-900 dark:text-white">
                   <tr>
                     <th className="p-2.5">Etapa del Cálculo</th>
@@ -124,10 +124,10 @@ export default function DescuentosYOfertasPage() {
                     <td className="p-2.5 text-slate-600 dark:text-slate-300">S/ 96.00 × 0.10 = Ahorro S/ 9.60</td>
                     <td className="p-2.5 font-mono text-slate-700 dark:text-slate-300">S/ 86.40</td>
                   </tr>
-                  <tr className="bg-emerald-50/60 dark:bg-emerald-950/30">
-                    <td className="p-2.5 font-bold text-emerald-950 dark:text-emerald-300">Precio Final a Pagar en Caja</td>
-                    <td className="p-2.5 font-mono font-bold text-emerald-800 dark:text-emerald-400">Ahorro Total: S/ 33.60</td>
-                    <td className="p-2.5 font-mono font-bold text-emerald-800 dark:text-emerald-400">S/ 86.40 (DUE: 28.00%)</td>
+                  <tr className="bg-brand-50/60 dark:bg-brand-950/30">
+                    <td className="p-2.5 font-bold text-brand-950 dark:text-brand-300">Precio Final a Pagar en Caja</td>
+                    <td className="p-2.5 font-mono font-bold text-brand-800 dark:text-brand-400">Ahorro Total: S/ 33.60</td>
+                    <td className="p-2.5 font-mono font-bold text-brand-800 dark:text-brand-400">S/ 86.40 (DUE: 28.00%)</td>
                   </tr>
                 </tbody>
               </table>
@@ -139,9 +139,9 @@ export default function DescuentosYOfertasPage() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         
         {/* Form Column */}
-        <div className="lg:col-span-7 rounded-3xl border-2 border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 sm:p-8 shadow-md shadow-slate-900/5 space-y-6">
-          <div className="flex items-center gap-2.5 border-b border-slate-100 dark:border-slate-800 pb-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
+        <div className="lg:col-span-7 rounded-lg border-2 border-slate-200/90 dark:border-[#2C3744] bg-white dark:bg-[#18202A] p-6 sm:p-8 space-y-6">
+          <div className="flex items-center gap-2.5 border-b border-slate-100 dark:border-[#2C3744] pb-3">
+            <div className="flex h-8 w-8 items-center justify-center rounded bg-brand-100 text-brand-800 dark:bg-brand-950 dark:text-brand-300">
               <Tag className="h-4.5 w-4.5" />
             </div>
             <h2 className="text-lg font-bold text-slate-900 dark:text-white">Ingresa los datos de la oferta</h2>
@@ -181,70 +181,30 @@ export default function DescuentosYOfertasPage() {
             />
           </div>
         </div>
-
-        {/* Results Column */}
+        {/* Resultado con forma de boleta */}
         <div className="lg:col-span-5 flex flex-col gap-4">
-          <div className="rounded-3xl border-2 border-emerald-300 dark:border-emerald-800/80 bg-emerald-50/70 dark:bg-slate-900 p-6 sm:p-7 shadow-md shadow-emerald-900/5">
-            <div className="flex items-center justify-between mb-4">
-              <span className="text-xs font-bold uppercase tracking-wider text-emerald-900 dark:text-emerald-300">
-                Liquidación de Oferta
-              </span>
-              <span className="rounded-full bg-emerald-700 dark:bg-emerald-600 px-3 py-0.5 text-xs font-bold text-white shadow-xs">
-                🇵🇪 En Soles
-              </span>
-            </div>
-
-            {/* Big Main Result Box */}
-            <div className="rounded-2xl bg-white dark:bg-slate-950 border-2 border-emerald-200 dark:border-emerald-800/60 p-6 shadow-sm text-center mb-5">
-              <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">
-                Precio Final con Descuento
-              </span>
-              <div className="text-3xl sm:text-5xl font-black text-emerald-800 dark:text-emerald-400 mt-1 font-mono tabular-nums break-words leading-tight">
-                {formatCurrency(result.finalPrice)}
-              </div>
-              <div className="mt-2 text-xs text-slate-600 dark:text-slate-400 font-semibold">
-                Ahorras en total {formatCurrency(result.totalSavings)} ({formatPercent(result.effectiveDiscountPercentage)})
-              </div>
-            </div>
-
-            {/* Sub-Metrics Grid */}
-            <div className="grid grid-cols-2 gap-3 mb-5">
-              <ResultMetricCard
-                label="Ahorro Total"
-                value={formatCurrency(result.totalSavings)}
-                type="success"
-                subValue="Descuento monetario"
-              />
-              <ResultMetricCard
-                label="Descuento Real Único"
-                value={formatPercent(result.effectiveDiscountPercentage)}
-                type="neutral"
-                subValue="Equivalente acumulado"
-              />
-            </div>
-
-            {/* Breakdown Detail */}
-            <div className="rounded-2xl bg-white/90 dark:bg-slate-950 p-4 text-xs text-slate-700 dark:text-slate-300 space-y-2 mb-5 border border-emerald-200/80 dark:border-slate-800 shadow-2xs">
-              <div className="flex justify-between font-medium">
-                <span>Precio de lista original:</span>
-                <span className="font-bold text-slate-900 dark:text-white tabular-nums font-mono">{formatCurrency(form.originalPrice)}</span>
-              </div>
-              <div className="flex justify-between font-medium">
-                <span>Primer descuento ({form.discount1}%):</span>
-                <span className="font-bold text-slate-900 dark:text-white tabular-nums font-mono">-{formatCurrency((form.originalPrice * form.discount1) / 100)}</span>
-              </div>
-              {form.discount2 ? (
-                <div className="flex justify-between font-medium">
-                  <span>Segundo descuento ({form.discount2}% s/ saldo):</span>
-                  <span className="font-bold text-slate-900 dark:text-white tabular-nums font-mono">
-                    -{formatCurrency(((form.originalPrice * (100 - form.discount1)) / 100 * form.discount2) / 100)}
-                  </span>
-                </div>
-              ) : null}
-            </div>
-
+          <PayslipResult
+            title={"Liquidación de Oferta"}
+            period={"En Soles"}
+            amountHeader="Valor"
+            lines={[
+              { label: "Ahorro Total", amount: formatCurrency(result.totalSavings), note: "Descuento monetario" },
+              { label: "Descuento Real Único", amount: formatPercent(result.effectiveDiscountPercentage), note: "Equivalente acumulado" },
+              { label: "Precio de lista original", amount: formatCurrency(form.originalPrice) },
+              { label: `Primer descuento (${form.discount1}%)`, amount: `-${formatCurrency((form.originalPrice * form.discount1) / 100)}` },
+              ...(form.discount2
+                ? [{
+                    label: `Segundo descuento (${form.discount2}% s/ saldo)`,
+                    amount: `-${formatCurrency((((form.originalPrice * (100 - form.discount1)) / 100) * form.discount2) / 100)}`,
+                  }]
+                : []),
+            ]}
+            totalLabel={"Precio Final con Descuento"}
+            totalAmount={formatCurrency(result.finalPrice)}
+            footnote={`Ahorras en total ${formatCurrency(result.totalSavings)} (${formatPercent(result.effectiveDiscountPercentage)})`}
+          >
             <ShareButtons title="Cálculo de Descuentos y Ofertas" shareText={shareSummary} />
-          </div>
+          </PayslipResult>
         </div>
 
       </div>

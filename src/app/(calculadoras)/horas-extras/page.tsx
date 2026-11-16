@@ -7,7 +7,7 @@ import { analyzeAtypicalSchedule, calculateOvertime } from '@/core/calculators/o
 import { formatCurrency } from '@/core/math/formatters';
 import { InputNumber } from '@/shared/components/ui/InputNumber';
 import { SwitchToggle } from '@/shared/components/ui/SwitchToggle';
-import { ResultMetricCard } from '@/shared/components/ui/ResultMetricCard';
+import { PayslipResult } from '@/shared/components/ui/PayslipResult';
 import { ShareButtons } from '@/shared/components/ui/ShareButtons';
 import { AlertTriangle, CalendarDays, CheckCircle2, Clock } from 'lucide-react';
 
@@ -83,32 +83,32 @@ Total Horas Extras a Cobrar: ${formatCurrency(result.totalOvertimePay)}`;
             <h2 className="text-lg font-bold text-slate-900 dark:text-white mb-2">
               Guía Laboral: ¿Cómo se calculan las Horas Extras según el D.S. 007-2002-TR?
             </h2>
-            <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+            <p className="text-[15px] text-slate-600 dark:text-slate-300 leading-relaxed">
               El <strong>Trabajo en Sobretiempo</strong> (horas extras) es aquel servicio prestado más allá de la jornada ordinaria máxima legal (8 horas diarias o 48 horas semanales) establecida por el artículo 25 de la Constitución Política del Perú y el Texto Único Ordenado del Decreto Legislativo N° 854 (aprobado por Decreto Supremo N° 007-2002-TR).
             </p>
           </div>
 
-          <div className="rounded-2xl bg-slate-50 dark:bg-slate-900 p-5 border border-slate-200 dark:border-slate-800 space-y-3 text-xs leading-relaxed">
-            <h3 className="font-bold text-sm text-slate-900 dark:text-white">
+          <div className="rounded-lg bg-slate-50 dark:bg-[#18202A] p-5 border border-slate-200 dark:border-[#2C3744] space-y-3 text-[13px] leading-relaxed">
+            <h3 className="font-bold text-[15px] text-slate-900 dark:text-white">
               1. Fórmulas de liquidación horaria y sobretasas legales
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
-              <div className="space-y-1.5 p-3 bg-white dark:bg-slate-950 rounded-xl border border-slate-200 dark:border-slate-800">
-                <span className="font-bold text-emerald-800 dark:text-emerald-400 block">• Primeras 2 horas del día (+25%):</span>
+              <div className="space-y-1.5 p-3 bg-white dark:bg-[#0E141B] rounded border border-slate-200 dark:border-[#2C3744]">
+                <span className="font-bold text-brand-800 dark:text-brand-400 block">• Primeras 2 horas del día (+25%):</span>
                 <p className="text-slate-600 dark:text-slate-300">
                   Cada una de las primeras 2 horas extraordinarias diarias se abona con un recargo del 25% sobre la hora ordinaria.
                 </p>
-                <div className="font-mono text-[11px] text-slate-800 dark:text-slate-200 pt-1">
+                <div className="font-mono text-[13px] text-slate-800 dark:text-slate-200 pt-1">
                   Valor Hora 25% = (Sueldo Mensual ÷ 240) × 1.25
                 </div>
               </div>
 
-              <div className="space-y-1.5 p-3 bg-white dark:bg-slate-950 rounded-xl border border-slate-200 dark:border-slate-800">
-                <span className="font-bold text-sky-800 dark:text-sky-400 block">• De la 3ra hora en adelante (+35%):</span>
+              <div className="space-y-1.5 p-3 bg-white dark:bg-[#0E141B] rounded border border-slate-200 dark:border-[#2C3744]">
+                <span className="font-bold text-brand-800 dark:text-brand-400 block">• De la 3ra hora en adelante (+35%):</span>
                 <p className="text-slate-600 dark:text-slate-300">
                   Por el mayor desgaste físico y mental, a partir de la tercera hora consecutiva la sobretasa aumenta al 35%.
                 </p>
-                <div className="font-mono text-[11px] text-slate-800 dark:text-slate-200 pt-1">
+                <div className="font-mono text-[13px] text-slate-800 dark:text-slate-200 pt-1">
                   Valor Hora 35% = (Sueldo Mensual ÷ 240) × 1.35
                 </div>
               </div>
@@ -116,14 +116,14 @@ Total Horas Extras a Cobrar: ${formatCurrency(result.totalOvertimePay)}`;
           </div>
 
           <div className="space-y-3">
-            <h3 className="font-bold text-sm text-slate-900 dark:text-white">
+            <h3 className="font-bold text-[15px] text-slate-900 dark:text-white">
               2. Caso práctico con liquidación mensual en boleta
             </h3>
-            <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+            <p className="text-[13px] text-slate-600 dark:text-slate-300 leading-relaxed">
               Un empleado con sueldo básico de <strong>S/ 2,400.00</strong> mensuales realiza 10 horas extras al 25% y 4 horas extras al 35% durante el mes de trabajo:
             </p>
             <div className="overflow-x-auto">
-              <table className="w-full text-xs text-left border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden">
+              <table className="w-full text-[13px] text-left border border-slate-200 dark:border-[#2C3744] rounded overflow-hidden">
                 <thead className="bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white">
                   <tr>
                     <th className="p-2.5">Tramo de Sobretiempo</th>
@@ -143,26 +143,26 @@ Total Horas Extras a Cobrar: ${formatCurrency(result.totalOvertimePay)}`;
                     <td className="p-2.5 font-semibold">Tramo 1: Horas con Sobretasa del 25%</td>
                     <td className="p-2.5 font-mono">S/ 10.00 × 1.25 = S/ 12.50</td>
                     <td className="p-2.5 font-semibold">10 horas</td>
-                    <td className="p-2.5 font-mono text-emerald-700 dark:text-emerald-400">+ S/ 125.00</td>
+                    <td className="p-2.5 font-mono text-brand-700 dark:text-brand-400">+ S/ 125.00</td>
                   </tr>
                   <tr>
                     <td className="p-2.5 font-semibold">Tramo 2: Horas con Sobretasa del 35%</td>
                     <td className="p-2.5 font-mono">S/ 10.00 × 1.35 = S/ 13.50</td>
                     <td className="p-2.5 font-semibold">4 horas</td>
-                    <td className="p-2.5 font-mono text-emerald-700 dark:text-emerald-400">+ S/ 54.00</td>
+                    <td className="p-2.5 font-mono text-brand-700 dark:text-brand-400">+ S/ 54.00</td>
                   </tr>
-                  <tr className="bg-emerald-50 dark:bg-emerald-950 font-bold text-slate-900 dark:text-white">
-                    <td className="p-2.5 text-emerald-800 dark:text-emerald-300">Total Adicional de Horas Extras en Boleta</td>
+                  <tr className="bg-brand-50 dark:bg-brand-950 font-bold text-slate-900 dark:text-white">
+                    <td className="p-2.5 text-brand-800 dark:text-brand-300">Total Adicional de Horas Extras en Boleta</td>
                     <td className="p-2.5 text-slate-500 font-normal">S/ 125.00 + S/ 54.00</td>
                     <td className="p-2.5 font-semibold">14 horas</td>
-                    <td className="p-2.5 font-mono text-emerald-800 dark:text-emerald-300 text-sm">+ S/ 179.00</td>
+                    <td className="p-2.5 font-mono text-brand-800 dark:text-brand-300 text-[15px]">+ S/ 179.00</td>
                   </tr>
                 </tbody>
               </table>
             </div>
           </div>
 
-          <div className="rounded-2xl border border-slate-200 dark:border-slate-800 p-4 space-y-2 text-xs text-slate-500 dark:text-slate-400 bg-slate-50/50 dark:bg-slate-900/30">
+          <div className="rounded-lg border border-slate-200 dark:border-[#2C3744] p-4 space-y-2 text-[13px] text-slate-500 dark:text-slate-400 bg-slate-50/50 dark:bg-slate-900/30">
             <span className="font-bold text-slate-700 dark:text-slate-300 block">Marco legal y fuentes oficiales de consulta:</span>
             <ul className="space-y-1 list-disc pl-4">
               <li>
@@ -171,7 +171,7 @@ Total Horas Extras a Cobrar: ${formatCurrency(result.totalOvertimePay)}`;
                   href="https://lpderecho.pe/tuo-ley-jornada-trabajo-horario-trabajo-sobretiempo-decreto-supremo-007-2002-tr/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-emerald-700 dark:text-emerald-400 underline hover:text-emerald-800"
+                  className="text-brand-700 dark:text-brand-400 underline hover:text-brand-800"
                 >
                   texto del D.S. N° 007-2002-TR
                 </a>.
@@ -182,7 +182,7 @@ Total Horas Extras a Cobrar: ${formatCurrency(result.totalOvertimePay)}`;
                   href="https://www.gob.pe/9972-denunciar-incumplimientos-laborales-de-una-empresa-privada"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-emerald-700 dark:text-emerald-400 underline hover:text-emerald-800"
+                  className="text-brand-700 dark:text-brand-400 underline hover:text-brand-800"
                 >
                   guía de SUNAFIL para denunciar incumplimientos laborales
                 </a>.
@@ -195,25 +195,25 @@ Total Horas Extras a Cobrar: ${formatCurrency(result.totalOvertimePay)}`;
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         
         {/* Form Column */}
-        <div className="lg:col-span-7 rounded-3xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 sm:p-8 shadow-sm space-y-6">
-          <div className="flex items-center gap-2.5 border-b border-slate-100 dark:border-slate-800 pb-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-50 text-brand-700 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/60">
+        <div className="lg:col-span-7 rounded-lg border border-slate-200/90 dark:border-[#2C3744] bg-white dark:bg-[#18202A] p-6 sm:p-8 space-y-6">
+          <div className="flex items-center gap-2.5 border-b border-slate-100 dark:border-[#2C3744] pb-3">
+            <div className="flex h-8 w-8 items-center justify-center rounded bg-brand-50 text-brand-700 dark:bg-brand-950 dark:text-brand-300 border border-brand-200/60 dark:border-brand-800/60">
               <Clock className="h-4.5 w-4.5" />
             </div>
             <h2 className="text-lg font-bold text-slate-900 dark:text-white">Datos de tu Jornada</h2>
           </div>
 
           <fieldset>
-            <legend className="mb-2 text-xs font-bold text-slate-900 dark:text-slate-200">
+            <legend className="mb-2 text-[13px] font-bold text-slate-900 dark:text-slate-200">
               Tipo de jornada
             </legend>
-            <div className="grid grid-cols-2 rounded-xl bg-slate-100 p-1 dark:bg-slate-950">
+            <div className="grid grid-cols-2 rounded bg-slate-100 p-1 dark:bg-[#0E141B]">
               <button
                 type="button"
                 onClick={() => setScheduleType('regular')}
-                className={`rounded-lg px-3 py-2 text-xs font-bold transition-colors ${
+                className={`rounded-lg px-3 py-2 text-[13px] font-bold transition-colors ${
                   scheduleType === 'regular'
-                    ? 'bg-white text-emerald-900 shadow-sm dark:bg-slate-800 dark:text-emerald-300'
+                    ? 'bg-white text-brand-900 dark:bg-slate-800 dark:text-brand-300'
                     : 'text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200'
                 }`}
               >
@@ -222,9 +222,9 @@ Total Horas Extras a Cobrar: ${formatCurrency(result.totalOvertimePay)}`;
               <button
                 type="button"
                 onClick={() => setScheduleType('atypical')}
-                className={`rounded-lg px-3 py-2 text-xs font-bold transition-colors ${
+                className={`rounded-lg px-3 py-2 text-[13px] font-bold transition-colors ${
                   scheduleType === 'atypical'
-                    ? 'bg-white text-emerald-900 shadow-sm dark:bg-slate-800 dark:text-emerald-300'
+                    ? 'bg-white text-brand-900 dark:bg-slate-800 dark:text-brand-300'
                     : 'text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200'
                 }`}
               >
@@ -234,12 +234,12 @@ Total Horas Extras a Cobrar: ${formatCurrency(result.totalOvertimePay)}`;
           </fieldset>
 
           {scheduleType === 'atypical' && (
-            <div className="space-y-4 rounded-2xl border border-emerald-200 bg-emerald-50/50 p-4 dark:border-emerald-900 dark:bg-emerald-950/20">
+            <div className="space-y-4 rounded-lg border border-brand-200 bg-brand-50/50 p-4 dark:border-brand-900 dark:bg-brand-950/20">
               <div className="flex items-start gap-2">
-                <CalendarDays className="mt-0.5 h-4 w-4 shrink-0 text-brand-700 dark:text-emerald-400" />
+                <CalendarDays className="mt-0.5 h-4 w-4 shrink-0 text-brand-700 dark:text-brand-400" />
                 <div>
-                  <h3 className="text-sm font-bold text-slate-900 dark:text-white">Configura el ciclo completo</h3>
-                  <p className="mt-0.5 text-xs leading-5 text-slate-600 dark:text-slate-400">
+                  <h3 className="text-[15px] font-bold text-slate-900 dark:text-white">Configura el ciclo completo</h3>
+                  <p className="mt-0.5 text-[13px] leading-5 text-slate-600 dark:text-slate-400">
                     Selecciona un rol frecuente o ingresa tus propios días y horas efectivas.
                   </p>
                 </div>
@@ -256,10 +256,10 @@ Total Horas Extras a Cobrar: ${formatCurrency(result.totalOvertimePay)}`;
                         setWorkDays(preset.workDays);
                         setRestDays(preset.restDays);
                       }}
-                      className={`rounded-full border px-3 py-1.5 text-xs font-bold transition-colors ${
+                      className={`rounded border px-3 py-1.5 text-[13px] font-bold transition-colors ${
                         isActive
                           ? 'border-brand-700 bg-brand-700 text-white'
-                          : 'border-slate-200 bg-white text-slate-700 hover:border-emerald-400 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300'
+                          : 'border-slate-200 bg-white text-slate-700 hover:border-brand-400 dark:border-slate-700 dark:bg-[#18202A] dark:text-slate-300'
                       }`}
                     >
                       {preset.label}
@@ -315,7 +315,7 @@ Total Horas Extras a Cobrar: ${formatCurrency(result.totalOvertimePay)}`;
           />
 
           {scheduleType === 'atypical' && (
-            <div className="rounded-xl border border-amber-200 bg-amber-50 p-3 text-xs leading-5 text-amber-900 dark:border-amber-900/70 dark:bg-amber-950/30 dark:text-amber-200">
+            <div className="rounded border border-amber-200 bg-amber-50 p-3 text-[13px] leading-5 text-amber-900 dark:border-amber-900/70 dark:bg-amber-950/30 dark:text-amber-200">
               Ingresa debajo únicamente las horas adicionales realizadas fuera del rol pactado o reconocidas en tu control de asistencia. El posible exceso promedio del ciclo se muestra aparte y requiere revisión laboral antes de asignarle una sobretasa.
             </div>
           )}
@@ -360,62 +360,61 @@ Total Horas Extras a Cobrar: ${formatCurrency(result.totalOvertimePay)}`;
             onChange={(hasFamilyAllowance) => setHasFamilyAllowance(hasFamilyAllowance)}
           />
         </div>
-
-        {/* Results Column — Proposal A */}
+        {/* Resultado con forma de boleta */}
         <div className="lg:col-span-5 flex flex-col gap-4">
           {scheduleType === 'atypical' && (
             <div
-              className={`rounded-3xl border-2 p-6 shadow-sm ${
+              className={`rounded-lg border-2 p-6 ${
                 atypicalSchedule.isWithinGeneralWeeklyLimit
-                  ? 'border-emerald-300 bg-emerald-50/70 dark:border-emerald-800 dark:bg-emerald-950/20'
+                  ? 'border-brand-300 bg-brand-50/70 dark:border-brand-800 dark:bg-brand-950/20'
                   : 'border-amber-300 bg-amber-50/80 dark:border-amber-800 dark:bg-amber-950/20'
               }`}
             >
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <span className="text-xs font-black uppercase tracking-wider text-slate-700 dark:text-slate-300">
+                  <span className="text-[13px] font-bold text-slate-700 dark:text-slate-300">
                     Diagnóstico del ciclo {workDays}×{restDays}
                   </span>
                   <div className="mt-2 flex items-center gap-2">
                     {atypicalSchedule.isWithinGeneralWeeklyLimit ? (
-                      <CheckCircle2 className="h-5 w-5 text-emerald-700 dark:text-emerald-400" />
+                      <CheckCircle2 className="h-5 w-5 text-brand-700 dark:text-brand-400" />
                     ) : (
                       <AlertTriangle className="h-5 w-5 text-amber-700 dark:text-amber-400" />
                     )}
-                    <strong className="text-sm text-slate-900 dark:text-white">
+                    <strong className="text-[15px] text-slate-900 dark:text-white">
                       {atypicalSchedule.isWithinGeneralWeeklyLimit
                         ? 'Dentro del límite general promedio'
                         : 'Supera el límite general promedio'}
                     </strong>
                   </div>
                 </div>
-                <span className="shrink-0 rounded-full bg-slate-900 px-2.5 py-1 text-[10px] font-bold text-white dark:bg-slate-800">
+                <span className="shrink-0 rounded bg-[#18202A] px-2.5 py-1 text-[13px] font-bold text-white dark:bg-slate-800">
                   Referencial
                 </span>
               </div>
 
-              <div className="mt-5 rounded-2xl border border-white/70 bg-white/80 p-5 text-center dark:border-slate-800 dark:bg-slate-950/70">
-                <span className="text-[11px] font-bold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+              <div className="mt-5 rounded-lg border border-white/70 bg-white/80 p-5 text-center dark:border-[#2C3744] dark:bg-slate-950/70">
+                <span className="text-[13px] font-bold text-slate-500 dark:text-slate-400">
                   Promedio semanal del ciclo
                 </span>
-                <div className={`mt-1 font-mono text-4xl font-black ${
+                <div className={`mt-1 font-mono text-4xl font-bold ${
                   atypicalSchedule.isWithinGeneralWeeklyLimit
-                    ? 'text-emerald-800 dark:text-emerald-400'
+                    ? 'text-brand-800 dark:text-brand-400'
                     : 'text-amber-800 dark:text-amber-400'
                 }`}>
                   {atypicalSchedule.averageWeeklyHours} h
                 </div>
-                <span className="text-xs text-slate-500 dark:text-slate-400">Límite general usado: 48 h/semana</span>
+                <span className="text-[13px] text-slate-500 dark:text-slate-400">Límite general usado: 48 h/semana</span>
               </div>
 
-              <div className="mt-4 grid grid-cols-2 gap-3 text-xs">
-                <div className="rounded-xl border border-slate-200 bg-white/70 p-3 dark:border-slate-800 dark:bg-slate-900/70">
+              <div className="mt-4 grid grid-cols-2 gap-3 text-[13px]">
+                <div className="rounded border border-slate-200 bg-white/70 p-3 dark:border-[#2C3744] dark:bg-slate-900/70">
                   <span className="block text-slate-500 dark:text-slate-400">Horas del ciclo</span>
                   <strong className="mt-1 block text-base text-slate-900 dark:text-white">
                     {atypicalSchedule.workedHoursPerCycle} h
                   </strong>
                 </div>
-                <div className="rounded-xl border border-slate-200 bg-white/70 p-3 dark:border-slate-800 dark:bg-slate-900/70">
+                <div className="rounded border border-slate-200 bg-white/70 p-3 dark:border-[#2C3744] dark:bg-slate-900/70">
                   <span className="block text-slate-500 dark:text-slate-400">Máximo proporcional</span>
                   <strong className="mt-1 block text-base text-slate-900 dark:text-white">
                     {atypicalSchedule.maximumOrdinaryHoursPerCycle} h
@@ -424,56 +423,27 @@ Total Horas Extras a Cobrar: ${formatCurrency(result.totalOvertimePay)}`;
               </div>
 
               {!atypicalSchedule.isWithinGeneralWeeklyLimit && (
-                <p className="mt-4 rounded-xl bg-amber-100 p-3 text-xs leading-5 text-amber-950 dark:bg-amber-950/50 dark:text-amber-200">
+                <p className="mt-4 rounded bg-amber-100 p-3 text-[13px] leading-5 text-amber-950 dark:bg-amber-950/50 dark:text-amber-200">
                   Diferencia orientativa: <strong>{atypicalSchedule.excessHoursPerCycle} horas por ciclo</strong>. No se suman automáticamente al pago porque debe revisarse el contrato, el régimen aplicable y la distribución diaria del sobretiempo.
                 </p>
               )}
             </div>
           )}
 
-          <div className="rounded-3xl border-2 border-emerald-200/90 dark:border-emerald-800/80 bg-white dark:bg-slate-900 p-6 sm:p-7 shadow-sm">
-            <div className="flex items-center justify-between mb-4">
-              <span className="text-xs font-bold uppercase tracking-wider text-emerald-950 dark:text-emerald-300">
-                Pago Total de Horas Extras
-              </span>
-              <span className="rounded-full bg-emerald-50 dark:bg-emerald-950/70 border border-emerald-200 dark:border-emerald-800 px-2.5 py-0.5 text-[11px] font-bold text-brand-700 dark:text-emerald-300">
-                🇵🇪 En Soles
-              </span>
-            </div>
-
-            {/* Big Main Result Box (Non-truncated tabular numerals) */}
-            <div className="rounded-2xl bg-emerald-50/50 dark:bg-slate-950 border border-emerald-100 dark:border-emerald-900/60 p-5 sm:p-6 text-center mb-5">
-              <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                Total Adicional a Cobrar
-              </span>
-              <div
-                title={formatCurrency(result.totalOvertimePay)}
-                className="text-3xl sm:text-4xl lg:text-[2.6rem] font-black text-brand-700 dark:text-emerald-400 mt-1.5 font-mono tracking-tight tabular-nums break-words leading-tight"
-              >
-                {formatCurrency(result.totalOvertimePay)}
-              </div>
-              <div className="mt-1.5 text-xs text-slate-600 dark:text-slate-400 font-semibold">
-                Por {hoursFirstTwo + hoursAfterTwo + holidayHours} horas adicionales ingresadas
-              </div>
-            </div>
-            {/* Sub-Metrics Grid */}
-            <div className="grid grid-cols-2 gap-3 mb-5">
-              <ResultMetricCard
-                label="Valor Hora Ordinaria"
-                value={formatCurrency(result.hourlyRate)}
-                type="neutral"
-                subValue="Sueldo / 240 hrs"
-              />
-              <ResultMetricCard
-                label="Pago al 25%"
-                value={formatCurrency(result.pay25Percent)}
-                type="success"
-                subValue={`${hoursFirstTwo} horas`}
-              />
-            </div>
-
+          <PayslipResult
+            title={"Pago Total de Horas Extras"}
+            period={"En Soles"}
+            amountHeader="Valor"
+            lines={[
+              { label: "Valor Hora Ordinaria", amount: formatCurrency(result.hourlyRate), note: "Sueldo / 240 hrs" },
+              { label: "Pago al 25%", amount: formatCurrency(result.pay25Percent), note: `${hoursFirstTwo} horas` },
+            ]}
+            totalLabel={"Total Adicional a Cobrar"}
+            totalAmount={formatCurrency(result.totalOvertimePay)}
+            footnote={`Por ${hoursFirstTwo + hoursAfterTwo + holidayHours} horas adicionales ingresadas`}
+          >
             <ShareButtons title="Cálculo de Horas Extras Perú" shareText={shareSummary} />
-          </div>
+          </PayslipResult>
         </div>
 
       </div>

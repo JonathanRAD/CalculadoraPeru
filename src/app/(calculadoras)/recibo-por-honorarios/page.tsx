@@ -7,7 +7,7 @@ import { calculateHonorarios } from '@/core/calculators/honorarios';
 import { formatCurrency } from '@/core/math/formatters';
 import { InputNumber } from '@/shared/components/ui/InputNumber';
 import { SwitchToggle } from '@/shared/components/ui/SwitchToggle';
-import { ResultMetricCard } from '@/shared/components/ui/ResultMetricCard';
+import { PayslipResult } from '@/shared/components/ui/PayslipResult';
 import { ShareButtons } from '@/shared/components/ui/ShareButtons';
 import { FileText, CheckCircle2 } from 'lucide-react';
 
@@ -60,32 +60,32 @@ Neto a Cobrar: ${formatCurrency(result.netAmountToReceive)}`;
             <h2 className="text-lg font-bold text-slate-900 dark:text-white mb-2">
               Guía Tributaria: ¿Cómo opera la retención del 8% de Cuarta Categoría ante la SUNAT?
             </h2>
-            <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+            <p className="text-[15px] text-slate-600 dark:text-slate-300 leading-relaxed">
               El <strong>Recibo por Honorarios Electrónico (RHE)</strong> es el comprobante de pago oficial emitido por personas naturales que ejercen una profesión, arte, ciencia u oficio de manera independiente y sin relación de subordinación laboral, generando <strong>Rentas de Cuarta Categoría</strong> conforme al Texto Único Ordenado de la Ley del Impuesto a la Renta (Decreto Supremo N° 179-2004-EF).
             </p>
           </div>
 
-          <div className="rounded-2xl bg-slate-50 dark:bg-slate-900 p-5 border border-slate-200 dark:border-slate-800 space-y-3 text-xs leading-relaxed">
-            <h3 className="font-bold text-sm text-slate-900 dark:text-white">
+          <div className="rounded-lg bg-slate-50 dark:bg-[#18202A] p-5 border border-slate-200 dark:border-[#2C3744] space-y-3 text-[13px] leading-relaxed">
+            <h3 className="font-bold text-[15px] text-slate-900 dark:text-white">
               1. Parámetros y reglas de retención oficial de SUNAT
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
-              <div className="space-y-1.5 p-3 bg-white dark:bg-slate-950 rounded-xl border border-slate-200 dark:border-slate-800">
-                <span className="font-bold text-emerald-800 dark:text-emerald-400 block">• Recibos hasta S/ 1,500.00:</span>
+              <div className="space-y-1.5 p-3 bg-white dark:bg-[#0E141B] rounded border border-slate-200 dark:border-[#2C3744]">
+                <span className="font-bold text-brand-800 dark:text-brand-400 block">• Recibos hasta S/ 1,500.00:</span>
                 <p className="text-slate-600 dark:text-slate-300">
                   No se aplica retención en la fuente. El profesional percibe el 100% íntegro del monto pactado.
                 </p>
-                <div className="font-mono text-[11px] text-slate-800 dark:text-slate-200 pt-1">
+                <div className="font-mono text-[13px] text-slate-800 dark:text-slate-200 pt-1">
                   Retención = S/ 0.00 (Tasa 0%)
                 </div>
               </div>
 
-              <div className="space-y-1.5 p-3 bg-white dark:bg-slate-950 rounded-xl border border-slate-200 dark:border-slate-800">
+              <div className="space-y-1.5 p-3 bg-white dark:bg-[#0E141B] rounded border border-slate-200 dark:border-[#2C3744]">
                 <span className="font-bold text-amber-800 dark:text-amber-400 block">• Recibos mayores a S/ 1,500.00:</span>
                 <p className="text-slate-600 dark:text-slate-300">
                   La empresa contratante retiene obligatoriamente el 8% y lo declara ante SUNAT. El profesional recibe el 92% neto en cuenta.
                 </p>
-                <div className="font-mono text-[11px] text-slate-800 dark:text-slate-200 pt-1">
+                <div className="font-mono text-[13px] text-slate-800 dark:text-slate-200 pt-1">
                   Retención = Monto Bruto × 0.08<br />
                   Neto a Cobrar = Monto Bruto × 0.92
                 </div>
@@ -94,14 +94,14 @@ Neto a Cobrar: ${formatCurrency(result.netAmountToReceive)}`;
           </div>
 
           <div className="space-y-3">
-            <h3 className="font-bold text-sm text-slate-900 dark:text-white">
+            <h3 className="font-bold text-[15px] text-slate-900 dark:text-white">
               2. Caso práctico numérico con y sin retención
             </h3>
-            <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+            <p className="text-[13px] text-slate-600 dark:text-slate-300 leading-relaxed">
               Un diseñador gráfico independiente cotiza dos servicios en el mes a clientes corporativos: uno por <strong>S/ 1,200.00</strong> y otro por <strong>S/ 3,500.00</strong>:
             </p>
             <div className="overflow-x-auto">
-              <table className="w-full text-xs text-left border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden">
+              <table className="w-full text-[13px] text-left border border-slate-200 dark:border-[#2C3744] rounded overflow-hidden">
                 <thead className="bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white">
                   <tr>
                     <th className="p-2.5">Comprobante Emitido</th>
@@ -117,28 +117,28 @@ Neto a Cobrar: ${formatCurrency(result.netAmountToReceive)}`;
                     <td className="p-2.5 font-mono">S/ 1,200.00</td>
                     <td className="p-2.5 font-mono text-slate-400">S/ 0.00 (0%)</td>
                     <td className="p-2.5 font-mono font-semibold">S/ 1,200.00</td>
-                    <td className="p-2.5 text-emerald-700 dark:text-emerald-400 text-[11px]">Menor o igual a S/ 1,500</td>
+                    <td className="p-2.5 text-brand-700 dark:text-brand-400 text-[13px]">Menor o igual a S/ 1,500</td>
                   </tr>
                   <tr>
                     <td className="p-2.5 font-semibold">Recibo 2: Branding integral</td>
                     <td className="p-2.5 font-mono">S/ 3,500.00</td>
                     <td className="p-2.5 font-mono text-red-600 dark:text-red-400">- S/ 280.00 (8%)</td>
                     <td className="p-2.5 font-mono font-semibold">S/ 3,220.00</td>
-                    <td className="p-2.5 text-amber-700 dark:text-amber-400 text-[11px]">Mayor a S/ 1,500 sin suspensión</td>
+                    <td className="p-2.5 text-amber-700 dark:text-amber-400 text-[13px]">Mayor a S/ 1,500 sin suspensión</td>
                   </tr>
-                  <tr className="bg-emerald-50 dark:bg-emerald-950 font-bold">
+                  <tr className="bg-brand-50 dark:bg-brand-950 font-bold">
                     <td className="p-2.5 text-slate-900 dark:text-white">Recibo 2 con Suspensión Form. 1609</td>
                     <td className="p-2.5 font-mono">S/ 3,500.00</td>
-                    <td className="p-2.5 font-mono text-emerald-700 dark:text-emerald-400">S/ 0.00 (Exonerado)</td>
-                    <td className="p-2.5 font-mono text-emerald-800 dark:text-emerald-300 text-sm">S/ 3,500.00</td>
-                    <td className="p-2.5 text-emerald-700 dark:text-emerald-400 text-[11px]">Acreditado con constancia SOL</td>
+                    <td className="p-2.5 font-mono text-brand-700 dark:text-brand-400">S/ 0.00 (Exonerado)</td>
+                    <td className="p-2.5 font-mono text-brand-800 dark:text-brand-300 text-[15px]">S/ 3,500.00</td>
+                    <td className="p-2.5 text-brand-700 dark:text-brand-400 text-[13px]">Acreditado con constancia SOL</td>
                   </tr>
                 </tbody>
               </table>
             </div>
           </div>
 
-          <div className="rounded-2xl border border-slate-200 dark:border-slate-800 p-4 space-y-2 text-xs text-slate-500 dark:text-slate-400 bg-slate-50/50 dark:bg-slate-900/30">
+          <div className="rounded-lg border border-slate-200 dark:border-[#2C3744] p-4 space-y-2 text-[13px] text-slate-500 dark:text-slate-400 bg-slate-50/50 dark:bg-slate-900/30">
             <span className="font-bold text-slate-700 dark:text-slate-300 block">Base legal y fuentes oficiales de consulta:</span>
             <ul className="space-y-1 list-disc pl-4">
               <li>
@@ -147,7 +147,7 @@ Neto a Cobrar: ${formatCurrency(result.netAmountToReceive)}`;
                   href="https://orientacion.sunat.gob.pe/3064-02-calculo-del-impuesto-por-rentas-de-cuarta-categoria"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-emerald-700 dark:text-emerald-400 underline hover:text-emerald-800"
+                  className="text-brand-700 dark:text-brand-400 underline hover:text-brand-800"
                 >
                   SUNAT Orientación: cálculo del pago a cuenta de cuarta categoría
                 </a>.
@@ -158,7 +158,7 @@ Neto a Cobrar: ${formatCurrency(result.netAmountToReceive)}`;
                   href="https://www.sunat.gob.pe/sol.html"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-emerald-700 dark:text-emerald-400 underline hover:text-emerald-800"
+                  className="text-brand-700 dark:text-brand-400 underline hover:text-brand-800"
                 >
                   SUNAT Operaciones en Línea (SOL)
                 </a>.
@@ -171,9 +171,9 @@ Neto a Cobrar: ${formatCurrency(result.netAmountToReceive)}`;
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         
         {/* Form Column */}
-        <div className="lg:col-span-7 rounded-3xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 sm:p-8 shadow-sm space-y-6">
-          <div className="flex items-center gap-2.5 border-b border-slate-100 dark:border-slate-800 pb-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-50 text-brand-700 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/60">
+        <div className="lg:col-span-7 rounded-lg border border-slate-200/90 dark:border-[#2C3744] bg-white dark:bg-[#18202A] p-6 sm:p-8 space-y-6">
+          <div className="flex items-center gap-2.5 border-b border-slate-100 dark:border-[#2C3744] pb-3">
+            <div className="flex h-8 w-8 items-center justify-center rounded bg-brand-50 text-brand-700 dark:bg-brand-950 dark:text-brand-300 border border-brand-200/60 dark:border-brand-800/60">
               <FileText className="h-4.5 w-4.5" />
             </div>
             <h2 className="text-lg font-bold text-slate-900 dark:text-white">Datos del Recibo por Honorarios</h2>
@@ -200,60 +200,32 @@ Neto a Cobrar: ${formatCurrency(result.netAmountToReceive)}`;
           />
 
           {result.isRetentionApplicable ? (
-            <div className="rounded-2xl bg-amber-50/80 dark:bg-amber-950/40 p-4 border border-amber-200 dark:border-amber-800 text-xs text-amber-900 dark:text-amber-200">
+            <div className="rounded-lg bg-amber-50/80 dark:bg-amber-950/40 p-4 border border-amber-200 dark:border-amber-800 text-[13px] text-amber-900 dark:text-amber-200">
               <strong>Aplica retención del 8%:</strong> Por ser mayor a S/ 1,500.00, la empresa te retendrá {formatCurrency(result.retentionAmount)} para declararlo ante la SUNAT.
             </div>
           ) : (
-            <div className="rounded-2xl bg-emerald-50/80 dark:bg-emerald-950/40 p-4 border border-emerald-200 dark:border-emerald-800 text-xs text-emerald-900 dark:text-emerald-200 flex items-center gap-2">
-              <CheckCircle2 className="h-4 w-4 text-brand-700 dark:text-emerald-400 shrink-0" />
+            <div className="rounded-lg bg-brand-50/80 dark:bg-brand-950/40 p-4 border border-brand-200 dark:border-brand-800 text-[13px] text-brand-900 dark:text-brand-200 flex items-center gap-2">
+              <CheckCircle2 className="h-4 w-4 text-brand-700 dark:text-brand-400 shrink-0" />
               <span><strong>Sin retención:</strong> Cobras el 100% íntegro del monto pactado.</span>
             </div>
           )}
         </div>
-
-        {/* Results Column — Proposal A */}
+        {/* Resultado con forma de boleta */}
         <div className="lg:col-span-5 flex flex-col gap-4">
-          <div className="rounded-3xl border-2 border-emerald-200/90 dark:border-emerald-800/80 bg-white dark:bg-slate-900 p-6 sm:p-7 shadow-sm">
-            <div className="flex items-center justify-between mb-4">
-              <span className="text-xs font-bold uppercase tracking-wider text-emerald-950 dark:text-emerald-300">
-                Neto a Cobrar en Cuenta
-              </span>
-              <span className="rounded-full bg-emerald-50 dark:bg-emerald-950/70 border border-emerald-200 dark:border-emerald-800 px-2.5 py-0.5 text-[11px] font-bold text-brand-700 dark:text-emerald-300">
-                4ta Categoría
-              </span>
-            </div>
-
-            {/* Big Main Result Box (Non-truncated tabular numerals) */}
-            <div className="rounded-2xl bg-emerald-50/50 dark:bg-slate-950 border border-emerald-100 dark:border-emerald-900/60 p-5 sm:p-6 text-center mb-5">
-              <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                Monto Neto a Recibir
-              </span>
-              <div className="text-3xl sm:text-4xl lg:text-[2.6rem] font-black text-brand-700 dark:text-emerald-400 mt-1.5 font-mono tracking-tight tabular-nums break-words leading-tight">
-                {formatCurrency(result.netAmountToReceive)}
-              </div>
-              <div className="mt-1.5 text-xs text-slate-600 dark:text-slate-400 font-semibold">
-                Importe neto transferido por la empresa
-              </div>
-            </div>
-
-            {/* Sub-Metrics Grid */}
-            <div className="grid grid-cols-2 gap-3 mb-5">
-              <ResultMetricCard
-                label="Retención 8% SUNAT"
-                value={formatCurrency(result.retentionAmount)}
-                type="warning"
-                subValue={result.retentionAmount > 0 ? 'Pago a cuenta de Renta' : 'S/ 0.00 (Exonerado)'}
-              />
-              <ResultMetricCard
-                label="Monto Bruto Total"
-                value={formatCurrency(result.grossAmount)}
-                type="neutral"
-                subValue="Importe en recibo"
-              />
-            </div>
-
+          <PayslipResult
+            title={"Neto a Cobrar en Cuenta"}
+            period={"4ta Categoría"}
+            amountHeader="Valor"
+            lines={[
+              { label: "Retención 8% SUNAT", amount: formatCurrency(result.retentionAmount), note: result.retentionAmount > 0 ? 'Pago a cuenta de Renta' : 'S/ 0.00 (Exonerado)' },
+              { label: "Monto Bruto Total", amount: formatCurrency(result.grossAmount), note: "Importe en recibo" },
+            ]}
+            totalLabel={"Monto Neto a Recibir"}
+            totalAmount={formatCurrency(result.netAmountToReceive)}
+            footnote={"Importe neto transferido por la empresa"}
+          >
             <ShareButtons title="Recibo por Honorarios (SUNAT)" shareText={shareSummary} />
-          </div>
+          </PayslipResult>
         </div>
 
       </div>

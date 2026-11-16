@@ -7,7 +7,7 @@ import { calculateIgv, IgvCalculationMode } from '@/core/calculators/tax';
 import { formatCurrency } from '@/core/math/formatters';
 import { getIgvIpmSplit } from '@/core/constants/peru';
 import { InputNumber } from '@/shared/components/ui/InputNumber';
-import { ResultMetricCard } from '@/shared/components/ui/ResultMetricCard';
+import { PayslipResult } from '@/shared/components/ui/PayslipResult';
 import { ShareButtons } from '@/shared/components/ui/ShareButtons';
 import { Receipt, CheckCircle2 } from 'lucide-react';
 
@@ -19,6 +19,8 @@ export default function CalculadoraIgvPage() {
 
   const split = getIgvIpmSplit();
   const result = calculateIgv({ amount, mode });
+  const igvPortion = Math.round(result.baseAmount * split.igv * 100) / 100;
+  const ipmPortion = Math.round((result.igvAmount - igvPortion) * 100) / 100;
 
   const shareSummary = `Base Imponible: ${formatCurrency(result.baseAmount)}
 IGV (18% SUNAT): ${formatCurrency(result.igvAmount)}
@@ -57,33 +59,33 @@ Total Facturado: ${formatCurrency(result.totalAmount)}`;
             <h2 className="text-lg font-bold text-slate-900 dark:text-white mb-2">
               Manual Tributario: Cálculo oficial del IGV (18%) conforme a la SUNAT
             </h2>
-            <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+            <p className="text-[15px] text-slate-600 dark:text-slate-300 leading-relaxed">
               El <strong>Impuesto General a las Ventas (IGV)</strong> es el tributo al valor agregado de naturaleza indirecta más importante del sistema tributario peruano. Grava todas las fases del ciclo de producción y comercialización de bienes muebles, contratos de construcción, la primera venta de inmuebles y la prestación o utilización de servicios en el país (Decreto Supremo N° 055-99-EF).
             </p>
           </div>
 
-          <div className="rounded-2xl bg-slate-50 dark:bg-slate-900 p-5 border border-slate-200 dark:border-slate-800 space-y-3 text-xs leading-relaxed">
-            <h3 className="font-bold text-sm text-slate-900 dark:text-white">
+          <div className="rounded-lg bg-slate-50 dark:bg-[#18202A] p-5 border border-slate-200 dark:border-[#2C3744] space-y-3 text-[13px] leading-relaxed">
+            <h3 className="font-bold text-[15px] text-slate-900 dark:text-white">
               1. Fórmulas oficiales para la emisión y revisión de comprobantes
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
-              <div className="space-y-1.5 p-3 bg-white dark:bg-slate-950 rounded-xl border border-slate-200 dark:border-slate-800">
-                <span className="font-bold text-emerald-800 dark:text-emerald-400 block">• Operación 1: Agregar IGV (+18%)</span>
+              <div className="space-y-1.5 p-3 bg-white dark:bg-[#0E141B] rounded border border-slate-200 dark:border-[#2C3744]">
+                <span className="font-bold text-brand-800 dark:text-brand-400 block">• Operación 1: Agregar IGV (+18%)</span>
                 <p className="text-slate-600 dark:text-slate-300">
                   Se usa cuando tienes el valor de venta sin impuesto (Base Imponible) y necesitas cotizar el precio final al cliente.
                 </p>
-                <div className="font-mono text-[11px] text-slate-800 dark:text-slate-200 pt-1">
+                <div className="font-mono text-[13px] text-slate-800 dark:text-slate-200 pt-1">
                   Total = Base Imponible × 1.18<br />
                   IGV = Base Imponible × 0.18
                 </div>
               </div>
 
-              <div className="space-y-1.5 p-3 bg-white dark:bg-slate-950 rounded-xl border border-slate-200 dark:border-slate-800">
-                <span className="font-bold text-sky-800 dark:text-sky-400 block">• Operación 2: Desglosar Factura (-18%)</span>
+              <div className="space-y-1.5 p-3 bg-white dark:bg-[#0E141B] rounded border border-slate-200 dark:border-[#2C3744]">
+                <span className="font-bold text-brand-800 dark:text-brand-400 block">• Operación 2: Desglosar Factura (-18%)</span>
                 <p className="text-slate-600 dark:text-slate-300">
                   Se usa cuando recibes un cobro total o comprobante y necesitas saber cuánto dinero corresponde a costo real y cuánto a crédito fiscal.
                 </p>
-                <div className="font-mono text-[11px] text-slate-800 dark:text-slate-200 pt-1">
+                <div className="font-mono text-[13px] text-slate-800 dark:text-slate-200 pt-1">
                   Base Imponible = Total Facturado ÷ 1.18<br />
                   IGV = Total Facturado - Base Imponible
                 </div>
@@ -92,14 +94,14 @@ Total Facturado: ${formatCurrency(result.totalAmount)}`;
           </div>
 
           <div className="space-y-3">
-            <h3 className="font-bold text-sm text-slate-900 dark:text-white">
+            <h3 className="font-bold text-[15px] text-slate-900 dark:text-white">
               2. Caso práctico numérico con desglose comercial
             </h3>
-            <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+            <p className="text-[13px] text-slate-600 dark:text-slate-300 leading-relaxed">
               Supongamos una microempresa en Lima que adquiere equipos de cómputo por un valor neto de <strong>S/ 2,500.00</strong> (Base Imponible) y luego vende servicios por un precio final cobrado de <strong>S/ 4,720.00</strong> (Total con IGV):
             </p>
             <div className="overflow-x-auto">
-              <table className="w-full text-xs text-left border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden">
+              <table className="w-full text-[13px] text-left border border-slate-200 dark:border-[#2C3744] rounded overflow-hidden">
                 <thead className="bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white">
                   <tr>
                     <th className="p-2.5">Operación</th>
@@ -112,7 +114,7 @@ Total Facturado: ${formatCurrency(result.totalAmount)}`;
                   <tr>
                     <td className="p-2.5 font-semibold">Compra con Factura (Crédito Fiscal)</td>
                     <td className="p-2.5 font-mono">S/ 2,500.00</td>
-                    <td className="p-2.5 font-mono text-emerald-700 dark:text-emerald-400">+ S/ 450.00</td>
+                    <td className="p-2.5 font-mono text-brand-700 dark:text-brand-400">+ S/ 450.00</td>
                     <td className="p-2.5 font-mono">S/ 2,950.00</td>
                   </tr>
                   <tr>
@@ -121,10 +123,10 @@ Total Facturado: ${formatCurrency(result.totalAmount)}`;
                     <td className="p-2.5 font-mono text-red-600 dark:text-red-400">+ S/ 720.00</td>
                     <td className="p-2.5 font-mono">S/ 4,720.00</td>
                   </tr>
-                  <tr className="bg-emerald-50 dark:bg-emerald-950 font-bold">
+                  <tr className="bg-brand-50 dark:bg-brand-950 font-bold">
                     <td className="p-2.5 text-slate-900 dark:text-white">Saldo Neto a Pagar a SUNAT en el Mes</td>
                     <td className="p-2.5 text-slate-500 font-normal">Diferencia neta</td>
-                    <td className="p-2.5 font-mono text-emerald-800 dark:text-emerald-300 text-sm">S/ 270.00</td>
+                    <td className="p-2.5 font-mono text-brand-800 dark:text-brand-300 text-[15px]">S/ 270.00</td>
                     <td className="p-2.5 text-slate-500 font-normal">(720 - 450)</td>
                   </tr>
                 </tbody>
@@ -132,7 +134,7 @@ Total Facturado: ${formatCurrency(result.totalAmount)}`;
             </div>
           </div>
 
-          <div className="rounded-2xl border border-slate-200 dark:border-slate-800 p-4 space-y-2 text-xs text-slate-500 dark:text-slate-400 bg-slate-50/50 dark:bg-slate-900/30">
+          <div className="rounded-lg border border-slate-200 dark:border-[#2C3744] p-4 space-y-2 text-[13px] text-slate-500 dark:text-slate-400 bg-slate-50/50 dark:bg-slate-900/30">
             <span className="font-bold text-slate-700 dark:text-slate-300 block">Base legal y fuentes oficiales de consulta:</span>
             <ul className="space-y-1 list-disc pl-4">
               <li>
@@ -141,7 +143,7 @@ Total Facturado: ${formatCurrency(result.totalAmount)}`;
                   href="https://orientacion.sunat.gob.pe/3053-concepto-tasa-y-operaciones-gravadas-igv-empresas"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-emerald-700 dark:text-emerald-400 underline hover:text-emerald-800"
+                  className="text-brand-700 dark:text-brand-400 underline hover:text-brand-800"
                 >
                   SUNAT Orientación: concepto, tasa y operaciones gravadas del IGV
                 </a>.
@@ -158,37 +160,37 @@ Total Facturado: ${formatCurrency(result.totalAmount)}`;
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         
         {/* Form Column */}
-        <div className="lg:col-span-7 rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 sm:p-8 shadow-sm space-y-6">
-          <div className="flex items-center gap-2.5 border-b border-slate-100 dark:border-slate-800 pb-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-50 text-brand-700 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/60">
+        <div className="lg:col-span-7 rounded-lg border border-slate-200 dark:border-[#2C3744] bg-white dark:bg-[#18202A] p-6 sm:p-8 space-y-6">
+          <div className="flex items-center gap-2.5 border-b border-slate-100 dark:border-[#2C3744] pb-3">
+            <div className="flex h-8 w-8 items-center justify-center rounded bg-brand-50 text-brand-700 dark:bg-brand-950 dark:text-brand-300 border border-brand-200/60 dark:border-brand-800/60">
               <Receipt className="h-4.5 w-4.5" />
             </div>
             <h2 className="text-lg font-bold text-slate-900 dark:text-white">Selecciona la operación de IGV</h2>
           </div>
 
           {/* Mode Selector Tabs */}
-          <div className="grid grid-cols-2 gap-2 rounded-2xl bg-slate-100 dark:bg-slate-950 p-1.5 border border-slate-200 dark:border-slate-800">
+          <div className="grid grid-cols-2 gap-2 rounded-lg bg-slate-100 dark:bg-[#0E141B] p-1.5 border border-slate-200 dark:border-[#2C3744]">
             <button
               type="button"
               onClick={() => setMode('add_igv')}
-              className={`rounded-xl py-3 text-xs sm:text-sm font-bold transition-all cursor-pointer ${
+              className={`rounded py-3 text-[13px] sm:text-[15px] font-bold transition-all cursor-pointer ${
                 mode === 'add_igv'
-                  ? 'bg-white dark:bg-slate-800 text-brand-700 dark:text-emerald-300 shadow-xs'
+                  ? 'bg-white dark:bg-slate-800 text-brand-700 dark:text-brand-300'
                   : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
-              ➕ Agregar IGV (a subtotal)
+              Agregar IGV (a subtotal)
             </button>
             <button
               type="button"
               onClick={() => setMode('extract_igv')}
-              className={`rounded-xl py-3 text-xs sm:text-sm font-bold transition-all cursor-pointer ${
+              className={`rounded py-3 text-[13px] sm:text-[15px] font-bold transition-all cursor-pointer ${
                 mode === 'extract_igv'
-                  ? 'bg-white dark:bg-slate-800 text-brand-700 dark:text-emerald-300 shadow-xs'
+                  ? 'bg-white dark:bg-slate-800 text-brand-700 dark:text-brand-300'
                   : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
-              ✂️ Extraer IGV (de total)
+              Extraer IGV (de total)
             </button>
           </div>
 
@@ -203,65 +205,41 @@ Total Facturado: ${formatCurrency(result.totalAmount)}`;
             required
           />
 
-          <div className="rounded-2xl bg-emerald-50/60 dark:bg-emerald-950/40 p-4 border border-emerald-200/80 dark:border-emerald-800 text-xs text-emerald-950 dark:text-emerald-200 space-y-1">
+          <div className="rounded-lg bg-brand-50/60 dark:bg-brand-950/40 p-4 border border-brand-200/80 dark:border-brand-800 text-[13px] text-brand-950 dark:text-brand-200 space-y-1">
             <div className="font-bold flex items-center gap-1.5">
-              <CheckCircle2 className="h-4 w-4 text-brand-700 dark:text-emerald-400" />
+              <CheckCircle2 className="h-4 w-4 text-brand-700 dark:text-brand-400" />
               <span>Desglose Legal Tributario Perú:</span>
             </div>
-            <p className="text-[11px] text-emerald-800 dark:text-emerald-300">
+            <p className="text-[13px] text-brand-800 dark:text-brand-300">
               • IGV ({(split.igv * 100).toFixed(1)}%): {formatCurrency(result.baseAmount * split.igv)} | • IPM ({(split.ipm * 100).toFixed(1)}%): {formatCurrency(result.baseAmount * split.ipm)}
             </p>
           </div>
         </div>
 
-        {/* Results Column — Proposal A */}
-        <div className="lg:col-span-5 flex flex-col gap-4">
-          <div className="rounded-3xl border-2 border-emerald-200/90 dark:border-emerald-800/80 bg-white dark:bg-slate-900 p-6 sm:p-7 shadow-sm">
-            <div className="flex items-center justify-between mb-4">
-              <span className="text-xs font-bold uppercase tracking-wider text-emerald-950 dark:text-emerald-300">
-                Liquidación Tributaria
-              </span>
-              <span className="rounded-full bg-emerald-50 dark:bg-emerald-950/70 border border-emerald-200 dark:border-emerald-800 px-2.5 py-0.5 text-[11px] font-bold text-brand-700 dark:text-emerald-300">
-                SUNAT 18%
-              </span>
-            </div>
-
-            {/* Big Main Result Box (Non-truncated tabular numerals) */}
-            <div className="rounded-2xl bg-emerald-50/50 dark:bg-slate-950 border border-emerald-100 dark:border-emerald-900/60 p-5 sm:p-6 text-center mb-5">
-              <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                {mode === 'add_igv' ? 'Monto Total Facturado (con IGV)' : 'Base Imponible Neta'}
-              </span>
-              <div
-                title={formatCurrency(mode === 'add_igv' ? result.totalAmount : result.baseAmount)}
-                className="text-3xl sm:text-4xl lg:text-[2.6rem] font-black text-brand-700 dark:text-emerald-400 mt-1.5 font-mono tracking-tight tabular-nums break-words leading-tight"
-              >
-                {formatCurrency(mode === 'add_igv' ? result.totalAmount : result.baseAmount)}
-              </div>
-              <div className="mt-1.5 text-xs text-slate-600 dark:text-slate-400 font-semibold">
-                {mode === 'add_igv'
-                  ? `Incluye ${formatCurrency(result.igvAmount)} de IGV (18%)`
-                  : `IGV extraído: ${formatCurrency(result.igvAmount)}`}
-              </div>
-            </div>
-
-            {/* Sub-Metrics Grid */}
-            <div className="grid grid-cols-2 gap-3 mb-5">
-              <ResultMetricCard
-                label="Base Imponible"
-                value={formatCurrency(result.baseAmount)}
-                type="neutral"
-                subValue="Ingreso neto de tu negocio"
-              />
-              <ResultMetricCard
-                label="Monto del IGV (18%)"
-                value={formatCurrency(result.igvAmount)}
-                type="warning"
-                subValue="Para declarar a SUNAT"
-              />
-            </div>
-
+        {/* Resultado con forma de boleta */}
+        <div className="lg:col-span-5">
+          <PayslipResult
+            title="LIQUIDACIÓN DE IGV"
+            period="Tasa total 18 %"
+            lines={
+              mode === 'add_igv'
+                ? [
+                    { label: 'Base imponible', note: 'Valor de venta sin impuesto', amount: formatCurrency(result.baseAmount) },
+                    { label: `IGV (${(split.igv * 100).toFixed(1)} %)`, amount: formatCurrency(igvPortion), kind: 'income' },
+                    { label: `IPM (${(split.ipm * 100).toFixed(1)} %)`, note: 'Impuesto de Promoción Municipal', amount: formatCurrency(ipmPortion), kind: 'income' },
+                  ]
+                : [
+                    { label: 'Total facturado', note: 'Precio con impuesto incluido', amount: formatCurrency(result.totalAmount) },
+                    { label: `IGV (${(split.igv * 100).toFixed(1)} %)`, amount: formatCurrency(igvPortion), kind: 'deduction' },
+                    { label: `IPM (${(split.ipm * 100).toFixed(1)} %)`, note: 'Impuesto de Promoción Municipal', amount: formatCurrency(ipmPortion), kind: 'deduction' },
+                  ]
+            }
+            totalLabel={mode === 'add_igv' ? 'Total a facturar' : 'Base imponible'}
+            totalAmount={formatCurrency(mode === 'add_igv' ? result.totalAmount : result.baseAmount)}
+            footnote={<>IGV más IPM: {formatCurrency(result.igvAmount)} para declarar a SUNAT.</>}
+          >
             <ShareButtons title="Cálculo de IGV (18%)" shareText={shareSummary} />
-          </div>
+          </PayslipResult>
         </div>
 
       </div>

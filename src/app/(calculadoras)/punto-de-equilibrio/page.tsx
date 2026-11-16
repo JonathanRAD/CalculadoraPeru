@@ -6,7 +6,7 @@ import { CALCULATORS_REGISTRY } from '@/features/calculators/registry';
 import { calculateBreakEven, BreakEvenInput } from '@/core/calculators/breakeven';
 import { formatCurrency, formatNumber, formatPercent } from '@/core/math/formatters';
 import { InputNumber } from '@/shared/components/ui/InputNumber';
-import { ResultMetricCard } from '@/shared/components/ui/ResultMetricCard';
+import { PayslipResult } from '@/shared/components/ui/PayslipResult';
 import { ShareButtons } from '@/shared/components/ui/ShareButtons';
 import { Scale, AlertCircle } from 'lucide-react';
 
@@ -60,32 +60,32 @@ export default function PuntoDeEquilibrioPage() {
             <h2 className="text-lg font-bold text-slate-900 dark:text-white mb-2">
               ¿Cómo calcular el Punto de Equilibrio de tu Negocio en el Perú?
             </h2>
-            <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+            <p className="text-[15px] text-slate-600 dark:text-slate-300 leading-relaxed">
               El <strong>Punto de Equilibrio</strong> (Break-Even Point) es el umbral financiero crítico en el cual los ingresos totales por ventas igualan con exactitud a la suma de los costos fijos y costos variables. En este punto la empresa no registra pérdidas ni utilidades (Utilidad Operativa = S/ 0.00). Conocer este número permite a emprendedores y gerentes de MYPES establecer cuotas de ventas diarias realistas y tomar decisiones informadas sobre precios y contrataciones.
             </p>
           </div>
 
-          <div className="rounded-2xl bg-slate-50 dark:bg-slate-900 p-5 border border-slate-200 dark:border-slate-800 space-y-3 text-xs leading-relaxed">
-            <h3 className="font-bold text-sm text-slate-900 dark:text-white">
+          <div className="rounded-lg bg-slate-50 dark:bg-[#18202A] p-5 border border-slate-200 dark:border-[#2C3744] space-y-3 text-[13px] leading-relaxed">
+            <h3 className="font-bold text-[15px] text-slate-900 dark:text-white">
               1. Fórmulas Financieras del Punto de Equilibrio
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
-              <div className="space-y-1.5 p-3.5 bg-white dark:bg-slate-950 rounded-xl border border-slate-200 dark:border-slate-800">
-                <span className="font-bold text-emerald-800 dark:text-emerald-400 block">• Punto de Equilibrio en Unidades (Q):</span>
+              <div className="space-y-1.5 p-3.5 bg-white dark:bg-[#0E141B] rounded border border-slate-200 dark:border-[#2C3744]">
+                <span className="font-bold text-brand-800 dark:text-brand-400 block">• Punto de Equilibrio en Unidades (Q):</span>
                 <p className="text-slate-600 dark:text-slate-300">
                   Cantidad mínima de productos o servicios que debes vender al mes para no perder dinero.
                 </p>
-                <div className="font-mono text-[11px] text-slate-800 dark:text-slate-200 pt-1">
+                <div className="font-mono text-[13px] text-slate-800 dark:text-slate-200 pt-1">
                   Q = Costos Fijos Totales ÷ (Precio Unitario - Costo Variable Unitario)
                 </div>
               </div>
 
-              <div className="space-y-1.5 p-3.5 bg-white dark:bg-slate-950 rounded-xl border border-slate-200 dark:border-slate-800">
-                <span className="font-bold text-sky-800 dark:text-sky-400 block">• Punto de Equilibrio en Soles (Ventas Netas):</span>
+              <div className="space-y-1.5 p-3.5 bg-white dark:bg-[#0E141B] rounded border border-slate-200 dark:border-[#2C3744]">
+                <span className="font-bold text-brand-800 dark:text-brand-400 block">• Punto de Equilibrio en Soles (Ventas Netas):</span>
                 <p className="text-slate-600 dark:text-slate-300">
                   Facturación mensual neta mínima necesaria para financiar toda la operación.
                 </p>
-                <div className="font-mono text-[11px] text-slate-800 dark:text-slate-200 pt-1">
+                <div className="font-mono text-[13px] text-slate-800 dark:text-slate-200 pt-1">
                   Ventas S/ = Costos Fijos Totales ÷ Ratio de Margen de Contribución
                 </div>
               </div>
@@ -93,15 +93,15 @@ export default function PuntoDeEquilibrioPage() {
           </div>
 
           <div className="space-y-3">
-            <h3 className="font-bold text-sm text-slate-900 dark:text-white">
+            <h3 className="font-bold text-[15px] text-slate-900 dark:text-white">
               2. Caso práctico ilustrativo (Taller de Confecciones en Gamarra, Lima)
             </h3>
-            <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+            <p className="text-[13px] text-slate-600 dark:text-slate-300 leading-relaxed">
               Un taller textil produce polos de algodón con una estructura de costos fijos mensuales de S/ 3,000.00 (alquiler de taller, servicios y mantenimiento). El costo variable de tela, confección y empaque es de S/ 30.00 por polo y se comercializa a un precio neto de S/ 50.00 (sin IGV):
             </p>
 
-            <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800">
-              <table className="w-full text-left text-xs">
+            <div className="overflow-x-auto rounded border border-slate-200 dark:border-[#2C3744]">
+              <table className="w-full text-left text-[13px]">
                 <thead className="bg-slate-100 dark:bg-slate-800/80 font-bold text-slate-900 dark:text-white">
                   <tr>
                     <th className="p-2.5">Concepto Financiero</th>
@@ -125,15 +125,15 @@ export default function PuntoDeEquilibrioPage() {
                     <td className="p-2.5 font-mono text-rose-600 dark:text-rose-400">S/ 30.00</td>
                     <td className="p-2.5 font-mono text-rose-600 dark:text-rose-400">S/ 4,500.00 (150 u.)</td>
                   </tr>
-                  <tr className="bg-emerald-50/60 dark:bg-emerald-950/30">
-                    <td className="p-2.5 font-bold text-emerald-950 dark:text-emerald-300">Punto de Equilibrio Calculado</td>
-                    <td className="p-2.5 font-mono font-bold text-emerald-800 dark:text-emerald-400">Margen: S/ 20.00</td>
-                    <td className="p-2.5 font-mono font-bold text-emerald-800 dark:text-emerald-400">150 Polos / S/ 7,500.00</td>
+                  <tr className="bg-brand-50/60 dark:bg-brand-950/30">
+                    <td className="p-2.5 font-bold text-brand-950 dark:text-brand-300">Punto de Equilibrio Calculado</td>
+                    <td className="p-2.5 font-mono font-bold text-brand-800 dark:text-brand-400">Margen: S/ 20.00</td>
+                    <td className="p-2.5 font-mono font-bold text-brand-800 dark:text-brand-400">150 Polos / S/ 7,500.00</td>
                   </tr>
                 </tbody>
               </table>
             </div>
-            <p className="text-[11px] text-slate-500 dark:text-slate-400 italic">
+            <p className="text-[13px] text-slate-500 dark:text-slate-400 italic">
               * Nota: A partir del polo número 151, cada unidad vendida genera una ganancia líquida de S/ 20.00 antes del impuesto a la renta.
             </p>
           </div>
@@ -143,9 +143,9 @@ export default function PuntoDeEquilibrioPage() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         
         {/* Form Column */}
-        <div className="lg:col-span-7 rounded-3xl border-2 border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 sm:p-8 shadow-md shadow-slate-900/5 space-y-6">
-          <div className="flex items-center gap-2.5 border-b border-slate-100 dark:border-slate-800 pb-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
+        <div className="lg:col-span-7 rounded-lg border-2 border-slate-200/90 dark:border-[#2C3744] bg-white dark:bg-[#18202A] p-6 sm:p-8 space-y-6">
+          <div className="flex items-center gap-2.5 border-b border-slate-100 dark:border-[#2C3744] pb-3">
+            <div className="flex h-8 w-8 items-center justify-center rounded bg-brand-100 text-brand-800 dark:bg-brand-950 dark:text-brand-300">
               <Scale className="h-4.5 w-4.5" />
             </div>
             <h2 className="text-lg font-bold text-slate-900 dark:text-white">Ingresa los costos de tu negocio</h2>
@@ -187,7 +187,7 @@ export default function PuntoDeEquilibrioPage() {
           </div>
 
           {!result.isFeasible && (
-            <div className="flex items-center gap-3 rounded-xl bg-rose-50 dark:bg-rose-950/50 p-4 border border-rose-200 dark:border-rose-800 text-rose-800 dark:text-rose-200 text-xs">
+            <div className="flex items-center gap-3 rounded bg-rose-50 dark:bg-rose-950/50 p-4 border border-rose-200 dark:border-rose-800 text-rose-800 dark:text-rose-200 text-[13px]">
               <AlertCircle className="h-5 w-5 shrink-0 text-rose-600 dark:text-rose-400" />
               <span>
                 <strong>Atención:</strong> El precio de venta debe ser mayor al costo variable por unidad para que el negocio sea financieramente viable.
@@ -195,66 +195,27 @@ export default function PuntoDeEquilibrioPage() {
             </div>
           )}
         </div>
-
-        {/* Results Column */}
+        {/* Resultado con forma de boleta */}
         <div className="lg:col-span-5 flex flex-col gap-4">
-          <div className="rounded-3xl border-2 border-emerald-300 dark:border-emerald-800/80 bg-emerald-50/70 dark:bg-slate-900 p-6 sm:p-7 shadow-md shadow-emerald-900/5">
-            <div className="flex items-center justify-between mb-4">
-              <span className="text-xs font-bold uppercase tracking-wider text-emerald-900 dark:text-emerald-300">
-                Meta mínima de ventas
-              </span>
-              <span className="rounded-full bg-emerald-700 dark:bg-emerald-600 px-3 py-0.5 text-xs font-bold text-white shadow-xs">
-                MYPE Perú
-              </span>
-            </div>
-
-            {/* Big Main Result Box */}
-            <div className="rounded-2xl bg-white dark:bg-slate-950 border-2 border-emerald-200 dark:border-emerald-800/60 p-6 shadow-sm text-center mb-5">
-              <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">
-                Punto de Equilibrio Requerido
-              </span>
-              <div className="text-3xl sm:text-5xl font-black text-emerald-800 dark:text-emerald-400 mt-1 font-mono tabular-nums break-words leading-tight">
-                {formatNumber(result.unitsNeeded)} unidades
-              </div>
-              <div className="mt-2 text-xs text-slate-600 dark:text-slate-400 font-semibold">
-                Vender mínimo {Math.ceil(result.unitsNeeded / 26)} unidades por día (mes de 26 días útiles)
-              </div>
-            </div>
-
-            {/* Sub-Metrics Grid */}
-            <div className="grid grid-cols-2 gap-3 mb-5">
-              <ResultMetricCard
-                label="Ventas mínimas (sin IGV)"
-                value={formatCurrency(result.minimumSalesAmount)}
-                type="neutral"
-                subValue="Para cubrir todos tus costos"
-              />
-              <ResultMetricCard
-                label="Margen Contribución"
-                value={formatCurrency(result.contributionMarginUnit)}
-                type="success"
-                subValue={`Ratio: ${formatPercent(result.contributionMarginRatio)}`}
-              />
-            </div>
-
-            {/* Breakdown Detail */}
-            <div className="rounded-2xl bg-white/90 dark:bg-slate-950 p-4 text-xs text-slate-700 dark:text-slate-300 space-y-2 mb-5 border border-emerald-200/80 dark:border-slate-800 shadow-2xs">
-              <div className="flex justify-between font-medium">
-                <span>Ventas mínimas con IGV (18%):</span>
-                <span className="font-bold text-slate-900 dark:text-white tabular-nums font-mono">{formatCurrency(result.minimumSalesWithIgv)}</span>
-              </div>
-              <div className="flex justify-between font-medium">
-                <span>Costos fijos mensuales a cubrir:</span>
-                <span className="font-bold text-slate-900 dark:text-white tabular-nums font-mono">{formatCurrency(form.fixedCosts)}</span>
-              </div>
-              <div className="flex justify-between font-medium">
-                <span>Margen sobre venta unitaria:</span>
-                <span className="font-bold text-emerald-700 dark:text-emerald-400 tabular-nums font-mono">{formatPercent(result.contributionMarginRatio)}</span>
-              </div>
-            </div>
+          <PayslipResult
+            title={"Meta mínima de ventas"}
+            period={"MYPE Perú"}
+            amountHeader="Valor"
+            lines={[
+              { label: "Ventas mínimas (sin IGV)", amount: formatCurrency(result.minimumSalesAmount), note: "Para cubrir todos tus costos" },
+              { label: "Margen Contribución", amount: formatCurrency(result.contributionMarginUnit), note: `Ratio: ${formatPercent(result.contributionMarginRatio)}` },
+              { label: "Ventas mínimas con IGV (18%)", amount: formatCurrency(result.minimumSalesWithIgv) },
+              { label: "Costos fijos mensuales a cubrir", amount: formatCurrency(form.fixedCosts) },
+              { label: "Margen sobre venta unitaria", amount: formatPercent(result.contributionMarginRatio) },
+            ]}
+            totalLabel={"Punto de Equilibrio Requerido"}
+            totalAmount={`${formatNumber(result.unitsNeeded)} unidades`}
+            footnote={`Vender mínimo ${Math.ceil(result.unitsNeeded / 26)} unidades por día (mes de 26 días útiles)`}
+          >
+            
 
             <ShareButtons title="Punto de Equilibrio MYPE Perú" shareText={shareSummary} />
-          </div>
+          </PayslipResult>
         </div>
 
       </div>

@@ -11,10 +11,10 @@ import {
 } from '@/core/calculators/taxRegimes';
 import { formatCurrency } from '@/core/math/formatters';
 import { InputNumber } from '@/shared/components/ui/InputNumber';
-import { ResultMetricCard } from '@/shared/components/ui/ResultMetricCard';
+import { PayslipResult } from '@/shared/components/ui/PayslipResult';
 import { ShareButtons } from '@/shared/components/ui/ShareButtons';
 import { ExportPdfButton } from '@/shared/components/ui/ExportPdfButton';
-import { Building, Sparkles, Check, X } from 'lucide-react';
+import { Building, Check, X } from 'lucide-react';
 
 export default function RegimenesTributariosPage() {
   const meta = CALCULATORS_REGISTRY.find((c) => c.id === 'regimenes-tributarios-sunat') || {
@@ -80,7 +80,7 @@ Motivo: ${result.recommendedReason}`;
       meta={meta}
       faqs={faqs}
       educationalContent={
-        <div className="space-y-4 text-sm leading-relaxed text-slate-700 dark:text-slate-300">
+        <div className="space-y-4 text-[15px] leading-relaxed text-slate-700 dark:text-slate-300">
           <p>
             Elegir el régimen tributario adecuado ante la <strong>Superintendencia Nacional de Aduanas y de Administración Tributaria (SUNAT)</strong> es una de las decisiones estratégicas más importantes para cualquier emprendedor o empresa en el Perú. Un régimen mal elegido puede ocasionar pagos en exceso de impuestos o contingencias por infracciones formales.
           </p>
@@ -89,8 +89,8 @@ Motivo: ${result.recommendedReason}`;
             Matriz Comparativa de Regímenes Tributarios SUNAT
           </h3>
 
-          <div className="my-4 overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-800">
-            <table className="w-full text-left text-xs sm:text-sm">
+          <div className="my-4 overflow-x-auto rounded-lg border border-slate-200 dark:border-[#2C3744]">
+            <table className="w-full text-left text-[13px] sm:text-[15px]">
               <thead className="bg-slate-100 dark:bg-slate-800/80 font-bold text-slate-900 dark:text-white">
                 <tr>
                   <th className="p-3">Régimen</th>
@@ -106,7 +106,7 @@ Motivo: ${result.recommendedReason}`;
                   <td className="p-3">Hasta S/ 96,000 / año (S/ 8,000 / mes)</td>
                   <td className="p-3">Solo Boletas de Venta y Guías</td>
                   <td className="p-3 font-mono">Cuota fija S/ 20 o S/ 50</td>
-                  <td className="p-3 font-bold text-emerald-600 dark:text-emerald-400">Sin libros</td>
+                  <td className="p-3 font-bold text-brand-600 dark:text-brand-400">Sin libros</td>
                 </tr>
                 <tr>
                   <td className="p-3 font-semibold">Régimen Especial (RER)</td>
@@ -145,9 +145,9 @@ Motivo: ${result.recommendedReason}`;
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         
         {/* Form Column */}
-        <div className="lg:col-span-7 rounded-3xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 sm:p-8 shadow-sm space-y-6">
-          <div className="flex items-center gap-2.5 border-b border-slate-100 dark:border-slate-800 pb-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-50 text-brand-700 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/60">
+        <div className="lg:col-span-7 rounded-lg border border-slate-200/90 dark:border-[#2C3744] bg-white dark:bg-[#18202A] p-6 sm:p-8 space-y-6">
+          <div className="flex items-center gap-2.5 border-b border-slate-100 dark:border-[#2C3744] pb-3">
+            <div className="flex h-8 w-8 items-center justify-center rounded bg-brand-50 text-brand-700 dark:bg-brand-950 dark:text-brand-300 border border-brand-200/60 dark:border-brand-800/60">
               <Building className="h-4.5 w-4.5" />
             </div>
             <h2 className="text-lg font-bold text-slate-900 dark:text-white">Perfil de tu Emprendimiento</h2>
@@ -185,16 +185,16 @@ Motivo: ${result.recommendedReason}`;
             placeholder="0.00"
           />
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <div className="grid grid-cols-1 gap-5">
             <div>
-              <label htmlFor="taxpayerType" className="text-xs sm:text-sm font-bold text-slate-900 dark:text-slate-200 block mb-2">
+              <label htmlFor="taxpayerType" className="mb-1.5 block text-[15px] font-semibold text-slate-900 dark:text-slate-100">
                 Tipo de contribuyente
               </label>
               <select
                 id="taxpayerType"
                 value={taxpayerType}
                 onChange={(e) => setTaxpayerType(e.target.value as TaxpayerType)}
-                className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 p-2.5 text-xs font-bold text-slate-900 dark:text-white outline-none focus:border-brand-700"
+                className="select-field w-full rounded border border-slate-400 bg-white pl-3 text-[15px] text-slate-900 focus:border-brand-600 focus:outline-2 focus:outline-offset-1 focus:outline-brand-600 dark:border-slate-600 dark:bg-[#0E141B] dark:text-slate-100"
               >
                 <option value="natural_person">Persona natural con negocio</option>
                 <option value="legal_entity">Persona jurídica / Empresa</option>
@@ -202,14 +202,14 @@ Motivo: ${result.recommendedReason}`;
             </div>
 
             <div>
-              <label htmlFor="clientType" className="text-xs sm:text-sm font-bold text-slate-900 dark:text-slate-200 block mb-2">
+              <label htmlFor="clientType" className="mb-1.5 block text-[15px] font-semibold text-slate-900 dark:text-slate-100">
                 ¿A quiénes le venderás principalmente?
               </label>
               <select
                 id="clientType"
                 value={clientType}
                 onChange={(e) => setClientType(e.target.value as ClientType)}
-                className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 p-2.5 text-xs font-bold text-slate-900 dark:text-white outline-none focus:border-brand-700"
+                className="select-field w-full rounded border border-slate-400 bg-white pl-3 text-[15px] text-slate-900 focus:border-brand-600 focus:outline-2 focus:outline-offset-1 focus:outline-brand-600 dark:border-slate-600 dark:bg-[#0E141B] dark:text-slate-100"
               >
                 <option value="final_consumer">Consumidor final / Personas (Boleta)</option>
                 <option value="businesses_factura">Empresas y Negocios (Factura obligatoria)</option>
@@ -218,14 +218,14 @@ Motivo: ${result.recommendedReason}`;
             </div>
 
             <div>
-              <label htmlFor="activityType" className="text-xs sm:text-sm font-bold text-slate-900 dark:text-slate-200 block mb-2">
+              <label htmlFor="activityType" className="mb-1.5 block text-[15px] font-semibold text-slate-900 dark:text-slate-100">
                 Giro / Actividad
               </label>
               <select
                 id="activityType"
                 value={activityType}
                 onChange={(e) => setActivityType(e.target.value as ActivityType)}
-                className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 p-2.5 text-xs font-bold text-slate-900 dark:text-white outline-none focus:border-brand-700"
+                className="select-field w-full rounded border border-slate-400 bg-white pl-3 text-[15px] text-slate-900 focus:border-brand-600 focus:outline-2 focus:outline-offset-1 focus:outline-brand-600 dark:border-slate-600 dark:bg-[#0E141B] dark:text-slate-100"
               >
                 <option value="commerce_trade">Comercio (Venta de productos/bodega)</option>
                 <option value="services">Servicios profesionales o técnicos</option>
@@ -236,7 +236,7 @@ Motivo: ${result.recommendedReason}`;
 
           {/* Comparativa Detallada 4 Regímenes */}
           <div className="space-y-3 pt-2">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+            <h3 className="text-[13px] font-bold text-slate-500 dark:text-slate-400">
               Evaluación de los 4 Regímenes SUNAT:
             </h3>
 
@@ -246,37 +246,37 @@ Motivo: ${result.recommendedReason}`;
                 return (
                   <div
                     key={regime.regimeId}
-                    className={`rounded-2xl border p-3.5 transition-all ${
+                    className={`rounded-lg border p-3.5 transition-all ${
                       isRecommended
-                        ? 'border-brand-700 bg-emerald-50/80 dark:bg-emerald-950/60 ring-2 ring-brand-700/20'
+                        ? 'border-brand-700 bg-brand-50/80 dark:bg-brand-950/60 ring-2 ring-brand-700/20'
                         : regime.isEligible
-                        ? 'border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950'
-                        : 'border-slate-200 dark:border-slate-800 bg-slate-100/60 dark:bg-slate-900/40 opacity-70'
+                        ? 'border-slate-200 dark:border-[#2C3744] bg-slate-50 dark:bg-[#0E141B]'
+                        : 'border-slate-200 dark:border-[#2C3744] bg-slate-100/60 dark:bg-slate-900/40 opacity-70'
                     }`}
                   >
                     <div className="flex items-center justify-between gap-1 mb-1.5">
-                      <span className="text-xs font-bold text-slate-900 dark:text-white truncate">
+                      <span className="text-[13px] font-bold text-slate-900 dark:text-white break-words">
                         {regime.name.split('(')[0]}
                       </span>
                       {isRecommended && (
-                        <span className="inline-flex items-center gap-1 rounded-md bg-brand-700 text-white px-2 py-0.2 text-[10px] font-bold shrink-0">
-                          <Sparkles className="h-2.5 w-2.5 text-amber-300" />
+                        <span className="inline-flex items-center gap-1 rounded-md bg-brand-700 text-white px-2 py-0.2 text-[13px] font-bold shrink-0">
+                          
                           Recomendado
                         </span>
                       )}
                     </div>
 
-                    <div className="text-sm font-black text-slate-900 dark:text-white font-mono">
+                    <div className="text-[15px] font-bold text-slate-900 dark:text-white font-mono">
                       {regime.isEligible ? formatCurrency(regime.totalMonthlyTax) : 'No apto'}
-                      <span className="text-[10px] font-normal text-slate-500 not-mono ml-1">/ mes</span>
+                      <span className="text-[13px] font-normal text-slate-500 not-mono ml-1">/ mes</span>
                     </div>
                     {regime.isEligible && regime.annualIncomeTax !== undefined && (
-                      <div className="mt-1 text-[11px] font-semibold text-slate-700 dark:text-slate-300">
+                      <div className="mt-1 text-[13px] font-semibold text-slate-700 dark:text-slate-300">
                         Renta anual estimada: <span className="font-mono">{formatCurrency(regime.annualIncomeTax)}</span>
                       </div>
                     )}
 
-                    <div className="mt-2 text-[11px] text-slate-600 dark:text-slate-400 space-y-1">
+                    <div className="mt-2 text-[13px] text-slate-600 dark:text-slate-400 space-y-1">
                       <div className="flex items-center gap-1">
                         {regime.canIssueFactura ? (
                           <Check className="h-3 w-3 text-brand-700 shrink-0" />
@@ -285,8 +285,8 @@ Motivo: ${result.recommendedReason}`;
                         )}
                         <span>{regime.canIssueFactura ? 'Emite Factura y Boleta' : 'Solo Boleta (No Factura)'}</span>
                       </div>
-                      <div className="text-[10px] text-slate-500 truncate">
-                        📚 {regime.accountingBooksRequired}
+                      <div className="text-[13px] text-slate-600 dark:text-slate-400 break-words">
+                        {regime.accountingBooksRequired}
                       </div>
                     </div>
                   </div>
@@ -297,50 +297,20 @@ Motivo: ${result.recommendedReason}`;
 
         </div>
 
-        {/* Results Column — Proposal A */}
+        {/* Resultado con forma de boleta */}
         <div className="lg:col-span-5 flex flex-col gap-4">
-          <div className="rounded-3xl border-2 border-emerald-200/90 dark:border-emerald-800/80 bg-white dark:bg-slate-900 p-6 sm:p-7 shadow-sm">
-            <div className="flex items-center justify-between mb-4">
-              <span className="text-xs font-bold uppercase tracking-wider text-emerald-950 dark:text-emerald-300">
-                Diagnóstico SUNAT
-              </span>
-              <span className="rounded-full bg-emerald-50 dark:bg-emerald-950/70 border border-emerald-200 dark:border-emerald-800 px-2.5 py-0.5 text-[11px] font-bold text-brand-700 dark:text-emerald-300">
-                SUNAT 2026
-              </span>
-            </div>
-
-            {/* Big Main Result Box */}
-            <div className="rounded-2xl bg-emerald-50/50 dark:bg-slate-950 border border-emerald-100 dark:border-emerald-900/60 p-5 sm:p-6 text-center mb-5 overflow-hidden">
-              <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                Régimen Ideal Recomendado
-              </span>
-              <div
-                title={result.recommendedRegimeName}
-                className="text-2xl sm:text-3xl font-black text-brand-700 dark:text-emerald-400 mt-1 tracking-tight break-words px-2"
-              >
-                {result.recommendedRegimeName}
-              </div>
-              <div className="mt-2 text-xs text-slate-600 dark:text-slate-300 font-medium leading-relaxed bg-white/70 dark:bg-slate-900 p-3 rounded-xl border border-emerald-100 dark:border-slate-800">
-                💡 {result.recommendedReason}
-              </div>
-            </div>
-
-            {/* Sub-Metrics Grid */}
-            <div className="grid grid-cols-2 gap-3 mb-5">
-              <ResultMetricCard
-                label="Impuesto Mensual Estimado"
-                value={formatCurrency(result.monthlyEstimatedTax)}
-                type="success"
-                subValue="Renta + IGV"
-              />
-              <ResultMetricCard
-                label="Ventas Anuales Proyectadas"
-                value={formatCurrency(estimatedMonthlyRevenue * 12)}
-                type="neutral"
-                subValue="Base 12 meses"
-              />
-            </div>
-
+          <PayslipResult
+            title="Diagnóstico SUNAT"
+            period="SUNAT 2026"
+            amountHeader="Valor"
+            lines={[
+              { label: 'Impuesto mensual estimado', note: 'Renta + IGV', amount: formatCurrency(result.monthlyEstimatedTax) },
+              { label: 'Ventas anuales proyectadas', note: 'Base 12 meses', amount: formatCurrency(estimatedMonthlyRevenue * 12) },
+            ]}
+            totalLabel="Régimen ideal recomendado"
+            totalAmount={result.recommendedRegimeName}
+            footnote={result.recommendedReason}
+          >
             <div className="flex flex-col sm:flex-row gap-2.5">
               <ExportPdfButton
                 className="flex-1"
@@ -368,7 +338,7 @@ Motivo: ${result.recommendedReason}`;
             <div className="mt-3">
               <ShareButtons title="Simulador Regímenes Tributarios SUNAT" shareText={shareSummary} />
             </div>
-          </div>
+          </PayslipResult>
         </div>
 
       </div>

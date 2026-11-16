@@ -7,7 +7,7 @@ import { calculateVacations, VacationRegime } from '@/core/calculators/vacations
 import { formatCurrency } from '@/core/math/formatters';
 import { InputNumber } from '@/shared/components/ui/InputNumber';
 import { SwitchToggle } from '@/shared/components/ui/SwitchToggle';
-import { ResultMetricCard } from '@/shared/components/ui/ResultMetricCard';
+import { PayslipResult } from '@/shared/components/ui/PayslipResult';
 import { ShareButtons } from '@/shared/components/ui/ShareButtons';
 import { Palmtree } from 'lucide-react';
 
@@ -69,7 +69,7 @@ Total a Percibir: ${formatCurrency(result.totalPay)}`;
       meta={meta}
       faqs={faqs}
       educationalContent={
-        <div className="space-y-4 text-sm leading-relaxed text-slate-700 dark:text-slate-300">
+        <div className="space-y-4 text-[15px] leading-relaxed text-slate-700 dark:text-slate-300">
           <p>
             El derecho al descanso vacacional anual remunerado en el Perú está regulado por el <strong>Decreto Legislativo N° 713</strong> y su reglamento (Decreto Supremo N° 012-92-TR). Todo colaborador en relación de subordinación formal acumula días de descanso por cada ciclo laboral anual concluido, condicionado al cumplimiento del récord vacacional respectivo.
           </p>
@@ -86,8 +86,8 @@ Total a Percibir: ${formatCurrency(result.totalPay)}`;
             <li><strong>Jornada de 3 o 4 días a la semana:</strong> No registrar más de 10 faltas injustificadas en el periodo anual.</li>
           </ul>
 
-          <div className="my-4 overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-800">
-            <table className="w-full text-left text-xs sm:text-sm">
+          <div className="my-4 overflow-x-auto rounded-lg border border-slate-200 dark:border-[#2C3744]">
+            <table className="w-full text-left text-[13px] sm:text-[15px]">
               <thead className="bg-slate-100 dark:bg-slate-800/80 font-bold text-slate-900 dark:text-white">
                 <tr>
                   <th className="p-3">Régimen Laboral</th>
@@ -131,9 +131,9 @@ Total a Percibir: ${formatCurrency(result.totalPay)}`;
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         
         {/* Form Column */}
-        <div className="lg:col-span-7 rounded-3xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 sm:p-8 shadow-sm space-y-6">
-          <div className="flex items-center gap-2.5 border-b border-slate-100 dark:border-slate-800 pb-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-50 text-brand-700 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/60">
+        <div className="lg:col-span-7 rounded-lg border border-slate-200/90 dark:border-[#2C3744] bg-white dark:bg-[#18202A] p-6 sm:p-8 space-y-6">
+          <div className="flex items-center gap-2.5 border-b border-slate-100 dark:border-[#2C3744] pb-3">
+            <div className="flex h-8 w-8 items-center justify-center rounded bg-brand-50 text-brand-700 dark:bg-brand-950 dark:text-brand-300 border border-brand-200/60 dark:border-brand-800/60">
               <Palmtree className="h-4.5 w-4.5" />
             </div>
             <h2 className="text-lg font-bold text-slate-900 dark:text-white">Datos de tus Vacaciones</h2>
@@ -150,15 +150,15 @@ Total a Percibir: ${formatCurrency(result.totalPay)}`;
           />
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-            <div>
-              <label htmlFor="companyRegime" className="text-xs sm:text-sm font-bold text-slate-900 dark:text-slate-200 block mb-2">
+            <div className="sm:col-span-2">
+              <label htmlFor="companyRegime" className="mb-1.5 block text-[15px] font-semibold text-slate-900 dark:text-slate-100">
                 Régimen Laboral / Días al año
               </label>
               <select
                 id="companyRegime"
                 value={companyRegime}
                 onChange={(e) => setCompanyRegime(e.target.value as VacationRegime)}
-                className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 p-2.5 text-xs font-bold text-slate-900 dark:text-white outline-none focus:border-brand-700"
+                className="select-field w-full rounded border border-slate-400 bg-white pl-3 text-[15px] text-slate-900 focus:border-brand-600 focus:outline-2 focus:outline-offset-1 focus:outline-brand-600 dark:border-slate-600 dark:bg-[#0E141B] dark:text-slate-100"
               >
                 <option value="general">Régimen General (30 días/año)</option>
                 <option value="especial_20">Régimen Especial / Agrario (20 días/año)</option>
@@ -273,53 +273,22 @@ Total a Percibir: ${formatCurrency(result.totalPay)}`;
             onChange={(hasFamilyAllowance) => setHasFamilyAllowance(hasFamilyAllowance)}
           />
         </div>
-
-        {/* Results Column — Proposal A */}
+        {/* Resultado con forma de boleta */}
         <div className="lg:col-span-5 flex flex-col gap-4">
-          <div className="rounded-3xl border-2 border-emerald-200/90 dark:border-emerald-800/80 bg-white dark:bg-slate-900 p-6 sm:p-7 shadow-sm">
-            <div className="flex items-center justify-between mb-4">
-              <span className="text-xs font-bold uppercase tracking-wider text-emerald-950 dark:text-emerald-300">
-                Liquidación de Vacaciones
-              </span>
-              <span className="rounded-full bg-emerald-50 dark:bg-emerald-950/70 border border-emerald-200 dark:border-emerald-800 px-2.5 py-0.5 text-[11px] font-bold text-brand-700 dark:text-emerald-300">
-                {result.annualVacationDays} días/año
-              </span>
-            </div>
-
-            {/* Big Main Result Box (Non-truncated tabular numerals) */}
-            <div className="rounded-2xl bg-emerald-50/50 dark:bg-slate-950 border border-emerald-100 dark:border-emerald-900/60 p-5 sm:p-6 text-center mb-5">
-              <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                Total Pago de Vacaciones
-              </span>
-              <div
-                title={formatCurrency(result.totalPay)}
-                className="text-3xl sm:text-4xl lg:text-[2.6rem] font-black text-brand-700 dark:text-emerald-400 mt-1.5 font-mono tracking-tight tabular-nums break-words leading-tight"
-              >
-                {formatCurrency(result.totalPay)}
-              </div>
-              <div className="mt-1.5 text-xs text-slate-600 dark:text-slate-400 font-semibold">
-                Por {monthsWorked} meses laborados ({result.annualVacationDays} días anuales)
-              </div>
-            </div>
-
-            {/* Sub-Metrics Grid */}
-            <div className="grid grid-cols-2 gap-3 mb-5">
-              <ResultMetricCard
-                label="Vacaciones Truncas"
-                value={formatCurrency(result.totalTruncatedVacations)}
-                type="neutral"
-                subValue={`Base: ${result.annualVacationDays} días/año`}
-              />
-              <ResultMetricCard
-                label="Venta de Vacaciones"
-                value={formatCurrency(result.soldVacationsPay)}
-                type="success"
-                subValue={`${daysToSell} días vendidos`}
-              />
-            </div>
-
+          <PayslipResult
+            title={"Liquidación de Vacaciones"}
+            period={`${result.annualVacationDays} días/año`}
+            amountHeader="Valor"
+            lines={[
+              { label: "Vacaciones Truncas", amount: formatCurrency(result.totalTruncatedVacations), note: `Base: ${result.annualVacationDays} días/año` },
+              { label: "Venta de Vacaciones", amount: formatCurrency(result.soldVacationsPay), note: `${daysToSell} días vendidos` },
+            ]}
+            totalLabel={"Total Pago de Vacaciones"}
+            totalAmount={formatCurrency(result.totalPay)}
+            footnote={`Por ${monthsWorked} meses laborados (${result.annualVacationDays} días anuales)`}
+          >
             <ShareButtons title="Liquidación de Vacaciones Perú" shareText={shareSummary} />
-          </div>
+          </PayslipResult>
         </div>
 
       </div>

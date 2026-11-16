@@ -6,7 +6,7 @@ import { ReferenceDataNote } from '@/shared/components/ui/ReferenceDataNote';
 import { CALCULATORS_REGISTRY } from '@/features/calculators/registry';
 import { formatCurrency, formatNumber } from '@/core/math/formatters';
 import { ELECTRIC_APPLIANCES } from '@/core/constants/peru';
-import { ResultMetricCard } from '@/shared/components/ui/ResultMetricCard';
+import { PayslipResult } from '@/shared/components/ui/PayslipResult';
 import { ShareButtons } from '@/shared/components/ui/ShareButtons';
 import { Zap, Plus, Trash2 } from 'lucide-react';
 
@@ -111,32 +111,32 @@ export default function ConsumoElectricoPage() {
             <h2 className="text-lg font-bold text-slate-900 dark:text-white mb-2">
               ¿Cómo calcular el Consumo Eléctrico y el Costo en tu Recibo de Luz en Perú?
             </h2>
-            <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+            <p className="text-[15px] text-slate-600 dark:text-slate-300 leading-relaxed">
               Monitorear el consumo de kilovatios-hora (<strong>kWh</strong>) de cada electrodoméstico o maquinaria es indispensable para optimizar las finanzas del hogar y evitar sorpresas en los recibos de las empresas distribuidoras de energía (Luz del Sur, Plena / Enel, Hidrandina, Seal, Electrocentro, entre otras), bajo el marco regulatorio de <strong>OSINERGMIN</strong>.
             </p>
           </div>
 
-          <div className="rounded-2xl bg-slate-50 dark:bg-slate-900 p-5 border border-slate-200 dark:border-slate-800 space-y-3 text-xs leading-relaxed">
-            <h3 className="font-bold text-sm text-slate-900 dark:text-white">
+          <div className="rounded-lg bg-slate-50 dark:bg-[#18202A] p-5 border border-slate-200 dark:border-[#2C3744] space-y-3 text-[13px] leading-relaxed">
+            <h3 className="font-bold text-[15px] text-slate-900 dark:text-white">
               1. Fórmulas de Facturación Eléctrica Residencial y Comercial
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
-              <div className="space-y-1.5 p-3.5 bg-white dark:bg-slate-950 rounded-xl border border-slate-200 dark:border-slate-800">
-                <span className="font-bold text-emerald-800 dark:text-emerald-400 block">• Consumo en Kilovatios-hora (kWh):</span>
+              <div className="space-y-1.5 p-3.5 bg-white dark:bg-[#0E141B] rounded border border-slate-200 dark:border-[#2C3744]">
+                <span className="font-bold text-brand-800 dark:text-brand-400 block">• Consumo en Kilovatios-hora (kWh):</span>
                 <p className="text-slate-600 dark:text-slate-300">
                   Energía demandada mensualmente por cada equipo según su potencia nominal.
                 </p>
-                <div className="font-mono text-[11px] text-slate-800 dark:text-slate-200 pt-1">
+                <div className="font-mono text-[13px] text-slate-800 dark:text-slate-200 pt-1">
                   kWh = (Potencia en Watts × Horas de uso/día × Días/mes) ÷ 1,000
                 </div>
               </div>
 
-              <div className="space-y-1.5 p-3.5 bg-white dark:bg-slate-950 rounded-xl border border-slate-200 dark:border-slate-800">
-                <span className="font-bold text-sky-800 dark:text-sky-400 block">• Costo Estimado en Recibo (Soles):</span>
+              <div className="space-y-1.5 p-3.5 bg-white dark:bg-[#0E141B] rounded border border-slate-200 dark:border-[#2C3744]">
+                <span className="font-bold text-brand-800 dark:text-brand-400 block">• Costo Estimado en Recibo (Soles):</span>
                 <p className="text-slate-600 dark:text-slate-300">
                   Multiplicación directa del total de kWh consumidos por el pliego tarifario local.
                 </p>
-                <div className="font-mono text-[11px] text-slate-800 dark:text-slate-200 pt-1">
+                <div className="font-mono text-[13px] text-slate-800 dark:text-slate-200 pt-1">
                   Costo Mensual S/ = kWh Consumidos × Tarifa por kWh (S/)
                 </div>
               </div>
@@ -144,15 +144,15 @@ export default function ConsumoElectricoPage() {
           </div>
 
           <div className="space-y-3">
-            <h3 className="font-bold text-sm text-slate-900 dark:text-white">
+            <h3 className="font-bold text-[15px] text-slate-900 dark:text-white">
               2. Tabla de Potencias y Consumos Habituales en Perú
             </h3>
-            <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+            <p className="text-[13px] text-slate-600 dark:text-slate-300 leading-relaxed">
               Referencia técnica de los artefactos más frecuentes en viviendas y microempresas peruanas (calculados con tarifa promedio de S/ 0.75/kWh):
             </p>
 
-            <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800">
-              <table className="w-full text-left text-xs">
+            <div className="overflow-x-auto rounded border border-slate-200 dark:border-[#2C3744]">
+              <table className="w-full text-left text-[13px]">
                 <thead className="bg-slate-100 dark:bg-slate-800/80 font-bold text-slate-900 dark:text-white">
                   <tr>
                     <th className="p-2.5">Artefacto Eléctrico</th>
@@ -193,17 +193,17 @@ export default function ConsumoElectricoPage() {
                   </tr>
                   <tr>
                     <td className="p-2.5 font-medium">Foco LED estándar</td>
-                    <td className="p-2.5 font-mono text-emerald-700 dark:text-emerald-400">9 Watts</td>
+                    <td className="p-2.5 font-mono text-brand-700 dark:text-brand-400">9 Watts</td>
                     <td className="p-2.5">6 horas diarias</td>
-                    <td className="p-2.5 font-mono text-emerald-700 dark:text-emerald-400">1.6 kWh</td>
-                    <td className="p-2.5 font-mono font-semibold text-emerald-700 dark:text-emerald-400">S/ 1.20 / mes</td>
+                    <td className="p-2.5 font-mono text-brand-700 dark:text-brand-400">1.6 kWh</td>
+                    <td className="p-2.5 font-mono font-semibold text-brand-700 dark:text-brand-400">S/ 1.20 / mes</td>
                   </tr>
                 </tbody>
               </table>
             </div>
           </div>
 
-          <div className="rounded-2xl border border-slate-200 dark:border-slate-800 p-4 space-y-2 text-xs text-slate-500 dark:text-slate-400 bg-slate-50/50 dark:bg-slate-900/30">
+          <div className="rounded-lg border border-slate-200 dark:border-[#2C3744] p-4 space-y-2 text-[13px] text-slate-500 dark:text-slate-400 bg-slate-50/50 dark:bg-slate-900/30">
             <span className="font-bold text-slate-700 dark:text-slate-300 block">Fuentes oficiales y alcance del cálculo:</span>
             <ul className="space-y-1 list-disc pl-4">
               <li>
@@ -212,7 +212,7 @@ export default function ConsumoElectricoPage() {
                   href="https://www.osinergmin.gob.pe/seccion/institucional/Paginas/VisorPliegosTarifarios.aspx?Codigo=PTS"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-emerald-700 dark:text-emerald-400 underline hover:text-emerald-800"
+                  className="text-brand-700 dark:text-brand-400 underline hover:text-brand-800"
                 >
                   Visor de Pliegos Tarifarios de Osinergmin
                 </a>.
@@ -228,30 +228,30 @@ export default function ConsumoElectricoPage() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         
         {/* Form Column */}
-        <div className="lg:col-span-7 rounded-3xl border-2 border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 sm:p-8 shadow-md shadow-slate-900/5 space-y-6">
-          <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+        <div className="lg:col-span-7 rounded-lg border-2 border-slate-200/90 dark:border-[#2C3744] bg-white dark:bg-[#18202A] p-6 sm:p-8 space-y-6">
+          <div className="flex items-center justify-between border-b border-slate-100 dark:border-[#2C3744] pb-3">
             <div className="flex items-center gap-2.5">
-              <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
+              <div className="flex h-8 w-8 items-center justify-center rounded bg-brand-100 text-brand-800 dark:bg-brand-950 dark:text-brand-300">
                 <Zap className="h-4.5 w-4.5" />
               </div>
               <h2 className="text-lg font-bold text-slate-900 dark:text-white">Artefactos y Equipos</h2>
             </div>
             <div className="flex items-center gap-2">
-              <label htmlFor="tariffPerKwh" className="text-xs text-slate-600 dark:text-slate-400 font-medium">Tarifa S/ kWh:</label>
+              <label htmlFor="tariffPerKwh" className="text-[13px] text-slate-600 dark:text-slate-400 font-medium">Tarifa S/ kWh:</label>
               <input
                 id="tariffPerKwh"
                 type="number"
                 step="0.01"
                 value={tariffPerKwh}
                 onChange={(e) => setTariffPerKwh(parseFloat(e.target.value) || 0)}
-                className="w-20 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 px-2.5 py-1 text-xs font-bold text-slate-900 dark:text-white outline-none"
+                className="w-20 rounded border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-[#0E141B] px-2.5 py-1 text-[13px] font-bold text-slate-900 dark:text-white outline-none"
               />
             </div>
           </div>
 
           {/* Quick presets */}
           <div>
-            <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block mb-2">
+            <span className="text-[13px] font-bold text-slate-500 dark:text-slate-400 block mb-2">
               + Agregar artefactos comunes:
             </span>
             <div className="flex flex-wrap gap-1.5">
@@ -260,7 +260,7 @@ export default function ConsumoElectricoPage() {
                   key={preset.name}
                   type="button"
                   onClick={() => addAppliance(preset.name, preset.watts)}
-                  className="inline-flex items-center gap-1 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-3 py-1 text-xs text-slate-700 dark:text-slate-300 hover:bg-emerald-50 dark:hover:bg-emerald-950 hover:text-emerald-800 dark:hover:text-emerald-300 cursor-pointer transition-colors"
+                  className="inline-flex items-center gap-1 rounded border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-3 py-1 text-[13px] text-slate-700 dark:text-slate-300 hover:bg-brand-50 dark:hover:bg-brand-950 hover:text-brand-800 dark:hover:text-brand-300 cursor-pointer transition-colors"
                 >
                   <Plus className="h-3 w-3" />
                   <span>{preset.name} ({preset.watts}W)</span>
@@ -277,7 +277,7 @@ export default function ConsumoElectricoPage() {
               return (
                 <div
                   key={app.id}
-                  className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-950 p-4 space-y-3"
+                  className="rounded-lg border border-slate-200 dark:border-[#2C3744] bg-slate-50/60 dark:bg-[#0E141B] p-4 space-y-3"
                 >
                   <div className="flex items-center justify-between">
                     <input
@@ -286,10 +286,10 @@ export default function ConsumoElectricoPage() {
                       aria-label={`Nombre del artefacto ${app.name}`}
                       value={app.name}
                       onChange={(e) => updateAppliance(app.id, 'name', e.target.value)}
-                      className="font-bold text-sm text-slate-900 dark:text-white bg-transparent outline-none border-b border-transparent focus:border-slate-300"
+                      className="font-bold text-[15px] text-slate-900 dark:text-white bg-transparent outline-none border-b border-transparent focus:border-slate-300"
                     />
                     <div className="flex items-center gap-3">
-                      <span className="text-xs font-bold text-emerald-800 dark:text-emerald-400 font-mono tabular-nums">
+                      <span className="text-[13px] font-bold text-brand-800 dark:text-brand-400 font-mono tabular-nums">
                         {formatCurrency(cost)} / mes
                       </span>
                       <button
@@ -305,35 +305,35 @@ export default function ConsumoElectricoPage() {
 
                   <div className="grid grid-cols-3 gap-3">
                     <div>
-                      <label htmlFor={`app-watts-${app.id}`} className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 block mb-1">Potencia (Watts)</label>
+                      <label htmlFor={`app-watts-${app.id}`} className="text-[13px] font-semibold text-slate-500 dark:text-slate-400 block mb-1">Potencia (Watts)</label>
                       <input
                         id={`app-watts-${app.id}`}
                         type="number"
                         value={app.watts}
                         onChange={(e) => updateAppliance(app.id, 'watts', parseFloat(e.target.value) || 0)}
-                        className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-1.5 text-xs font-bold text-slate-900 dark:text-white outline-none font-mono"
+                        className="w-full rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-[#18202A] px-3 py-1.5 text-[13px] font-bold text-slate-900 dark:text-white outline-none font-mono"
                       />
                     </div>
                     <div>
-                      <label htmlFor={`app-hours-${app.id}`} className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 block mb-1">Horas / día</label>
+                      <label htmlFor={`app-hours-${app.id}`} className="text-[13px] font-semibold text-slate-500 dark:text-slate-400 block mb-1">Horas / día</label>
                       <input
                         id={`app-hours-${app.id}`}
                         type="number"
                         max="24"
                         value={app.hoursPerDay}
                         onChange={(e) => updateAppliance(app.id, 'hoursPerDay', parseFloat(e.target.value) || 0)}
-                        className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-1.5 text-xs font-bold text-slate-900 dark:text-white outline-none font-mono"
+                        className="w-full rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-[#18202A] px-3 py-1.5 text-[13px] font-bold text-slate-900 dark:text-white outline-none font-mono"
                       />
                     </div>
                     <div>
-                      <label htmlFor={`app-days-${app.id}`} className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 block mb-1">Días / mes</label>
+                      <label htmlFor={`app-days-${app.id}`} className="text-[13px] font-semibold text-slate-500 dark:text-slate-400 block mb-1">Días / mes</label>
                       <input
                         id={`app-days-${app.id}`}
                         type="number"
                         max="31"
                         value={app.daysPerMonth}
                         onChange={(e) => updateAppliance(app.id, 'daysPerMonth', parseFloat(e.target.value) || 0)}
-                        className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-1.5 text-xs font-bold text-slate-900 dark:text-white outline-none font-mono"
+                        className="w-full rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-[#18202A] px-3 py-1.5 text-[13px] font-bold text-slate-900 dark:text-white outline-none font-mono"
                       />
                     </div>
                   </div>
@@ -342,64 +342,24 @@ export default function ConsumoElectricoPage() {
             })}
           </div>
         </div>
-
-        {/* Results Column */}
+        {/* Resultado con forma de boleta */}
         <div className="lg:col-span-5 flex flex-col gap-4">
-          <div className="rounded-3xl border-2 border-emerald-300 dark:border-emerald-800/80 bg-emerald-50/70 dark:bg-slate-900 p-6 sm:p-7 shadow-md shadow-emerald-900/5">
-            <div className="flex items-center justify-between mb-4">
-              <span className="text-xs font-bold uppercase tracking-wider text-emerald-900 dark:text-emerald-300">
-                Gasto de Energía Mensual
-              </span>
-              <span className="rounded-full bg-emerald-700 dark:bg-emerald-600 px-3 py-0.5 text-xs font-bold text-white shadow-xs">
-                Osinergmin
-              </span>
-            </div>
-
-            {/* Big Main Result */}
-            <div className="rounded-2xl bg-white dark:bg-slate-950 border-2 border-emerald-200 dark:border-emerald-800/60 p-6 shadow-sm text-center mb-5">
-              <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">
-                Gasto Estimado al Mes
-              </span>
-              <div className="text-3xl sm:text-5xl font-black text-emerald-800 dark:text-emerald-400 mt-1 font-mono tabular-nums break-words leading-tight">
-                {formatCurrency(totalMonthlyCost)}
-              </div>
-              <div className="mt-2 text-xs text-slate-600 dark:text-slate-400 font-semibold">
-                {formatNumber(totalMonthlyKwh)} kWh consumidos en total al mes
-              </div>
-            </div>
-
-            {/* Sub-Metrics Grid */}
-            <div className="grid grid-cols-2 gap-3 mb-5">
-              <ResultMetricCard
-                label="Gasto Diario Promedio"
-                value={formatCurrency(totalMonthlyCost / 30)}
-                type="success"
-                subValue="Costo por día de uso"
-              />
-              <ResultMetricCard
-                label="Artefactos en lista"
-                value={`${appliances.length} equipos`}
-                type="neutral"
-                subValue={`Tarifa: S/ ${tariffPerKwh.toFixed(2)}/kWh`}
-              />
-            </div>
-
-            {/* Breakdown Detail */}
-            <div className="rounded-2xl bg-white/90 dark:bg-slate-950 p-4 text-xs text-slate-700 dark:text-slate-300 space-y-2 mb-5 border border-emerald-200/80 dark:border-slate-800 shadow-2xs">
-              <div className="flex justify-between font-medium">
-                <span>Tarifa por kWh aplicada:</span>
-                <span className="font-bold text-slate-900 dark:text-white tabular-nums font-mono">S/ {tariffPerKwh.toFixed(2)}</span>
-              </div>
-              <div className="flex justify-between font-medium">
-                <span>Promedio por equipo:</span>
-                <span className="font-bold text-slate-900 dark:text-white tabular-nums font-mono">
-                  {formatCurrency(appliances.length > 0 ? totalMonthlyCost / appliances.length : 0)} / mes
-                </span>
-              </div>
-            </div>
-
+          <PayslipResult
+            title={"Gasto de Energía Mensual"}
+            period={"Osinergmin"}
+            amountHeader="Valor"
+            lines={[
+              { label: "Gasto Diario Promedio", amount: formatCurrency(totalMonthlyCost / 30), note: "Costo por día de uso" },
+              { label: "Artefactos en lista", amount: `${appliances.length} equipos`, note: `Tarifa: S/ ${tariffPerKwh.toFixed(2)}/kWh` },
+              { label: "Tarifa por kWh aplicada", amount: `S/ ${tariffPerKwh.toFixed(2)}` },
+              { label: "Promedio por equipo", amount: `${formatCurrency(appliances.length > 0 ? totalMonthlyCost / appliances.length : 0)} / mes` },
+            ]}
+            totalLabel={"Gasto Estimado al Mes"}
+            totalAmount={formatCurrency(totalMonthlyCost)}
+            footnote={`${formatNumber(totalMonthlyKwh)} kWh consumidos en total al mes`}
+          >
             <ShareButtons title="Consumo Eléctrico Estimado" shareText={shareSummary} />
-          </div>
+          </PayslipResult>
         </div>
 
       </div>

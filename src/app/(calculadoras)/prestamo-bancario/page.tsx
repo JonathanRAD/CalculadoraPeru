@@ -6,7 +6,7 @@ import { CALCULATORS_REGISTRY } from '@/features/calculators/registry';
 import { calculateLoan } from '@/core/calculators/loan';
 import { formatCurrency } from '@/core/math/formatters';
 import { InputNumber } from '@/shared/components/ui/InputNumber';
-import { ResultMetricCard } from '@/shared/components/ui/ResultMetricCard';
+import { PayslipResult } from '@/shared/components/ui/PayslipResult';
 import { ShareButtons } from '@/shared/components/ui/ShareButtons';
 import { Landmark } from 'lucide-react';
 
@@ -57,7 +57,7 @@ Total de Intereses a Pagar: ${formatCurrency(result.totalInterestPaid)} (TEA: ${
       meta={meta}
       faqs={faqs}
       educationalContent={
-        <div className="space-y-4 text-sm leading-relaxed text-slate-700 dark:text-slate-300">
+        <div className="space-y-4 text-[15px] leading-relaxed text-slate-700 dark:text-slate-300">
           <p>
             Al solicitar un préstamo personal, crédito vehicular o financiamiento para capital de trabajo en el sistema financiero peruano, es fundamental comprender la estructura de las cuotas y los costos regulados por la <strong>Superintendencia de Banca, Seguros y AFP (SBS)</strong>.
           </p>
@@ -74,8 +74,8 @@ Total de Intereses a Pagar: ${formatCurrency(result.totalInterestPaid)} (TEA: ${
             <li><strong>Seguro de Desgravamen y Cargos:</strong> Cobertura ante fallecimiento e invalidez exigida para proteger el saldo pendiente.</li>
           </ul>
 
-          <div className="my-4 overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-800">
-            <table className="w-full text-left text-xs sm:text-sm">
+          <div className="my-4 overflow-x-auto rounded-lg border border-slate-200 dark:border-[#2C3744]">
+            <table className="w-full text-left text-[13px] sm:text-[15px]">
               <thead className="bg-slate-100 dark:bg-slate-800/80 font-bold text-slate-900 dark:text-white">
                 <tr>
                   <th className="p-3">Concepto Financiero</th>
@@ -92,7 +92,7 @@ Total de Intereses a Pagar: ${formatCurrency(result.totalInterestPaid)} (TEA: ${
                 <tr>
                   <td className="p-3 font-semibold">TCEA (Costo Efectivo Anual)</td>
                   <td className="p-3">TEA + Desgravamen + Comisiones + Gastos</td>
-                  <td className="p-3 font-bold text-brand-700 dark:text-emerald-400">El costo real definitivo a pagar</td>
+                  <td className="p-3 font-bold text-brand-700 dark:text-brand-400">El costo real definitivo a pagar</td>
                 </tr>
                 <tr>
                   <td className="p-3 font-semibold">Amortización Anticipada</td>
@@ -115,9 +115,9 @@ Total de Intereses a Pagar: ${formatCurrency(result.totalInterestPaid)} (TEA: ${
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         
         {/* Form Column */}
-        <div className="lg:col-span-7 rounded-3xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 sm:p-8 shadow-sm space-y-6">
-          <div className="flex items-center gap-2.5 border-b border-slate-100 dark:border-slate-800 pb-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-50 text-brand-700 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/60">
+        <div className="lg:col-span-7 rounded-lg border border-slate-200/90 dark:border-[#2C3744] bg-white dark:bg-[#18202A] p-6 sm:p-8 space-y-6">
+          <div className="flex items-center gap-2.5 border-b border-slate-100 dark:border-[#2C3744] pb-3">
+            <div className="flex h-8 w-8 items-center justify-center rounded bg-brand-50 text-brand-700 dark:bg-brand-950 dark:text-brand-300 border border-brand-200/60 dark:border-brand-800/60">
               <Landmark className="h-4.5 w-4.5" />
             </div>
             <h2 className="text-lg font-bold text-slate-900 dark:text-white">Datos del Préstamo Bancario</h2>
@@ -168,50 +168,22 @@ Total de Intereses a Pagar: ${formatCurrency(result.totalInterestPaid)} (TEA: ${
             placeholder="0.075"
           />
         </div>
-
-        {/* Results Column — Proposal A */}
+        {/* Resultado con forma de boleta */}
         <div className="lg:col-span-5 flex flex-col gap-4">
-          <div className="rounded-3xl border-2 border-emerald-200/90 dark:border-emerald-800/80 bg-white dark:bg-slate-900 p-6 sm:p-7 shadow-sm">
-            <div className="flex items-center justify-between mb-4">
-              <span className="text-xs font-bold uppercase tracking-wider text-emerald-950 dark:text-emerald-300">
-                Cuota Mensual Fija
-              </span>
-              <span className="rounded-full bg-emerald-50 dark:bg-emerald-950/70 border border-emerald-200 dark:border-emerald-800 px-2.5 py-0.5 text-[11px] font-bold text-brand-700 dark:text-emerald-300">
-                Sistema Francés
-              </span>
-            </div>
-
-            {/* Big Main Result Box (Non-truncated tabular numerals) */}
-            <div className="rounded-2xl bg-emerald-50/50 dark:bg-slate-950 border border-emerald-100 dark:border-emerald-900/60 p-5 sm:p-6 text-center mb-5">
-              <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                Cuota Mensual Estimada
-              </span>
-              <div className="text-3xl sm:text-4xl lg:text-[2.6rem] font-black text-brand-700 dark:text-emerald-400 mt-1.5 font-mono tracking-tight tabular-nums break-words leading-tight">
-                {formatCurrency(result.monthlyPaymentWithInsurance)}
-              </div>
-              <div className="mt-1.5 text-xs text-slate-600 dark:text-slate-400 font-semibold">
-                Cuota fija mensual con seguro incluido
-              </div>
-            </div>
-
-            {/* Sub-Metrics Grid */}
-            <div className="grid grid-cols-2 gap-3 mb-5">
-              <ResultMetricCard
-                label="Total Intereses"
-                value={formatCurrency(result.totalInterestPaid)}
-                type="warning"
-                subValue={`TEA: ${annualInterestRate}%`}
-              />
-              <ResultMetricCard
-                label="Total a Devolver"
-                value={formatCurrency(result.totalAmountToRepay)}
-                type="neutral"
-                subValue={`En ${termMonths} meses`}
-              />
-            </div>
-
+          <PayslipResult
+            title={"Cuota Mensual Fija"}
+            period={"Sistema Francés"}
+            amountHeader="Valor"
+            lines={[
+              { label: "Total Intereses", amount: formatCurrency(result.totalInterestPaid), note: `TEA: ${annualInterestRate}%` },
+              { label: "Total a Devolver", amount: formatCurrency(result.totalAmountToRepay), note: `En ${termMonths} meses` },
+            ]}
+            totalLabel={"Cuota Mensual Estimada"}
+            totalAmount={formatCurrency(result.monthlyPaymentWithInsurance)}
+            footnote={"Cuota fija mensual con seguro incluido"}
+          >
             <ShareButtons title="Simulador de Préstamos Bancarios" shareText={shareSummary} />
-          </div>
+          </PayslipResult>
         </div>
 
       </div>
