@@ -10,6 +10,7 @@ import { ClientModalsContainer } from '@/shared/components/layout/ClientModalsCo
 import { PwaRegistration } from '@/shared/components/ui/PwaRegistration';
 import { GoogleAnalyticsPageViews } from '@/shared/components/analytics/GoogleAnalytics';
 import { CookieBanner } from '@/shared/components/ui/CookieBanner';
+import { CustomSystemsPrompt } from '@/features/custom-systems/CustomSystemsPrompt';
 import { ProProvider } from '@/features/premium/context/ProContext';
 import { ModalOriginTracker } from '@/shared/components/ui/ModalOriginTracker';
 import { NativeAnalyticsTracker } from '@/shared/components/analytics/NativeAnalyticsTracker';
@@ -151,6 +152,29 @@ export default function RootLayout({
             `,
           }}
         />
+        <Script
+          id="consent-default"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              window.gtag = gtag;
+              var accepted = false;
+              try { accepted = localStorage.getItem('calculaperu-cookie-consent') === 'accepted'; } catch (e) {}
+              var state = accepted ? 'granted' : 'denied';
+              gtag('consent', 'default', {
+                ad_storage: state,
+                analytics_storage: state,
+                ad_user_data: state,
+                ad_personalization: state,
+                wait_for_update: 500
+              });
+              window.adsbygoogle = window.adsbygoogle || [];
+              window.adsbygoogle.requestNonPersonalizedAds = accepted ? 0 : 1;
+            `,
+          }}
+        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(rootWebsiteJsonLd) }}
@@ -201,6 +225,7 @@ export default function RootLayout({
             {process.env.VERCEL ? <Analytics /> : null}
             <PwaRegistration />
             <CookieBanner />
+            <CustomSystemsPrompt />
           </ProProvider>
         </ThemeProvider>
       </body>

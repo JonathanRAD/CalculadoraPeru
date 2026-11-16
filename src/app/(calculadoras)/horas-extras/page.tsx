@@ -166,25 +166,25 @@ Total Horas Extras a Cobrar: ${formatCurrency(result.totalOvertimePay)}`;
             <span className="font-bold text-slate-700 dark:text-slate-300 block">Marco legal y fuentes oficiales de consulta:</span>
             <ul className="space-y-1 list-disc pl-4">
               <li>
-                <strong>Ley de Jornada de Trabajo y Horas Extras (D.S. N° 007-2002-TR):</strong> Sobretasas mínimas de 25% (primeras 2 horas) y 35% (horas siguientes) fiscalizadas por el{' '}
+                <strong>Ley de Jornada de Trabajo y Horas Extras (D.S. N° 007-2002-TR):</strong> Sobretasas mínimas de 25% (primeras 2 horas) y 35% (horas siguientes) Consulta el{' '}
                 <a
-                  href="https://www.gob.pe/mtpe"
+                  href="https://lpderecho.pe/tuo-ley-jornada-trabajo-horario-trabajo-sobretiempo-decreto-supremo-007-2002-tr/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-emerald-700 dark:text-emerald-400 underline hover:text-emerald-800"
                 >
-                  Ministerio de Trabajo y Promoción del Empleo (MTPE)
+                  texto del D.S. N° 007-2002-TR
                 </a>.
               </li>
               <li>
                 <strong>Fiscalización de derechos laborales:</strong> Directivas y criterios inspectivos sobre registro y pago de sobretiempo en la{' '}
                 <a
-                  href="https://www.gob.pe/sunafil"
+                  href="https://www.gob.pe/9972-denunciar-incumplimientos-laborales-de-una-empresa-privada"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-emerald-700 dark:text-emerald-400 underline hover:text-emerald-800"
                 >
-                  Superintendencia Nacional de Fiscalización Laboral (SUNAFIL)
+                  guía de SUNAFIL para denunciar incumplimientos laborales
                 </a>.
               </li>
             </ul>
@@ -354,7 +354,7 @@ Total Horas Extras a Cobrar: ${formatCurrency(result.totalOvertimePay)}`;
 
           <SwitchToggle
             id="hasFamilyAllowance"
-            label="¿Percibes Asignación Familiar (+S/ 113.00)?"
+            label="¿Percibes Asignación Familiar (+S/ 123.00)?"
             description="Se suma al sueldo para calcular el valor de la hora ordinaria"
             checked={hasFamilyAllowance}
             onChange={(hasFamilyAllowance) => setHasFamilyAllowance(hasFamilyAllowance)}

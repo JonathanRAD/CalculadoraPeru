@@ -7,6 +7,7 @@ import {
   Store, TrendingUp,
 } from 'lucide-react';
 import { CALCULATORS_REGISTRY, CATEGORIES, type CalculatorCategory } from '@/features/calculators/registry';
+import { GUIDES } from '@/features/guias/data';
 import { HomeSearch } from '@/features/home/components/HomeSearch';
 import { ResponsiveDetails } from '@/features/home/components/ResponsiveDetails';
 import { FadeIn } from '@/shared/components/ui/FadeIn';
@@ -303,6 +304,40 @@ export default function HomePage() {
             );
           })}
         </div>
+      </section>
+
+      {/* ========================================================================= */}
+      {/* GUIDES SECTION */}
+      {/* ========================================================================= */}
+      <section aria-labelledby="guides-title" className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-14">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between mb-8">
+          <div>
+            <span className="text-xs font-bold uppercase tracking-wider text-[#08734F] dark:text-emerald-400">
+              Guías
+            </span>
+            <h2 id="guides-title" className="mt-1 text-2xl sm:text-3xl font-black tracking-tight text-slate-950 dark:text-white">
+              Entiende tus números paso a paso
+            </h2>
+            <p className="mt-1 text-xs sm:text-sm text-slate-600 dark:text-slate-400">
+              Explicaciones con ejemplos en soles y fuentes oficiales.
+            </p>
+          </div>
+          <Link href="/guias" className="group inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-[#08734F] hover:text-emerald-800 dark:text-emerald-400 dark:hover:text-emerald-300">
+            <span>Ver todas las guías</span>
+            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
+          </Link>
+        </div>
+        <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {GUIDES.slice(0, 6).map((guide) => (
+            <li key={guide.slug}>
+              <Link href={`/guias/${guide.slug}`} className="app-card h-full p-5 flex flex-col gap-2 group hover:border-[#08734F] transition-all">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-[#08734F] dark:text-emerald-400">{guide.category}</span>
+                <h3 className="text-sm sm:text-base font-bold text-slate-900 dark:text-white group-hover:text-[#08734F] dark:group-hover:text-emerald-400 transition-colors">{guide.title}</h3>
+                <span className="mt-auto text-xs text-slate-500 dark:text-slate-400">{guide.readingMinutes} min de lectura</span>
+              </Link>
+            </li>
+          ))}
+        </ul>
       </section>
 
       {/* ========================================================================= */}

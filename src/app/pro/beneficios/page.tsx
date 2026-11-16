@@ -205,7 +205,7 @@ const CALCULATORS_GUIDE: CalculatorGuideItem[] = [
     category: 'tributario',
     categoryLabel: 'Tributario & SUNAT',
     iconName: 'Receipt',
-    freeTier: 'Desglose de Base Imponible, IGV (16% + 2% IPM) y Total.',
+    freeTier: 'Desglose de Base Imponible, IGV (18%) y Total.',
     proBenefits: [
       'Separación de Crédito Fiscal vs Débito Fiscal para liquidación mensual en Declara Fácil 621.',
       'Exportación de lotes de facturas a Excel con fórmulas automáticas.',

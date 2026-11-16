@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useSyncExternalStore } from 'react';
 import Link from 'next/link';
 import { Send, CheckCircle2, AlertCircle, Loader2, MessageSquare } from 'lucide-react';
 
@@ -13,8 +13,13 @@ const CATEGORIES = [
   { value: 'mejora', label: 'Sugerir una mejora o nueva función' },
   { value: 'privacidad', label: 'Privacidad o eliminación de mis datos' },
   { value: 'alianza', label: 'Colaboración o alianzas' },
+  { value: 'sistema_a_medida', label: 'Quiero un sistema a medida para mi negocio' },
   { value: 'otro', label: 'Otro asunto' },
 ];
+
+function subscribeNever() {
+  return () => {};
+}
 
 function generateClientUuid(): string {
   if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
@@ -31,8 +36,16 @@ export function ContactForm() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
-  const [category, setCategory] = useState('consulta_general');
   const [message, setMessage] = useState('');
+
+  // Si llegan desde «Sistemas a medida», el motivo ya viene elegido en la URL (?motivo=...).
+  const search = useSyncExternalStore(subscribeNever, () => window.location.search, () => '');
+  const motivoFromUrl = (() => {
+    const motivo = new URLSearchParams(search).get('motivo');
+    return motivo && CATEGORIES.some((item) => item.value === motivo) ? motivo : null;
+  })();
+  const [chosenCategory, setChosenCategory] = useState<string | null>(null);
+  const category = chosenCategory ?? motivoFromUrl ?? 'consulta_general';
   const [consent, setConsent] = useState(false);
   const [honeypot, setHoneypot] = useState(''); // Campo anti-bot invisible
   const [idempotencyKey, setIdempotencyKey] = useState(generateClientUuid);
@@ -220,7 +233,7 @@ export function ContactForm() {
           </label>
           <select
             value={category}
-            onChange={(e) => setCategory(e.target.value)}
+            onChange={(e) => setChosenCategory(e.target.value)}
             className="w-full bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-slate-900 dark:text-white outline-none focus:border-[#00875A] transition-colors cursor-pointer"
           >
             {CATEGORIES.map((c) => (

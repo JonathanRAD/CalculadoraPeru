@@ -5,12 +5,18 @@ import Link from 'next/link';
 import { ChevronRight, ArrowRight, ShieldCheck } from 'lucide-react';
 import { CALCULATORS_REGISTRY, CalculatorMeta } from '../registry';
 import { FaqAccordion, FaqItem } from '@/shared/components/ui/FaqAccordion';
+import { SITE_LAST_UPDATED } from '@/core/constants/site-updates';
+import { GUIDES } from '@/features/guias/data';
 
 interface CalculatorShellProps {
   meta: CalculatorMeta;
   children: React.ReactNode; // Inputs & Results
   educationalContent?: React.ReactNode;
   faqs?: FaqItem[];
+  /** Contenido promocional (PRO) que se muestra debajo de la guía y las preguntas frecuentes. */
+  afterContent?: React.ReactNode;
+  /** Aviso sobre datos variables (precios, tarifas, comisiones), mostrado bajo la calculadora. */
+  dataNote?: React.ReactNode;
 }
 
 export function CalculatorShell({
@@ -18,10 +24,14 @@ export function CalculatorShell({
   children,
   educationalContent,
   faqs,
+  afterContent,
+  dataNote,
 }: CalculatorShellProps) {
   const related = CALCULATORS_REGISTRY
     .filter((c) => c.id !== meta.id && c.category === meta.category)
     .slice(0, 3);
+
+  const relatedGuides = GUIDES.filter((guide) => guide.calculator.href === meta.slug);
 
   const appJsonLd = {
     '@context': 'https://schema.org',
@@ -110,6 +120,16 @@ export function CalculatorShell({
           <p className="mt-2 text-sm sm:text-base text-slate-600 dark:text-slate-300 max-w-3xl font-normal leading-relaxed">
             {meta.description}
           </p>
+          <p className="mt-3 text-xs text-slate-500 dark:text-slate-400">
+            Última actualización del sitio:{' '}
+            <time dateTime={SITE_LAST_UPDATED}>
+              {new Date(`${SITE_LAST_UPDATED}T12:00:00`).toLocaleDateString('es-PE', { day: 'numeric', month: 'long', year: 'numeric' })}
+            </time>
+            {' · '}
+            <Link href="/actualizaciones" className="font-bold hover:underline">Ver cambios de parámetros</Link>
+            {' · '}
+            <Link href="/guias" className="font-bold hover:underline">Guías</Link>
+          </p>
 
         </div>
       </div>
@@ -121,6 +141,23 @@ export function CalculatorShell({
         <div className="app-card p-6 sm:p-8 mb-8 shadow-sm">
           {children}
         </div>
+
+        {dataNote}
+
+        {relatedGuides.length > 0 && (
+          <section aria-label="Guías relacionadas" className="app-card p-5 sm:p-6 mb-8">
+            <h2 className="text-sm font-bold text-slate-900 dark:text-white mb-2">Entiende cómo se calcula</h2>
+            <ul className="space-y-2">
+              {relatedGuides.map((guide) => (
+                <li key={guide.slug}>
+                  <Link href={`/guias/${guide.slug}`} className="inline-flex items-center gap-1.5 text-sm font-bold text-[#08734F] dark:text-emerald-400 hover:underline">
+                    {guide.title} <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
 
         {/* Educational Content & Law Breakdown */}
         {educationalContent && (
@@ -138,6 +175,8 @@ export function CalculatorShell({
             <FaqAccordion items={faqs} />
           </section>
         )}
+
+        {afterContent &&<div className="mb-8">{afterContent}</div>}
 
         {/* Related Calculators */}
         {related.length > 0 && (

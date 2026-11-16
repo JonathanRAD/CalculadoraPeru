@@ -278,6 +278,7 @@ export function SubmissionsTab() {
             <option value="error_report">Reporte de Error</option>
             <option value="privacidad">Privacidad</option>
             <option value="alianza">Alianza</option>
+            <option value="sistema_a_medida">Sistema a medida</option>
             <option value="otro">Otro</option>
           </select>
         </div>

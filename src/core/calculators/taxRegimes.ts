@@ -12,6 +12,8 @@ export interface TaxRegimesInput {
   activityType: ActivityType;
   taxpayerType?: TaxpayerType;
   workerCount?: number;
+  /** Utilidad neta mensual estimada (antes de impuesto a la renta). Opcional: permite estimar la regularización anual. */
+  estimatedMonthlyProfit?: number;
 }
 
 export interface RegimeComparisonItem {
@@ -22,6 +24,8 @@ export interface RegimeComparisonItem {
   monthlyIncomeTax: number; // Pago a cuenta mensual de impuesto a la renta
   monthlyIgv: number; // Pago estimado de IGV
   totalMonthlyTax: number; // Renta + IGV
+  /** Impuesto a la renta anual estimado (solo si se indicó utilidad). En RMT y General es el impuesto anual del que se descuentan los pagos a cuenta. */
+  annualIncomeTax?: number;
   canIssueFactura: boolean;
   annualDeclarationRequired: boolean;
   accountingBooksRequired: string;
@@ -36,6 +40,18 @@ export interface TaxRegimesResult {
   regimes: RegimeComparisonItem[];
 }
 
+/** Impuesto anual del RMT: 10 % hasta 15 UIT de renta neta y 29.5 % por el exceso. */
+export function calculateRmtAnnualIncomeTax(annualNetIncome: number): number {
+  const profit = Math.max(0, annualNetIncome || 0);
+  const threshold = 15 * PERU_CONSTANTS.CURRENT_UIT;
+  return roundTo(Math.min(profit, threshold) * 0.1 + Math.max(0, profit - threshold) * 0.295, 2);
+}
+
+/** Impuesto anual del Régimen General: 29.5 % de la renta neta anual. */
+export function calculateGeneralAnnualIncomeTax(annualNetIncome: number): number {
+  return roundTo(Math.max(0, annualNetIncome || 0) * 0.295, 2);
+}
+
 /**
  * Simula y compara los 4 regímenes tributarios de la SUNAT recomendando el más económico y legal para el negocio.
  */
@@ -46,6 +62,9 @@ export function calculateTaxRegimes(input: TaxRegimesInput): TaxRegimesResult {
   const annualPurchases = purchases * 12;
   const workers = Math.max(0, input.workerCount || 1);
   const taxpayerType = input.taxpayerType ?? 'natural_person';
+  const profitProvided = Number.isFinite(input.estimatedMonthlyProfit) && Number(input.estimatedMonthlyProfit) > 0;
+  // La utilidad no puede superar las ventas del mes
+  const annualProfit = profitProvided ? Math.min(Number(input.estimatedMonthlyProfit), rev) * 12 : 0;
 
   // 1. NUEVO RUS
   const isRusEligible =
@@ -78,6 +97,7 @@ export function calculateTaxRegimes(input: TaxRegimesInput): TaxRegimesResult {
     monthlyIncomeTax: rusMonthlyTax,
     monthlyIgv: 0, // En RUS está incluido en la cuota fija
     totalMonthlyTax: rusMonthlyTax,
+    annualIncomeTax: profitProvided && isRusEligible ? roundTo(rusMonthlyTax * 12, 2) : undefined,
     canIssueFactura: false,
     annualDeclarationRequired: false,
     accountingBooksRequired: 'Ninguno (0 libros contables)',
@@ -103,6 +123,7 @@ export function calculateTaxRegimes(input: TaxRegimesInput): TaxRegimesResult {
     monthlyIncomeTax: roundTo(rerMonthlyIncomeTax, 2),
     monthlyIgv: roundTo(estimatedIgvPay, 2),
     totalMonthlyTax: roundTo(rerTotalMonthly, 2),
+    annualIncomeTax: profitProvided ? roundTo(rerMonthlyIncomeTax * 12, 2) : undefined,
     canIssueFactura: true,
     annualDeclarationRequired: false, // En RER los pagos mensuales son cancelatorios
     accountingBooksRequired: '2 Libros (Registro de Compras y Registro de Ventas)',
@@ -126,6 +147,7 @@ export function calculateTaxRegimes(input: TaxRegimesInput): TaxRegimesResult {
     monthlyIncomeTax: roundTo(rmtMonthlyIncomeTax, 2),
     monthlyIgv: roundTo(estimatedIgvPay, 2),
     totalMonthlyTax: roundTo(rmtTotalMonthly, 2),
+    annualIncomeTax: profitProvided ? calculateRmtAnnualIncomeTax(annualProfit) : undefined,
     canIssueFactura: true,
     annualDeclarationRequired: true,
     accountingBooksRequired: 'Compras, Ventas y Libro Diario simplificado',
@@ -143,6 +165,7 @@ export function calculateTaxRegimes(input: TaxRegimesInput): TaxRegimesResult {
     monthlyIncomeTax: roundTo(rgMonthlyIncomeTax, 2),
     monthlyIgv: roundTo(estimatedIgvPay, 2),
     totalMonthlyTax: roundTo(rgTotalMonthly, 2),
+    annualIncomeTax: profitProvided ? calculateGeneralAnnualIncomeTax(annualProfit) : undefined,
     canIssueFactura: true,
     annualDeclarationRequired: true,
     accountingBooksRequired: 'Contabilidad Completa',
@@ -160,8 +183,29 @@ export function calculateTaxRegimes(input: TaxRegimesInput): TaxRegimesResult {
     recommendedRegimeName = 'Nuevo RUS';
     recommendedReason = `Es la opción más económica para tu volumen de ventas. Solo pagas una cuota fija de S/ ${rusMonthlyTax} al mes (incluye IGV y Renta) y no estás obligado a llevar libros contables ni presentar declaración jurada anual.`;
     monthlyEstimatedTax = rusMonthlyTax;
-  } else if (input.clientType === 'businesses_factura' || input.clientType === 'both') {
-    // Si emite facturas
+  } else if (!isRmtEligible) {
+    recommendedRegimeId = 'general';
+    recommendedRegimeName = 'Régimen General (RG)';
+    recommendedReason = 'Tus ingresos anuales estimados superan el límite del RMT (1,700 UIT), por lo que corresponde el Régimen General.';
+    monthlyEstimatedTax = rgTotalMonthly;
+  } else if (profitProvided) {
+    // Con utilidad estimada se compara el impuesto a la renta anual de cada régimen elegible.
+    const money = (value: number) => `S/ ${value.toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    const options: Array<{ id: 'rer' | 'rmt' | 'general'; name: string; tax: number; monthly: number }> = [];
+    if (isRerEligible) options.push({ id: 'rer', name: 'RER (Régimen Especial)', tax: rerItem.annualIncomeTax ?? 0, monthly: rerTotalMonthly });
+    options.push({ id: 'rmt', name: 'Régimen MYPE Tributario (RMT)', tax: rmtItem.annualIncomeTax ?? 0, monthly: rmtTotalMonthly });
+    options.push({ id: 'general', name: 'Régimen General (RG)', tax: rgItem.annualIncomeTax ?? 0, monthly: rgTotalMonthly });
+    const best = options.reduce((lowest, option) => (option.tax < lowest.tax ? option : lowest), options[0]);
+
+    recommendedRegimeId = best.id;
+    recommendedRegimeName = best.name;
+    monthlyEstimatedTax = best.monthly;
+    recommendedReason =
+      `Con una utilidad anual estimada de ${money(annualProfit)}, el impuesto a la renta anual sería: ` +
+      options.map((option) => `${option.name.split(' (')[0]} ${money(option.tax)}`).join('; ') +
+      `. ${best.name.split(' (')[0]} resulta el más bajo. En RMT y Régimen General los pagos mensuales son pagos a cuenta que se descuentan al regularizar en la declaración anual; en el RER el pago mensual es definitivo.`;
+  } else {
+    // Si no califica al RUS, se compara RER frente a RMT
     if (isRerEligible && purchases < rev * 0.4) {
       // Si tiene pocas compras con factura, RER con 1.5% sin DJ anual de renta puede ser más simple
       recommendedRegimeId = 'rer';

@@ -4,6 +4,8 @@ export interface CalculatorMeta {
   id: string;
   slug: string;
   title: string;
+  /** Título corto para la etiqueta <title> y los resultados de búsqueda (≤ 60 caracteres). */
+  metaTitle?: string;
   shortTitle: string;
   description: string;
   cardSummary: string; // 1-line concise summary for home cards
@@ -103,6 +105,7 @@ export const CALCULATORS_REGISTRY: CalculatorMeta[] = [
     id: 'comisiones-pos-yape',
     slug: '/comisiones-pos-yape',
     title: 'Calculadora de Comisiones POS y Billeteras (Yape, Niubiz, Izipay)',
+    metaTitle: 'Comisiones de POS, Yape y pasarelas de pago',
     shortTitle: 'Comisiones POS y Billeteras',
     description: 'Calcula cuánto te descuenta Niubiz, Izipay, Culqi, Mercado Pago o Yape Empresa con IGV incluido.',
     cardSummary: 'Calcula comisiones de Yape, Niubiz, Izipay y más',
@@ -301,6 +304,7 @@ export const CALCULATORS_REGISTRY: CalculatorMeta[] = [
     id: 'recibo-por-honorarios',
     slug: '/recibo-por-honorarios',
     title: 'Calculadora de Recibo por Honorarios (4ta Categoría - Retención 8%)',
+    metaTitle: 'Recibo por honorarios: retención de 4ta categoría',
     shortTitle: 'Recibo por Honorarios (4ta Cat)',
     description: 'Calcula el monto neto a cobrar o el monto bruto a emitir en tu recibo por honorarios electrónico descontando la retención del 8% de SUNAT.',
     cardSummary: 'Calcula la retención del 8% de 4ta categoría',
@@ -343,6 +347,7 @@ export const CALCULATORS_REGISTRY: CalculatorMeta[] = [
     id: 'liquidacion-laboral',
     slug: '/liquidacion-laboral',
     title: 'Calculadora de Liquidación Laboral Todo en 1 (Beneficios y Despido)',
+    metaTitle: 'Liquidación laboral: beneficios y despido',
     shortTitle: 'Liquidación Laboral Todo en 1',
     description: 'Calcula tu liquidación completa ante cese o despido: CTS trunca, gratificación, bono EsSalud, vacaciones truncas e indemnización legal.',
     cardSummary: 'Calcula tu liquidación total: CTS, Grati, Vacaciones y Despido',
@@ -384,6 +389,7 @@ export const CALCULATORS_REGISTRY: CalculatorMeta[] = [
     id: 'regimenes-tributarios-sunat',
     slug: '/regimenes-tributarios-sunat',
     title: 'Simulador de Regímenes Tributarios SUNAT (RUS, RER, MYPE y General)',
+    metaTitle: 'Régimen tributario SUNAT: RUS, RER, RMT o General',
     shortTitle: 'Regímenes Tributarios SUNAT',
     description: 'Descubre en qué régimen tributario de la SUNAT te conviene inscribir tu negocio (RUS, RER, RMT o General) y cuánto pagarás de impuestos.',
     cardSummary: 'Simula qué régimen SUNAT te conviene (RUS, RER, MYPE)',

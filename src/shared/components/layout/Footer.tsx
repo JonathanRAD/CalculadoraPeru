@@ -3,6 +3,8 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { ArrowUpRight, Calculator, LockKeyhole, ShieldCheck } from 'lucide-react';
+import { resetConsent } from '@/shared/lib/cookie-consent';
+import { OPEN_EVENT } from '@/features/custom-systems/prompt-rules';
 
 const POPULAR_LINKS = [
   { href: '/sueldo-neto', label: 'Sueldo neto y planilla' },
@@ -19,6 +21,8 @@ const CATEGORY_LINKS = [
 ];
 
 const LEGAL_LINKS = [
+  { href: '/guias', label: 'Guías' },
+  { href: '/actualizaciones', label: 'Actualizaciones' },
   { href: '/sobre-nosotros', label: 'Sobre nosotros' },
   { href: '/contacto', label: 'Contacto' },
   { href: '/terminos-y-condiciones', label: 'Términos y condiciones' },
@@ -66,6 +70,8 @@ export function Footer() {
             <h2 className="text-xs font-bold uppercase tracking-[0.12em] text-white">Información</h2>
             <ul className="mt-4 space-y-1">
               {LEGAL_LINKS.map((link) => <li key={link.href}><Link href={link.href} className="flex min-h-9 items-center text-sm text-slate-400 transition-colors hover:text-emerald-400 focus-visible:text-emerald-400 focus-visible:outline-none">{link.label}</Link></li>)}
+              <li><button type="button" onClick={() => window.dispatchEvent(new Event(OPEN_EVENT))} className="flex min-h-9 items-center text-sm text-slate-400 transition-colors hover:text-emerald-400 focus-visible:text-emerald-400 focus-visible:outline-none cursor-pointer">Sistemas a medida</button></li>
+              <li><button type="button" onClick={resetConsent} className="flex min-h-9 items-center text-sm text-slate-400 transition-colors hover:text-emerald-400 focus-visible:text-emerald-400 focus-visible:outline-none cursor-pointer">Preferencias de cookies</button></li>
             </ul>
           </nav>
         </div>

@@ -65,8 +65,10 @@ export function calculateNetSalary(input: PayrollInput): PayrollResult {
   const pensionDeduction = roundTo((pensionableIncome * pensionRate) / 100, 2);
 
   // Estimación Impuesto a la Renta de 5ta Categoría (SUNAT)
-  // Proyección anual: (12 sueldos + 2 gratificaciones) - 7 UIT
-  const annualIncome = pensionableIncome * 14;
+  // Proyección anual: 12 sueldos + 2 gratificaciones + bonificación extraordinaria (Ley 30334, 9%) - 7 UIT.
+  // La bonificación no es remunerativa ni pensionable, pero sí está afecta a quinta categoría.
+  const extraordinaryBonus = pensionableIncome * 2 * PERU_CONSTANTS.EXTRAORDINARY_BONUS_RATE;
+  const annualIncome = pensionableIncome * 14 + extraordinaryBonus;
   const uit2026 = PERU_CONSTANTS.CURRENT_UIT;
   const exempt7Uit = 7 * uit2026; // S/ 38,500 no afectos en 2026
   const taxableAnnual = Math.max(0, annualIncome - exempt7Uit);

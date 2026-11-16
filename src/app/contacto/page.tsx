@@ -5,7 +5,7 @@ import type { Metadata } from 'next';
 import { ContactForm } from './ContactForm';
 
 export const metadata: Metadata = {
-  title: 'Contacto y Soporte | CalculaPerú',
+  title: 'Contacto y Soporte',
   description:
     'Comunícate con el equipo de CalculaPerú. Envíanos tus dudas, reportes de cálculo o sugerencias de nuevas herramientas para MYPES y trabajadores peruanos.',
   alternates: {

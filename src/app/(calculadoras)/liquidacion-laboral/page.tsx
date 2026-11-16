@@ -9,6 +9,7 @@ import {
   SeparationReason,
 } from '@/core/calculators/severancePay';
 import { calculateCompleteGratificationMonths } from '@/core/calculators/laborPeriods';
+import { PERU_CONSTANTS } from '@/core/constants/peru';
 import { formatCurrency } from '@/core/math/formatters';
 import { InputNumber } from '@/shared/components/ui/InputNumber';
 import { SwitchToggle } from '@/shared/components/ui/SwitchToggle';
@@ -43,6 +44,7 @@ export default function LiquidacionLaboralPage() {
 
   const [baseSalary, setBaseSalary] = useState<number>(3000);
   const [hasFamilyAllowance, setHasFamilyAllowance] = useState<boolean>(false);
+  const [hiredBeforeRemype, setHiredBeforeRemype] = useState<boolean>(false);
   const [laborRegime, setLaborRegime] = useState<LaborRegime>('general');
   const [separationReason, setSeparationReason] = useState<SeparationReason>('renuncia');
   const [hasEps, setHasEps] = useState<boolean>(false);
@@ -68,6 +70,7 @@ export default function LiquidacionLaboralPage() {
     baseSalary,
     hasFamilyAllowance,
     laborRegime,
+    hiredBeforeRemype,
     separationReason,
     hasEps,
     monthsInLastSemesterCts,
@@ -109,6 +112,7 @@ ${isDismissal ? `Indemnización por Despido: ${formatCurrency(result.arbitraryDi
   return (
     <CalculatorShell
       meta={meta}
+      afterContent={<SunafilFinesCard obligationType="liquidacion" />}
       faqs={faqs}
       educationalContent={
         <div className="space-y-6">
@@ -239,9 +243,9 @@ ${isDismissal ? `Indemnización por Despido: ${formatCurrency(result.arbitraryDi
                 onChange={(e) => setLaborRegime(e.target.value as LaborRegime)}
                 className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 p-2.5 text-xs font-bold text-slate-900 dark:text-white outline-none focus:border-[#08734F]"
               >
-                <option value="general">Régimen General (100% beneficios)</option>
-                <option value="pequena_empresa">Pequeña Empresa MYPE (50% beneficios)</option>
-                <option value="microempresa">Microempresa (Solo vacaciones)</option>
+                <option value="general">Régimen General (100 % de beneficios; también si la empresa no está inscrita en REMYPE)</option>
+                <option value="pequena_empresa">Pequeña empresa inscrita en REMYPE (50 % de beneficios)</option>
+                <option value="microempresa">Microempresa inscrita en REMYPE (solo vacaciones)</option>
               </select>
             </div>
           </div>
@@ -374,9 +378,18 @@ ${isDismissal ? `Indemnización por Despido: ${formatCurrency(result.arbitraryDi
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+            {laborRegime !== 'general' && (
+              <SwitchToggle
+                id="hiredBeforeRemype"
+                label="¿Fue contratado antes de la inscripción de la empresa en el REMYPE?"
+                description="El régimen MYPE no es retroactivo: si fue contratado antes, conserva el régimen general (100 %)."
+                checked={hiredBeforeRemype}
+                onChange={(value) => setHiredBeforeRemype(value)}
+              />
+            )}
             <SwitchToggle
               id="hasFamilyAllowance"
-              label="Asignación Familiar (+S/ 113.00)"
+              label="Asignación Familiar (+S/ 123.00)"
               description="Hijos menores o universitarios"
               checked={hasFamilyAllowance}
               onChange={(val) => setHasFamilyAllowance(val)}
@@ -493,7 +506,7 @@ ${isDismissal ? `Indemnización por Despido: ${formatCurrency(result.arbitraryDi
                   subtitle: `Liquidación integral laboral calculada bajo normativa legal peruana (D.L. 728)`,
                   items: [
                     { label: 'Último Sueldo Básico', value: formatCurrency(baseSalary) },
-                    { label: 'Asignación Familiar', value: hasFamilyAllowance ? 'S/ 113.00' : 'S/ 0.00' },
+                    { label: 'Asignación Familiar', value: hasFamilyAllowance ? 'S/ 123.00' : 'S/ 0.00' },
                     { label: 'Régimen Laboral', value: laborRegime === 'general' ? 'Régimen General (100%)' : laborRegime === 'pequena_empresa' ? 'Pequeña Empresa MYPE (50%)' : 'Microempresa' },
                     ...(employmentStartDate && terminationDate && !hasInvalidDateRange ? [
                       { label: 'Fecha de inicio laboral', value: employmentStartDate },
@@ -548,7 +561,7 @@ ${isDismissal ? `Indemnización por Despido: ${formatCurrency(result.arbitraryDi
             ]}
             csvRows={[
               { concepto: 'Sueldo Básico', base: 'D.L. 728', monto: baseSalary },
-              { concepto: 'Asignación Familiar', base: 'Ley 25129', monto: hasFamilyAllowance ? 113 : 0 },
+              { concepto: 'Asignación Familiar', base: 'Ley 25129', monto: hasFamilyAllowance ? PERU_CONSTANTS.FAMILY_ALLOWANCE : 0 },
               { concepto: 'CTS Trunca', base: 'D.S. 001-97-TR', monto: result.truncatedCts },
               { concepto: 'Gratificación Trunca', base: 'Ley 27735', monto: result.truncatedGrati },
               { concepto: 'Bonificación Extraordinaria (EsSalud/EPS)', base: 'Ley 30334', monto: result.essaludBonus },
@@ -563,11 +576,8 @@ ${isDismissal ? `Indemnización por Despido: ${formatCurrency(result.arbitraryDi
               `• Vacaciones Truncas: ${formatCurrency(result.truncatedVacations)}\n` +
               (result.arbitraryDismissalIndemnity > 0 ? `• Indemnización Despido: ${formatCurrency(result.arbitraryDismissalIndemnity)}\n` : '') +
               `*TOTAL LIQUIDACIÓN NETA: ${formatCurrency(result.totalSettlement)}*\n` +
-              `_Calculado con parámetros referenciales SUNAFIL en calculaperu.pe_`}
+              `_Calculado con parámetros referenciales SUNAFIL en calculaperu.com.pe_`}
           />
-
-          {/* SUNAFIL Fines Risk Matrix */}
-          <SunafilFinesCard obligationType="liquidacion" />
         </div>
 
       </div>
@@ -577,7 +587,7 @@ ${isDismissal ? `Indemnización por Despido: ${formatCurrency(result.arbitraryDi
         onClose={() => setIsPremiumModalOpen(false)}
         calculationData={{
           baseSalary,
-          familyAllowance: hasFamilyAllowance ? 113 : 0,
+          familyAllowance: hasFamilyAllowance ? PERU_CONSTANTS.FAMILY_ALLOWANCE : 0,
           laborRegime: laborRegime === 'general' ? 'Régimen General (D.L. 728)' : laborRegime === 'pequena_empresa' ? 'Pequeña Empresa (REMYPE)' : 'Microempresa (REMYPE)',
           separationReason: separationReason === 'despido_arbitrario' ? 'Despido Arbitrario / Injustificado' : separationReason === 'renuncia' ? 'Renuncia Voluntaria' : separationReason === 'mutuo_disenso' ? 'Mutuo Disenso' : 'Vencimiento de Contrato',
           employmentStartDate: employmentStartDate || undefined,

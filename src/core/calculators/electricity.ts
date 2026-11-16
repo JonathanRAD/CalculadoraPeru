@@ -5,7 +5,7 @@ export interface ElectricityInput {
   powerWatts: number; // Potencia del artefacto en Watts (ej: 1200 W)
   hoursPerDay: number; // Horas de uso al día (ej: 5 horas)
   daysPerMonth: number; // Días de uso al mes (ej: 30 días)
-  kwhRate?: number; // Costo por kWh según empresa eléctrica (Luz del Sur / Enel S/ 0.72)
+  kwhRate?: number; // Costo por kWh según empresa eléctrica (referencia: S/ 0.75 con IGV)
 }
 
 export interface ElectricityResult {

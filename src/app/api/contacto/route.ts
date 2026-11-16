@@ -17,6 +17,7 @@ const ALLOWED_CATEGORIES = [
   'mejora',
   'privacidad',
   'alianza',
+  'sistema_a_medida',
   'otro',
 ];
 

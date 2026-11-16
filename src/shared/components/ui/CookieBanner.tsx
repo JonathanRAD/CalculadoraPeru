@@ -3,6 +3,7 @@
 import React, { useState, useSyncExternalStore } from 'react';
 import Link from 'next/link';
 import { Cookie, X } from 'lucide-react';
+import { CONSENT_STORAGE_KEY, applyConsent } from '@/shared/lib/cookie-consent';
 
 function subscribeStorage(callback: () => void) {
   window.addEventListener('storage', callback);
@@ -11,7 +12,7 @@ function subscribeStorage(callback: () => void) {
 
 function getConsentSnapshot() {
   try {
-    return !localStorage.getItem('calculaperu-cookie-consent');
+    return !localStorage.getItem(CONSENT_STORAGE_KEY);
   } catch {
     return false;
   }
@@ -25,10 +26,11 @@ export function CookieBanner() {
   const [dismissed, setDismissed] = useState(false);
   const isConsentMissing = useSyncExternalStore(subscribeStorage, getConsentSnapshot, getServerSnapshot);
 
-  const handleAccept = () => {
+  const choose = (accepted: boolean) => {
     try {
-      localStorage.setItem('calculaperu-cookie-consent', 'accepted');
+      localStorage.setItem(CONSENT_STORAGE_KEY, accepted ? 'accepted' : 'rejected');
     } catch {}
+    applyConsent(accepted);
     setDismissed(true);
   };
 
@@ -47,8 +49,8 @@ export function CookieBanner() {
             <span>Aviso de Cookies y Privacidad</span>
           </div>
           <button
-            onClick={handleAccept}
-            aria-label="Cerrar aviso de cookies"
+            onClick={() => choose(false)}
+            aria-label="Cerrar sin aceptar cookies opcionales"
             className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-0.5"
           >
             <X className="h-4 w-4" />
@@ -56,10 +58,10 @@ export function CookieBanner() {
         </div>
 
         <p className="text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
-          CalculaPerú utiliza cookies propias y de terceros (como Google Analytics y Google AdSense) para personalizar contenido, anuncios y analizar nuestro tráfico conforme a las normativas de privacidad.
+          Usamos almacenamiento propio para recordar tu tema. Si aceptas, Google Analytics y Google AdSense pueden usar cookies para medir el uso del sitio y mostrar anuncios personalizados. Si rechazas, seguiremos midiendo visitas de forma limitada y los anuncios no serán personalizados.
         </p>
 
-        <div className="flex items-center justify-between gap-3 pt-1">
+        <div className="flex flex-wrap items-center justify-between gap-3 pt-1">
           <Link
             href="/politica-de-privacidad"
             className="text-[11px] text-sky-700 dark:text-sky-400 hover:underline font-semibold"
@@ -67,12 +69,20 @@ export function CookieBanner() {
             Leer Política de Privacidad
           </Link>
 
-          <button
-            onClick={handleAccept}
-            className="px-4 py-2 bg-[#00875A] hover:bg-[#00704A] text-white font-bold rounded-lg text-xs transition-colors shadow-xs cursor-pointer"
-          >
-            Aceptar y continuar
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => choose(false)}
+              className="px-4 py-2 border border-slate-300 dark:border-slate-600 text-slate-800 dark:text-slate-200 font-bold rounded-lg text-xs transition-colors hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer"
+            >
+              Rechazar
+            </button>
+            <button
+              onClick={() => choose(true)}
+              className="px-4 py-2 bg-[#00875A] hover:bg-[#00704A] text-white font-bold rounded-lg text-xs transition-colors shadow-xs cursor-pointer"
+            >
+              Aceptar
+            </button>
+          </div>
         </div>
       </div>
     </div>

@@ -7,6 +7,11 @@ export interface CtsInput {
   hasFamilyAllowance?: boolean; // Asignación familiar (10% de la RMV)
   monthsWorkedInSemester: number; // Meses completos laborados en el semestre (1 a 6)
   companyRegime: CompanyRegime; // Régimen laboral
+  /**
+   * Trabajador contratado antes de que la empresa se inscribiera en el REMYPE.
+   * El régimen MYPE no es retroactivo: esos trabajadores conservan el régimen general.
+   */
+  hiredBeforeRemype?: boolean;
 }
 
 export interface CtsResult {
@@ -26,8 +31,9 @@ export function calculateCts(input: CtsInput): CtsResult {
   const familyAllowance = input.hasFamilyAllowance ? PERU_CONSTANTS.FAMILY_ALLOWANCE : 0;
   const computableSalary = salary + familyAllowance;
   const months = Math.max(1, Math.min(6, input.monthsWorkedInSemester || 6));
+  const regime = input.companyRegime !== 'general' && input.hiredBeforeRemype ? 'general' : input.companyRegime;
 
-  if (input.companyRegime === 'microempresa') {
+  if (regime === 'microempresa') {
     return {
       computableSalary,
       oneSixthGratification: 0,
@@ -37,7 +43,7 @@ export function calculateCts(input: CtsInput): CtsResult {
     };
   }
 
-  const regimeFactor = input.companyRegime === 'pequena_empresa' ? 0.5 : 1.0;
+  const regimeFactor = regime === 'pequena_empresa' ? 0.5 : 1.0;
   const oneSixthGratification = roundTo((computableSalary * regimeFactor) / 6, 2);
   const totalComputableBasis = roundTo(computableSalary + oneSixthGratification, 2);
 

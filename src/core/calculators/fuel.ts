@@ -25,7 +25,7 @@ export function calculateFuelCost(input: FuelInput): FuelResult {
   const baseDistance = Math.max(0, input.distanceKm || 0);
   const totalDistanceKm = input.isRoundTrip ? baseDistance * 2 : baseDistance;
   const efficiency = Math.max(1, input.efficiencyKmPerGallon || 35);
-  const price = Math.max(0, input.fuelPricePerUnit || 16.5);
+  const price = Math.max(0, input.fuelPricePerUnit || 21);
   const passengers = Math.max(1, input.numberOfPassengers || 1);
 
   const unitsNeeded = totalDistanceKm / efficiency;

@@ -11,6 +11,19 @@ const nextConfig: NextConfig = {
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
     minimumCacheTTL: 31536000,
   },
+  async redirects() {
+    // Evita contenido duplicado: el alias de Vercel redirige (301) al dominio oficial.
+    // Solo afecta al host exacto de producción; los despliegues de vista previa
+    // usan otros hostnames y no se ven afectados.
+    return [
+      {
+        source: "/:path*",
+        has: [{ type: "host" as const, value: "calculadora-peru.vercel.app" }],
+        destination: "https://www.calculaperu.com.pe/:path*",
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     return [
       {

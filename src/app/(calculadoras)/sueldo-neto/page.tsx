@@ -143,35 +143,35 @@ Sueldo Neto en Cuenta: ${formatCurrency(result.netSalary)}`;
                     <td className="p-2.5 text-emerald-700 dark:text-emerald-400 font-semibold">Haber computable principal</td>
                   </tr>
                   <tr>
-                    <td className="p-2.5">Asignación Familiar (Ley 25129 - 10% RMV S/ 1,130)</td>
-                    <td className="p-2.5 font-mono">S/ 113.00</td>
+                    <td className="p-2.5">Asignación Familiar (Ley 25129 - 10% RMV S/ 1,230)</td>
+                    <td className="p-2.5 font-mono">S/ 123.00</td>
                     <td className="p-2.5 text-emerald-700 dark:text-emerald-400 font-semibold">Beneficio social remunerativo</td>
                   </tr>
                   <tr className="bg-slate-50/60 dark:bg-slate-900/60 font-bold">
                     <td className="p-2.5">Total Remuneración Bruta Afecta</td>
-                    <td className="p-2.5 font-mono">S/ 3,113.00</td>
+                    <td className="p-2.5 font-mono">S/ 3,123.00</td>
                     <td className="p-2.5">Base imponible mensual</td>
                   </tr>
                   <tr>
                     <td className="p-2.5">Descuento Previsional AFP Integra (Flujo: 12.92%)</td>
-                    <td className="p-2.5 font-mono text-red-600 dark:text-red-400">- S/ 402.20</td>
+                    <td className="p-2.5 font-mono text-red-600 dark:text-red-400">- S/ 403.49</td>
                     <td className="p-2.5 text-slate-600 dark:text-slate-400">10% fondo + 1.37% seguro + 1.55% comisión</td>
                   </tr>
                   <tr>
                     <td className="p-2.5">Retención Proyectada 5ta Categoría SUNAT (Tramo 1: 8%)</td>
-                    <td className="p-2.5 font-mono text-red-600 dark:text-red-400">- S/ 33.88</td>
-                    <td className="p-2.5 text-slate-600 dark:text-slate-400">Proyección anual (14 sueldos) menos 7 UIT</td>
+                    <td className="p-2.5 font-mono text-red-600 dark:text-red-400">- S/ 38.56</td>
+                    <td className="p-2.5 text-slate-600 dark:text-slate-400">Proyección anual (14 sueldos + bonificación extraordinaria) menos 7 UIT</td>
                   </tr>
                   <tr className="bg-emerald-50 dark:bg-emerald-950 font-bold text-slate-900 dark:text-white">
                     <td className="p-2.5 text-emerald-800 dark:text-emerald-300">Sueldo Neto Líquido a Depositar</td>
-                    <td className="p-2.5 font-mono text-emerald-800 dark:text-emerald-300 text-sm">S/ 2,676.92</td>
+                    <td className="p-2.5 font-mono text-emerald-800 dark:text-emerald-300 text-sm">S/ 2,680.95</td>
                     <td className="p-2.5 text-emerald-800 dark:text-emerald-300">Ingreso efectivo mensual en cuenta</td>
                   </tr>
                 </tbody>
               </table>
             </div>
             <p className="text-[11px] text-slate-500 dark:text-slate-400 italic">
-              * Nota: Si el afiliado estuviese en comisión mixta (saldo), la tasa en planilla sería 11.37% (-S/ 353.95), resultando en un neto de S/ 2,725.17. El empleador aporta adicionalmente EsSalud (9% = S/ 280.17) sin descontarlo del trabajador.
+              * Nota: Si el afiliado estuviese en comisión mixta (saldo), la tasa en planilla sería 11.37% (-S/ 355.09), resultando en un neto de S/ 2,729.35. El empleador aporta adicionalmente EsSalud (9% = S/ 281.07) sin descontarlo del trabajador.
             </p>
           </div>
 
@@ -181,7 +181,7 @@ Sueldo Neto en Cuenta: ${formatCurrency(result.netSalary)}`;
               <li>
                 <strong>Comisiones y primas de AFP:</strong> Consulta los tarifarios mensuales oficiales en la{' '}
                 <a
-                  href="https://www.sbs.gob.pe/afiliados/informacion-del-sistema-de-pensiones/comisiones-y-primas-de-seguro"
+                  href="https://www.sbs.gob.pe/app/spp/empleadores/comisiones_spp/paginas/comision_prima.aspx"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-emerald-700 dark:text-emerald-400 underline hover:text-emerald-800"
@@ -192,7 +192,7 @@ Sueldo Neto en Cuenta: ${formatCurrency(result.netSalary)}`;
               <li>
                 <strong>Sistema Nacional de Pensiones (ONP 13%):</strong> Información de aportes y jubilación regulada por el D.L. 19990 en la{' '}
                 <a
-                  href="https://www.onp.gob.pe"
+                  href="https://www.gob.pe/onp"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-emerald-700 dark:text-emerald-400 underline hover:text-emerald-800"
@@ -203,23 +203,23 @@ Sueldo Neto en Cuenta: ${formatCurrency(result.netSalary)}`;
               <li>
                 <strong>Impuesto a la Renta de 5ta Categoría:</strong> Tramos vigentes y deducción de 7 UIT conforme al D.S. N° 179-2004-EF en{' '}
                 <a
-                  href="https://orientacion.sunat.gob.pe/quinta-categoria"
+                  href="https://orientacion.sunat.gob.pe/node/301"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-emerald-700 dark:text-emerald-400 underline hover:text-emerald-800"
                 >
-                  SUNAT Orientación Tributaria
+                  SUNAT Orientación: cálculo del impuesto de quinta categoría
                 </a>.
               </li>
               <li>
-                <strong>Régimen laboral de la actividad privada:</strong> Beneficios y derechos regulados bajo el D.L. 728 verificables en el{' '}
+                <strong>Régimen laboral de la actividad privada:</strong> Beneficios y derechos regulados bajo el D.L. 728 que puedes contrastar con{' '}
                 <a
-                  href="https://www.gob.pe/mtpe"
+                  href="https://portal.trabajo.gob.pe/calculadoraMTPE/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-emerald-700 dark:text-emerald-400 underline hover:text-emerald-800"
                 >
-                  Ministerio de Trabajo y Promoción del Empleo (MTPE)
+                  la calculadora oficial de beneficios sociales del MTPE
                 </a>.
               </li>
             </ul>
@@ -315,7 +315,7 @@ Sueldo Neto en Cuenta: ${formatCurrency(result.netSalary)}`;
           <SwitchToggle
             id="hasDependents"
             label="¿Tienes hijos menores de edad o dependientes?"
-            description="Agrega el 10% de Asignación Familiar legal (+S/ 113.00)"
+            description="Agrega el 10% de Asignación Familiar legal (+S/ 123.00)"
             checked={hasDependents}
             onChange={(hasDependents) => setHasDependents(hasDependents)}
             badge="Beneficio"
@@ -545,7 +545,7 @@ Sueldo Neto en Cuenta: ${formatCurrency(result.netSalary)}`;
                   subtitle: `Desglose de remuneración y aportes según legislación laboral de Perú`,
                   items: [
                     { label: 'Sueldo Básico Mensual', value: formatCurrency(grossSalary) },
-                    { label: 'Asignación Familiar', value: hasDependents ? 'S/ 113.00' : 'S/ 0.00' },
+                    { label: 'Asignación Familiar', value: hasDependents ? 'S/ 123.00' : 'S/ 0.00' },
                     ...(result.variableRemuneration > 0 ? [{ label: 'Ingresos Remunerativos Variables', value: formatCurrency(result.variableRemuneration) }] : []),
                     ...(result.nonRemunerativeIncome > 0 ? [{ label: 'Ingresos No Remunerativos', value: formatCurrency(result.nonRemunerativeIncome) }] : []),
                     { label: 'Remuneración Bruta Total', value: formatCurrency(result.totalGrossIncome), isHighlight: true },

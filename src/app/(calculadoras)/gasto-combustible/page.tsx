@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { CalculatorShell } from '@/features/calculators/components/CalculatorShell';
+import { ReferenceDataNote } from '@/shared/components/ui/ReferenceDataNote';
 import { CALCULATORS_REGISTRY } from '@/features/calculators/registry';
 import { calculateFuelCost } from '@/core/calculators/fuel';
 import { formatCurrency, formatNumber } from '@/core/math/formatters';
@@ -12,11 +13,11 @@ import { ShareButtons } from '@/shared/components/ui/ShareButtons';
 import { Fuel } from 'lucide-react';
 
 const COMMON_FUELS = [
-  { id: 'regular', name: 'Gasolina Regular (90)', price: 16.20 },
-  { id: 'premium', name: 'Gasolina Premium (95/97)', price: 18.90 },
-  { id: 'diesel', name: 'Diésel DB5', price: 16.80 },
-  { id: 'glp', name: 'GLP (por galón)', price: 7.50 },
-  { id: 'gnv', name: 'GNV (por m³)', price: 1.65 },
+  { id: 'regular', name: 'Gasohol Regular (90)', price: 21.00 },
+  { id: 'premium', name: 'Gasohol Premium (95/97)', price: 24.00 },
+  { id: 'diesel', name: 'Diésel B5 S-50', price: 26.50 },
+  { id: 'glp', name: 'GLP (por galón, referencia)', price: 7.50 },
+  { id: 'gnv', name: 'GNV (por m³, referencia)', price: 1.65 },
 ];
 
 export default function GastoCombustiblePage() {
@@ -24,7 +25,7 @@ export default function GastoCombustiblePage() {
 
   const [distanceKm, setDistanceKm] = useState<number>(300);
   const [efficiencyKmPerGallon, setEfficiencyKmPerGallon] = useState<number>(40);
-  const [fuelPricePerUnit, setFuelPricePerUnit] = useState<number>(16.20);
+  const [fuelPricePerUnit, setFuelPricePerUnit] = useState<number>(21.00);
   const [numberOfPassengers, setNumberOfPassengers] = useState<number>(4);
   const [isRoundTrip, setIsRoundTrip] = useState<boolean>(true);
 
@@ -68,6 +69,17 @@ export default function GastoCombustiblePage() {
   return (
     <CalculatorShell
       meta={meta}
+      dataNote={
+        <ReferenceDataNote
+          reviewed="2026-11-14"
+          sources={[
+            { label: 'Facilito (Osinergmin): precios por grifo', url: 'https://www.facilito.gob.pe/' },
+            { label: 'gob.pe: cómo consultar los precios de combustibles', url: 'https://www.gob.pe/553-consultar-los-precios-de-combustibles' },
+          ]}
+        >
+          El precio del combustible cambia casi a diario y varía según el grifo y el distrito. El valor que aparece en la calculadora es solo una referencia editable: En Lima, el 14 de noviembre de 2026, Facilito mostraba rangos aproximados de S/ 18.56 a 23.99 por galón de gasohol regular, S/ 20.39 a 27.99 de premium y S/ 23.09 a 30.36 de diésel; los valores iniciales son puntos medios redondeados. Los valores de GLP y GNV son referencias que no pudimos contrastar con una fuente de noviembre de 2026: consúltalos en Facilito. Ingresa el precio que ves en tu grifo y el rendimiento real de tu vehículo para obtener un resultado fiable.
+        </ReferenceDataNote>
+      }
       faqs={faqs}
       educationalContent={
         <div className="space-y-6">
@@ -112,7 +124,7 @@ export default function GastoCombustiblePage() {
               2. Caso práctico de viaje: Ruta Lima - Ica (Ida y Vuelta)
             </h3>
             <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-              Un viaje familiar de fin de semana comprende 300 km de ida y 300 km de vuelta (600 km en total por la Panamericana Sur). El automóvil rinde 40 km/galón usando Gasolina Regular a S/ 16.20 por galón con 4 ocupantes:
+              Un viaje familiar de fin de semana comprende 300 km de ida y 300 km de vuelta (600 km en total por la Panamericana Sur). El automóvil rinde 40 km/galón usando Gasohol Regular a S/ 21.00 por galón (valor de ejemplo) con 4 ocupantes:
             </p>
 
             <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800">
@@ -137,13 +149,13 @@ export default function GastoCombustiblePage() {
                   </tr>
                   <tr>
                     <td className="p-2.5 font-medium">Gasto Total en Combustible</td>
-                    <td className="p-2.5 text-slate-600 dark:text-slate-300">15.0 galones × S/ 16.20</td>
-                    <td className="p-2.5 font-mono font-semibold text-slate-900 dark:text-white">S/ 243.00</td>
+                    <td className="p-2.5 text-slate-600 dark:text-slate-300">15.0 galones × S/ 21.00</td>
+                    <td className="p-2.5 font-mono font-semibold text-slate-900 dark:text-white">S/ 315.00</td>
                   </tr>
                   <tr className="bg-emerald-50/60 dark:bg-emerald-950/30">
                     <td className="p-2.5 font-bold text-emerald-950 dark:text-emerald-300">Aporte Individual por Pasajero</td>
-                    <td className="p-2.5 font-mono font-bold text-emerald-800 dark:text-emerald-400">S/ 243.00 ÷ 4 personas</td>
-                    <td className="p-2.5 font-mono font-bold text-emerald-800 dark:text-emerald-400">S/ 60.75 c/u</td>
+                    <td className="p-2.5 font-mono font-bold text-emerald-800 dark:text-emerald-400">S/ 315.00 ÷ 4 personas</td>
+                    <td className="p-2.5 font-mono font-bold text-emerald-800 dark:text-emerald-400">S/ 78.75 c/u</td>
                   </tr>
                 </tbody>
               </table>
@@ -220,7 +232,7 @@ export default function GastoCombustiblePage() {
               prefix="S/"
               value={fuelPricePerUnit}
               onChange={(fuelPricePerUnit) => setFuelPricePerUnit(fuelPricePerUnit)}
-              placeholder="16.20"
+              placeholder="21.00"
               required
             />
 

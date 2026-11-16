@@ -9,6 +9,11 @@ export interface VacationsInput {
   monthsWorked: number; // Meses laborados en el periodo (1 a 12)
   daysWorked?: number; // Días adicionales laborados (0 a 29)
   companyRegime: VacationRegime; // Régimen general (30d), especial (20d), MYPE (15d) o personalizado
+  /**
+   * Trabajador contratado antes de que la empresa se inscribiera en el REMYPE.
+   * El régimen MYPE no es retroactivo: conserva los 30 días del régimen general.
+   */
+  hiredBeforeRemype?: boolean;
   customDaysPerYear?: number; // Días de vacaciones al año si es personalizado
   daysToSell?: number; // Días de vacaciones que se compran/venden a la empresa
 }
@@ -34,12 +39,14 @@ export function calculateVacations(input: VacationsInput): VacationsResult {
   const dailyRate = computableSalary / 30;
 
   // Determinar días de vacaciones por año según régimen
+  const isMype = input.companyRegime === 'pequena_empresa' || input.companyRegime === 'microempresa';
+  const regime = isMype && input.hiredBeforeRemype ? 'general' : input.companyRegime;
   let annualVacationDays = 30;
-  if (input.companyRegime === 'pequena_empresa' || input.companyRegime === 'microempresa') {
+  if (regime === 'pequena_empresa' || regime === 'microempresa') {
     annualVacationDays = 15;
-  } else if (input.companyRegime === 'especial_20') {
+  } else if (regime === 'especial_20') {
     annualVacationDays = 20;
-  } else if (input.companyRegime === 'personalizado') {
+  } else if (regime === 'personalizado') {
     annualVacationDays = Math.max(1, Math.min(60, input.customDaysPerYear || 30));
   }
 

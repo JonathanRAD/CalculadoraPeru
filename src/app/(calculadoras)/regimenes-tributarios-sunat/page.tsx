@@ -33,6 +33,7 @@ export default function RegimenesTributariosPage() {
 
   const [estimatedMonthlyRevenue, setEstimatedMonthlyRevenue] = useState<number>(4500);
   const [estimatedMonthlyPurchases, setEstimatedMonthlyPurchases] = useState<number>(1500);
+  const [estimatedMonthlyProfit, setEstimatedMonthlyProfit] = useState<number>(0);
   const [clientType, setClientType] = useState<ClientType>('final_consumer');
   const [activityType, setActivityType] = useState<ActivityType>('commerce_trade');
   const [taxpayerType, setTaxpayerType] = useState<TaxpayerType>('natural_person');
@@ -40,6 +41,7 @@ export default function RegimenesTributariosPage() {
   const result = calculateTaxRegimes({
     estimatedMonthlyRevenue,
     estimatedMonthlyPurchases,
+    estimatedMonthlyProfit: estimatedMonthlyProfit > 0 ? estimatedMonthlyProfit : undefined,
     clientType,
     activityType,
     taxpayerType,
@@ -173,6 +175,16 @@ Motivo: ${result.recommendedReason}`;
             />
           </div>
 
+          <InputNumber
+            id="monthlyProfit"
+            label="Utilidad neta mensual estimada (opcional)"
+            prefix="S/"
+            value={estimatedMonthlyProfit}
+            onChange={(val) => setEstimatedMonthlyProfit(val)}
+            helpText="Ventas menos costos y gastos. Déjalo en 0 si no lo sabes: con este dato se compara el impuesto a la renta anual de cada régimen."
+            placeholder="0.00"
+          />
+
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div>
               <label htmlFor="taxpayerType" className="text-xs sm:text-sm font-bold text-slate-900 dark:text-slate-200 block mb-2">
@@ -258,6 +270,11 @@ Motivo: ${result.recommendedReason}`;
                       {regime.isEligible ? formatCurrency(regime.totalMonthlyTax) : 'No apto'}
                       <span className="text-[10px] font-normal text-slate-500 not-mono ml-1">/ mes</span>
                     </div>
+                    {regime.isEligible && regime.annualIncomeTax !== undefined && (
+                      <div className="mt-1 text-[11px] font-semibold text-slate-700 dark:text-slate-300">
+                        Renta anual estimada: <span className="font-mono">{formatCurrency(regime.annualIncomeTax)}</span>
+                      </div>
+                    )}
 
                     <div className="mt-2 text-[11px] text-slate-600 dark:text-slate-400 space-y-1">
                       <div className="flex items-center gap-1">

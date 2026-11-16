@@ -4,7 +4,7 @@ import { ShieldCheck, Lock, Eye, Cookie, ArrowLeft } from 'lucide-react';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Política de Privacidad | CalculaPerú',
+  title: 'Política de Privacidad',
   description:
     'Conoce cómo protegemos tu privacidad, el uso de cookies y la recopilación de datos en CalculaPerú conforme a las leyes peruanas y estándares de Google.',
   alternates: {
@@ -36,7 +36,7 @@ export default function PoliticaPrivacidadPage() {
             Política de Privacidad
           </h1>
           <p className="text-xs text-slate-500 dark:text-slate-400 mt-2 font-medium">
-            Última actualización: 21 de septiembre de 2026
+            Última actualización: 14 de noviembre de 2026
           </p>
         </div>
 
@@ -69,6 +69,9 @@ export default function PoliticaPrivacidadPage() {
                 <strong>Herramientas de analítica web:</strong> Empleamos Google Analytics 4 para registrar métricas de uso y rendimiento web (como rutas de página consultadas, títulos, términos del buscador interno, tipo de dispositivo, navegador y procedencia aproximada). Esta telemetría técnica no se asocia con los campos de cálculo ni transmite salarios, montos remunerativos ni datos financieros ingresados por el usuario en las herramientas.
               </li>
               <li>
+                <strong>Estadísticas propias y de alojamiento:</strong> Además de Google Analytics 4, registramos en nuestra propia base de datos eventos anónimos de visita: la ruta de la página, la página de procedencia (referrer), los términos escritos en el buscador interno de la portada (hasta 100 caracteres), el tipo de dispositivo (móvil o escritorio) y un identificador de sesión diario no reversible generado a partir de un código hash. No almacenamos tu dirección IP ni los montos que ingresas en las calculadoras. Nuestro proveedor de alojamiento, Vercel, también puede medir visitas y rendimiento mediante Vercel Web Analytics.
+              </li>
+              <li>
                 <strong>Cuentas CalculaPerú PRO:</strong> Si dispones de una cuenta PRO activa, la información de un cálculo o cotización únicamente se almacena en nuestra base de datos protegida (PostgreSQL alojado en Supabase con cifrado en tránsito y en reposo) cuando pulsas voluntariamente el botón <em>&ldquo;Guardar en Mis Cálculos&rdquo;</em>. <strong>No existe guardado automático</strong> en segundo plano.
               </li>
             </ul>
@@ -80,9 +83,12 @@ export default function PoliticaPrivacidadPage() {
               3. Cookies y Publicidad de Terceros (Google AdSense)
             </h2>
             <p>
-              CalculaPerú utiliza almacenamiento local y cookies técnicas para recordar tus preferencias (como el Modo Claro u Oscuro). Asimismo, proveedores externos, incluido <strong>Google</strong>, utilizan cookies para publicar anuncios cuando visitas nuestro sitio web:
+              CalculaPerú utiliza almacenamiento local y cookies técnicas para recordar tus preferencias (como el Modo Claro u Oscuro, tu elección sobre cookies y si cerraste un aviso informativo, por ejemplo el de sistemas a medida, para no volver a mostrártelo durante un tiempo). Asimismo, proveedores externos, incluido <strong>Google</strong>, utilizan cookies para publicar anuncios cuando visitas nuestro sitio web:
             </p>
             <ul className="list-disc pl-5 space-y-1.5 text-xs text-slate-600 dark:text-slate-400">
+              <li>
+                <strong>Tu elección:</strong> Al entrar te pedimos aceptar o rechazar las cookies opcionales de medición y publicidad. Hasta que elijas, y si rechazas, todas las señales de consentimiento de Google (almacenamiento de anuncios, analítica, datos de usuario para anuncios y personalización) permanecen denegadas, y los anuncios que se muestren no serán personalizados. Puedes cambiar tu elección en cualquier momento desde «Preferencias de cookies» en el pie de página. Si visitas el sitio desde el Espacio Económico Europeo, el Reino Unido o Suiza, Google puede mostrarte además su propio mensaje de consentimiento.
+              </li>
               <li>
                 <strong>Cookies publicitarias de Google:</strong> Google y sus socios utilizan cookies para mostrar anuncios basados en tus visitas a este y otros sitios web en internet.
               </li>

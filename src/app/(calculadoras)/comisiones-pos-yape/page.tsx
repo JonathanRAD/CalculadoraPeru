@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { CalculatorShell } from '@/features/calculators/components/CalculatorShell';
+import { ReferenceDataNote } from '@/shared/components/ui/ReferenceDataNote';
 import { CALCULATORS_REGISTRY } from '@/features/calculators/registry';
 import { calculatePosCommission, PosGateway, GATEWAY_RATES } from '@/core/calculators/posCommissions';
 import { formatCurrency, formatPercent } from '@/core/math/formatters';
@@ -16,22 +17,26 @@ export default function ComisionesPosYapePage() {
   const [amount, setAmount] = useState<number>(100);
   const [gateway, setGateway] = useState<PosGateway>('yape');
   const [mode, setMode] = useState<'deduct_from_sale' | 'add_to_charge'>('deduct_from_sale');
+  const [customRate, setCustomRate] = useState<number>(3.5);
+  const [customFixedFee, setCustomFixedFee] = useState<number>(0);
 
   const result = calculatePosCommission({
     amount,
     gateway,
     mode,
+    customRatePercentage: customRate,
+    customFixedFee,
   });
 
   const shareSummary = `Pasarela: ${result.gatewayName}
 Monto Cobrado al Cliente: ${formatCurrency(result.chargeAmount)}
-Comisión Total (con IGV): ${formatCurrency(result.totalCommissionFee)} (${formatPercent(result.commissionRate * 1.18)})
+Comisión Total (con IGV): ${formatCurrency(result.totalCommissionFee)} (${formatPercent(result.effectiveRatePercentage)}${result.fixedFee > 0 ? ` + ${formatCurrency(result.fixedFee)} por venta` : ''})
 Monto Líquido en Cuenta: ${formatCurrency(result.netReceived)}`;
 
   const faqs = [
     {
       question: '¿Por qué las comisiones de POS y pasarelas en Perú cobran IGV (18%) adicional?',
-      answer: 'El servicio de intermediación y procesamiento de pagos brindado por empresas como Niubiz, Izipay, Culqi o Mercado Pago está legalmente gravado con el Impuesto General a las Ventas (18%). Al finalizar el mes, la pasarela de pagos emite una Factura Electrónica por las comisiones cobradas, la cual sirve como Crédito Fiscal (gasto deducible) para tu empresa o negocio formal ante SUNAT.',
+      answer: 'En la mayoría de operadores la comisión se publica sin IGV y se suma el 18 % al cobrarla (por ejemplo, Yape e Izipay). Algunos comparativos señalan que ciertas pasarelas, como Culqi o Mercado Pago, publican su tarifa sin sumar IGV. Revisa tu contrato y la factura mensual de tu operador para saber qué parte es IGV; cuando lo es, puede ser crédito fiscal si tu régimen declara IGV.',
     },
     {
       question: '¿Cuánto cobra Yape Empresa en comisiones a los negocios?',
@@ -39,7 +44,7 @@ Monto Líquido en Cuenta: ${formatCurrency(result.netReceived)}`;
     },
     {
       question: '¿Cuál es la diferencia entre cobrar tarjeta de débito y de crédito en Perú?',
-      answer: 'Las transacciones con tarjeta de débito tienen menores costos interbancarios para los procesadores de pago, por lo que suelen tener tarifas base entre 2.5% y 3.2% + IGV. Las tarjetas de crédito nacionales cobran entre 3.4% y 3.9% + IGV, mientras que las tarjetas corporativas o internacionales pueden llegar hasta 4.5% o 5% + IGV.',
+      answer: 'Las tarifas cambian según el tipo de tarjeta (débito o crédito, nacional o extranjera), el rubro del comercio y lo que negocies con el operador. Por eso conviene pedir el tarifario por escrito y usar la opción de comisión personalizada con la tasa y el cargo fijo de tu contrato.',
     },
     {
       question: '¿Cómo calcular el precio que debo cobrar para que la comisión no reduzca mi ganancia?',
@@ -54,6 +59,17 @@ Monto Líquido en Cuenta: ${formatCurrency(result.netReceived)}`;
   return (
     <CalculatorShell
       meta={meta}
+      dataNote={
+        <ReferenceDataNote
+          reviewed="2026-11-14"
+          sources={[
+            { label: 'El Peruano: Yape Empresa, 2.95 % sobre las ventas del día', url: 'https://elperuano.pe/noticia/240612-yape-aclara-que-aplicacion-seguira-siendo-gratis-para-usuarios' },
+            { label: 'CONIT: comparativo de tarifas (octubre de 2026)', url: 'https://conit.pe/blog/izipay-vs-culqi-vs-niubiz-vs-mercado-pago' },
+          ]}
+        >
+          Las comisiones dependen de tu contrato, tu rubro y el tipo de tarjeta (débito o crédito). La tasa de Yape para negocios (2.95 % + IGV) es la publicada por la empresa; las de Culqi, Mercado Pago e Izipay vienen de un comparativo de tarifas publicadas en octubre de 2026 y Niubiz no publica una tasa online fija. Usa la opción de comisión personalizada con la tasa y el cargo fijo de tu contrato.
+        </ReferenceDataNote>
+      }
       faqs={faqs}
       educationalContent={
         <div className="space-y-4 text-sm leading-relaxed text-slate-700 dark:text-slate-300">
@@ -65,7 +81,7 @@ Monto Líquido en Cuenta: ${formatCurrency(result.netReceived)}`;
             Comparativa de Comisiones de Pasarelas en Perú
           </h3>
           <p>
-            A continuación se detallan los rangos referenciales de comisiones cobradas por los principales operadores autorizados en el mercado nacional:
+            A continuación se resumen las tarifas publicadas por los principales operadores. Las de Culqi, Mercado Pago e Izipay provienen de un comparativo de tarifas publicadas en octubre de 2026 (CONIT); la de Yape es la publicada por la empresa. Tu tasa real depende de tu contrato, tu rubro y el tipo de tarjeta.
           </p>
 
           <div className="my-4 overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-800">
@@ -80,28 +96,34 @@ Monto Líquido en Cuenta: ${formatCurrency(result.netReceived)}`;
               </thead>
               <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                 <tr>
-                  <td className="p-3 font-semibold">Yape Empresa</td>
+                  <td className="p-3 font-semibold">Yape para Empresas</td>
                   <td className="p-3">2.95%</td>
-                  <td className="p-3 font-mono font-bold text-slate-900 dark:text-white">~3.48%</td>
-                  <td className="p-3">Inmediato / 24h</td>
+                  <td className="p-3 font-mono font-bold text-slate-900 dark:text-white">~3.48% (con IGV)</td>
+                  <td className="p-3">Según condiciones de Yape</td>
                 </tr>
                 <tr>
-                  <td className="p-3 font-semibold">Niubiz / Izipay (Débito)</td>
-                  <td className="p-3">2.80% - 3.20%</td>
-                  <td className="p-3 font-mono font-bold text-slate-900 dark:text-white">~3.30% - 3.78%</td>
-                  <td className="p-3">24 a 48h hábiles</td>
+                  <td className="p-3 font-semibold">Culqi</td>
+                  <td className="p-3">3.44% + US$ 0.20 por venta</td>
+                  <td className="p-3 font-mono font-bold text-slate-900 dark:text-white">Sin IGV, según el comparativo</td>
+                  <td className="p-3">El mismo día</td>
                 </tr>
                 <tr>
-                  <td className="p-3 font-semibold">Niubiz / Izipay (Crédito)</td>
-                  <td className="p-3">3.45% - 3.99%</td>
-                  <td className="p-3 font-mono font-bold text-slate-900 dark:text-white">~4.07% - 4.71%</td>
-                  <td className="p-3">24 a 48h hábiles</td>
+                  <td className="p-3 font-semibold">Mercado Pago</td>
+                  <td className="p-3">3.49% + S/ 1.00 (al instante) o 3.29% + S/ 1.00 (a 14 días)</td>
+                  <td className="p-3 font-mono font-bold text-slate-900 dark:text-white">Sin IGV, según el comparativo</td>
+                  <td className="p-3">Al instante o a 14 días</td>
                 </tr>
                 <tr>
-                  <td className="p-3 font-semibold">Mercado Pago / Culqi</td>
-                  <td className="p-3">3.49% + S/ 1.00</td>
-                  <td className="p-3 font-mono font-bold text-slate-900 dark:text-white">Tasa + Cargo fijo + IGV</td>
-                  <td className="p-3">1 a 3 días hábiles</td>
+                  <td className="p-3 font-semibold">Izipay</td>
+                  <td className="p-3">3.44% + S/ 0.69 por venta</td>
+                  <td className="p-3 font-mono font-bold text-slate-900 dark:text-white">~4.06% + S/ 0.81 (con IGV)</td>
+                  <td className="p-3">Día siguiente</td>
+                </tr>
+                <tr>
+                  <td className="p-3 font-semibold">Niubiz</td>
+                  <td className="p-3">No publica tasa online fija; se negocia</td>
+                  <td className="p-3 font-mono font-bold text-slate-900 dark:text-white">Según contrato</td>
+                  <td className="p-3">Día siguiente</td>
                 </tr>
               </tbody>
             </table>
@@ -111,7 +133,7 @@ Monto Líquido en Cuenta: ${formatCurrency(result.netReceived)}`;
             El Crédito Fiscal de tus Comisiones
           </h3>
           <p>
-            Recuerda solicitar mensualmente tu reporte o factura electrónica a Niubiz, Izipay o Culqi. El IGV que te retienen en cada cobro constituye <strong>Crédito Fiscal</strong> que tu contador debe declarar en el formulario mensual de SUNAT para descontar el IGV que le debes al fisco por tus ventas.
+            Recuerda solicitar mensualmente tu reporte o factura electrónica a tu operador. Cuando la comisión incluye IGV, ese IGV constituye <strong>Crédito Fiscal</strong> que tu contador debe declarar en el formulario mensual de SUNAT para descontar el IGV que le debes al fisco por tus ventas.
           </p>
         </div>
       }
@@ -184,13 +206,35 @@ Monto Líquido en Cuenta: ${formatCurrency(result.netReceived)}`;
                   >
                     <div>{info.name}</div>
                     <span className="text-[11px] font-normal text-slate-500 dark:text-slate-400">
-                      Tasa: {info.rate}% + IGV
+                      Tasa: {key === 'personalizado' ? 'la de tu contrato' : `${info.rate}%${info.fixedFee > 0 ? ` + S/ ${info.fixedFee.toFixed(2)}` : ''}${info.igvApplies ? ' + IGV' : ''}`}
                     </span>
                   </button>
                 );
               })}
             </div>
           </div>
+
+          {gateway === 'personalizado' && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <InputNumber
+                id="customRate"
+                label="Tasa de tu contrato (sin IGV)"
+                suffix="%"
+                value={customRate}
+                onChange={(value) => setCustomRate(value)}
+                max={100}
+                placeholder="3.50"
+              />
+              <InputNumber
+                id="customFixedFee"
+                label="Cargo fijo por venta (opcional)"
+                prefix="S/"
+                value={customFixedFee}
+                onChange={(value) => setCustomFixedFee(value)}
+                placeholder="0.00"
+              />
+            </div>
+          )}
         </div>
 
         {/* Results Column */}
@@ -224,7 +268,7 @@ Monto Líquido en Cuenta: ${formatCurrency(result.netReceived)}`;
                 label="Comisión Neta"
                 value={formatCurrency(result.commissionFeeBeforeTax)}
                 type="warning"
-                subValue={`Tasa: ${formatPercent(result.commissionRate)}`}
+                subValue={`Tasa: ${formatPercent(result.commissionRate)}${result.fixedFee > 0 ? ` + ${formatCurrency(result.fixedFee)} fijo` : ''}`}
               />
               <ResultMetricCard
                 label="IGV Comisión (18%)"

@@ -1,61 +1,43 @@
 import { MetadataRoute } from 'next';
 import { CALCULATORS_REGISTRY } from '@/features/calculators/registry';
+import { GUIDES } from '@/features/guias/data';
+import { SITE_LAST_UPDATED } from '@/core/constants/site-updates';
 
-const LAST_SIGNIFICANT_UPDATE = new Date('2026-09-06T05:00:00.000Z');
-
+/**
+ * lastModified se basa en fechas reales:
+ * - calculadoras y páginas generales: última actualización registrada del sitio;
+ * - guías: su propia fecha de revisión.
+ * Google ignora changefreq y priority, por lo que no se declaran.
+ */
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = 'https://www.calculaperu.com.pe';
+  const siteDate = new Date(`${SITE_LAST_UPDATED}T12:00:00.000Z`);
 
   const calculatorRoutes = CALCULATORS_REGISTRY.map((calc) => ({
     url: `${baseUrl}${calc.slug}`,
-    lastModified: LAST_SIGNIFICANT_UPDATE,
-    changeFrequency: 'weekly' as const,
-    priority: 0.9,
+    lastModified: siteDate,
   }));
 
+  const guideRoutes = GUIDES.map((guide) => ({
+    url: `${baseUrl}/guias/${guide.slug}`,
+    lastModified: new Date(`${guide.updated}T12:00:00.000Z`),
+  }));
+
+  const staticPaths = [
+    '',
+    '/guias',
+    '/actualizaciones',
+    '/cotizador',
+    '/pro',
+    '/sobre-nosotros',
+    '/contacto',
+    '/politica-de-privacidad',
+    '/terminos-y-condiciones',
+  ];
+
   return [
-    {
-      url: baseUrl,
-      lastModified: LAST_SIGNIFICANT_UPDATE,
-      changeFrequency: 'daily' as const,
-      priority: 1.0,
-    },
-    {
-      url: `${baseUrl}/cotizador`,
-      lastModified: LAST_SIGNIFICANT_UPDATE,
-      changeFrequency: 'daily' as const,
-      priority: 1.0,
-    },
-    {
-      url: `${baseUrl}/pro`,
-      lastModified: LAST_SIGNIFICANT_UPDATE,
-      changeFrequency: 'daily' as const,
-      priority: 1.0,
-    },
-    {
-      url: `${baseUrl}/sobre-nosotros`,
-      lastModified: LAST_SIGNIFICANT_UPDATE,
-      changeFrequency: 'monthly' as const,
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/contacto`,
-      lastModified: LAST_SIGNIFICANT_UPDATE,
-      changeFrequency: 'monthly' as const,
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/politica-de-privacidad`,
-      lastModified: LAST_SIGNIFICANT_UPDATE,
-      changeFrequency: 'monthly' as const,
-      priority: 0.5,
-    },
-    {
-      url: `${baseUrl}/terminos-y-condiciones`,
-      lastModified: LAST_SIGNIFICANT_UPDATE,
-      changeFrequency: 'monthly' as const,
-      priority: 0.5,
-    },
+    ...staticPaths.map((path) => ({ url: `${baseUrl}${path}`, lastModified: siteDate })),
+    ...guideRoutes,
     ...calculatorRoutes,
   ];
 }

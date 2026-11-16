@@ -18,6 +18,7 @@ export default function CalculadoraVacacionesPage() {
   const [hasFamilyAllowance, setHasFamilyAllowance] = useState<boolean>(false);
   const [monthsWorked, setMonthsWorked] = useState<number>(8);
   const [daysWorked, setDaysWorked] = useState<number>(0);
+  const [hiredBeforeRemype, setHiredBeforeRemype] = useState<boolean>(false);
   const [companyRegime, setCompanyRegime] = useState<VacationRegime>('general');
   const [customDaysPerYear, setCustomDaysPerYear] = useState<number>(20);
   const [daysToSell, setDaysToSell] = useState<number>(0);
@@ -28,6 +29,7 @@ export default function CalculadoraVacacionesPage() {
     monthsWorked,
     daysWorked,
     companyRegime,
+    hiredBeforeRemype,
     customDaysPerYear,
     daysToSell,
   });
@@ -58,7 +60,7 @@ Total a Percibir: ${formatCurrency(result.totalPay)}`;
     },
     {
       question: '¿La asignación familiar ingresa en el cálculo de vacaciones?',
-      answer: 'Sí. La asignación familiar (S/ 113.00, equivalente al 10% de la Remuneración Mínima Vital de S/ 1,130) tiene naturaleza remunerativa ordinaria y computable para todos los beneficios sociales, incluyendo vacaciones gozadas, venta de vacaciones y vacaciones truncas.',
+      answer: 'Sí. La asignación familiar (S/ 123.00, equivalente al 10% de la Remuneración Mínima Vital de S/ 1,230) tiene naturaleza remunerativa ordinaria y computable para todos los beneficios sociales, incluyendo vacaciones gozadas, venta de vacaciones y vacaciones truncas.',
     },
   ];
 
@@ -253,9 +255,19 @@ Total a Percibir: ${formatCurrency(result.totalPay)}`;
             />
           )}
 
+          {(companyRegime === 'pequena_empresa' || companyRegime === 'microempresa') && (
+            <SwitchToggle
+              id="hiredBeforeRemype"
+              label="¿Fue contratado antes de la inscripción de la empresa en el REMYPE?"
+              description="El régimen MYPE no es retroactivo: si fue contratado antes, conserva los 30 días del régimen general."
+              checked={hiredBeforeRemype}
+              onChange={(value) => setHiredBeforeRemype(value)}
+            />
+          )}
+
           <SwitchToggle
             id="hasFamilyAllowance"
-            label="¿Percibes Asignación Familiar (+S/ 113.00)?"
+            label="¿Percibes Asignación Familiar (+S/ 123.00)?"
             description="Forma parte de la remuneración computable para las vacaciones"
             checked={hasFamilyAllowance}
             onChange={(hasFamilyAllowance) => setHasFamilyAllowance(hasFamilyAllowance)}

@@ -2,6 +2,7 @@
 
 import React, { useRef, useState } from 'react';
 import { CalculatorShell } from '@/features/calculators/components/CalculatorShell';
+import { ReferenceDataNote } from '@/shared/components/ui/ReferenceDataNote';
 import { CALCULATORS_REGISTRY } from '@/features/calculators/registry';
 import { formatCurrency, formatNumber } from '@/core/math/formatters';
 import { ELECTRIC_APPLIANCES } from '@/core/constants/peru';
@@ -68,7 +69,7 @@ export default function ConsumoElectricoPage() {
   const faqs = [
     {
       question: '¿Cuál es la tarifa promedio por kWh en Perú según Osinergmin?',
-      answer: 'En Lima y las principales regiones del Perú, la tarifa residencial estándar (Opción Tarifaria BT5B) supervisada por el Osinergmin se ubica habitualmente entre S/ 0.72 y S/ 0.85 por kilovatio-hora (kWh) para consumos mayores a 30 o 100 kWh/mes, incluyendo los cargos por reposición, mantenimiento y alumbrado público.',
+      answer: 'En Lima y las principales regiones del Perú, la tarifa residencial estándar (Opción Tarifaria BT5B) supervisada por el Osinergmin tiene un cargo por energía activa que, en el pliego de Pluz Energía vigente desde el 4 de noviembre de 2026, es de 63.18 ctm S/kWh (tramo de 31 a 140 kWh) y 64.57 ctm S/kWh (más de 140 kWh), sin IGV; con IGV equivale a unos S/ 0.75 a S/ 0.76 por kWh. A eso se suman el cargo fijo mensual, el alumbrado público y el IGV, y cada distribuidora (Luz del Sur, Pluz, regiones) tiene su propio pliego.',
     },
     {
       question: '¿Cuáles son los electrodomésticos que más energía consumen en un hogar o negocio?',
@@ -91,6 +92,18 @@ export default function ConsumoElectricoPage() {
   return (
     <CalculatorShell
       meta={meta}
+      dataNote={
+        <ReferenceDataNote
+          reviewed="2026-11-14"
+          sources={[
+            { label: 'Osinergmin: visor de pliegos tarifarios', url: 'https://www.osinergmin.gob.pe/seccion/institucional/Paginas/VisorPliegosTarifarios.aspx?Codigo=PTS' },
+            { label: 'Luz del Sur: pliego vigente (PDF)', url: 'https://cdn.luzdelsur.com.pe/weblds/nuestraempresa/lds_tarifas.pdf' },
+            { label: 'Pluz Energía: pliego tarifario', url: 'https://www.osinergmin.gob.pe/Tarifas/Electricidad/PliegoTarifario?Id=150000' },
+          ]}
+        >
+          La tarifa por kWh cambia según tu distribuidora, tu opción tarifaria y el mes, y tu recibo suma además cargos fijos, alumbrado público e IGV. El valor predeterminado (S/ 0.75 con IGV) sale del cargo de energía activa del pliego de Pluz Energía vigente desde el 4 de noviembre de 2026, sin incluir cargos fijos ni alumbrado público; es una referencia editable: revisa tu último recibo e ingresa el precio por kWh que figura en él.
+        </ReferenceDataNote>
+      }
       faqs={faqs}
       educationalContent={
         <div className="space-y-6">
@@ -196,12 +209,12 @@ export default function ConsumoElectricoPage() {
               <li>
                 <strong>Organismo Supervisor de la Inversión en Energía y Minería (Osinergmin):</strong> Supervisa las tarifas del servicio público de electricidad y pliegos tarifarios vigentes en el{' '}
                 <a
-                  href="https://www.osinergmin.gob.pe"
+                  href="https://www.osinergmin.gob.pe/seccion/institucional/Paginas/VisorPliegosTarifarios.aspx?Codigo=PTS"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-emerald-700 dark:text-emerald-400 underline hover:text-emerald-800"
                 >
-                  Portal Institucional de Osinergmin
+                  Visor de Pliegos Tarifarios de Osinergmin
                 </a>.
               </li>
               <li>

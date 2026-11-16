@@ -55,6 +55,9 @@ export const EXTERNAL_ORIGINS = {
   GA_COLLECT: "https://analytics.google.com",
   ADSENSE_DOMAIN: "https://pagead2.googlesyndication.com",
   ADSENSE_FRAME: "https://tpc.googlesyndication.com",
+  // Verificación de tráfico válido de Google (AdSense la carga junto a los anuncios). Hosts exactos, sin comodines.
+  ADTRAFFIC_EP1: "https://ep1.adtrafficquality.google",
+  ADTRAFFIC_EP2: "https://ep2.adtrafficquality.google",
   GOOGLE_FONTS_CSS: "https://fonts.googleapis.com",
   GOOGLE_FONTS_STATIC: "https://fonts.gstatic.com",
   VERCEL_ANALYTICS: "https://va.vercel-scripts.com",
@@ -102,7 +105,7 @@ export function buildCsp(config: SecurityHeadersConfig): string {
   const directives: string[] = [
     "default-src 'self'",
     // Scripts: propios + GA4 + AdSense + Vercel Analytics
-    `script-src 'self' 'unsafe-inline' ${EXTERNAL_ORIGINS.GA_DOMAIN} ${EXTERNAL_ORIGINS.GA_ANALYTICS} ${EXTERNAL_ORIGINS.ADSENSE_DOMAIN} ${EXTERNAL_ORIGINS.VERCEL_ANALYTICS}`,
+    `script-src 'self' 'unsafe-inline' ${EXTERNAL_ORIGINS.GA_DOMAIN} ${EXTERNAL_ORIGINS.GA_ANALYTICS} ${EXTERNAL_ORIGINS.ADSENSE_DOMAIN} ${EXTERNAL_ORIGINS.ADTRAFFIC_EP2} ${EXTERNAL_ORIGINS.VERCEL_ANALYTICS}`,
     // Estilos: propios + Google Fonts
     `style-src 'self' 'unsafe-inline' ${EXTERNAL_ORIGINS.GOOGLE_FONTS_CSS}`,
     // Fuentes: Google Fonts
@@ -110,9 +113,9 @@ export function buildCsp(config: SecurityHeadersConfig): string {
     // Imágenes: propios + data URIs (logos empresa base64) + balizas/creativos AdSense/Analytics (sin comodines)
     `img-src 'self' data: ${EXTERNAL_ORIGINS.ADSENSE_DOMAIN} ${EXTERNAL_ORIGINS.ADSENSE_FRAME} ${EXTERNAL_ORIGINS.GA_ANALYTICS} ${EXTERNAL_ORIGINS.GA_DOMAIN}`,
     // Conexiones de datos: propios + GA4 / beacons + AdSense + Vercel Insights (sin BCRP client-side)
-    `connect-src 'self' ${EXTERNAL_ORIGINS.GA_ANALYTICS} ${EXTERNAL_ORIGINS.GA_COLLECT} ${EXTERNAL_ORIGINS.ADSENSE_DOMAIN} ${EXTERNAL_ORIGINS.VERCEL_VITALS}`,
+    `connect-src 'self' ${EXTERNAL_ORIGINS.GA_ANALYTICS} ${EXTERNAL_ORIGINS.GA_COLLECT} ${EXTERNAL_ORIGINS.ADSENSE_DOMAIN} ${EXTERNAL_ORIGINS.ADTRAFFIC_EP1} ${EXTERNAL_ORIGINS.ADTRAFFIC_EP2} ${EXTERNAL_ORIGINS.VERCEL_VITALS}`,
     // Frames: 'self' + blob: (vista previa PDF Cotizador PRO) + AdSense
-    `frame-src 'self' blob: ${EXTERNAL_ORIGINS.ADSENSE_FRAME} ${EXTERNAL_ORIGINS.ADSENSE_DOMAIN}`,
+    `frame-src 'self' blob: ${EXTERNAL_ORIGINS.ADSENSE_FRAME} ${EXTERNAL_ORIGINS.ADSENSE_DOMAIN} ${EXTERNAL_ORIGINS.ADTRAFFIC_EP2}`,
     // Web Workers: propios + blob (generación cliente)
     "worker-src 'self' blob:",
     // Plugin objects deshabilitados

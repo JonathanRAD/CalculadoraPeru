@@ -57,6 +57,7 @@ const CATEGORY_SUBJECT_MAP: Record<string, string> = {
   mejora: 'Sugerencia de Mejora',
   privacidad: 'Privacidad o Datos',
   alianza: 'Alianza o Colaboración',
+  sistema_a_medida: 'Sistema a medida (cotización de proyecto)',
   otro: 'Consulta de Usuario',
 };
 

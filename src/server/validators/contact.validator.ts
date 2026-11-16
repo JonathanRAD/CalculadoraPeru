@@ -10,6 +10,7 @@ export const ALLOWED_CONTACT_CATEGORIES = [
   'mejora',
   'privacidad',
   'alianza',
+  'sistema_a_medida',
   'comercial',
   'soporte_tecnico',
   'sugerencia',

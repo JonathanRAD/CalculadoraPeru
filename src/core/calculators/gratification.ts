@@ -10,6 +10,11 @@ export interface GratificationInput {
   monthsWorkedInSemester: number; // Meses completos laborados (1 a 6)
   companyRegime: CompanyRegime; // Régimen laboral
   healthInsurance: HealthInsurance; // EsSalud (9%) o EPS (6.75%)
+  /**
+   * Trabajador contratado antes de que la empresa se inscribiera en el REMYPE.
+   * El régimen MYPE no es retroactivo: esos trabajadores conservan el régimen general.
+   */
+  hiredBeforeRemype?: boolean;
 }
 
 export interface GratificationResult {
@@ -29,8 +34,9 @@ export function calculateGratification(input: GratificationInput): Gratification
   const familyAllowance = input.hasFamilyAllowance ? PERU_CONSTANTS.FAMILY_ALLOWANCE : 0;
   const computableSalary = salary + familyAllowance;
   const months = Math.max(1, Math.min(6, input.monthsWorkedInSemester || 6));
+  const regime = input.companyRegime !== 'general' && input.hiredBeforeRemype ? 'general' : input.companyRegime;
 
-  if (input.companyRegime === 'microempresa') {
+  if (regime === 'microempresa') {
     return {
       baseComputableSalary: computableSalary,
       rawGratification: 0,
@@ -42,7 +48,7 @@ export function calculateGratification(input: GratificationInput): Gratification
   }
 
   // Factor según régimen (Régimen General: 1 sueldo completo / Pequeña empresa: 50% de sueldo)
-  const regimeMultiplier = input.companyRegime === 'pequena_empresa' ? 0.5 : 1.0;
+  const regimeMultiplier = regime === 'pequena_empresa' ? 0.5 : 1.0;
   const rawGratification = roundTo(((computableSalary * regimeMultiplier) / 6) * months, 2);
 
   const bonusPercentage = input.healthInsurance === 'eps'

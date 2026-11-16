@@ -244,7 +244,7 @@ Compra: S/ ${result.buyRate.toFixed(3)} | Venta: S/ ${result.sellRate.toFixed(3)
               <li>
                 <strong>Tipo de cambio contable oficial SBS:</strong> Consulta la cotización diaria ponderada en la{' '}
                 <a
-                  href="https://www.sbs.gob.pe/app/pp/sistip_portal/paginas/titulo.aspx"
+                  href="https://www.sbs.gob.pe/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-emerald-700 dark:text-emerald-400 underline hover:text-emerald-800"

@@ -10,7 +10,7 @@ export function buildCalculatorMetadata(id: CalculatorMeta['id']): Metadata {
   if (!calculator) return {};
 
   return {
-    title: calculator.title,
+    title: calculator.metaTitle ?? calculator.title,
     description: calculator.description,
     keywords: calculator.keywords,
     alternates: { canonical: calculator.slug },

@@ -17,6 +17,7 @@ export default function GratificacionPage() {
   const [baseSalary, setBaseSalary] = useState<number>(2500);
   const [hasFamilyAllowance, setHasFamilyAllowance] = useState<boolean>(false);
   const [monthsWorkedInSemester, setMonthsWorkedInSemester] = useState<number>(6);
+  const [hiredBeforeRemype, setHiredBeforeRemype] = useState<boolean>(false);
   const [companyRegime, setCompanyRegime] = useState<CompanyRegime>('general');
   const [healthInsurance, setHealthInsurance] = useState<HealthInsurance>('essalud');
 
@@ -25,6 +26,7 @@ export default function GratificacionPage() {
     hasFamilyAllowance,
     monthsWorkedInSemester,
     companyRegime,
+    hiredBeforeRemype,
     healthInsurance,
   });
 
@@ -102,7 +104,7 @@ Total en Mano: ${formatCurrency(result.totalToReceive)} (100% libre de descuento
               2. Caso práctico real (Régimen General con Asignación Familiar)
             </h3>
             <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-              Trabajador del sector privado con sueldo ordinario mensual de <strong>S/ 3,500.00</strong>, acreditado con carga familiar (recibe Asignación Familiar legal de S/ 113.00), asegurado en EsSalud y con el semestre completo laborado (enero a junio o julio a diciembre):
+              Trabajador del sector privado con sueldo ordinario mensual de <strong>S/ 3,500.00</strong>, acreditado con carga familiar (recibe Asignación Familiar legal de S/ 123.00), asegurado en EsSalud y con el semestre completo laborado (enero a junio o julio a diciembre):
             </p>
             <div className="overflow-x-auto">
               <table className="w-full text-xs text-left border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden">
@@ -122,17 +124,17 @@ Total en Mano: ${formatCurrency(result.totalToReceive)} (100% libre de descuento
                   <tr>
                     <td className="p-2.5 font-semibold">Asignación Familiar (Ley 25129)</td>
                     <td className="p-2.5 text-slate-500">10% de la RMV vigente</td>
-                    <td className="p-2.5 font-mono">+ S/ 113.00</td>
+                    <td className="p-2.5 font-mono">+ S/ 123.00</td>
                   </tr>
                   <tr className="bg-slate-50/60 dark:bg-slate-900/60 font-bold">
                     <td className="p-2.5">Subtotal Gratificación Legal</td>
-                    <td className="p-2.5 text-slate-500 font-normal">S/ 3,613.00 × (6/6 meses)</td>
-                    <td className="p-2.5 font-mono">S/ 3,613.00</td>
+                    <td className="p-2.5 text-slate-500 font-normal">S/ 3,623.00 × (6/6 meses)</td>
+                    <td className="p-2.5 font-mono">S/ 3,623.00</td>
                   </tr>
                   <tr>
                     <td className="p-2.5 font-semibold">Bonificación Extraordinaria EsSalud (9%)</td>
-                    <td className="p-2.5 text-slate-500">9% de S/ 3,613.00</td>
-                    <td className="p-2.5 font-mono text-emerald-700 dark:text-emerald-400">+ S/ 325.17</td>
+                    <td className="p-2.5 text-slate-500">9% de S/ 3,623.00</td>
+                    <td className="p-2.5 font-mono text-emerald-700 dark:text-emerald-400">+ S/ 326.07</td>
                   </tr>
                   <tr>
                     <td className="p-2.5 font-semibold">Descuentos Previsionales (AFP/ONP)</td>
@@ -142,7 +144,7 @@ Total en Mano: ${formatCurrency(result.totalToReceive)} (100% libre de descuento
                   <tr className="bg-emerald-50 dark:bg-emerald-950 font-bold text-slate-900 dark:text-white">
                     <td className="p-2.5 text-emerald-800 dark:text-emerald-300">Total Efectivo a Cobrar en Cuenta</td>
                     <td className="p-2.5 text-slate-500 font-normal">Gratificación + Bonificación</td>
-                    <td className="p-2.5 font-mono text-emerald-800 dark:text-emerald-300 text-sm">S/ 3,938.17</td>
+                    <td className="p-2.5 font-mono text-emerald-800 dark:text-emerald-300 text-sm">S/ 3,949.07</td>
                   </tr>
                 </tbody>
               </table>
@@ -155,23 +157,23 @@ Total en Mano: ${formatCurrency(result.totalToReceive)} (100% libre de descuento
               <li>
                 <strong>Ley de Gratificaciones (Ley N° 27735 y D.S. N° 005-2002-TR):</strong> Plazos legales (hasta el 15 de julio y 15 de diciembre) en el{' '}
                 <a
-                  href="https://www.gob.pe/mtpe"
+                  href="https://cdn.www.gob.pe/uploads/document/file/3321103/guia_gratificaciones.pdf"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-emerald-700 dark:text-emerald-400 underline hover:text-emerald-800"
                 >
-                  Ministerio de Trabajo y Promoción del Empleo (MTPE)
+                  guía oficial de gratificaciones del MTPE (PDF)
                 </a>.
               </li>
               <li>
                 <strong>Inafectación previsional y bonificación extraordinaria (Ley N° 30334):</strong> Reglas sobre el 9% (EsSalud) o 6.75% (EPS) y fiscalización de pago en la{' '}
                 <a
-                  href="https://www.gob.pe/sunafil"
+                  href="https://www.gob.pe/9972-denunciar-incumplimientos-laborales-de-una-empresa-privada"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-emerald-700 dark:text-emerald-400 underline hover:text-emerald-800"
                 >
-                  Superintendencia Nacional de Fiscalización Laboral (SUNAFIL)
+                  guía de SUNAFIL para denunciar incumplimientos laborales
                 </a>.
               </li>
             </ul>
@@ -211,9 +213,9 @@ Total en Mano: ${formatCurrency(result.totalToReceive)} (100% libre de descuento
                 onChange={(e) => setCompanyRegime(e.target.value as CompanyRegime)}
                 className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 p-2.5 text-xs font-bold text-slate-900 dark:text-white outline-none focus:border-[#08734F]"
               >
-                <option value="general">Régimen General (1 sueldo)</option>
-                <option value="pequena_empresa">Pequeña Empresa MYPE (50% sueldo)</option>
-                <option value="microempresa">Microempresa (Sin gratificación)</option>
+                <option value="general">Régimen General (1 sueldo; también si la empresa no está inscrita en REMYPE)</option>
+                <option value="pequena_empresa">Pequeña empresa inscrita en REMYPE (medio sueldo)</option>
+                <option value="microempresa">Microempresa inscrita en REMYPE (sin gratificación)</option>
               </select>
             </div>
 
@@ -245,9 +247,19 @@ Total en Mano: ${formatCurrency(result.totalToReceive)} (100% libre de descuento
             required
           />
 
+          {companyRegime !== 'general' && (
+            <SwitchToggle
+              id="hiredBeforeRemype"
+              label="¿Fue contratado antes de la inscripción de la empresa en el REMYPE?"
+              description="El régimen MYPE no es retroactivo: si fue contratado antes, conserva el régimen general (100 %)."
+              checked={hiredBeforeRemype}
+              onChange={(value) => setHiredBeforeRemype(value)}
+            />
+          )}
+
           <SwitchToggle
             id="hasFamilyAllowance"
-            label="¿Percibes Asignación Familiar (+S/ 113.00)?"
+            label="¿Percibes Asignación Familiar (+S/ 123.00)?"
             description="Se suma a la base computable para el cálculo de la gratificación"
             checked={hasFamilyAllowance}
             onChange={(hasFamilyAllowance) => setHasFamilyAllowance(hasFamilyAllowance)}

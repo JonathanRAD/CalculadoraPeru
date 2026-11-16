@@ -184,6 +184,13 @@ export function Navbar() {
             })}
 
             <Link
+              href="/guias"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800/50 transition-colors font-semibold"
+            >
+              <span>Guías</span>
+            </Link>
+
+            <Link
               href="/pro/beneficios"
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-emerald-400 hover:text-emerald-300 hover:bg-slate-800/50 transition-colors font-semibold"
             >

@@ -42,8 +42,8 @@ Las páginas de calculadoras son interactivas en el cliente. Cada ruta tiene un 
 Los parámetros centralizados incluyen:
 
 - UIT 2026: S/ 5,500.
-- RMV: S/ 1,130.
-- Asignación familiar: S/ 113.
+- RMV: S/ 1,230 (D.S. 015-2026-TR, desde el 1 de octubre de 2026).
+- Asignación familiar: S/ 123.
 - ONP: 13%.
 - AFP sobre flujo: aporte, seguro y comisión publicados por la SBS para julio de 2026.
 - Límites RMT calculados en UIT, no como montos fijos.

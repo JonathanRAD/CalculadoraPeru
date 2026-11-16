@@ -17,6 +17,11 @@ export interface SeverancePayInput {
   hasEps?: boolean; // 6.75% en lugar de 9% EsSalud
   totalYearsWorkedForIndemnity?: number; // Años totales trabajados (si es despido arbitrario)
   totalMonthsWorkedForIndemnity?: number; // Meses adicionales
+  /**
+   * Trabajador contratado antes de que la empresa se inscribiera en el REMYPE.
+   * El régimen MYPE no es retroactivo: esos trabajadores conservan el régimen general.
+   */
+  hiredBeforeRemype?: boolean;
 }
 
 export interface SeverancePayResult {
@@ -38,13 +43,14 @@ export function calculateSeverancePay(input: SeverancePayInput): SeverancePayRes
   const salary = Math.max(0, input.baseSalary || 0);
   const familyAllowance = input.hasFamilyAllowance ? PERU_CONSTANTS.FAMILY_ALLOWANCE : 0;
   const baseComputable = salary + familyAllowance;
+  const laborRegime = input.laborRegime !== 'general' && input.hiredBeforeRemype ? 'general' : input.laborRegime;
 
-  const regimeFactor = input.laborRegime === 'general' ? 1.0 : input.laborRegime === 'pequena_empresa' ? 0.5 : 0.0;
-  const vacationRegimeFactor = input.laborRegime === 'general' ? 1.0 : 0.5;
+  const regimeFactor = laborRegime === 'general' ? 1.0 : laborRegime === 'pequena_empresa' ? 0.5 : 0.0;
+  const vacationRegimeFactor = laborRegime === 'general' ? 1.0 : 0.5;
 
   // 1. Gratificación Trunca
   const gratiMonths = Math.max(0, Math.min(6, input.monthsInLastSemesterGrati || 0));
-  const truncatedGrati = input.laborRegime === 'microempresa'
+  const truncatedGrati = laborRegime === 'microempresa'
     ? 0
     : ((baseComputable * regimeFactor) / 6) * gratiMonths;
 
@@ -55,7 +61,7 @@ export function calculateSeverancePay(input: SeverancePayInput): SeverancePayRes
   const essaludBonus = truncatedGrati * bonusRate;
 
   // 2. CTS Trunca (Remuneración computable incluye 1/6 de gratificación)
-  const sixthOfGrati = input.laborRegime === 'microempresa'
+  const sixthOfGrati = laborRegime === 'microempresa'
     ? 0
     : (baseComputable * regimeFactor) / 6;
   const computableForCts = baseComputable + sixthOfGrati;
@@ -63,10 +69,10 @@ export function calculateSeverancePay(input: SeverancePayInput): SeverancePayRes
   const ctsMonths = Math.max(0, Math.min(6, input.monthsInLastSemesterCts || 0));
   const ctsDays = Math.max(0, Math.min(29, input.daysInLastSemesterCts || 0));
 
-  const ctsFromMonths = input.laborRegime === 'microempresa'
+  const ctsFromMonths = laborRegime === 'microempresa'
     ? 0
     : ((computableForCts * regimeFactor) / 12) * ctsMonths;
-  const ctsFromDays = input.laborRegime === 'microempresa'
+  const ctsFromDays = laborRegime === 'microempresa'
     ? 0
     : ((computableForCts * regimeFactor) / 360) * ctsDays;
 
@@ -86,20 +92,20 @@ export function calculateSeverancePay(input: SeverancePayInput): SeverancePayRes
     const years = Math.max(0, input.totalYearsWorkedForIndemnity || 0);
     const months = Math.max(0, Math.min(11, input.totalMonthsWorkedForIndemnity || 0));
 
-    if (input.laborRegime === 'general') {
+    if (laborRegime === 'general') {
       // 1.5 remuneraciones por año, tope 12 sueldos
       const perYear = 1.5 * baseComputable;
       const perMonth = perYear / 12;
       const totalRaw = (perYear * years) + (perMonth * months);
       arbitraryDismissalIndemnity = Math.min(12 * baseComputable, totalRaw);
-    } else if (input.laborRegime === 'pequena_empresa') {
+    } else if (laborRegime === 'pequena_empresa') {
       // 20 días de sueldo por año, tope 120 días (4 sueldos)
       const dailyRate = baseComputable / 30;
       const perYear = 20 * dailyRate;
       const perMonth = perYear / 12;
       const totalRaw = (perYear * years) + (perMonth * months);
       arbitraryDismissalIndemnity = Math.min(120 * dailyRate, totalRaw);
-    } else if (input.laborRegime === 'microempresa') {
+    } else if (laborRegime === 'microempresa') {
       // 10 días de sueldo por año, tope 90 días (3 sueldos)
       const dailyRate = baseComputable / 30;
       const perYear = 10 * dailyRate;

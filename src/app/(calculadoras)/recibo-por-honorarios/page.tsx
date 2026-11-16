@@ -144,12 +144,12 @@ Neto a Cobrar: ${formatCurrency(result.netAmountToReceive)}`;
               <li>
                 <strong>Rentas de 4ta Categoría y Retención del 8%:</strong> Reguladas por el D.S. N° 179-2004-EF. Consulta topes mensuales y excepciones en{' '}
                 <a
-                  href="https://orientacion.sunat.gob.pe/cuarta-categoria"
+                  href="https://orientacion.sunat.gob.pe/3064-02-calculo-del-impuesto-por-rentas-de-cuarta-categoria"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-emerald-700 dark:text-emerald-400 underline hover:text-emerald-800"
                 >
-                  SUNAT Orientación - Rentas de Cuarta Categoría
+                  SUNAT Orientación: cálculo del pago a cuenta de cuarta categoría
                 </a>.
               </li>
               <li>

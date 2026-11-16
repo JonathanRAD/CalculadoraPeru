@@ -5,6 +5,7 @@ import { CalculatorShell } from '@/features/calculators/components/CalculatorShe
 import { CALCULATORS_REGISTRY } from '@/features/calculators/registry';
 import { calculateCts } from '@/core/calculators/cts';
 import { CompanyRegime } from '@/core/calculators/gratification';
+import { PERU_CONSTANTS } from '@/core/constants/peru';
 import { formatCurrency } from '@/core/math/formatters';
 import { InputNumber } from '@/shared/components/ui/InputNumber';
 import { SwitchToggle } from '@/shared/components/ui/SwitchToggle';
@@ -20,6 +21,7 @@ export default function CalculadoraCtsPage() {
   const [baseSalary, setBaseSalary] = useState<number>(2500);
   const [hasFamilyAllowance, setHasFamilyAllowance] = useState<boolean>(false);
   const [monthsWorkedInSemester, setMonthsWorkedInSemester] = useState<number>(6);
+  const [hiredBeforeRemype, setHiredBeforeRemype] = useState<boolean>(false);
   const [companyRegime, setCompanyRegime] = useState<CompanyRegime>('general');
 
   const result = calculateCts({
@@ -27,6 +29,7 @@ export default function CalculadoraCtsPage() {
     hasFamilyAllowance,
     monthsWorkedInSemester,
     companyRegime,
+    hiredBeforeRemype,
   });
 
   const shareSummary = `Depósito de CTS: ${formatCurrency(result.ctsAmountToDeposit)}
@@ -44,7 +47,7 @@ Periodo: ${monthsWorkedInSemester} meses laborados`;
     },
     {
       question: '¿Qué trabajadores del sector privado no tienen derecho a percibir CTS?',
-      answer: 'No tienen derecho al depósito de CTS los trabajadores sujetos a regímenes especiales de tiempo parcial (part-time) que laboran una jornada promedio menor a 4 horas diarias, los trabajadores de la microempresa inscrita formalmente en el REMYPE, y aquellos trabajadores contratados bajo el régimen CAS o locadores de servicios independientes que emiten recibos por honorarios.',
+      answer: 'No tienen derecho al depósito de CTS los trabajadores sujetos a regímenes especiales de tiempo parcial (part-time) que laboran una jornada promedio menor a 4 horas diarias, los trabajadores contratados después de que su microempresa se inscribió en el REMYPE (si la empresa no está inscrita, o si fueron contratados antes, rige el régimen general), y aquellos trabajadores contratados bajo el régimen CAS o locadores de servicios independientes que emiten recibos por honorarios.',
     },
     {
       question: '¿Qué ocurre si la empresa no deposita la CTS en el plazo legal?',
@@ -59,6 +62,7 @@ Periodo: ${monthsWorkedInSemester} meses laborados`;
   return (
     <CalculatorShell
       meta={meta}
+      afterContent={<SunafilFinesCard obligationType="cts" />}
       faqs={faqs}
       educationalContent={
         <div className="space-y-6">
@@ -103,7 +107,7 @@ Periodo: ${monthsWorkedInSemester} meses laborados`;
               2. Caso práctico con liquidación de depósito real (Normativa 2026)
             </h3>
             <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-              Tomemos como referencia a un colaborador del régimen general privado con sueldo básico de <strong>S/ 2,400.00</strong>, Asignación Familiar de <strong>S/ 113.00</strong> (10% de la RMV S/ 1,130), que laboró el semestre completo (6 meses) y cuya última gratificación percibida fue de <strong>S/ 2,513.00</strong>:
+              Tomemos como referencia a un colaborador del régimen general privado con sueldo básico de <strong>S/ 2,400.00</strong>, Asignación Familiar de <strong>S/ 123.00</strong> (10% de la RMV S/ 1,230), que laboró el semestre completo (6 meses) y cuya última gratificación percibida fue de <strong>S/ 2,513.00</strong>:
             </p>
             <div className="overflow-x-auto">
               <table className="w-full text-xs text-left border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden">
@@ -123,22 +127,22 @@ Periodo: ${monthsWorkedInSemester} meses laborados`;
                   <tr>
                     <td className="p-2.5 font-semibold">Asignación Familiar (Ley 25129)</td>
                     <td className="p-2.5 text-slate-500">10% de la RMV vigente</td>
-                    <td className="p-2.5 font-mono">+ S/ 113.00</td>
+                    <td className="p-2.5 font-mono">+ S/ 123.00</td>
                   </tr>
                   <tr>
                     <td className="p-2.5 font-semibold">Sexto de Gratificación (1/6)</td>
-                    <td className="p-2.5 text-slate-500">S/ 2,513.00 ÷ 6</td>
-                    <td className="p-2.5 font-mono text-emerald-700 dark:text-emerald-400">+ S/ 418.83</td>
+                    <td className="p-2.5 text-slate-500">S/ 2,523.00 ÷ 6</td>
+                    <td className="p-2.5 font-mono text-emerald-700 dark:text-emerald-400">+ S/ 420.50</td>
                   </tr>
                   <tr className="bg-slate-50/60 dark:bg-slate-900/60 font-bold">
                     <td className="p-2.5">Total Base Computable Semestral</td>
                     <td className="p-2.5 text-slate-500 font-normal">Suma de conceptos afectos</td>
-                    <td className="p-2.5 font-mono">S/ 2,931.83</td>
+                    <td className="p-2.5 font-mono">S/ 2,943.50</td>
                   </tr>
                   <tr className="bg-emerald-50 dark:bg-emerald-950 font-bold text-slate-900 dark:text-white">
                     <td className="p-2.5 text-emerald-800 dark:text-emerald-300">Depósito Semestral de CTS (Mayo / Noviembre)</td>
-                    <td className="p-2.5 text-slate-500 font-normal">(S/ 2,931.83 ÷ 12) × 6 meses</td>
-                    <td className="p-2.5 font-mono text-emerald-800 dark:text-emerald-300 text-sm">S/ 1,465.92</td>
+                    <td className="p-2.5 text-slate-500 font-normal">(S/ 2,943.50 ÷ 12) × 6 meses</td>
+                    <td className="p-2.5 font-mono text-emerald-800 dark:text-emerald-300 text-sm">S/ 1,471.75</td>
                   </tr>
                 </tbody>
               </table>
@@ -151,23 +155,23 @@ Periodo: ${monthsWorkedInSemester} meses laborados`;
               <li>
                 <strong>Ley de Compensación por Tiempo de Servicios (D.S. N° 001-97-TR):</strong> Reglas sobre depósito semestral y cómputo de 1/6 de gratificación en el{' '}
                 <a
-                  href="https://www.gob.pe/mtpe"
+                  href="https://www.gob.pe/institucion/mtpe/informes-publicaciones/221736"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-emerald-700 dark:text-emerald-400 underline hover:text-emerald-800"
                 >
-                  Ministerio de Trabajo y Promoción del Empleo (MTPE)
+                  texto oficial del TUO publicado por el MTPE
                 </a>.
               </li>
               <li>
                 <strong>Fiscalización del depósito oportuno de CTS:</strong> Verificación de plazos (máximo 15 de mayo y 15 de noviembre) en la{' '}
                 <a
-                  href="https://www.gob.pe/sunafil"
+                  href="https://www.gob.pe/9972-denunciar-incumplimientos-laborales-de-una-empresa-privada"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-emerald-700 dark:text-emerald-400 underline hover:text-emerald-800"
                 >
-                  Superintendencia Nacional de Fiscalización Laboral (SUNAFIL)
+                  guía de SUNAFIL para denunciar incumplimientos laborales
                 </a>.
               </li>
             </ul>
@@ -207,9 +211,9 @@ Periodo: ${monthsWorkedInSemester} meses laborados`;
                 onChange={(e) => setCompanyRegime(e.target.value as CompanyRegime)}
                 className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 p-2.5 text-xs font-bold text-slate-900 dark:text-white outline-none focus:border-[#08734F]"
               >
-                <option value="general">Régimen General (CTS Completa)</option>
-                <option value="pequena_empresa">Pequeña Empresa MYPE (50% de CTS)</option>
-                <option value="microempresa">Microempresa (Sin CTS)</option>
+                <option value="general">Régimen General (CTS completa; también si la empresa no está inscrita en REMYPE)</option>
+                <option value="pequena_empresa">Pequeña empresa inscrita en REMYPE (50 % de la CTS)</option>
+                <option value="microempresa">Microempresa inscrita en REMYPE (sin CTS)</option>
               </select>
             </div>
 
@@ -226,9 +230,19 @@ Periodo: ${monthsWorkedInSemester} meses laborados`;
             />
           </div>
 
+          {companyRegime !== 'general' && (
+            <SwitchToggle
+              id="hiredBeforeRemype"
+              label="¿Fue contratado antes de la inscripción de la empresa en el REMYPE?"
+              description="El régimen MYPE no es retroactivo: si fue contratado antes, conserva el régimen general (100 %)."
+              checked={hiredBeforeRemype}
+              onChange={(value) => setHiredBeforeRemype(value)}
+            />
+          )}
+
           <SwitchToggle
             id="hasFamilyAllowance"
-            label="¿Percibes Asignación Familiar (+S/ 113.00)?"
+            label="¿Percibes Asignación Familiar (+S/ 123.00)?"
             description="Se incorpora como remuneración computable para el cálculo de la CTS"
             checked={hasFamilyAllowance}
             onChange={(hasFamilyAllowance) => setHasFamilyAllowance(hasFamilyAllowance)}
@@ -290,6 +304,7 @@ Periodo: ${monthsWorkedInSemester} meses laborados`;
               hasFamilyAllowance,
               monthsWorkedInSemester,
               companyRegime,
+    hiredBeforeRemype,
               ctsToDeposit: result.ctsAmountToDeposit,
               computableBasis: result.totalComputableBasis,
               oneSixthGrati: result.oneSixthGratification,
@@ -301,7 +316,7 @@ Periodo: ${monthsWorkedInSemester} meses laborados`;
             ]}
             csvRows={[
               { concepto: 'Sueldo Básico Mensual', monto: baseSalary },
-              { concepto: 'Asignación Familiar (+10%)', monto: hasFamilyAllowance ? 113 : 0 },
+              { concepto: 'Asignación Familiar (+10%)', monto: hasFamilyAllowance ? PERU_CONSTANTS.FAMILY_ALLOWANCE : 0 },
               { concepto: 'Sexto (1/6) de Gratificación', monto: result.oneSixthGratification },
               { concepto: 'Base Computable Total', monto: result.totalComputableBasis },
               { concepto: 'Meses Laborados en Semestre', monto: monthsWorkedInSemester },
@@ -312,11 +327,8 @@ Periodo: ${monthsWorkedInSemester} meses laborados`;
               `• Base Computable: ${formatCurrency(result.totalComputableBasis)}\n` +
               `• Meses computados: ${monthsWorkedInSemester} meses\n` +
               `*TOTAL CTS A DEPOSITAR: ${formatCurrency(result.ctsAmountToDeposit)}*\n` +
-              `_Generado en CalculaPerú (calculaperu.pe)_`}
+              `_Generado en CalculaPerú (calculaperu.com.pe)_`}
           />
-
-          {/* SUNAFIL Fines Risk Matrix */}
-          <SunafilFinesCard obligationType="cts" />
         </div>
 
       </div>

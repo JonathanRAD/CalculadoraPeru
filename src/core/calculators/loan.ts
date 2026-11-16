@@ -30,9 +30,12 @@ export interface LoanResult {
  */
 export function calculateLoan(input: LoanInput): LoanResult {
   const principal = Math.max(0, input.loanAmount || 0);
-  const tea = Math.max(0, input.annualInterestRate || 0);
-  const months = Math.max(1, input.termMonths || 12);
-  const insuranceRate = (input.monthlyInsuranceRate || 0.075) / 100;
+  const tea = Math.min(1000, Math.max(0, input.annualInterestRate || 0));
+  // Plazo acotado para evitar cronogramas desproporcionados (máximo 40 años).
+  const months = Math.min(480, Math.max(1, Math.round(input.termMonths || 12)));
+  // Un 0 ingresado por el usuario se respeta; solo se usa el valor por defecto si no hay dato.
+  const insuranceInput = Number.isFinite(input.monthlyInsuranceRate) ? Number(input.monthlyInsuranceRate) : 0.075;
+  const insuranceRate = Math.max(0, insuranceInput) / 100;
 
   // Convertir TEA a TEM (Tasa Efectiva Mensual): TEM = (1 + TEA)^(1/12) - 1
   const tem = tea > 0 ? Math.pow(1 + tea / 100, 1 / 12) - 1 : 0;

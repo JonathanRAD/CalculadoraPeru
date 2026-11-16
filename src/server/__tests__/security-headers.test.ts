@@ -77,6 +77,10 @@ describe('Configuración de Cabeceras de Seguridad y CSP', () => {
       // AdSense
       expect(csp).toContain(EXTERNAL_ORIGINS.ADSENSE_DOMAIN);
       expect(csp).toContain(EXTERNAL_ORIGINS.ADSENSE_FRAME);
+      // Verificación de tráfico válido de Google: hosts exactos, nunca comodines
+      expect(csp).toContain(EXTERNAL_ORIGINS.ADTRAFFIC_EP1);
+      expect(csp).toContain(EXTERNAL_ORIGINS.ADTRAFFIC_EP2);
+      expect(csp).not.toContain('*.adtrafficquality.google');
 
       // Vercel Analytics / Speed Insights
       expect(csp).toContain(EXTERNAL_ORIGINS.VERCEL_ANALYTICS);

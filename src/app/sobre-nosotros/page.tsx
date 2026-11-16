@@ -4,7 +4,7 @@ import { Heart, Code2, Sparkles, Mail, ArrowLeft, ExternalLink } from 'lucide-re
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Sobre Nosotros y Contacto | CalculaPerú',
+  title: 'Sobre CalculaPerú: quién está detrás y cómo trabajamos',
   description:
     'Conoce la historia detrás de CalculaPerú: la misión de simplificar los números para emprendedores, trabajadores y MYPES de todo el Perú.',
   alternates: {
@@ -90,6 +90,32 @@ export default function SobreNosotrosPage() {
                 En uso libre, tus números y sueldos se calculan localmente en tu propio dispositivo. En el Plan PRO, los cálculos se guardan únicamente si tú decides almacenarlos voluntariamente.
               </p>
             </div>
+          </div>
+
+          {/* Method Section */}
+          <div className="border-t border-slate-100 dark:border-slate-800 pt-6 space-y-3">
+            <h2 className="text-lg font-bold text-slate-900 dark:text-white">
+              Cómo mantenemos las calculadoras
+            </h2>
+            <ul className="list-disc pl-5 space-y-2">
+              <li>
+                <strong>Una sola fuente de parámetros.</strong> UIT, RMV, asignación familiar, ONP y tasas AFP viven en un único archivo del código, de modo que cada calculadora y cada guía usan el mismo valor.
+              </li>
+              <li>
+                <strong>Pruebas automáticas.</strong> Las fórmulas laborales y tributarias tienen pruebas de regresión con casos numéricos para detectar cambios no intencionados antes de publicar.
+              </li>
+              <li>
+                <strong>Fuentes oficiales.</strong> Los parámetros salen de SUNAT, MTPE, SBS y BCRP. Los cambios se anotan en el{' '}
+                <Link href="/actualizaciones" className="font-bold text-emerald-800 dark:text-emerald-400 hover:underline">registro de actualizaciones</Link>.
+              </li>
+              <li>
+                <strong>Alcance.</strong> Los resultados son referenciales. Tu caso puede variar por contratos, convenios o situaciones especiales; ante una decisión importante, consulta a un contador o abogado laboral.
+              </li>
+              <li>
+                <strong>Correcciones.</strong> Si encuentras un error, escríbenos por el formulario de contacto y lo revisamos. Las explicaciones paso a paso están en las{' '}
+                <Link href="/guias" className="font-bold text-emerald-800 dark:text-emerald-400 hover:underline">guías</Link>.
+              </li>
+            </ul>
           </div>
 
           {/* Contact Section */}

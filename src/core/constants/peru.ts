@@ -5,24 +5,25 @@
 
 export const PERU_CONSTANTS = {
   CURRENT_YEAR: 2026,
-  IGV_RATE: 0.18, // 18% (16% IGV + 2% IPM)
+  IGV_RATE: 0.18, // 18% en total (2026: 15.5% IGV + 2.5% IPM, Ley 32387)
   UIT_2024: 5150, // S/ 5,150
   UIT_2025: 5350, // S/ 5,350
   UIT_2026: 5500, // D.S. N.° 301-2025-EF
   CURRENT_UIT: 5500,
-  RMV: 1130, // Vigente desde el 1 de enero de 2025
+  RMV: 1230, // D.S. N.° 015-2026-TR, vigente desde el 1 de octubre de 2026 (segundo tramo a S/ 1,300 previsto para el primer semestre de 2027)
   FAMILY_ALLOWANCE_RATE: 0.1,
-  FAMILY_ALLOWANCE: 113, // 10% de la RMV
+  FAMILY_ALLOWANCE: 123, // 10% de la RMV (S/ 1,230)
   ONP_RATE: 0.13,
   AFP_MANDATORY_CONTRIBUTION_RATE: 0.1,
   AFP_INSURANCE_RATE: 0.0137,
   ESSALUD_RATE: 0.09,
+  EXTRAORDINARY_BONUS_RATE: 0.09, // Ley 30334: 9% de la gratificación (afiliados a EsSalud)
   EPS_EXTRAORDINARY_BONUS_RATE: 0.0675,
   FOURTH_CATEGORY_RETENTION_RATE: 0.08,
   FOURTH_CATEGORY_RECEIPT_THRESHOLD: 1500,
   RMT_MAX_UIT: 1700,
   RMT_REDUCED_PAYMENT_UIT: 300,
-  DEFAULT_KWH_COST: 0.72, // S/ 0.72 por kWh (Promedio Lima Luz del Sur / Enel Pliego BT5B)
+  DEFAULT_KWH_COST: 0.75, // S/ 0.75 por kWh con IGV (energía activa BT5B residencial; Pluz, pliego vigente desde el 4-nov-2026: 63.18–64.57 ctm S/kWh sin IGV)
   CURRENCY_SYMBOL: 'S/',
   CURRENCY_CODE: 'PEN',
   LOCALE: 'es-PE',
@@ -54,3 +55,20 @@ export const ELECTRIC_APPLIANCES = [
   { id: 'foco_led', name: 'Foco LED (10W equivalente a 100W)', watts: 10, defaultHours: 6, icon: '💡' },
   { id: 'plancha', name: 'Plancha Eléctrica', watts: 1200, defaultHours: 1, icon: '👔' },
 ] as const;
+
+/**
+ * Reparto del 18 % entre IGV e IPM por año (Ley 32387, según SUNAT).
+ * El total aplicable no cambia; el IPM sube gradualmente y el IGV baja en la misma medida.
+ * Años posteriores a 2028 mantienen el último reparto publicado hasta que SUNAT indique otro.
+ */
+export const IGV_IPM_SPLIT_BY_YEAR: Record<number, { igv: number; ipm: number }> = {
+  2026: { igv: 0.155, ipm: 0.025 },
+  2027: { igv: 0.15, ipm: 0.03 },
+  2028: { igv: 0.145, ipm: 0.035 },
+};
+
+export function getIgvIpmSplit(year: number = new Date().getFullYear()): { igv: number; ipm: number } {
+  if (year <= 2026) return IGV_IPM_SPLIT_BY_YEAR[2026];
+  if (year >= 2028) return IGV_IPM_SPLIT_BY_YEAR[2028];
+  return IGV_IPM_SPLIT_BY_YEAR[year];
+}

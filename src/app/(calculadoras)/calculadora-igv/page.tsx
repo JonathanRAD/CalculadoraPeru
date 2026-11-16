@@ -5,6 +5,7 @@ import { CalculatorShell } from '@/features/calculators/components/CalculatorShe
 import { CALCULATORS_REGISTRY } from '@/features/calculators/registry';
 import { calculateIgv, IgvCalculationMode } from '@/core/calculators/tax';
 import { formatCurrency } from '@/core/math/formatters';
+import { getIgvIpmSplit } from '@/core/constants/peru';
 import { InputNumber } from '@/shared/components/ui/InputNumber';
 import { ResultMetricCard } from '@/shared/components/ui/ResultMetricCard';
 import { ShareButtons } from '@/shared/components/ui/ShareButtons';
@@ -16,6 +17,7 @@ export default function CalculadoraIgvPage() {
   const [amount, setAmount] = useState<number>(100);
   const [mode, setMode] = useState<IgvCalculationMode>('add_igv');
 
+  const split = getIgvIpmSplit();
   const result = calculateIgv({ amount, mode });
 
   const shareSummary = `Base Imponible: ${formatCurrency(result.baseAmount)}
@@ -25,7 +27,7 @@ Total Facturado: ${formatCurrency(result.totalAmount)}`;
   const faqs = [
     {
       question: '¿Cómo está descompuesta la tasa del 18% de IGV en el Perú?',
-      answer: 'La tasa oficial del 18% aplicada en todas las operaciones comerciales gravadas se compone legalmente de dos tributos: el 16% correspondiente al Impuesto General a las Ventas (IGV) y el 2% destinado al Impuesto de Promoción Municipal (IPM). Ambos son administrados y recaudados conjuntamente por la SUNAT en un solo pago mensual a través del Formulario Virtual Declara Fácil 621.',
+      answer: 'La tasa oficial del 18% aplicada en todas las operaciones comerciales gravadas se compone legalmente de dos tributos: el Impuesto General a las Ventas (IGV) y el Impuesto de Promoción Municipal (IPM). Por la Ley N° 32387, el IPM sube de forma gradual (2.5% en 2026, 3% en 2027 y 3.5% en 2028) y el IGV baja en la misma medida (15.5%, 15% y 14.5%), por lo que el total aplicable sigue siendo 18%. Ambos son administrados y recaudados conjuntamente por la SUNAT en un solo pago mensual a través del Formulario Virtual Declara Fácil 621.',
     },
     {
       question: '¿Cuál es la fórmula matemática para desglosar el IGV de una factura o boleta?',
@@ -134,26 +136,19 @@ Total Facturado: ${formatCurrency(result.totalAmount)}`;
             <span className="font-bold text-slate-700 dark:text-slate-300 block">Base legal y fuentes oficiales de consulta:</span>
             <ul className="space-y-1 list-disc pl-4">
               <li>
-                <strong>Tasa del IGV (18% = 16% IGV + 2% IPM):</strong> Regulada en el TUO de la Ley del IGV (D.S. N° 055-99-EF). Consulta la normativa en el{' '}
+                <strong>Tasa del IGV (18% en total; en 2026, 15.5% IGV + 2.5% IPM):</strong> Regulada en el TUO de la Ley del IGV (D.S. N° 055-99-EF). Consulta la normativa en el{' '}
                 <a
-                  href="https://orientacion.sunat.gob.pe/impuesto-general-a-las-ventas"
+                  href="https://orientacion.sunat.gob.pe/3053-concepto-tasa-y-operaciones-gravadas-igv-empresas"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-emerald-700 dark:text-emerald-400 underline hover:text-emerald-800"
                 >
-                  Portal de Orientación SUNAT - IGV
+                  SUNAT Orientación: concepto, tasa y operaciones gravadas del IGV
                 </a>.
               </li>
               <li>
                 <strong>Reglamento de Comprobantes de Pago:</strong> Resolución de Superintendencia N° 007-99/SUNAT sobre emisión de boletas y facturas electrónicas en{' '}
-                <a
-                  href="https://www.sunat.gob.pe"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-emerald-700 dark:text-emerald-400 underline hover:text-emerald-800"
-                >
-                  Superintendencia Nacional de Aduanas y de Administración Tributaria (SUNAT)
-                </a>.
+                SUNAT.
               </li>
             </ul>
           </div>
@@ -214,7 +209,7 @@ Total Facturado: ${formatCurrency(result.totalAmount)}`;
               <span>Desglose Legal Tributario Perú:</span>
             </div>
             <p className="text-[11px] text-emerald-800 dark:text-emerald-300">
-              • IGV (16%): {formatCurrency(result.baseAmount * 0.16)} | • IPM (2%): {formatCurrency(result.baseAmount * 0.02)}
+              • IGV ({(split.igv * 100).toFixed(1)}%): {formatCurrency(result.baseAmount * split.igv)} | • IPM ({(split.ipm * 100).toFixed(1)}%): {formatCurrency(result.baseAmount * split.ipm)}
             </p>
           </div>
         </div>

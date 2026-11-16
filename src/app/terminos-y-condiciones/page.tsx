@@ -4,7 +4,7 @@ import { Scale, AlertTriangle, ArrowLeft } from 'lucide-react';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Términos y Condiciones de Uso | CalculaPerú',
+  title: 'Términos y Condiciones de Uso',
   description:
     'Términos y condiciones de uso de CalculaPerú: descargo de responsabilidad sobre cálculos tributarios, laborales y comerciales.',
   alternates: {
