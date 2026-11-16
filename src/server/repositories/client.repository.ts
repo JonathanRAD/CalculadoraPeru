@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';
 import { getSupabaseAdmin, isSupabaseConfigured, requireDurableStorage } from '../config/supabase';
+import { getDataDir } from '@/server/utils/data-dir';
 
 export interface ClientRecord {
   id: string;
@@ -18,7 +19,7 @@ export interface ClientRecord {
   updatedAt: string;
 }
 
-const DATA_DIR = path.join(process.cwd(), '.data');
+const DATA_DIR = getDataDir();
 const CLIENTS_FILE = path.join(DATA_DIR, 'clients.json');
 
 function ensureDataDir() {

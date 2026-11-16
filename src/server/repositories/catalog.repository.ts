@@ -3,6 +3,7 @@ import path from 'path';
 import crypto from 'crypto';
 import { getSupabaseAdmin, isSupabaseConfigured, requireDurableStorage } from '../config/supabase';
 import { UnitType } from '@/core/calculators/quote';
+import { getDataDir } from '@/server/utils/data-dir';
 
 export interface CatalogItemRecord {
   id: string;
@@ -19,7 +20,7 @@ export interface CatalogItemRecord {
   updatedAt: string;
 }
 
-const DATA_DIR = path.join(process.cwd(), '.data');
+const DATA_DIR = getDataDir();
 const CATALOG_FILE = path.join(DATA_DIR, 'catalog.json');
 
 function ensureDataDir() {

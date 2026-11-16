@@ -3,8 +3,9 @@ import path from 'path';
 import crypto from 'crypto';
 import { SubscriptionRequest, SubscriptionStatus } from '@/features/auth/types';
 import { getSupabaseAdmin, isSupabaseConfigured, requireDurableStorage } from '../config/supabase';
+import { getDataDir } from '@/server/utils/data-dir';
 
-const DATA_DIR = path.join(process.cwd(), '.data');
+const DATA_DIR = getDataDir();
 const SUB_REQUESTS_FILE = path.join(DATA_DIR, 'subscription_requests.json');
 
 function ensureDataDir() {

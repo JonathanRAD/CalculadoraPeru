@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { getSupabaseAdmin, isSupabaseConfigured, requireDurableStorage } from '../config/supabase';
+import { getDataDir } from '@/server/utils/data-dir';
 
 export interface AnalyticsEvent {
   id?: string;
@@ -70,7 +71,7 @@ const CALCULATOR_NAME_MAP: Record<string, string> = {
   '/ventas-necesarias': 'Ventas Necesarias para Meta',
 };
 
-const DATA_DIR = path.join(process.cwd(), '.data');
+const DATA_DIR = getDataDir();
 const ANALYTICS_FILE = path.join(DATA_DIR, 'analytics.json');
 
 function ensureDataDir() {

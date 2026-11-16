@@ -3,6 +3,7 @@ import path from 'path';
 import crypto from 'crypto';
 import { getSupabaseAdmin, isSupabaseConfigured, requireDurableStorage } from '../config/supabase';
 import { sanitizePostgrestSearch } from '../utils/search-sanitizer';
+import { getDataDir } from '@/server/utils/data-dir';
 
 export type ContactEmailStatus = 'pending' | 'sent' | 'failed';
 
@@ -56,7 +57,7 @@ export interface CreateSubmissionResult {
   submission: ContactSubmissionRecord;
 }
 
-const DATA_DIR = path.join(process.cwd(), '.data');
+const DATA_DIR = getDataDir();
 const SUBMISSIONS_FILE = path.join(DATA_DIR, 'contact_submissions.json');
 
 function ensureDataDir() {

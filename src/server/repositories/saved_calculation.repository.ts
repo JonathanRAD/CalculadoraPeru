@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';
 import { getSupabaseAdmin, isSupabaseConfigured, requireDurableStorage } from '../config/supabase';
+import { getDataDir } from '@/server/utils/data-dir';
 
 export interface SavedCalculation {
   id: string;
@@ -14,7 +15,7 @@ export interface SavedCalculation {
   createdAt: string;
 }
 
-const DATA_DIR = path.join(process.cwd(), '.data');
+const DATA_DIR = getDataDir();
 const SAVED_CALCS_FILE = path.join(DATA_DIR, 'saved_calculations.json');
 
 function ensureDataDir() {

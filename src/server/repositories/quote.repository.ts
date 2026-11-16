@@ -6,6 +6,7 @@ import { QuoteStatus, UnitType, DiscountType } from '@/core/calculators/quote';
 import { sanitizePostgrestSearch } from '../utils/search-sanitizer';
 import { clientRepository } from './client.repository';
 import { catalogRepository } from './catalog.repository';
+import { getDataDir } from '@/server/utils/data-dir';
 
 export interface QuoteRecord {
   id: string;
@@ -69,7 +70,7 @@ export interface QuoteWithItems {
   items: QuoteItemRecord[];
 }
 
-const DATA_DIR = path.join(process.cwd(), '.data');
+const DATA_DIR = getDataDir();
 const QUOTES_FILE = path.join(DATA_DIR, 'quotes.json');
 const QUOTE_ITEMS_FILE = path.join(DATA_DIR, 'quote_items.json');
 const QUOTE_SEQUENCES_FILE = path.join(DATA_DIR, 'quote_sequences.json');

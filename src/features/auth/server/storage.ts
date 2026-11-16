@@ -2,8 +2,9 @@ import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';
 import { UserAccount, SafeUser, LicenseCode, ProPlan } from '../types';
+import { getDataDir } from '@/server/utils/data-dir';
 
-const DATA_DIR = path.join(process.cwd(), '.data');
+const DATA_DIR = getDataDir();
 const DB_FILE = path.join(DATA_DIR, 'db.json');
 
 
